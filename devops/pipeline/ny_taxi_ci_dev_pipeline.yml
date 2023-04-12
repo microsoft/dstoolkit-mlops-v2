@@ -1,0 +1,79 @@
+pr: none
+trigger:
+  branches:
+   include:
+     - development
+  paths:
+    include:
+      - devops/*
+      - mlops/common/*
+      - src/nyc_src/*
+      - mlops/nyc_taxi/*
+      - src/shared/*
+
+pool:
+  vmImage: ubuntu-latest
+
+parameters:
+ - name: exec_environment
+   displayName: "Execution Environment"
+   default: "dev"
+
+variables:
+- group: MLOps-${{parameters.exec_environment}}-VG
+- name: PIPELINE_TYPE
+  value: nyc
+
+stages:
+    - stage: execute
+      displayName: execute_job
+      variables:
+      - template: templates/experiment_variables.yml
+        parameters:
+          exec_environment: ${{parameters.exec_environment}}
+      jobs:
+      - job: Execute_Job_Pipeline
+        steps:
+        - template: templates/get_connection_details.yml
+        - template: templates/configure_azureml_agent.yml
+        - template: templates/execute_mlops_pipeline.yml
+          parameters:
+            script_parameter: |
+              python -m mlops.nyc_taxi.src.mlops_pipeline \
+                --subscription_id $(SUBSCRIPTION_ID) \
+                --resource_group_name $(RESOURCE_GROUP_NAME) \
+                --workspace_name $(WORKSPACE_NAME) \
+                --cluster_name $(CLUSTER_NAME) \
+                --cluster_size $(CLUSTER_SIZE) \
+                --cluster_region $(CLUSTER_REGION) \
+                --build_reference $(BUILD.BUILDID) \
+                --deploy_environment ${{parameters.exec_environment}} \
+                --experiment_name $(EXPERIMENT_NAME) \
+                --display_name $(DISPLAY_NAME) \
+                --wait_for_completion False \
+                --environment_name $(ENVIRONMENT_NAME) \
+                --env_base_image_name $(ENV_BASE_IMAGE_NAME) \
+                --model_name $(MODEL_NAME) \
+                --conda_path $(CONDA_PATH) \
+                --output_file run_id.txt
+
+        - task: AzureCLI@2
+          displayName: Read Run ID
+          name: read_run_id
+          inputs:
+            azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+            scriptType: bash
+            scriptLocation: inlineScript
+            workingDirectory: $(System.DefaultWorkingDirectory)
+            inlineScript: |
+              readarray arr <"run_id.txt"
+              run_name=${arr[0]}
+              echo $run_name
+
+              echo "##vso[task.setvariable variable=RUN_NAME;isOutput=true;]$run_name"
+
+      # Async job wait for results
+      # This is a early preview feature and it can be changed prior GA
+      # https://github.com/Azure/azure-mlops-automation for details or get access
+
+      - template: templates/wait_with_extension_job.yml

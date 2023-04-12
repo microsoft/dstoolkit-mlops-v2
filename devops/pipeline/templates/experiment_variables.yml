@@ -1,0 +1,7 @@
+variables:
+- name: EXPERIMENT_NAME
+  value: $(PIPELINE_TYPE)_$(EXPERIMENT_BASE_NAME)_${{parameters.exec_environment}}_$(Build.SourceBranchName)
+- name: DISPLAY_NAME
+  value: $(DISPLAY_BASE_NAME)_${{parameters.exec_environment}}_$(Build.BuildID)
+- name: MODEL_NAME
+  value: $(PIPELINE_TYPE)_$(MODEL_BASE_NAME)_${{parameters.exec_environment}}_$(Build.SourceBranchName)
