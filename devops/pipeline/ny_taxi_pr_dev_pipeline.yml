@@ -1,0 +1,62 @@
+pr:
+  branches:
+   include:
+     - development
+  paths:
+    include:
+      - devops/*
+      - mlops/common/*
+      - src/nyc_taxi/*
+      - mlops/nyc_src/*
+      - src/shared/*
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+parameters:
+ - name: exec_environment
+   displayName: "Execution Environment"
+   default: "dev"
+
+variables:
+- group: MLOps-${{parameters.exec_environment}}-VG
+- name: PIPELINE_TYPE
+  value: nyc
+
+stages:
+    - stage: build
+      displayName: build_validation
+      jobs:
+        - template: build_validation_pipeline.yml
+        
+    - stage: execute
+      displayName: execute_job
+      variables:
+      - template: templates/experiment_variables.yml
+        parameters:
+          exec_environment: ${{parameters.exec_environment}}
+      jobs:
+      - job: Execute_Job_Pipeline
+        steps:
+        - template: templates/get_connection_details.yml
+        - template: templates/configure_azureml_agent.yml
+        - template: templates/execute_mlops_pipeline.yml
+          parameters:
+            script_parameter: |
+              python -m mlops.nyc_taxi.src.mlops_pipeline \
+                --subscription_id $(SUBSCRIPTION_ID) \
+                --resource_group_name $(RESOURCE_GROUP_NAME) \
+                --workspace_name $(WORKSPACE_NAME) \
+                --cluster_name $(CLUSTER_NAME) \
+                --cluster_size $(CLUSTER_SIZE) \
+                --cluster_region $(CLUSTER_REGION) \
+                --build_reference $(BUILD.BUILDID) \
+                --deploy_environment ${{parameters.exec_environment}} \
+                --experiment_name $(EXPERIMENT_NAME) \
+                --display_name $(DISPLAY_NAME) \
+                --wait_for_completion True \
+                --environment_name $(ENVIRONMENT_NAME) \
+                --env_base_image_name $(ENV_BASE_IMAGE_NAME) \
+                --model_name $(MODEL_NAME) \
+                --conda_path $(CONDA_PATH)
