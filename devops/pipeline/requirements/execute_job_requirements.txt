@@ -8,5 +8,5 @@ pytest-cov==3.0.0
 pytest-azurepipelines==1.0.3
 pytest-mock==3.7.0
 pytest==7.1.2
-mlflow==1.27.0
+mlflow==2.2.1
 mldesigner==0.1.0b4
