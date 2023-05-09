@@ -1,0 +1,57 @@
+variables:
+- name:  ML_MODEL_CONFIG_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.ML_MODEL_CONFIG_NAME'] ]
+- name:  IOTHUB_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.IOTHUB_NAME'] ] 
+- name:  IOT_HUB_RESOURCE_GROUP
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.IOT_HUB_RESOURCE_GROUP'] ] 
+- name:  KEYVAULT_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.KEYVAULT_NAME'] ] 
+- name:  ML_SCOPE_SVC_CONNECTION
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.ML_SCOPE_SVC_CONNECTION'] ]       
+- name:  HOST_PORT_NUMBER
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.HOST_PORT_NUMBER'] ]
+- name:  EXPERIMENT_BASE_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.EXPERIMENT_BASE_NAME'] ] 
+- name:  ENVIRONMENT_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.ENVIRONMENT_NAME'] ]
+- name:  ENV_BASE_IMAGE_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.ENV_BASE_IMAGE_NAME'] ]
+- name:  DISPLAY_BASE_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.DISPLAY_BASE_NAME'] ]
+- name: CONDA_PATH
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.CONDA_PATH'] ]        
+- name:  CLUSTER_SIZE
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.CLUSTER_SIZE'] ] 
+- name:  CLUSTER_REGION
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.CLUSTER_REGION'] ] 
+- name:  CLUSTER_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.CLUSTER_NAME'] ] 
+- name:  AZURE_RM_SVC_CONNECTION
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.AZURE_RM_SVC_CONNECTION'] ] 
+- name:  MODEL_BASE_NAME
+  value: $[ dependencies.variable_generation.load_config_variables.outputs['loading_model_config.MODEL_BASE_NAME'] ]
+- name:  REGISTRY_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.REGISTRY_NAME'] ] 
+- name:  RESOURCE_GROUP_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.RESOURCE_GROUP_NAME'] ]
+- name:  SCORE_FILE_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.SCORE_FILE_NAME'] ] 
+- name:  SMOKE_TEST_DOCKER_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.SMOKE_TEST_DOCKER_NAME'] ] 
+- name:  TARGET_CONDITION
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.TARGET_CONDITION'] ] 
+- name:  TEMP_CONTAINER_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.TEMP_CONTAINER_NAME'] ]
+- name:  TEMP_IMAGE_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.TEMP_IMAGE_NAME'] ] 
+- name:  TEST_FILE_PATH
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.TEST_FILE_PATH'] ]          
+- name:  WORKSPACE_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.WORKSPACE_NAME'] ]
+- name: EXPERIMENT_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.EXPERIMENT_NAME'] ]
+- name: DISPLAY_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.DISPLAY_NAME'] ]
+- name: MODEL_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.MODEL_NAME'] ] 

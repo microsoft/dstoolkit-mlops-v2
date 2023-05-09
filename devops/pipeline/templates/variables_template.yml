@@ -1,0 +1,112 @@
+parameters:
+ - name: env_name
+   displayName: "Execution Environment"
+ - name: model_type
+   displayName: "type of model to execute"
+
+stages:
+- stage: variable_generation
+  jobs:
+  - job: load_config_variables
+    steps:
+    - powershell: |
+        $json = Get-Content -Raw -Path '$(System.DefaultWorkingDirectory)/config/model_config.json' | ConvertFrom-Json
+        $firstElement = $json.models | Where-Object {($_.ML_MODEL_CONFIG_NAME -eq "${{ parameters.model_type }}") -and ($_.ENV_NAME -eq "${{ parameters.env_name }}")} | Select-Object -First 1
+        
+        Write-Output $firstElement.KEYVAULT_NAME
+        
+        foreach ($property in $firstElement.PSObject.Properties) {
+          $pname = $property.Name
+          $pvalue = $property.Value
+          Write-Output "##vso[task.setvariable variable=$pname;isoutput=true]$pvalue"
+          }
+        
+        $EXPERIMENT_NAME =  "${{ parameters.model_type }}" + "_" + "$($firstElement.EXPERIMENT_BASE_NAME)" + "_" + "${{parameters.env_name}}" + "_" + "$(Build.SourceBranchName)"
+        Write-Output "##vso[task.setvariable variable=EXPERIMENT_NAME;isoutput=true]$EXPERIMENT_NAME"
+        
+        $DISPLAY_NAME =  "${{ parameters.model_type }}" + "_" + "$($firstElement.DISPLAY_BASE_NAME)" + "_" + "${{parameters.env_name}}" + "_" + "$(Build.BuildID)"
+        Write-Output "##vso[task.setvariable variable=DISPLAY_NAME;isoutput=true]$DISPLAY_NAME"
+        Write-Output $DISPLAY_NAME
+        $MODEL_NAME =  "${{ parameters.model_type }}" + "_" + "$($firstElement.MODEL_BASE_NAME)" + "_" + "${{parameters.env_name}}" + "_" + "$(Build.SourceBranchName)"
+        Write-Output "##vso[task.setvariable variable=MODEL_NAME;isoutput=true]$MODEL_NAME"  
+      name: loading_model_config
+
+  - job: validate_assign_variables
+    dependsOn: load_config_variables
+    variables:
+    - name:  ML_MODEL_CONFIG_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.ML_MODEL_CONFIG_NAME'] ]
+    - name:  IOTHUB_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.IOTHUB_NAME'] ] 
+    - name:  IOT_HUB_RESOURCE_GROUP
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.IOT_HUB_RESOURCE_GROUP'] ] 
+    - name:  KEYVAULT_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.KEYVAULT_NAME'] ] 
+    - name:  ML_SCOPE_SVC_CONNECTION
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.ML_SCOPE_SVC_CONNECTION'] ]       
+    - name:  HOST_PORT_NUMBER
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.HOST_PORT_NUMBER'] ]
+    - name:  EXPERIMENT_BASE_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.EXPERIMENT_BASE_NAME'] ] 
+    - name:  ENVIRONMENT_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.ENVIRONMENT_NAME'] ]
+    - name:  ENV_BASE_IMAGE_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.ENV_BASE_IMAGE_NAME'] ]
+    - name:  DISPLAY_BASE_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.DISPLAY_BASE_NAME'] ]
+    - name: CONDA_PATH
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.CONDA_PATH'] ]        
+    - name:  CLUSTER_SIZE
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.CLUSTER_SIZE'] ] 
+    - name:  CLUSTER_REGION
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.CLUSTER_REGION'] ] 
+    - name:  CLUSTER_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.CLUSTER_NAME'] ] 
+    - name:  AZURE_RM_SVC_CONNECTION
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.AZURE_RM_SVC_CONNECTION'] ] 
+    - name:  MODEL_BASE_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.MODEL_BASE_NAME'] ]
+    - name:  REGISTRY_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.REGISTRY_NAME'] ] 
+    - name:  RESOURCE_GROUP_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.RESOURCE_GROUP_NAME'] ]
+    - name:  SCORE_FILE_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.SCORE_FILE_NAME'] ] 
+    - name:  SMOKE_TEST_DOCKER_NAME
+    - name:  TARGET_CONDITION
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.TARGET_CONDITION'] ] 
+    - name:  TEMP_CONTAINER_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.TEMP_CONTAINER_NAME'] ]
+    - name:  TEMP_IMAGE_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.TEMP_IMAGE_NAME'] ] 
+    - name:  TEST_FILE_PATH
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.TEST_FILE_PATH'] ]          
+    - name:  WORKSPACE_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.WORKSPACE_NAME'] ]
+    - name: EXPERIMENT_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.EXPERIMENT_NAME'] ]
+    - name: DISPLAY_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.DISPLAY_NAME'] ]
+    - name: MODEL_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.MODEL_NAME'] ]  
+    steps:
+    - script: |
+        if [ -z "$(ML_MODEL_CONFIG_NAME)" ]
+        then
+          echo "variables are not available. Check parameter values or config json file for valid values.."
+          exit 1
+        else
+          echo "variables were loaded from config file.."
+          printenv
+        fi
+      name: validate_variable_load
+    - task: AzureKeyVault@2
+      continueOnError: false
+      inputs:
+        azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+        KeyVaultName: $(KEYVAULT_NAME)
+        SecretsFilter: '*'
+        RunAsPreJob: false
+      name: load_keyvault_secrets
+
+          
