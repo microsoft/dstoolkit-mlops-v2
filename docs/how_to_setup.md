@@ -20,6 +20,9 @@ In order to setup the repository, you need to complete few steps.
 - ENVIRONMENT_NAME: a name of the Azure ML environment.
 - ENV_BASE_IMAGE_NAME: a base image for the environment (ex.: mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04).
 - CONDA_PATH: a location of the conda file (mlops/nyc_taxi/environment/conda.yml).
+- ENDPOINT_NAME: a name of the deployment to the managed endpoint.
+- ENDPOINT_DEPLOYMENT_NAME: a name of the deployment to the managed endpoint.
+- BATCH_ENDPOINT_COMPUTE_NAME: a name for the Azure ML compute for batch endpoint.
 
 Information about variable groups in Azure DevOps can be found in [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops&tabs=classic).
 
@@ -61,6 +64,9 @@ In order to setup the repository, you need to complete few steps.
 - ENVIRONMENT_NAME: a name of the Azure ML environment.
 - ENV_BASE_IMAGE_NAME: a base image for the environment (ex.: mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04).
 - CONDA_PATH: a location of the conda file (mlops/nyc_taxi/environment/conda.yml).
+- ENDPOINT_NAME: a name of the deployment to the managed endpoint.
+- ENDPOINT_DEPLOYMENT_NAME: a name of the deployment to the managed endpoint.
+- BATCH_ENDPOINT_COMPUTE_NAME: a name for the Azure ML compute for batch endpoint.
 
 Information about repository variable in Github Workflows can be found in [this document](https://docs.github.com/en/actions/learn-github-actions/variables#creating-configuration-variables-for-a-repository).
 

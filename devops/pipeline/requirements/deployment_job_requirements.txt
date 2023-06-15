@@ -1,0 +1,3 @@
+azure-cli==2.48.1
+azure-ai-ml==1.8.0
+azure-identity==1.11.0

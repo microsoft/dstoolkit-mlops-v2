@@ -18,6 +18,13 @@ parameters:
  - name: exec_environment
    displayName: "Execution Environment"
    default: "dev"
+ - name: endpointType
+   displayName: Endpoint Type
+   type: string
+   values:
+    - BatchEndpoint
+    - OnlineEndpoint
+
 
 variables:
 - group: MLOps-${{parameters.exec_environment}}-VG
@@ -77,3 +84,10 @@ stages:
       # https://github.com/Azure/azure-mlops-automation for details or get access
 
       - template: templates/wait_with_extension_job.yml
+
+    - stage: EndpointDeployment
+      displayName: Endpoint Deployment
+      jobs:
+      - template: templates/endpoint_deployment.yml
+        parameters:
+          endpointType: ${{parameters.endpointType}}

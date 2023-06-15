@@ -1,0 +1,67 @@
+parameters:
+  - name: endpointType
+    displayName: Endpoint Type
+    type: string
+    values:
+      - BatchEndpoint
+      - OnlineEndpoint
+
+jobs:
+  - job: deployEndpoint
+    displayName: Deploy Managed Endpoint
+    steps:
+      - task: UsePythonVersion@0
+        displayName: "Use Python 3.8"
+        inputs:
+          versionSpec: "3.8"
+
+      - task: AzureCLI@2
+        displayName: Install Job Requirements
+        inputs:
+          azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+          scriptType: bash
+          scriptLocation: inlineScript
+          workingDirectory: $(System.DefaultWorkingDirectory)
+          inlineScript: |
+            set -e # fail on error
+            python -m pip install --upgrade pip
+            pip install -r devops/pipeline/requirements/deployment_job_requirements.txt
+            az version
+
+      - ${{ if eq(parameters.endpointType, 'BatchEndpoint') }}:
+        - task: AzureCLI@2
+          displayName: Deploy Batch Endpoint
+          inputs:
+            azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+            scriptType: bash
+            continueOnError: false
+            scriptLocation: inlineScript
+            workingDirectory: $(System.DefaultWorkingDirectory)
+            inlineScript: |             
+              python -m mlops.nyc_taxi.src.deploy.deploy-batch-endpoint \
+                --subscription_id $(SUBSCRIPTION_ID) \
+                --resource_group_name $(RESOURCE_GROUP_NAME) \
+                --workspace_name $(WORKSPACE_NAME) \
+                --deployment_name $(ENDPOINT_DEPLOYMENT_NAME) \
+                --endpoint_name $(ENDPOINT_NAME) \
+                --model_name $(MODEL_BASE_NAME) \
+                --compute_name $(BATCH_ENDPOINT_COMPUTE_NAME)
+
+      - ${{ if eq(parameters.endpointType, 'OnlineEndpoint') }}:
+        - task: AzureCLI@2
+          displayName: Deploy Online Endpoint
+          inputs:
+            azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+            scriptType: bash
+            continueOnError: false
+            scriptLocation: inlineScript
+            workingDirectory: $(System.DefaultWorkingDirectory)
+            inlineScript: |
+              python -m mlops.nyc_taxi.src.deploy.deploy-online-endpoint \
+                --subscription_id $(SUBSCRIPTION_ID) \
+                --resource_group_name $(RESOURCE_GROUP_NAME) \
+                --workspace_name $(WORKSPACE_NAME) \
+                --deployment_name $(ENDPOINT_DEPLOYMENT_NAME) \
+                --endpoint_name $(ENDPOINT_NAME) \
+                --model_name $(MODEL_BASE_NAME) \
+                --traffic_allocation 100 \
