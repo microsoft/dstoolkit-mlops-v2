@@ -73,8 +73,6 @@ stages:
         steps:
         - template: templates/get_connection_details.yml
         - template: templates/configure_azureml_agent.yml
-        - template: templates/provision_realtime_endpoint.yml
-        - template: templates/provision_realtime_deployment.yml
         - template: templates/execute_python_code.yml
           parameters:
             step_name: provision_azureml_endpoint
