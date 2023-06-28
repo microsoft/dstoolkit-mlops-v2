@@ -56,7 +56,7 @@ stages:
 
     - stage: deploy
       displayName: Execute Deployment Job
-      dependsOn: execute_job
+      dependsOn: execute_training_job
       variables: 
         run_id_from_submit_job: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ]     
       jobs:
