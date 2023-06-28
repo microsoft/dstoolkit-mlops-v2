@@ -17,6 +17,7 @@ pool:
 
 
 variables:
+- group: mlops_platform_dev_vg
 - name: PIPELINE_TYPE
   value: nyc_taxi
 
