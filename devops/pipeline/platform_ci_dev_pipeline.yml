@@ -69,6 +69,18 @@ stages:
                 - script: echo "Approving will deploy the model to the edge"
 
       - job: Execute_Deployment_Job
+        dependsOn: ApproveDeployment
         steps:
         - template: templates/get_connection_details.yml
         - template: templates/configure_azureml_agent.yml
+        - template: templates/provision_realtime_endpoint.yml
+        - template: templates/provision_realtime_deployment.yml
+        - template: templates/execute_python_code.yml
+          parameters:
+            step_name: provision_azureml_endpoint
+            script_parameter: |
+              python -m mlops.${{ parameters.model_type }}.src.provision_endpoint \
+                --subscription_id $(SUBSCRIPTION_ID) \
+                --resource_group_name $(RESOURCE_GROUP_NAME) \
+                --workspace_name $(WORKSPACE_NAME) \
+                --endpoint_name $(ENDPOINT_NAME) 

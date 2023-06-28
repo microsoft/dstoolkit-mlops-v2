@@ -54,4 +54,6 @@ variables:
 - name: DISPLAY_NAME
   value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.DISPLAY_NAME'] ]
 - name: MODEL_NAME
-  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.MODEL_NAME'] ] 
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.MODEL_NAME'] ]
+- name: ENDPOINT_NAME
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.ENDPOINT_NAME'] ]  

@@ -89,6 +89,9 @@ stages:
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.DISPLAY_NAME'] ]
     - name: MODEL_NAME
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.MODEL_NAME'] ]  
+    - name: ENDPOINT_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.ENDPOINT_NAME'] ]  
+
     steps:
     - script: |
         if [ -z "$(ML_MODEL_CONFIG_NAME)" ]
