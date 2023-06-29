@@ -91,6 +91,18 @@ stages:
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.MODEL_NAME'] ]  
     - name: ENDPOINT_NAME
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.ENDPOINT_NAME'] ]  
+    - name: DEPLOYMENT_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.DEPLOYMENT_NAME'] ]
+    - name: DEPLOYMENT_TRAFFIC_ALLOCATION
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.DEPLOYMENT_TRAFFIC_ALLOCATION'] ]  
+    - name: DEPLOYMENT_VM_SIZE
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.DEPLOYMENT_VM_SIZE'] ]
+    - name: DEPLOYMENT_BASE_IMAGE_NAME
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.DEPLOYMENT_BASE_IMAGE_NAME'] ]
+    - name: DEPLOYMENT_CONDA_PATH
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.DEPLOYMENT_CONDA_PATH'] ]  
+    - name: SCORE_DIR
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.SCORE_DIR'] ]
 
     steps:
     - script: |
