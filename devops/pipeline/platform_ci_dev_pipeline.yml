@@ -99,7 +99,7 @@ stages:
                 --deployment_traffic_allocation $(DEPLOYMENT_TRAFFIC_ALLOCATION) \
                 --deployment_vm_size $(DEPLOYMENT_VM_SIZE) \
                 --model_name $(MODEL_NAME) \
-                --deployment_base_image $(DEPLOYMENT_BASE_IMAGE) \
+                --deployment_base_image $(DEPLOYMENT_BASE_IMAGE_NAME) \
                 --deployment_conda_path $(DEPLOYMENT_CONDA_PATH) \
                 --score_dir $(SCORE_DIR) \
                 --score_file_name $(SCORE_FILE_NAME)
