@@ -7,7 +7,7 @@ parameters:
 steps:
   - task: AzureCLI@2
     name: execute_python_job
-    displayName: $(step_name)
+    displayName: ${{parameters.step_name}}
     continueOnError: false
     env: {APPLICATIONINSIGHTS_CONNECTION_STRING: "$(APPLICATIONINSIGHTS-CONNECTION-STRING)"}
     inputs: 
