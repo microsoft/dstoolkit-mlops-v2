@@ -86,3 +86,31 @@ stages:
                 --resource_group_name $(RESOURCE_GROUP_NAME) \
                 --workspace_name $(WORKSPACE_NAME) \
                 --endpoint_name $(ENDPOINT_NAME) 
+        - template: templates/execute_python_code.yml
+          parameters:
+            step_name: provision_azureml_deployment
+            script_parameter: |
+              python -m mlops.${{ parameters.model_type }}.src.provision_deployment \
+                --subscription_id $(SUBSCRIPTION_ID) \
+                --resource_group_name $(RESOURCE_GROUP_NAME) \
+                --workspace_name $(WORKSPACE_NAME) \
+                --endpoint_name $(ENDPOINT_NAME) \
+                --deployment_name $(DEPLOYMENT_NAME) \
+                --deployment_traffic_allocation $(DEPLOYMENT_TRAFFIC_ALLOCATION) \
+                --deployment_vm_size $(DEPLOYMENT_VM_SIZE) \
+                --model_name $(MODEL_NAME) \
+                --deployment_base_image $(DEPLOYMENT_BASE_IMAGE) \
+                --deployment_conda_path $(DEPLOYMENT_CONDA_PATH) \
+                --score_dir $(SCORE_DIR) \
+                --score_file_name $(SCORE_FILE_NAME)
+        - template: templates/execute_python_code.yml
+          parameters:
+            step_name: provision_azureml_deployment
+            script_parameter: |
+              python -m mlops.${{ parameters.model_type }}.src.test_model_on_aml \
+                --subscription_id $(SUBSCRIPTION_ID) \
+                --resource_group_name $(RESOURCE_GROUP_NAME) \
+                --workspace_name $(WORKSPACE_NAME) \
+                --endpoint_name $(ENDPOINT_NAME) \
+                --deployment_name $(DEPLOYMENT_NAME) \
+                --test_model_file $(TEST_FILE_PATH) 

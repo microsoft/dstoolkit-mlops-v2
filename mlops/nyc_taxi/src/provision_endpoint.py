@@ -23,9 +23,8 @@ parser.add_argument("--workspace_name", type=str, help="Azure Machine learning W
 parser.add_argument("--endpoint_name", type=str, help="Azureml realtime endpoint name")
 args = parser.parse_args()
 
-allowed_chars = string.ascii_lowercase + string.digits
-endpoint_suffix = "".join(random.choice(allowed_chars) for x in range(5))
-endpoint_name = "diabetes-endpoint-" + args.endpoint_name
+
+endpoint_name = args.endpoint_name
 
 print(f"Endpoint name: {endpoint_name}")
 
