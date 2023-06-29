@@ -6,12 +6,8 @@ import argparse
 # arguments expected for executing the experiments
 parser = argparse.ArgumentParser("provision_endpoints")
 parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
-parser.add_argument(
-    "--resource_group_name", type=str, help="Azure Machine learning resource group"
-)
-parser.add_argument(
-    "--workspace_name", type=str, help="Azure Machine learning Workspace name"
-)
+parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group")
+parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name")
 parser.add_argument("--endpoint_name", type=str, help="Azureml realtime endpoint name")
 args = parser.parse_args()
 
