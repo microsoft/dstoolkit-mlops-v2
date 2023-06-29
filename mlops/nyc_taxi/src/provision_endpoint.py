@@ -4,6 +4,16 @@ from pathlib import Path
 import argparse
 import random
 import string
+from azure.ai.ml import MLClient
+from azure.ai.ml.entities import (
+    ManagedOnlineEndpoint,
+    ManagedOnlineDeployment,
+    Model,
+    Environment,
+    CodeConfiguration,
+)
+from azure.identity import DefaultAzureCredential
+from azure.ai.ml.constants import AssetTypes
 
 # arguments expected for executing the experiments
 parser = argparse.ArgumentParser("provision_endpoints")
@@ -18,6 +28,10 @@ endpoint_suffix = "".join(random.choice(allowed_chars) for x in range(5))
 endpoint_name = "diabetes-endpoint-" + args.endpoint_name
 
 print(f"Endpoint name: {endpoint_name}")
+
+ml_client = MLClient(
+    DefaultAzureCredential(), args.subscription_id, args.resource_group_name, args.workspace_name
+)
 
 endpoint = ManagedOnlineEndpoint(
     name=endpoint_name,
