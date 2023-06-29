@@ -27,7 +27,7 @@
             "TEMP_IMAGE_NAME": "testimage",
             "TEST_FILE_PATH": "./sample-request.json",
             "WORKSPACE_NAME": "researchmlops",
-            "ENDPOINT_NAME": "london_taxi"
+            "ENDPOINT_NAME": "london-taxi"
         },
         {
             "ML_MODEL_CONFIG_NAME": "nyc_taxi",
@@ -56,7 +56,7 @@
             "TEMP_IMAGE_NAME": "testimage",
             "TEST_FILE_PATH": "./sample-request.json",
             "WORKSPACE_NAME": "researchmlops",
-            "ENDPOINT_NAME": "nyc_taxi"           
+            "ENDPOINT_NAME": "nyc-taxi"           
         }
     ]
 }
