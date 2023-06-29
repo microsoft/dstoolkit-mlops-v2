@@ -61,6 +61,8 @@ stages:
       - execute_training_job
       variables:
       - template: templates/experiment_variables.yml
+      - name: run_id_from_submit_job
+        value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ]
       jobs:
       - deployment: ApproveDeployment
         environment: deployenv
@@ -74,16 +76,7 @@ stages:
         dependsOn: ApproveDeployment
         steps:
         - template: templates/get_connection_details.yml
-        - template: templates/configure_azureml_agent.yml
-        - task: Bash@3
-          displayName: Test Variables
-          inputs:
-            targetType: 'inline'
-            script: |
-              echo "$(SUBSCRIPTION_ID)"
-              echo "$(RESOURCE_GROUP_NAME)"
-              echo "$(WORKSPACE_NAME)"
-              echo "$(ENDPOINT_NAME)"
+        - template: templates/configure_azureml_agent.yml)"
         - template: templates/execute_python_code.yml
           parameters:
             step_name: provision_azureml_endpoint

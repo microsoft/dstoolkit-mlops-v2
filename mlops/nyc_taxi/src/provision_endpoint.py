@@ -2,6 +2,8 @@ import os
 import json
 from pathlib import Path
 import argparse
+import random
+import string
 
 # arguments expected for executing the experiments
 parser = argparse.ArgumentParser("provision_endpoints")
