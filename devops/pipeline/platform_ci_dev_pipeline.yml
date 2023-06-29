@@ -76,6 +76,15 @@ stages:
         steps:
         - template: templates/get_connection_details.yml
         - template: templates/configure_azureml_agent.yml
+        - task: Bash@3
+          displayName: Test Variables
+          inputs:
+            targetType: 'inline'
+            script: |
+              echo "$(SUBSCRIPTION_ID)"
+              echo "$(RESOURCE_GROUP_NAME)"
+              echo "$(WORKSPACE_NAME)"
+              echo "$(ENDPOINT_NAME)"
         - template: templates/execute_python_code.yml
           parameters:
             step_name: provision_azureml_endpoint
