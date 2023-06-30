@@ -34,9 +34,9 @@ jobs:
 - job: Execute_Deployment_Job
   dependsOn: ApproveDeployment
   steps:
-  - template: templates/get_connection_details.yml
-  - template: templates/configure_azureml_agent.yml
-  - template: templates/execute_python_code.yml
+  - template: get_connection_details.yml
+  - template: configure_azureml_agent.yml
+  - template: execute_python_code.yml
     parameters:
       step_name: provision_azureml_endpoint
       script_parameter: |
@@ -46,7 +46,7 @@ jobs:
           --workspace_name ${{ parameters.WORKSPACE_NAME }} \
           --endpoint_name ${{ parameters.ENDPOINT_NAME }} \
           --is_local ${{ parameters.IS_LOCAL }}
-  - template: templates/execute_python_code.yml
+  - template: execute_python_code.yml
     parameters:
       step_name: provision_azureml_deployment
       script_parameter: |
@@ -64,7 +64,7 @@ jobs:
           --score_dir ${{ parameters.SCORE_DIR }} \
           --score_file_name ${{ parameters.SCORE_FILE_NAME }} \
           --is_local ${{ parameters.IS_LOCAL }}
-  - template: templates/execute_python_code.yml
+  - template: execute_python_code.yml
     parameters:
       step_name: provision_azureml_deployment
       script_parameter: |

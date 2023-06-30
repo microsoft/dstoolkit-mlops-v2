@@ -74,18 +74,18 @@ stages:
 
       - template: templates/aml_real_deployment.yml  # Template reference
         parameters:
-          SUBSCRIPTION_ID: macOS
-          RESOURCE_GROUP_NAME: macOS
-          WORKSPACE_NAME: macOS
-          MODEL_TYPE: macOS
-          ENDPOINT_NAME: macOS
-          DEPLOYMENT_NAME: macOS
-          DEPLOYMENT_TRAFFIC_ALLOCATION: macOS
-          DEPLOYMENT_VM_SIZE: macOS
-          MODEL_NAME: macOS
-          DEPLOYMENT_BASE_IMAGE_NAME: macOS
-          DEPLOYMENT_CONDA_PATH: macOS
-          SCORE_DIR: macOS
-          SCORE_FILE_NAME: macOS
-          TEST_FILE_PATH: macOS
+          SUBSCRIPTION_ID: $(SUBSCRIPTION_ID)
+          RESOURCE_GROUP_NAME: $(RESOURCE_GROUP_NAME)
+          WORKSPACE_NAME: $(WORKSPACE_NAME)
+          MODEL_TYPE: ${{ parameters.model_type }}
+          ENDPOINT_NAME: $(ENDPOINT_NAME)
+          DEPLOYMENT_NAME: $(DEPLOYMENT_NAME)
+          DEPLOYMENT_TRAFFIC_ALLOCATION: $(DEPLOYMENT_TRAFFIC_ALLOCATION)
+          DEPLOYMENT_VM_SIZE: $(DEPLOYMENT_VM_SIZE)
+          MODEL_NAME: $(MODEL_NAME)
+          DEPLOYMENT_BASE_IMAGE_NAME: $(DEPLOYMENT_BASE_IMAGE_NAME)
+          DEPLOYMENT_CONDA_PATH: $(DEPLOYMENT_CONDA_PATH)
+          SCORE_DIR: $(SCORE_DIR)
+          SCORE_FILE_NAME: $(SCORE_FILE_NAME)
+          TEST_FILE_PATH: $(TEST_FILE_PATH)
           IS_LOCAL: "False"
