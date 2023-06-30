@@ -22,7 +22,6 @@ args = parser.parse_args()
 
 
 endpoint_name = args.endpoint_name
-local = args.is_local
 batch = args.is_batch
 
 print(f"Endpoint name: {endpoint_name}")
