@@ -88,4 +88,4 @@ stages:
           SCORE_DIR: $(SCORE_DIR)
           SCORE_FILE_NAME: $(SCORE_FILE_NAME)
           TEST_FILE_PATH: $(TEST_FILE_PATH)
-          IS_BRANCH: "False"
+          IS_BATCH: "False"
