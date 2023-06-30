@@ -8,7 +8,13 @@ from azure.ai.ml import MLClient
 from azure.ai.ml.entities import (
     ManagedOnlineEndpoint,
     ManagedOnlineDeployment,
+    BatchEndpoint,
+    ModelBatchDeployment,
+    ModelBatchDeploymentSettings,
     Model,
+    AmlCompute,
+    Data,
+    BatchRetrySettings,
     Environment,
     CodeConfiguration,
 )

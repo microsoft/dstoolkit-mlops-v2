@@ -43,11 +43,3 @@ if batch == "False":
     )
 
     ml_client.online_endpoints.begin_create_or_update(endpoint=endpoint).result()
-else:
-    endpoint = BatchEndpoint(
-        name=endpoint_name,
-        description="An endpoint to perform training of the Heart Disease Data Set prediction task",
-        tags={"foo": "bar"},
-    )
-
-    ml_client.batch_endpoints.begin_create_or_update(endpoint).result()
