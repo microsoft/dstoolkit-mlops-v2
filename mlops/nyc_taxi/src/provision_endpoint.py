@@ -40,5 +40,5 @@ endpoint = ManagedOnlineEndpoint(
     auth_mode="key",
     tags={"foo": "bar"},
 )
-
-ml_client.online_endpoints.begin_create_or_update(endpoint, local=local).result()
+if local == "False":
+    ml_client.online_endpoints.begin_create_or_update(endpoint=endpoint).result()

@@ -74,8 +74,8 @@ blue_deployment = ManagedOnlineDeployment(
     instance_type=deployment_vm_size,
     instance_count=1,
 )
-
-ml_client.online_deployments.begin_create_or_update(blue_deployment, local=local).result()
+if local == "False":
+    ml_client.online_deployments.begin_create_or_update(blue_deployment).result()
 
 #endpoint.traffic = {blue_deployment.name: 100}
 #ml_client.begin_create_or_update(endpoint).result()
