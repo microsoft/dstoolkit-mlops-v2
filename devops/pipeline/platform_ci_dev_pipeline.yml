@@ -55,7 +55,7 @@ stages:
               echo "##vso[task.setvariable variable=RUN_NAME;isOutput=true;]$run_name"
 
     - stage: deploy
-      displayName: Execute Deployment Job
+      displayName: Execute_local_deployment
       dependsOn: 
       - variable_generation
       - execute_training_job
@@ -72,45 +72,20 @@ stages:
               steps:
                 - script: echo "Approving will deploy the model to the edge"
 
-      - job: Execute_Deployment_Job
-        dependsOn: ApproveDeployment
-        steps:
-        - template: templates/get_connection_details.yml
-        - template: templates/configure_azureml_agent.yml
-        - template: templates/execute_python_code.yml
-          parameters:
-            step_name: provision_azureml_endpoint
-            script_parameter: |
-              python -m mlops.${{ parameters.model_type }}.src.provision_endpoint \
-                --subscription_id $(SUBSCRIPTION_ID) \
-                --resource_group_name $(RESOURCE_GROUP_NAME) \
-                --workspace_name $(WORKSPACE_NAME) \
-                --endpoint_name $(ENDPOINT_NAME) 
-        - template: templates/execute_python_code.yml
-          parameters:
-            step_name: provision_azureml_deployment
-            script_parameter: |
-              python -m mlops.${{ parameters.model_type }}.src.provision_deployment \
-                --subscription_id $(SUBSCRIPTION_ID) \
-                --resource_group_name $(RESOURCE_GROUP_NAME) \
-                --workspace_name $(WORKSPACE_NAME) \
-                --endpoint_name $(ENDPOINT_NAME) \
-                --deployment_name $(DEPLOYMENT_NAME) \
-                --deployment_traffic_allocation $(DEPLOYMENT_TRAFFIC_ALLOCATION) \
-                --deployment_vm_size $(DEPLOYMENT_VM_SIZE) \
-                --model_name $(MODEL_NAME) \
-                --deployment_base_image $(DEPLOYMENT_BASE_IMAGE_NAME) \
-                --deployment_conda_path $(DEPLOYMENT_CONDA_PATH) \
-                --score_dir $(SCORE_DIR) \
-                --score_file_name $(SCORE_FILE_NAME)
-        - template: templates/execute_python_code.yml
-          parameters:
-            step_name: provision_azureml_deployment
-            script_parameter: |
-              python -m mlops.${{ parameters.model_type }}.src.test_model_on_aml \
-                --subscription_id $(SUBSCRIPTION_ID) \
-                --resource_group_name $(RESOURCE_GROUP_NAME) \
-                --workspace_name $(WORKSPACE_NAME) \
-                --endpoint_name $(ENDPOINT_NAME) \
-                --deployment_name $(DEPLOYMENT_NAME) \
-                --test_model_file $(TEST_FILE_PATH) 
+      - template: templates/aml_real_deployment.yml  # Template reference
+        parameters:
+          SUBSCRIPTION_ID: macOS
+          RESOURCE_GROUP_NAME: macOS
+          WORKSPACE_NAME: macOS
+          MODEL_TYPE: macOS
+          ENDPOINT_NAME: macOS
+          DEPLOYMENT_NAME: macOS
+          DEPLOYMENT_TRAFFIC_ALLOCATION: macOS
+          DEPLOYMENT_VM_SIZE: macOS
+          MODEL_NAME: macOS
+          DEPLOYMENT_BASE_IMAGE_NAME: macOS
+          DEPLOYMENT_CONDA_PATH: macOS
+          SCORE_DIR: macOS
+          SCORE_FILE_NAME: macOS
+          TEST_FILE_PATH: macOS
+          IS_LOCAL: "False"

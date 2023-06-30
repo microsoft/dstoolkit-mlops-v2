@@ -21,10 +21,12 @@ parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
 parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group")
 parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name")
 parser.add_argument("--endpoint_name", type=str, help="Azureml realtime endpoint name")
+parser.add_argument("--is_local", type=str, help="local endpoint provisioning")
 args = parser.parse_args()
 
 
 endpoint_name = args.endpoint_name
+local = args.is_local
 
 print(f"Endpoint name: {endpoint_name}")
 
@@ -39,4 +41,4 @@ endpoint = ManagedOnlineEndpoint(
     tags={"foo": "bar"},
 )
 
-ml_client.online_endpoints.begin_create_or_update(endpoint).result()
+ml_client.online_endpoints.begin_create_or_update(endpoint, local=local).result()
