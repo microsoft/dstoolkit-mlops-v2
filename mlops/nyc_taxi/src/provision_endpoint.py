@@ -6,10 +6,7 @@ import random
 import string
 from azure.ai.ml import MLClient
 from azure.ai.ml.entities import (
-    ManagedOnlineEndpoint,
-    BatchEndpoint,
-    ModelBatchDeployment,
-    ModelBatchDeploymentSettings,
+    ManagedOnlineEndpoint
 )
 from azure.identity import DefaultAzureCredential
 from azure.ai.ml.constants import AssetTypes
