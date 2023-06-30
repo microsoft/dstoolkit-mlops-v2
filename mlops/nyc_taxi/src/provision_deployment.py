@@ -29,7 +29,7 @@ parser.add_argument("--deployment_base_image", type=str, help="Azureml inference
 parser.add_argument("--deployment_conda_path", type=str, help="conda file path for inferencing image")
 parser.add_argument("--score_dir", type=str, help="name of directory with score file")
 parser.add_argument("--score_file_name", type=str, help="score file name")
-parser.add_argument("--is_local", type=str, help="is local deployment")
+parser.add_argument("--is_batch", type=str, help="batch deployment")
 args = parser.parse_args()
 
 endpoint_name = args.endpoint_name
@@ -40,7 +40,7 @@ deployment_base_image = args.deployment_base_image
 deployment_conda_path = args.deployment_conda_path
 score_dir =  args.score_dir
 score_file_name = args.score_file_name
-local = args.is_local
+batch = args.is_batch
 
 print(f"Endpoint name: {endpoint_name}")
 print(f"Endpoint name: {deployment_name}")
@@ -74,8 +74,8 @@ blue_deployment = ManagedOnlineDeployment(
     instance_type=deployment_vm_size,
     instance_count=1,
 )
-if local == "False":
-    ml_client.online_deployments.begin_create_or_update(blue_deployment).result()
+
+ml_client.online_deployments.begin_create_or_update(blue_deployment).result()
 
 #endpoint.traffic = {blue_deployment.name: 100}
 #ml_client.begin_create_or_update(endpoint).result()

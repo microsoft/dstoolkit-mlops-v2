@@ -7,10 +7,9 @@ import string
 from azure.ai.ml import MLClient
 from azure.ai.ml.entities import (
     ManagedOnlineEndpoint,
-    ManagedOnlineDeployment,
-    Model,
-    Environment,
-    CodeConfiguration,
+    BatchEndpoint,
+    ModelBatchDeployment,
+    ModelBatchDeploymentSettings,
 )
 from azure.identity import DefaultAzureCredential
 from azure.ai.ml.constants import AssetTypes
@@ -21,12 +20,13 @@ parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
 parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group")
 parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name")
 parser.add_argument("--endpoint_name", type=str, help="Azureml realtime endpoint name")
-parser.add_argument("--is_local", type=str, help="local endpoint provisioning")
+parser.add_argument("--is_batch", type=str, help="batch endpoint provisioning")
 args = parser.parse_args()
 
 
 endpoint_name = args.endpoint_name
 local = args.is_local
+batch = args.is_batch
 
 print(f"Endpoint name: {endpoint_name}")
 
@@ -34,11 +34,20 @@ ml_client = MLClient(
     DefaultAzureCredential(), args.subscription_id, args.resource_group_name, args.workspace_name
 )
 
-endpoint = ManagedOnlineEndpoint(
-    name=endpoint_name,
-    description="An online endpoint serving an MLflow model for the diabetes classification task",
-    auth_mode="key",
-    tags={"foo": "bar"},
-)
-if local == "False":
+if batch == "False":
+    endpoint = ManagedOnlineEndpoint(
+        name=endpoint_name,
+        description="An online endpoint serving an MLflow model for the diabetes classification task",
+        auth_mode="key",
+        tags={"foo": "bar"},
+    )
+
     ml_client.online_endpoints.begin_create_or_update(endpoint=endpoint).result()
+else:
+    endpoint = BatchEndpoint(
+        name=endpoint_name,
+        description="An endpoint to perform training of the Heart Disease Data Set prediction task",
+        tags={"foo": "bar"},
+    )
+
+    ml_client.batch_endpoints.begin_create_or_update(endpoint).result()

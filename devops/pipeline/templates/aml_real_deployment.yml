@@ -27,7 +27,7 @@ parameters:
   type: string
 - name: TEST_FILE_PATH
   type: string
-- name: IS_LOCAL
+- name: IS_BATCH
   type: string
 
 jobs:
@@ -45,7 +45,7 @@ jobs:
           --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
           --workspace_name ${{ parameters.WORKSPACE_NAME }} \
           --endpoint_name ${{ parameters.ENDPOINT_NAME }} \
-          --is_local ${{ parameters.IS_LOCAL }}
+          --is_batch ${{ parameters.IS_BATCH }}
   - template: execute_python_code.yml
     parameters:
       step_name: provision_azureml_deployment
@@ -63,17 +63,17 @@ jobs:
           --deployment_conda_path ${{ parameters.DEPLOYMENT_CONDA_PATH }} \
           --score_dir ${{ parameters.SCORE_DIR }} \
           --score_file_name ${{ parameters.SCORE_FILE_NAME }} \
-          --is_local ${{ parameters.IS_LOCAL }}
+          --is_batch ${{ parameters.IS_BATCH }}
   - template: execute_python_code.yml
     parameters:
-      step_name: provision_azureml_deployment
+      step_name: test_azureml_deployment
       script_parameter: |
         python -m mlops.${{ parameters.MODEL_TYPE }}.src.test_model_on_aml \
           --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
           --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
           --workspace_name ${{ parameters.WORKSPACE_NAME }} \
           --endpoint_name ${{ parameters.ENDPOINT_NAME }} \
-          --deployment_name ${{ parameters.DEPLOYMENT_NAME }} \) \
+          --deployment_name ${{ parameters.DEPLOYMENT_NAME }} \
           --test_model_file ${{ parameters.TEST_FILE_PATH }} 
 
 
