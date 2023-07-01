@@ -40,7 +40,7 @@ jobs:
     parameters:
       step_name: provision_azureml_endpoint
       script_parameter: |
-        python -m mlops.${{ parameters.MODEL_TYPE }}.src.provision_endpoint \
+        python -m mlops.common.deployment.provision_endpoint \
           --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
           --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
           --workspace_name ${{ parameters.WORKSPACE_NAME }} \
@@ -50,7 +50,7 @@ jobs:
     parameters:
       step_name: provision_azureml_deployment
       script_parameter: |
-        python -m mlops.${{ parameters.MODEL_TYPE }}.src.provision_deployment \
+        python -m mlops.common.deployment.provision_deployment \
           --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
           --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
           --workspace_name ${{ parameters.WORKSPACE_NAME }} \
@@ -68,7 +68,7 @@ jobs:
     parameters:
       step_name: test_azureml_deployment
       script_parameter: |
-        python -m mlops.${{ parameters.MODEL_TYPE }}.src.test_model_on_aml \
+        python -m mlops.common.deployment.test_model_on_aml \
           --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
           --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
           --workspace_name ${{ parameters.WORKSPACE_NAME }} \
