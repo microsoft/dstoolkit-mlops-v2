@@ -6,9 +6,9 @@ jobs:
 - job: Build_Validation_Pipeline
   steps:
   - task: UsePythonVersion@0
-    displayName: 'Use Python 3.8'
+    displayName: 'Use Python 3.9'
     inputs:
-      versionSpec: '3.8'
+      versionSpec: '3.9'
 
   - script: |
       python -m pip install --upgrade pip
