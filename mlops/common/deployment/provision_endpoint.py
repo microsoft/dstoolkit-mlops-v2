@@ -37,7 +37,7 @@ ml_client = MLClient(
 if batch == "False":
     endpoint = ManagedOnlineEndpoint(
         name=endpoint_name,
-        description="An online endpoint serving an MLflow model",
+        description="An online endpoint serving an MLflow model for the diabetes classification task",
         auth_mode="key",
         tags={"build_id": build_id, "run_id": run_id},
     )
