@@ -8,8 +8,8 @@ dependencies:
     - pandas
     - scikit-learn==1.2.0
     - mlflow==2.1.1
-    - azureml-mlflow==1.48.0
+    - azureml-mlflow==1.52.0
     - mldesigner==0.1.0b4
-    - azure-ai-ml==1.5.0
+    - azure-ai-ml==1.8.0
     - azure-identity==1.11.0
     - azure-keyvault-secrets==4.6.0
