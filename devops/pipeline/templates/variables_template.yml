@@ -88,6 +88,10 @@ stages:
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.DEPLOYMENT_CONDA_PATH'] ]  
     - name: SCORE_DIR
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.SCORE_DIR'] ]
+    - name: IS_BATCH_DEPLOYMENT
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.IS_BATCH_DEPLOYMENT'] ]
+    - name: BATCH_DEPLOYMENT_CONFIG
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.BATCH_DEPLOYMENT_CONFIG'] ]
 
     steps:
     - script: |

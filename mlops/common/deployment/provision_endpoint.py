@@ -9,7 +9,18 @@ from azure.ai.ml.entities import (
     ManagedOnlineEndpoint
 )
 from azure.identity import DefaultAzureCredential
-from azure.ai.ml.constants import AssetTypes
+from azure.ai.ml.entities import (
+    BatchEndpoint,
+    ModelBatchDeployment,
+    ModelBatchDeploymentSettings,
+    Model,
+    AmlCompute,
+    Data,
+    BatchRetrySettings,
+    CodeConfiguration,
+    Environment,
+)
+from azure.ai.ml.constants import AssetTypes, BatchDeploymentOutputAction
 
 # arguments expected for executing the experiments
 parser = argparse.ArgumentParser("provision_endpoints")
@@ -20,6 +31,7 @@ parser.add_argument("--endpoint_name", type=str, help="Azureml realtime endpoint
 parser.add_argument("--run_id", type=str, help="run responsbile for model generation")
 parser.add_argument("--build_id", type=str, help="build responsbile for deployment")
 parser.add_argument("--is_batch", type=str, help="batch endpoint provisioning")
+parser.add_argument("--batch_config", type=str, help="file path to batch config")
 args = parser.parse_args()
 
 
@@ -27,6 +39,7 @@ endpoint_name = args.endpoint_name
 batch = args.is_batch
 build_id = args.build_id
 run_id = args.run_id
+batch_config = args.batch_config
 
 print(f"Endpoint name: {endpoint_name}")
 
@@ -43,3 +56,12 @@ if batch == "False":
     )
 
     ml_client.online_endpoints.begin_create_or_update(endpoint=endpoint).result()
+
+else:
+    endpoint = BatchEndpoint(
+        name=endpoint_name,
+        description="A heart condition classifier for batch inference",
+        tags={"build_id": build_id, "run_id": run_id},
+    )
+
+    ml_client.batch_endpoints.begin_create_or_update(endpoint).result()

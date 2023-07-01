@@ -89,4 +89,6 @@ stages:
           SCORE_FILE_NAME: $(SCORE_FILE_NAME)
           TEST_FILE_PATH: $(TEST_FILE_PATH)
           RUN_ID: $(run_id_from_submit_job)
-          IS_BATCH: "False"
+          IS_BATCH: $(IS_BATCH_DEPLOYMENT)
+          BATCH_DEPLOYMENT_CONFIG: $(BATCH_DEPLOYMENT_CONFIG)
+          DEPLOY_ENVIRONMENT: ${{parameters.exec_environment}} 

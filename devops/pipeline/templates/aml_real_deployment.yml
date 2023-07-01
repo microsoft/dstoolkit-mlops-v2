@@ -29,7 +29,11 @@ parameters:
   type: string
 - name: RUN_ID
   type: string
-- name: IS_BATCH
+- name: IS_BATCH_DEPLOYMENT
+  type: string
+- name: BATCH_DEPLOYMENT_CONFIG
+  type: string
+- name: DEPLOY_ENVIRONMENT
   type: string
 
 jobs:
@@ -42,14 +46,23 @@ jobs:
     parameters:
       step_name: provision_azureml_endpoint
       script_parameter: |
-        python -m mlops.common.deployment.provision_endpoint \
+        python -m python -m mlops.common.deployment.provision_endpoint \
+	--subscription_id f5772c02-4566-4154-a8d5-5b4658e5d310 \
+    --resource_group_name mlops \
+    --workspace_name researchmlops \
+    --endpoint_name batch-endpoint-nyc-taxi \
+	--run_id "joyful_cord_5sv8gmq02q" \
+	--build_id "1392" \
+	--is_batch "True" \
+	--batch_config "mlops/nyc_taxi/deployment/batch_config.json"  \
           --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
           --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
           --workspace_name ${{ parameters.WORKSPACE_NAME }} \
           --endpoint_name ${{ parameters.ENDPOINT_NAME }} \
           --run_id ${{ parameters.RUN_ID }} \
           --build_id $(Build.Buildid) \
-          --is_batch ${{ parameters.IS_BATCH }}
+          --is_batch ${{ parameters.IS_BATCH_DEPLOYMENT }} \
+          --batch_config ${{ parameters.BATCH_DEPLOYMENT_CONFIG }}
   - template: execute_python_code.yml
     parameters:
       step_name: provision_azureml_deployment
@@ -69,7 +82,9 @@ jobs:
           --score_file_name ${{ parameters.SCORE_FILE_NAME }} \
           --run_id ${{ parameters.RUN_ID }} \
           --build_id $(Build.Buildid) \
-          --is_batch ${{ parameters.IS_BATCH }}
+          --is_batch ${{ parameters.IS_BATCH_DEPLOYMENT }} \
+          --batch_config ${{ parameters.BATCH_DEPLOYMENT_CONFIG }} \
+          --env_type ${{ parameters.DEPLOY_ENVIRONMENT }}
   - template: execute_python_code.yml
     parameters:
       step_name: test_azureml_deployment
