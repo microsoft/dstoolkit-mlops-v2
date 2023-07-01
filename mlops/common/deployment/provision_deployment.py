@@ -30,6 +30,7 @@ parser.add_argument("--deployment_conda_path", type=str, help="conda file path f
 parser.add_argument("--score_dir", type=str, help="name of directory with score file")
 parser.add_argument("--score_file_name", type=str, help="score file name")
 parser.add_argument("--build_id", type=str, help="build responsbile for deployment")
+parser.add_argument("--run_id", type=str, help="run responsbile for model generation")
 parser.add_argument("--is_batch", type=str, help="batch deployment")
 args = parser.parse_args()
 
@@ -42,6 +43,7 @@ deployment_conda_path = args.deployment_conda_path
 score_dir =  args.score_dir
 score_file_name = args.score_file_name
 build_id = args.build_id
+run_id = args.run_id
 batch = args.is_batch
 
 print(f"Endpoint name: {endpoint_name}")
@@ -75,7 +77,7 @@ blue_deployment = ManagedOnlineDeployment(
     ),
     instance_type=deployment_vm_size,
     instance_count=1,
-    tags={"build_id": build_id},
+    tags={"build_id": build_id, "run_id": run_id},
 )
 
 ml_client.online_deployments.begin_create_or_update(blue_deployment).result()

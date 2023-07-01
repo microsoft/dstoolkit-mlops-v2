@@ -27,6 +27,8 @@ parameters:
   type: string
 - name: TEST_FILE_PATH
   type: string
+- name: RUN_ID
+  type: string
 - name: IS_BATCH
   type: string
 
@@ -45,6 +47,7 @@ jobs:
           --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
           --workspace_name ${{ parameters.WORKSPACE_NAME }} \
           --endpoint_name ${{ parameters.ENDPOINT_NAME }} \
+          --run_id ${{ parameters.RUN_ID }} \
           --build_id $(Build.Buildid) \
           --is_batch ${{ parameters.IS_BATCH }}
   - template: execute_python_code.yml
@@ -64,6 +67,7 @@ jobs:
           --deployment_conda_path ${{ parameters.DEPLOYMENT_CONDA_PATH }} \
           --score_dir ${{ parameters.SCORE_DIR }} \
           --score_file_name ${{ parameters.SCORE_FILE_NAME }} \
+          --run_id ${{ parameters.RUN_ID }} \
           --build_id $(Build.Buildid) \
           --is_batch ${{ parameters.IS_BATCH }}
   - template: execute_python_code.yml
