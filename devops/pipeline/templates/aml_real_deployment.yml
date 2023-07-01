@@ -46,15 +46,7 @@ jobs:
     parameters:
       step_name: provision_azureml_endpoint
       script_parameter: |
-        python -m python -m mlops.common.deployment.provision_endpoint \
-	--subscription_id f5772c02-4566-4154-a8d5-5b4658e5d310 \
-    --resource_group_name mlops \
-    --workspace_name researchmlops \
-    --endpoint_name batch-endpoint-nyc-taxi \
-	--run_id "joyful_cord_5sv8gmq02q" \
-	--build_id "1392" \
-	--is_batch "True" \
-	--batch_config "mlops/nyc_taxi/deployment/batch_config.json"  \
+        python -m mlops.common.deployment.provision_endpoint \
           --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
           --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
           --workspace_name ${{ parameters.WORKSPACE_NAME }} \
@@ -63,6 +55,7 @@ jobs:
           --build_id $(Build.Buildid) \
           --is_batch ${{ parameters.IS_BATCH_DEPLOYMENT }} \
           --batch_config ${{ parameters.BATCH_DEPLOYMENT_CONFIG }}
+
   - template: execute_python_code.yml
     parameters:
       step_name: provision_azureml_deployment
@@ -85,6 +78,7 @@ jobs:
           --is_batch ${{ parameters.IS_BATCH_DEPLOYMENT }} \
           --batch_config ${{ parameters.BATCH_DEPLOYMENT_CONFIG }} \
           --env_type ${{ parameters.DEPLOY_ENVIRONMENT }}
+
   - template: execute_python_code.yml
     parameters:
       step_name: test_azureml_deployment
