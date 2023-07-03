@@ -26,7 +26,6 @@
             "DEPLOYMENT_BASE_IMAGE_NAME": "mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04",
             "DEPLOYMENT_CONDA_PATH": "model/london_taxi/environment/conda.yml",
             "SCORE_DIR": "model/london_taxi/scoring",
-            "IS_BATCH_DEPLOYMENT": "True",
             "BATCH_DEPLOYMENT_CONFIG": "mlops/london_taxi/deployment/batch_config.json"      
         },
         {
@@ -55,7 +54,6 @@
             "DEPLOYMENT_BASE_IMAGE_NAME": "mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04",
             "DEPLOYMENT_CONDA_PATH": "model/nyc_taxi/environment/conda.yml",
             "SCORE_DIR": "model/nyc_taxi/scoring",
-            "IS_BATCH_DEPLOYMENT": "True",
             "BATCH_DEPLOYMENT_CONFIG": "mlops/nyc_taxi/configs/deployment/batch_config.json",
             "DATA_CONFIG_PATH": "mlops/nyc_taxi/configs/data_config.json"          
         }

@@ -31,7 +31,7 @@ parameters:
   type: string
 - name: IS_BATCH_DEPLOYMENT
   type: string
-  default: False
+  default: True
 - name: BATCH_DEPLOYMENT_CONFIG
   type: string
 - name: DEPLOY_ENVIRONMENT
@@ -83,7 +83,7 @@ jobs:
           --batch_config ${{ parameters.BATCH_DEPLOYMENT_CONFIG }} \
           --env_type ${{ parameters.DEPLOY_ENVIRONMENT }}
 
-  - ${{ if eq(parameters['IS_BATCH_DEPLOYMENT'], False) }}:
+  - ${{ if eq(parameters['IS_BATCH_DEPLOYMENT'], 'False') }}:
     - template: execute_python_code.yml
       parameters:
         step_name: test_azureml_real_deployment
@@ -96,7 +96,7 @@ jobs:
             --deployment_name ${{ parameters.DEPLOYMENT_NAME }} \
             --test_model_file ${{ parameters.TEST_FILE_PATH }} 
 
-  - ${{ else }}:
+  - ${{ if eq(parameters['IS_BATCH_DEPLOYMENT'], 'True') }}:
     - template: test_batch_deployment.yml
       parameters:
         SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
