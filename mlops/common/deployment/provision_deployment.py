@@ -27,44 +27,26 @@ parser = argparse.ArgumentParser("provision_endpoints")
 parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
 parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group")
 parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name")
-parser.add_argument("--endpoint_name", type=str, help="Azureml realtime endpoint name")
-parser.add_argument("--deployment_name", type=str, help="Azureml realtime deployment name")
-parser.add_argument("--deployment_traffic_allocation", type=str, help="Azureml realtime deployment traffic allocation")
-parser.add_argument("--deployment_vm_size", type=str, help="Azureml realtime deployment vm size")
 parser.add_argument("--model_name", type=str, help="registered model name to be deployed")
-parser.add_argument("--deployment_base_image", type=str, help="Azureml inference image name")
-parser.add_argument("--deployment_conda_path", type=str, help="conda file path for inferencing image")
-parser.add_argument("--score_dir", type=str, help="name of directory with score file")
-parser.add_argument("--score_file_name", type=str, help="score file name")
 parser.add_argument("--build_id", type=str, help="build responsbile for deployment")
 parser.add_argument("--run_id", type=str, help="run responsbile for model generation")
 parser.add_argument("--is_batch", type=str, help="batch deployment")
 parser.add_argument("--batch_config", type=str, help="file path to batch config")
 parser.add_argument("--env_type", type=str, help="env name (dev, test, prod) for deployment")
-
+parser.add_argument("--realtime_deployment_config", type=str, help="config for real time deployment")
 args = parser.parse_args()
 
-endpoint_name = args.endpoint_name
-deployment_name = args.deployment_name
+
 model_name = args.model_name
-deployment_vm_size = args.deployment_vm_size
-deployment_base_image = args.deployment_base_image
-deployment_conda_path = args.deployment_conda_path
-score_dir =  args.score_dir
-score_file_name = args.score_file_name
+real_config = args.realtime_deployment_config
 build_id = args.build_id
 run_id = args.run_id
 batch = args.is_batch
 batch_config = args.batch_config
 env_type = args.env_type
 
-print(f"Endpoint name: {endpoint_name}")
-print(f"Endpoint name: {deployment_name}")
 print(f"Model name: {model_name}")
-print(f"score_dir: {score_dir}")
-print(f"score_file_name: {score_file_name}")
-print(f"deployment_base_image: {deployment_base_image}")
-print(f"deployment_conda_path: {deployment_conda_path}")
+
 
 ml_client = MLClient(
     DefaultAzureCredential(), args.subscription_id, args.resource_group_name, args.workspace_name
@@ -75,33 +57,49 @@ latest_version = max(model.version for model in model_refs)
 model = ml_client.models.get(model_name, latest_version)
 
 if batch == "False":
-    environment = Environment(
-        conda_file=deployment_conda_path,
-        image=deployment_base_image,
-    )
 
-    blue_deployment = ManagedOnlineDeployment(
-        name=deployment_name,
-        endpoint_name=endpoint_name,
-        model=model,
-        environment=environment,
-        code_configuration=CodeConfiguration(
-            code=score_dir, scoring_script=score_file_name
-        ),
-        instance_type=deployment_vm_size,
-        instance_count=1,
-        tags={"build_id": build_id, "run_id": run_id},
-    )
+    config_file = open(real_config)
+    endpoint_config = json.load(config_file)
+    for elem in endpoint_config['real_time']:
+        if 'ENDPOINT_NAME' in elem and 'ENV_NAME' in elem:
+            if env_type == elem['ENV_NAME']:
+                endpoint_name = elem["ENDPOINT_NAME"]
+                deployment_name = elem["DEPLOYMENT_NAME"]
+                deployment_conda_path = elem["DEPLOYMENT_CONDA_PATH"]
+                deployment_base_image = elem["DEPLOYMENT_BASE_IMAGE"]
+                score_dir = elem["SCORE_DIR"]
+                score_file_name = elem["SCORE_FILE_NAME"]
+                deployment_vm_size = elem["DEPLOYMENT_VM_SIZE"]
 
-    ml_client.online_deployments.begin_create_or_update(blue_deployment).result()
+                environment = Environment(
+                    conda_file=deployment_conda_path,
+                    image=deployment_base_image,
+                )
+
+                blue_deployment = ManagedOnlineDeployment(
+                    name=deployment_name,
+                    endpoint_name=endpoint_name,
+                    model=model,
+                    environment=environment,
+                    code_configuration=CodeConfiguration(
+                        code=score_dir, scoring_script=score_file_name
+                    ),
+                    instance_type=deployment_vm_size,
+                    instance_count=1,
+                    tags={"build_id": build_id, "run_id": run_id},
+                )
+
+                ml_client.online_deployments.begin_create_or_update(blue_deployment).result()
 
 else:
     batch_file = open(batch_config)
     batch_data = json.load(batch_file)
 
-    for elem in batch_data['models']:
-        if 'ENV_NAME' in elem:
+    for elem in batch_data['batch_config']:
+        if 'ENDPOINT_NAME' in elem and 'ENV_NAME' in elem:
             if env_type == elem["ENV_NAME"]:
+                endpoint_name = elem["ENDPOINT_NAME"]
+                deployment_name = elem["DEPLOYMENT_NAME"]
                 batch_cluster_name = elem["BATCH_CLUSTER_NAME"]
                 cluster_instance_count = elem["CLUSTER_INSTANCE_COUNT"]
                 max_concurrency_per_instance = elem["MAX_CONCURRENCY_PER_INSTANCE"]

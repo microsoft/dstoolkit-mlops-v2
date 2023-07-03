@@ -9,27 +9,34 @@ parser = argparse.ArgumentParser("test_model")
 parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
 parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group")
 parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name")
-parser.add_argument("--endpoint_name", type=str, help="AML endpoint name")
-parser.add_argument("--deployment_name", type=str, help="AML deployment name")
-parser.add_argument("--test_model_file", type=str, help="Test model file")
+parser.add_argument("--realtime_deployment_config", type=str, help="config for real time deployment")
+parser.add_argument("--environment_name",type=str,help="data config path")
 
 args = parser.parse_args()
+
+real_config = args.realtime_deployment_config
+environment_name = args.environment_name
 
 ml_client = MLClient(
     DefaultAzureCredential(), args.subscription_id,  args.resource_group_name,  args.workspace_name
 )
 
-endpoint_name = args.endpoint_name
-deployment_name = args.deployment_name
-test_model_file = args.test_model_file
+config_file = open(real_config)
+endpoint_config = json.load(config_file)
+for elem in endpoint_config['real_time']:
+    if 'ENDPOINT_NAME' in elem and 'ENV_NAME' in elem:
+        if environment_name == elem['ENV_NAME']:
+            endpoint_name = elem["ENDPOINT_NAME"]
+            deployment_name = elem["ENDPOINT_NAME"]
+            test_model_file = elem["TEST_FILE_PATH"]
 
-endpoint_url = ml_client.online_endpoints.get(name=endpoint_name).scoring_uri
-api_key = ml_client.online_endpoints.get_keys(name=endpoint_name).primary_key
+            endpoint_url = ml_client.online_endpoints.get(name=endpoint_name).scoring_uri
+            api_key = ml_client.online_endpoints.get_keys(name=endpoint_name).primary_key
 
-request_result = ml_client.online_endpoints.invoke(
-    endpoint_name=endpoint_name,
-    deployment_name=deployment_name,
-    request_file=test_model_file,
-)
+            request_result = ml_client.online_endpoints.invoke(
+                endpoint_name=endpoint_name,
+                deployment_name=deployment_name,
+                request_file=test_model_file,
+            )
 
-print(request_result)
+            print(request_result)

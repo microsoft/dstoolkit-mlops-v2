@@ -11,9 +11,8 @@ parser.add_argument("--resource_group_name", type=str, help="Azure Machine learn
 parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name")
 parser.add_argument("--data_purpose", type=str, help="data to be registered identified by purpose")
 parser.add_argument("--data_config_path", type=str, help="data config path")
-parser.add_argument("--deployment_name", type=str, help="AML deployment name")
-parser.add_argument("--endpoint_name", type=str, help="AML endpoint name")
 parser.add_argument("--environment_name",type=str,help="data config path")
+parser.add_argument("--batch_config", type=str, help="file path to batch config")
 
 args = parser.parse_args()
 
@@ -23,9 +22,14 @@ ml_client = MLClient(
 data_purpose = args.data_purpose
 data_config_path = args.data_config_path
 environment_name = args.environment_name
+batch_config = args.batch_config
 
 config_file = open(data_config_path)
 data_config = json.load(config_file)
+
+batch_file = open(batch_config)
+batch_data = json.load(batch_file)
+input = None
 
 for elem in data_config['datasets']:
     if 'DATA_PURPOSE' in elem and 'ENV_NAME' in elem:
@@ -35,6 +39,13 @@ for elem in data_config['datasets']:
             heart_dataset_unlabeled = ml_client.data.get(name=dataset_name, label="latest")
 
             input = Input(type=AssetTypes.URI_FOLDER, path=heart_dataset_unlabeled.id)
+
+for elem in batch_data['batch_config']:
+    if 'ENDPOINT_NAME' in elem and 'ENV_NAME' in elem:
+        if environment_name == elem["ENV_NAME"]:
+            endpoint_name = elem["ENDPOINT_NAME"]
+            deployment_name = elem["DEPLOYMENT_NAME"]
+
 
             job = ml_client.batch_endpoints.invoke(
                 deployment_name=args.deployment_name, endpoint_name=args.endpoint_name, input=input

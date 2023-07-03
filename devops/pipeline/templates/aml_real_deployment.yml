@@ -7,25 +7,7 @@ parameters:
   type: string
 - name: MODEL_TYPE
   type: string
-- name: ENDPOINT_NAME
-  type: string
-- name: DEPLOYMENT_NAME
-  type: string
-- name: DEPLOYMENT_TRAFFIC_ALLOCATION
-  type: string
-- name: DEPLOYMENT_VM_SIZE
-  type: string
 - name: MODEL_NAME
-  type: string
-- name: DEPLOYMENT_BASE_IMAGE_NAME
-  type: string
-- name: DEPLOYMENT_CONDA_PATH
-  type: string
-- name: SCORE_DIR
-  type: string
-- name: SCORE_FILE_NAME
-  type: string
-- name: TEST_FILE_PATH
   type: string
 - name: RUN_ID
   type: string
@@ -38,7 +20,8 @@ parameters:
   type: string
 - name: DATA_CONFIG_PATH
   type: string
-
+- name: REALTIME_DEPLOYMENT_CONFIG
+  type: string
 
 jobs:
 - job: Execute_Deployment_Job
@@ -54,11 +37,13 @@ jobs:
           --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
           --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
           --workspace_name ${{ parameters.WORKSPACE_NAME }} \
-          --endpoint_name ${{ parameters.ENDPOINT_NAME }} \
+          --realtime_deployment_config ${{ parameters.REALTIME_DEPLOYMENT_CONFIG }} \
           --run_id ${{ parameters.RUN_ID }} \
           --build_id $(Build.Buildid) \
           --is_batch ${{ parameters.IS_BATCH_DEPLOYMENT }} \
-          --batch_config ${{ parameters.BATCH_DEPLOYMENT_CONFIG }}
+          --batch_config ${{ parameters.BATCH_DEPLOYMENT_CONFIG }} \
+          --environment_name ${{ parameters.DEPLOY_ENVIRONMENT }} 
+
 
   - template: execute_python_code.yml
     parameters:
@@ -68,20 +53,13 @@ jobs:
           --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
           --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
           --workspace_name ${{ parameters.WORKSPACE_NAME }} \
-          --endpoint_name ${{ parameters.ENDPOINT_NAME }} \
-          --deployment_name ${{ parameters.DEPLOYMENT_NAME }} \
-          --deployment_traffic_allocation ${{ parameters.DEPLOYMENT_TRAFFIC_ALLOCATION }} \
-          --deployment_vm_size ${{ parameters.DEPLOYMENT_VM_SIZE }} \
           --model_name ${{ parameters.MODEL_NAME }} \
-          --deployment_base_image ${{ parameters.DEPLOYMENT_BASE_IMAGE_NAME }} \
-          --deployment_conda_path ${{ parameters.DEPLOYMENT_CONDA_PATH }} \
-          --score_dir ${{ parameters.SCORE_DIR }} \
-          --score_file_name ${{ parameters.SCORE_FILE_NAME }} \
           --run_id ${{ parameters.RUN_ID }} \
           --build_id $(Build.Buildid) \
           --is_batch ${{ parameters.IS_BATCH_DEPLOYMENT }} \
           --batch_config ${{ parameters.BATCH_DEPLOYMENT_CONFIG }} \
-          --env_type ${{ parameters.DEPLOY_ENVIRONMENT }}
+          --env_type ${{ parameters.DEPLOY_ENVIRONMENT }} \
+          --realtime_deployment_config ${{ parameters.REALTIME_DEPLOYMENT_CONFIG }} 
 
   - ${{ if eq(parameters.IS_BATCH_DEPLOYMENT, 'False') }}:
     - template: execute_python_code.yml
@@ -92,9 +70,7 @@ jobs:
             --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
             --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
             --workspace_name ${{ parameters.WORKSPACE_NAME }} \
-            --endpoint_name ${{ parameters.ENDPOINT_NAME }} \
-            --deployment_name ${{ parameters.DEPLOYMENT_NAME }} \
-            --test_model_file ${{ parameters.TEST_FILE_PATH }} 
+            --realtime_deployment_config ${{ parameters.REALTIME_DEPLOYMENT_CONFIG }} 
 
   - ${{ if eq(parameters.IS_BATCH_DEPLOYMENT, 'True') }}:
     - template: test_batch_deployment.yml
@@ -102,11 +78,10 @@ jobs:
         SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
         RESOURCE_GROUP_NAME: ${{ parameters.RESOURCE_GROUP_NAME }}
         WORKSPACE_NAME: ${{ parameters.WORKSPACE_NAME }}
-        DEPLOYMENT_NAME:  ${{ parameters.DEPLOYMENT_NAME }}
-        ENDPOINT_NAME:  ${{ parameters.ENDPOINT_NAME }}
         DATA_CONFIG_PATH:  ${{ parameters.DATA_CONFIG_PATH }}
         DATA_PURPOSE: "batch_test_data"
         ENVIRONMENT_NAME: ${{ parameters.DEPLOY_ENVIRONMENT }}
+        BATCH_DEPLOYMENT_CONFIG: ${{ parameters.BATCH_DEPLOYMENT_CONFIG }}
 
 
 
