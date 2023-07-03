@@ -26,6 +26,7 @@ steps:
 
 - template: execute_python_code.yml
   parameters:
+    step_name: test_batch_deployment
     script_parameter: |
       python -m mlops.common.deployment.test_batch_deployment \
         --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
