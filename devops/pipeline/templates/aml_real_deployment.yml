@@ -106,6 +106,7 @@ jobs:
         ENDPOINT_NAME:  ${{ parameters.ENDPOINT_NAME }}
         DATA_CONFIG_PATH:  ${{ parameters.DATA_CONFIG_PATH }}
         DATA_PURPOSE: "batch_test_data"
+        ENVIRONMENT_NAME: ${{ parameters.DEPLOY_ENVIRONMENT }}
 
 
 

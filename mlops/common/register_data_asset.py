@@ -12,11 +12,13 @@ parser.add_argument("--resource_group_name", type=str, help="Azure Machine learn
 parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name")
 parser.add_argument("--data_purpose", type=str, help="data to be registered identified by purpose")
 parser.add_argument("--data_config_path", type=str, help="data config path")
-
+parser.add_argument("--environment_name",type=str,help="data config path")
+ 
 args = parser.parse_args()
 
 data_purpose = args.data_purpose
 data_config_path = args.data_config_path
+environment_name = args.environment_name
 
 ml_client = MLClient(
     DefaultAzureCredential(), args.subscription_id, args.resource_group_name, args.workspace_name
@@ -26,8 +28,8 @@ config_file = open(data_config_path)
 data_config = json.load(config_file)
 
 for elem in data_config['datasets']:
-    if 'DATA_PURPOSE' in elem:
-        if data_purpose == elem["DATA_PURPOSE"]:
+    if 'DATA_PURPOSE' in elem and 'ENV_NAME' in elem:
+        if data_purpose == elem["DATA_PURPOSE"] and environment_name == elem['ENV_NAME']:
             data_path = elem["DATA_PATH"]
             dataset_desc = elem["DATASET_DESC"]
             dataset_name = elem["DATASET_NAME"]

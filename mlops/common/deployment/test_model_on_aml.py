@@ -12,6 +12,7 @@ parser.add_argument("--workspace_name", type=str, help="Azure Machine learning W
 parser.add_argument("--endpoint_name", type=str, help="AML endpoint name")
 parser.add_argument("--deployment_name", type=str, help="AML deployment name")
 parser.add_argument("--test_model_file", type=str, help="Test model file")
+
 args = parser.parse_args()
 
 ml_client = MLClient(
