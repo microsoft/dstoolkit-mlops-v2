@@ -67,7 +67,7 @@ def construct_pipeline(
             if "training_data" == elem["DATA_PURPOSE"] and environment_name == elem['ENV_NAME']:
                 dataset_name = elem["DATASET_NAME"]
 
-    registered_data_asset = ml_client.data.get(name=dataset_name)
+    registered_data_asset = ml_client.data.get(name=dataset_name,label='latest')
 
 
     parent_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/components")
