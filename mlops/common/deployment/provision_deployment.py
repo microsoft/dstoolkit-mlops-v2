@@ -66,7 +66,7 @@ if batch == "False":
                 endpoint_name = elem["ENDPOINT_NAME"]
                 deployment_name = elem["DEPLOYMENT_NAME"]
                 deployment_conda_path = elem["DEPLOYMENT_CONDA_PATH"]
-                deployment_base_image = elem["DEPLOYMENT_BASE_IMAGE"]
+                deployment_base_image = elem["DEPLOYMENT_BASE_IMAGE_NAME"]
                 score_dir = elem["SCORE_DIR"]
                 score_file_name = elem["SCORE_FILE_NAME"]
                 deployment_vm_size = elem["DEPLOYMENT_VM_SIZE"]
