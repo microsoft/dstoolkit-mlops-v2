@@ -31,7 +31,7 @@ parameters:
   type: string
 - name: IS_BATCH_DEPLOYMENT
   type: string
-  default: True
+  default: False
 - name: BATCH_DEPLOYMENT_CONFIG
   type: string
 - name: DEPLOY_ENVIRONMENT
