@@ -56,4 +56,6 @@ variables:
 - name: IS_BATCH_DEPLOYMENT
   value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.IS_BATCH_DEPLOYMENT'] ]   
 - name: BATCH_DEPLOYMENT_CONFIG
-  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.BATCH_DEPLOYMENT_CONFIG'] ]    
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.BATCH_DEPLOYMENT_CONFIG'] ]  
+- name: DATA_CONFIG_PATH
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.DATA_CONFIG_PATH'] ]      

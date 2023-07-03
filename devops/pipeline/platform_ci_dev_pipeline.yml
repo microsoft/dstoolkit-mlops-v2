@@ -92,3 +92,4 @@ stages:
           IS_BATCH_DEPLOYMENT: $(IS_BATCH_DEPLOYMENT)
           BATCH_DEPLOYMENT_CONFIG: $(BATCH_DEPLOYMENT_CONFIG)
           DEPLOY_ENVIRONMENT: ${{parameters.exec_environment}} 
+          DATA_CONFIG_PATH:  $(DATA_CONFIG_PATH) 

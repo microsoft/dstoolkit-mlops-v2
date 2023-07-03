@@ -1,0 +1,41 @@
+parameters:
+- name: SUBSCRIPTION_ID
+  type: string
+- name: RESOURCE_GROUP_NAME
+  type: string
+- name: WORKSPACE_NAME
+  type: string
+- name: DATA_PATH
+  type: string
+- name: DATASET_NAME
+  type: string
+- name: DATASET_DESC
+  type: string
+- name: DEPLOYMENT_NAME
+  type: string
+- name: ENDPOINT_NAME
+  type: string
+- name: DATA_CONFIG_PATH
+  type: string
+
+steps:
+- template: register_data_asset.yml
+  parameters:
+    script_parameter: |
+      python -m mlops.common.register_data_asset \
+        --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
+        --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
+        --workspace_name ${{ parameters.WORKSPACE_NAME }} \
+        --data_path ${{ parameters.DATA_PATH }} \
+        --dataset_name ${{ parameters.DATASET_NAME }} \
+        --dataset_desc ${{ parameters.DATASET_DESC }} 
+- template: execute_python_code.yml
+  parameters:
+    script_parameter: |
+      python -m mlops.common.deployment.test_batch_deployment \
+        --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
+        --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
+        --workspace_name ${{ parameters.WORKSPACE_NAME }} \
+        --endpoint_name ${{ parameters.ENDPOINT_NAME }} \
+        --deployment_name ${{ parameters.DEPLOYMENT_NAME }} \
+        --dataset_name ${{ parameters.DATASET_NAME }} 
