@@ -89,12 +89,12 @@ jobs:
         step_name: test_azureml_real_deployment
         script_parameter: |
           python -m mlops.common.deployment.test_model_on_aml \
-            --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
-            --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
-            --workspace_name ${{ parameters.WORKSPACE_NAME }} \
-            --endpoint_name ${{ parameters.ENDPOINT_NAME }} \
-            --deployment_name ${{ parameters.DEPLOYMENT_NAME }} \
-            --test_model_file ${{ parameters.TEST_FILE_PATH }} 
+            --subscription_id $[ parameters.SUBSCRIPTION_ID ] \
+            --resource_group_name $[ parameters.RESOURCE_GROUP_NAME ] \
+            --workspace_name $[ parameters.WORKSPACE_NAME ] \
+            --endpoint_name $[ parameters.ENDPOINT_NAME ] \
+            --deployment_name $[ parameters.DEPLOYMENT_NAME ] \
+            --test_model_file $[ parameters.TEST_FILE_PATH ] 
 
   - ${{ if eq(parameters.IS_BATCH_DEPLOYMENT, 'True') }}:
     - template: test_batch_deployment.yml
