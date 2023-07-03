@@ -5,11 +5,9 @@ parameters:
   type: string
 - name: WORKSPACE_NAME
   type: string
-- name: DATA_PATH
+- name: DATA_CONFIG_PATH
   type: string
-- name: DATASET_NAME
-  type: string
-- name: DATASET_DESC
+- name: DATA_PURPOSE
   type: string
 
 steps:
