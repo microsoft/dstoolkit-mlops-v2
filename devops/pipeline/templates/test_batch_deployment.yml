@@ -16,6 +16,7 @@ parameters:
 steps:
 - template: register_data_asset.yml
   parameters:
+    step_name: "register batch test data"
     script_parameter: |
       python -m mlops.common.register_data_asset \
         --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
@@ -26,7 +27,7 @@ steps:
 
 - template: execute_python_code.yml
   parameters:
-    step_name: test_batch_deployment
+    step_name: "test azureml batch endpoint"
     script_parameter: |
       python -m mlops.common.deployment.test_batch_deployment \
         --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \

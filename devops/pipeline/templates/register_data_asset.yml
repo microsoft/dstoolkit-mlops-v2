@@ -1,10 +1,12 @@
 parameters:
   - name: script_parameter
     type: string
+  - name: step_name
+    type: string
 
 steps:
   - task: AzureCLI@2
-    displayName: Register Data Asset
+    displayName: ${{parameters.step_name}}
     continueOnError: false
     env: {APPLICATIONINSIGHTS_CONNECTION_STRING: "$(APPLICATIONINSIGHTS-CONNECTION-STRING)"}
     inputs: 
