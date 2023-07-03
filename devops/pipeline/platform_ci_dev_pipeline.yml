@@ -20,7 +20,7 @@ stages:
         steps:
         - template: templates/get_connection_details.yml
         - template: templates/configure_azureml_agent.yml
-        - template: register_data_asset.yml
+        - template: templates/register_data_asset.yml
           parameters:
             step_name: "register training data"
             script_parameter: |
