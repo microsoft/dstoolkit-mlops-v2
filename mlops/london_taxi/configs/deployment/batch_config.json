@@ -11,7 +11,6 @@
             "OUTPUT_FILE_NAME": "predictions.csv",
             "MAX_RETRIES": 3,
             "RETRY_TIMEOUT": 300
-  
         }
     ]
 }

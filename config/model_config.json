@@ -26,7 +26,8 @@
             "DEPLOYMENT_BASE_IMAGE_NAME": "mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04",
             "DEPLOYMENT_CONDA_PATH": "model/london_taxi/environment/conda.yml",
             "SCORE_DIR": "model/london_taxi/scoring",
-            "BATCH_DEPLOYMENT_CONFIG": "mlops/london_taxi/deployment/batch_config.json"      
+            "BATCH_DEPLOYMENT_CONFIG": "mlops/london_taxi/configs/deployment/batch_config.json",
+            "DATA_CONFIG_PATH": "mlops/london_taxi/configs/data_config.json"     
         },
         {
             "ML_MODEL_CONFIG_NAME": "nyc_taxi",
