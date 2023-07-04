@@ -70,7 +70,8 @@ jobs:
             --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
             --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
             --workspace_name ${{ parameters.WORKSPACE_NAME }} \
-            --realtime_deployment_config ${{ parameters.REALTIME_DEPLOYMENT_CONFIG }} 
+            --realtime_deployment_config ${{ parameters.REALTIME_DEPLOYMENT_CONFIG }} \
+            --environment_name ${{ parameters.DEPLOY_ENVIRONMENT }}
 
   - ${{ if eq(parameters.IS_BATCH_DEPLOYMENT, 'True') }}:
     - template: test_batch_deployment.yml
