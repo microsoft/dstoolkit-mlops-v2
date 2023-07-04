@@ -84,7 +84,7 @@ stages:
           runOnce:
             deploy:
               steps:
-                - script: echo "Approving will deploy the model to the edge"
+                - script: echo "Approving will deploy the model to the environment"
 
       - template: templates/aml_real_deployment.yml  # Template reference
         parameters:

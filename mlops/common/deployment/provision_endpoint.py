@@ -55,10 +55,10 @@ if batch == "False":
         if 'ENDPOINT_NAME' in elem and 'ENV_NAME' in elem:
             if environment_name == elem['ENV_NAME']:
                 endpoint_name = elem["ENDPOINT_NAME"]
-
+                endpoint_desc = elem["ENDPOINT_DESC"]
                 endpoint = ManagedOnlineEndpoint(
                     name=endpoint_name,
-                    description="An online endpoint serving an MLflow model for the diabetes classification task",
+                    description=endpoint_desc,
                     auth_mode="key",
                     tags={"build_id": build_id, "run_id": run_id},
                 )
@@ -72,7 +72,7 @@ else:
         if 'ENDPOINT_NAME' in elem and 'ENV_NAME' in elem:
             if environment_name == elem['ENV_NAME']:
                 endpoint_name = elem["ENDPOINT_NAME"]
-                
+
                 endpoint = BatchEndpoint(
                     name=endpoint_name,
                     description="A heart condition classifier for batch inference",

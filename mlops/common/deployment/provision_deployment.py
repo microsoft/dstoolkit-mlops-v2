@@ -70,7 +70,11 @@ if batch == "False":
                 score_dir = elem["SCORE_DIR"]
                 score_file_name = elem["SCORE_FILE_NAME"]
                 deployment_vm_size = elem["DEPLOYMENT_VM_SIZE"]
+                deployment_instance_count = elem["DEPLOYMENT_INSTANCE_COUNT"]
+                deployment_desc = elem["DEPLOYMENT_DESC"]
+                environment_variables = elem["ENVIRONMENT_VARIABLES"]
 
+                
                 environment = Environment(
                     conda_file=deployment_conda_path,
                     image=deployment_base_image,
@@ -80,12 +84,14 @@ if batch == "False":
                     name=deployment_name,
                     endpoint_name=endpoint_name,
                     model=model,
+                    description=deployment_desc,
                     environment=environment,
                     code_configuration=CodeConfiguration(
                         code=score_dir, scoring_script=score_file_name
                     ),
                     instance_type=deployment_vm_size,
-                    instance_count=1,
+                    instance_count=deployment_instance_count,
+                    environment_variables = dict(environment_variables),
                     tags={"build_id": build_id, "run_id": run_id},
                 )
 
