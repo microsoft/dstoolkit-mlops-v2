@@ -211,6 +211,10 @@ def prepare_and_execute(
     output_file: str,
     data_config_path: str
 ):
+    ml_client = MLClient(
+        DefaultAzureCredential(), subscription_id,  resource_group_name,  workspace_name
+    )
+    
     compute = get_compute(
         subscription_id,
         resource_group_name,
