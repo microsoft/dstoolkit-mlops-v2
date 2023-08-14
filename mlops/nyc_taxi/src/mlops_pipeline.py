@@ -5,6 +5,7 @@ from azure.ai.ml import MLClient, Input
 from azure.ai.ml import load_component
 import time
 import os
+import json
 from mlops.common.get_compute import get_compute
 from mlops.common.get_environment import get_environment
 
@@ -55,9 +56,20 @@ def construct_pipeline(
     deploy_environment: str,
     build_reference: str,
     model_name: str,
+    data_config_path: str,
+    ml_client
 ):
+    dataset_name = None
+    config_file = open(data_config_path)
+    data_config = json.load(config_file)
+    for elem in data_config['datasets']:
+        if 'DATA_PURPOSE' in elem and 'ENV_NAME' in elem:
+            if "training_data" == elem["DATA_PURPOSE"] and deploy_environment == elem['ENV_NAME']:
+                dataset_name = elem["DATASET_NAME"]
+
+    registered_data_asset = ml_client.data.get(name=dataset_name,label='latest')
     parent_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/components")
-    data_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/data/")
+    #data_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/data/")
 
     prepare_data = load_component(source=parent_dir + "/prep.yml")
     transform_data = load_component(source=parent_dir + "/transform.yml")
@@ -83,7 +95,7 @@ def construct_pipeline(
     gl_pipeline_components.append(register_model)
 
     pipeline_job = nyc_taxi_data_regression(
-        Input(type="uri_folder", path=data_dir), model_name, build_reference
+        Input(type="uri_folder", path=registered_data_asset.id), model_name, build_reference
     )
     pipeline_job.display_name = display_name
     pipeline_job.tags = {
@@ -197,6 +209,7 @@ def prepare_and_execute(
     build_reference: str,
     model_name: str,
     output_file: str,
+    data_config_path: str
 ):
     compute = get_compute(
         subscription_id,
@@ -229,6 +242,8 @@ def prepare_and_execute(
         deploy_environment,
         build_reference,
         model_name,
+        data_config_path,
+        ml_client
     )
 
     execute_pipeline(
@@ -302,6 +317,7 @@ def main():
     parser.add_argument(
         "--output_file", type=str, required=False, help="A file to save run id"
     )
+    parser.add_argument("--data_config_path", type=str, required=True, help="data config path")
 
     args = parser.parse_args()
 
@@ -326,6 +342,7 @@ def main():
         args.build_reference,
         args.model_name,
         args.output_file,
+        args.data_config_path
     )
 
 
