@@ -28,6 +28,8 @@ parameters:
  - name: model_type
    displayName: "type of model to execute"
    default: "london_taxi"
+ - name: is_batch_deployment
+   displayName: "determine real or batch deployment"
 
 stages:
   - template: templates/variables_template.yml
@@ -38,3 +40,4 @@ stages:
     parameters:
       exec_environment: ${{ parameters.env_name }}
       model_type: ${{ parameters.model_type }}
+      is_batch_deployment: ${{ parameters.is_batch_deployment }}
