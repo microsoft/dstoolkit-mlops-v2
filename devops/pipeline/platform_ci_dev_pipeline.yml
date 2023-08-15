@@ -65,8 +65,21 @@ stages:
               readarray arr <"run_id.txt"
               run_name=${arr[0]}
               echo $run_name
-
               echo "##vso[task.setvariable variable=RUN_NAME;isOutput=true;]$run_name"
+
+              python -m mlops.common.get_run_metadata \
+                --subscription_id $(SUBSCRIPTION_ID) \
+                --resource_group_name $(RESOURCE_GROUP_NAME) \
+                --workspace_name $(WORKSPACE_NAME) \
+                --run_id $run_name \
+                --output_file_name metadata.txt
+              
+              readarray arr <"metadata.txt"
+              metadata=${arr[0]}
+              echo $metadata
+              echo "##vso[task.setvariable variable=RUN_METADATA;isOutput=true;]$metadata"
+
+
 
     - stage: deploy
       displayName: Execute_local_deployment
@@ -77,6 +90,8 @@ stages:
       - template: templates/experiment_variables.yml
       - name: run_id_from_submit_job
         value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ]
+      - name: run_metadata_from_submit_job
+        value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_METADATA'] ]
       jobs:
       - job: ApproveDeployment
         displayName: Wait for external validation  
@@ -88,7 +103,7 @@ stages:
           inputs:
             notifyUsers: |
               rimod@microsoft.com
-            instructions: 'Please validate the build configuration and resume'
+            instructions: "$(run_metadata_from_submit_job)"
             onTimeout: 'reject'
 
       - template: templates/aml_real_deployment.yml  # Template reference
