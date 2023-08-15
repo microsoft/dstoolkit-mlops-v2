@@ -64,7 +64,7 @@ def construct_pipeline(
     data_config = json.load(config_file)
     for elem in data_config['datasets']:
         if 'DATA_PURPOSE' in elem and 'ENV_NAME' in elem:
-            if "training_data" == elem["DATA_PURPOSE"] and deploy_environment == elem['ENV_NAME']:
+            if deploy_environment == elem['ENV_NAME']:
                 dataset_name = elem["DATASET_NAME"]
 
     registered_data_asset = ml_client.data.get(name=dataset_name,label='latest')
