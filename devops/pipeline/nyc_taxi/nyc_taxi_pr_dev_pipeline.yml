@@ -22,7 +22,7 @@ variables:
 parameters:
  - name: env_name
    displayName: "Execution Environment"
-   default: "dev"
+   default: "pr"
  - name: model_type
    displayName: "model type"
    default: "nyc_taxi"
