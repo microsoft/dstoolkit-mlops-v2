@@ -20,16 +20,17 @@ def get_run_metadata(
         resource_group_name=resource_group_name,
         workspace_name=workspace_name,
     )
-    azureml_mlflow_uri = client.workspaces.get(workspace_name).mlflow_tracking_uri
-    mlflow.set_tracking_uri(azureml_mlflow_uri)
-
-    my_run = mlflow.get_run(run_id)
+    my_run = client.jobs.get(run_id)
 
     metadata = {}
-    metadata["aml_uri"] = my_run.info.artifact_uri
-    metadata["aml_run_name"] = my_run.info.run_name
-    metadata["aml_run_id"] = my_run.info.run_uuid
-    metadata["aml_experiment_id"] = my_run.info.experiment_id
+    metadata["job_url"] = my_run.studio_url
+    metadata["aml_display_name"] = my_run.display_name
+    metadata["aml_run_name"] = my_run.experiment_name
+    metadata["aml_run_id"] = my_run.id
+    metadata["aml_name"] = my_run.name
+    metadata["job_url"] = my_run.studio_url
+    metadata["job_url"] = my_run.studio_url
+    metadata["job_url"] = my_run.studio_url
 
     if output_file_name is not None:
         with open(output_file_name, "w") as out_file:
