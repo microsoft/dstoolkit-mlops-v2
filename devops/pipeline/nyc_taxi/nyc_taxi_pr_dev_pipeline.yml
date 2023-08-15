@@ -2,14 +2,14 @@ pr: none
 trigger:
   branches:
    include:
-     - master
+     - development
   paths:
     include:
       - devops/*
       - mlops/common/*
-      - mlops/london_taxi/*
-      - src/london_src/*
-      - model/london_taxi/*
+      - mlops/nyc_taxi/*
+      - src/nyc_src/*
+      - model/nyc_taxi/*
       - src/shared/*
 
 pool:
@@ -19,7 +19,7 @@ pool:
 variables:
 - group: mlops_platform_dev_vg
 - name: PIPELINE_TYPE
-  value: london_taxi
+  value: nyc_taxi
 
 parameters:
  - name: env_name
@@ -27,17 +27,14 @@ parameters:
    default: "dev"
  - name: model_type
    displayName: "type of model to execute"
-   default: "london_taxi"
- - name: is_batch_deployment
-   displayName: "determine real or batch deployment"
+   default: "nyc_taxi"
 
 stages:
-  - template: templates/variables_template.yml
+  - template: ../templates/variables_template.yml
     parameters:
       env_name: ${{parameters.env_name}}
       model_type: ${{parameters.model_type}}
-  - template: platform_ci_dev_pipeline.yml
+  - template: ../platform_pr_dev_pipeline.yml
     parameters:
       exec_environment: ${{ parameters.env_name }}
       model_type: ${{ parameters.model_type }}
-      is_batch_deployment: ${{ parameters.is_batch_deployment }}
