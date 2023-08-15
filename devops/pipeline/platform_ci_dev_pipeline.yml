@@ -78,13 +78,19 @@ stages:
       - name: run_id_from_submit_job
         value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ]
       jobs:
-      - deployment: ApproveDeployment
-        environment: deployenv
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - script: echo "Approving will deploy the model to the environment"
+      - job: waitForValidation
+        dependsOn: 'previousJobName'
+        displayName: Wait for external validation  
+        pool: server    
+        timeoutInMinutes: 4320 # job times out in 3 days
+        steps:   
+        - task: ManualValidation@0
+          timeoutInMinutes: 1440 # task times out in 1 day
+          inputs:
+            notifyUsers: |
+              rimod@microsoft.com
+            instructions: 'Please validate the build configuration and resume'
+            onTimeout: 'reject'
 
       - template: templates/aml_real_deployment.yml  # Template reference
         parameters:
