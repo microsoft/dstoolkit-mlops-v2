@@ -18,18 +18,16 @@ pool:
 
 variables:
 - group: mlops_platform_dev_vg
-- name: PIPELINE_TYPE
-  value: nyc_taxi
 
 parameters:
  - name: env_name
    displayName: "Execution Environment"
    default: "dev"
  - name: model_type
-   displayName: "type of model to execute"
+   displayName: "model type"
    default: "nyc_taxi"
  - name: is_batch_deployment
-   displayName: "determine real or batch deployment"
+   displayName: "True for batch endpoint and False for real-time endpoint"
 
 stages:
   - template: ../templates/variables_template.yml

@@ -1,16 +1,15 @@
 import argparse
-import os
 import json
 from azure.ai.ml import MLClient
 
 from azure.identity import DefaultAzureCredential
 
 parser = argparse.ArgumentParser("test_model")
-parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
-parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group")
-parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name")
-parser.add_argument("--realtime_deployment_config", type=str, help="config for real time deployment")
-parser.add_argument("--environment_name",type=str,help="data config path")
+parser.add_argument("--subscription_id", type=str, help="Azure subscription id", required=True)
+parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group", required=True)
+parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name", required=True)
+parser.add_argument("--realtime_deployment_config", type=str, help="file path of realtime config", required=True)
+parser.add_argument("--environment_name",type=str,help="env name (dev, test, prod) for deployment", required=True)
 
 args = parser.parse_args()
 

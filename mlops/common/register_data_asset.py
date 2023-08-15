@@ -3,16 +3,15 @@ from azure.identity import DefaultAzureCredential
 import argparse
 from azure.ai.ml.entities import Data
 from azure.ai.ml.constants import AssetTypes
-import os
 import json
 
-parser = argparse.ArgumentParser("provision_endpoints")
-parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
-parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group")
-parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name")
-parser.add_argument("--data_purpose", type=str, help="data to be registered identified by purpose")
-parser.add_argument("--data_config_path", type=str, help="data config path")
-parser.add_argument("--environment_name",type=str,help="data config path")
+parser = argparse.ArgumentParser("register data assets")
+parser.add_argument("--subscription_id", type=str, help="Azure subscription id", required=True)
+parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group", required=True)
+parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name", required=True)
+parser.add_argument("--data_purpose", type=str, help="data to be registered identified by purpose", required=True)
+parser.add_argument("--data_config_path", type=str, help="data config file path", required=True)
+parser.add_argument("--environment_name",type=str,help="environment name (e.g. dev, test, prod)", required=True)
  
 args = parser.parse_args()
 

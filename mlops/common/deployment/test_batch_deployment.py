@@ -1,18 +1,17 @@
 import argparse
-import os
 import json
 from azure.ai.ml import MLClient, Input
 from azure.ai.ml.constants import AssetTypes
 from azure.identity import DefaultAzureCredential
 
 parser = argparse.ArgumentParser("test_model")
-parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
-parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group")
-parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name")
-parser.add_argument("--data_purpose", type=str, help="data to be registered identified by purpose")
-parser.add_argument("--data_config_path", type=str, help="data config path")
-parser.add_argument("--environment_name",type=str,help="data config path")
-parser.add_argument("--batch_config", type=str, help="file path to batch config")
+parser.add_argument("--subscription_id", type=str, help="Azure subscription id", required=True)
+parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group", required=True)
+parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name", required=True)
+parser.add_argument("--data_purpose", type=str, help="type of data to be registered e.g. training, test", required=True)
+parser.add_argument("--data_config_path", type=str, help="data config path", required=True)
+parser.add_argument("--environment_name",type=str,help="env name (dev, test, prod) for deployment", required=True)
+parser.add_argument("--batch_config", type=str, help="file path of batch config", required=True)
 
 args = parser.parse_args()
 

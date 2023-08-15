@@ -18,15 +18,13 @@ pool:
 
 variables:
 - group: mlops_platform_dev_vg
-- name: PIPELINE_TYPE
-  value: london_taxi
 
 parameters:
  - name: env_name
    displayName: "Execution Environment"
    default: "dev"
  - name: model_type
-   displayName: "type of model to execute"
+   displayName: "model type"
    default: "london_taxi"
 
 stages:

@@ -1,48 +1,43 @@
-import os
+
 import json
-from pathlib import Path
 import argparse
-import random
-import string
 from azure.ai.ml import MLClient
 from azure.ai.ml.entities import (
-    ManagedOnlineEndpoint,
     ManagedOnlineDeployment,
-    Model,
     Environment,
     CodeConfiguration,
 )
 from azure.identity import DefaultAzureCredential
 from azure.ai.ml.entities import (
-    BatchEndpoint,
     ModelBatchDeployment,
     ModelBatchDeploymentSettings,
-    Data,
     BatchRetrySettings
 )
-from azure.ai.ml.constants import AssetTypes, BatchDeploymentOutputAction
+from azure.ai.ml.constants import BatchDeploymentOutputAction
 
-# arguments expected for executing the experiments
-parser = argparse.ArgumentParser("provision_endpoints")
-parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
-parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group")
-parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name")
-parser.add_argument("--model_name", type=str, help="registered model name to be deployed")
-parser.add_argument("--build_id", type=str, help="build responsbile for deployment")
-parser.add_argument("--run_id", type=str, help="run responsbile for model generation")
-parser.add_argument("--is_batch", type=str, help="batch deployment")
-parser.add_argument("--batch_config", type=str, help="file path to batch config")
-parser.add_argument("--env_type", type=str, help="env name (dev, test, prod) for deployment")
-parser.add_argument("--realtime_deployment_config", type=str, help="config for real time deployment")
+
+parser = argparse.ArgumentParser("provision_deployment")
+parser.add_argument("--subscription_id", type=str, help="Azure subscription id", required=True)
+parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group", required=True)
+parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name", required=True)
+parser.add_argument("--model_name", type=str, help="registered model name to be deployed", required=True)
+parser.add_argument("--build_id", type=str, help="Azure DevOps build id for deployment", required=True)
+parser.add_argument("--run_id", type=str, help="AML run id for model generation", required=True)
+parser.add_argument("--is_batch", type=str, help="True for batch endpoint and False for real-time endpoint", required=True)
+parser.add_argument("--batch_config", type=str, help="file path of batch config")
+parser.add_argument("--env_type", type=str, help="env name (dev, test, prod) for deployment", required=True)
+parser.add_argument("--realtime_deployment_config", type=str, help="file path of realtime config")
 args = parser.parse_args()
 
 
 model_name = args.model_name
-real_config = args.realtime_deployment_config
 build_id = args.build_id
 run_id = args.run_id
 batch = args.is_batch
-batch_config = args.batch_config
+if args.batch_config is not None:
+    batch_config = args.batch_config
+if args.realtime_deployment_config is not None:
+    real_config = args.realtime_deployment_config
 env_type = args.env_type
 
 print(f"Model name: {model_name}")
