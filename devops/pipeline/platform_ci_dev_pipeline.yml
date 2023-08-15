@@ -94,12 +94,12 @@ stages:
         value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_METADATA'] ]
       jobs:
       - job: ApproveDeployment
-        displayName: Wait for external validation  
+        displayName: Approve for Model Deployment  
         pool: server    
-        timeoutInMinutes: 4320 # job times out in 3 days
+        timeoutInMinutes: 60 # job times out in 60 minutes
         steps:   
         - task: ManualValidation@0
-          timeoutInMinutes: 1440 # task times out in 1 day
+          timeoutInMinutes: 60 # task times out in 60 minutes
           inputs:
             notifyUsers: |
               rimod@microsoft.com

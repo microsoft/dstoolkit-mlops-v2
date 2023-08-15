@@ -35,7 +35,6 @@ def get_run_metadata(
     if output_file_name is not None:
         with open(output_file_name, "w") as out_file:
             out_file.write(json.dumps(metadata))
-    print(my_run)
 
 
 
