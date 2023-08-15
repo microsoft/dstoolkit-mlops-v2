@@ -2,7 +2,7 @@ pr: none
 trigger:
   branches:
    include:
-     - master
+     - development
   paths:
     include:
       - devops/*
