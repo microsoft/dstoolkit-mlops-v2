@@ -48,4 +48,5 @@ stages:
                 --environment_name $(ENVIRONMENT_NAME) \
                 --env_base_image_name $(ENV_BASE_IMAGE_NAME) \
                 --model_name $(MODEL_NAME) \
+                --data_config_path "$(DATA_CONFIG_PATH)" \
                 --conda_path $(CONDA_PATH)
