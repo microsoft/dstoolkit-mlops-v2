@@ -2,7 +2,7 @@
     "datasets":[
         {
             "ML_MODEL_CONFIG_NAME": "nyc_taxi",
-            "ENV_NAME": "dev",
+            "ENV_NAME": "pr",
             "AZURE_RM_SVC_CONNECTION": "azure_connection",
             "DATA_PURPOSE": "pr_data",
             "DATA_PATH":"mlops/nyc_taxi/data",
