@@ -1,0 +1,31 @@
+{
+    "datasets":[
+        {
+            "ML_MODEL_CONFIG_NAME": "nyc_taxi",
+            "ENV_NAME": "pr",
+            "AZURE_RM_SVC_CONNECTION": "azure_connection",
+            "DATA_PURPOSE": "pr_data",
+            "DATA_PATH":"mlops/nyc_taxi/data",
+            "DATASET_NAME":"nyc_taxi_pr_data",
+            "DATASET_DESC":"this dataset is for pr validation only"
+        },
+        {
+            "ML_MODEL_CONFIG_NAME": "nyc_taxi",
+            "ENV_NAME": "dev",
+            "AZURE_RM_SVC_CONNECTION": "azure_connection",
+            "DATA_PURPOSE": "batch_test_data",
+            "DATA_PATH":"mlops/nyc_taxi/batch_test_data",
+            "DATASET_NAME":"nyc_taxi_batch_test",
+            "DATASET_DESC":"this dataset is for testing batch deployments"
+        },
+        {
+            "ML_MODEL_CONFIG_NAME": "nyc_taxi",
+            "ENV_NAME": "dev",
+            "AZURE_RM_SVC_CONNECTION": "azure_connection",
+            "DATA_PURPOSE": "training_data",
+            "DATA_PATH":"mlops/nyc_taxi/data",
+            "DATASET_NAME":"nyc_taxi_training",
+            "DATASET_DESC":"this dataset is for training models"
+        }
+    ]
+}

@@ -24,8 +24,6 @@ def main(clean_data, transformed_data):
     for filename in arr:
         print("reading file: %s ..." % filename)
         with open(os.path.join(clean_data, filename), "r") as handle:
-            # print (handle.read())
-            # ('input_df_%s' % filename) = pd.read_csv((Path(training_data) / filename))
             input_df = pd.read_csv((Path(clean_data) / filename))
             df_list.append(input_df)
 

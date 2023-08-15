@@ -10,6 +10,7 @@ from sklearn.model_selection import train_test_split
 import pickle
 
 
+
 def main(raw_data, prep_data):
     print("hello training world...")
 
@@ -29,8 +30,6 @@ def main(raw_data, prep_data):
     for filename in arr:
         print("reading file: %s ..." % filename)
         with open(os.path.join(raw_data, filename), "r") as handle:
-            # print (handle.read())
-            # ('input_df_%s' % filename) = pd.read_csv((Path(training_data) / filename))
             input_df = pd.read_csv((Path(raw_data) / filename))
             df_list.append(input_df)
 
@@ -101,7 +100,8 @@ def data_prep(green_data, yellow_data):
     yellow_data_clean = cleanseData(yellow_data, yellow_columns, useful_columns)
 
     # Append yellow data to green data
-    combined_df = green_data_clean.append(yellow_data_clean, ignore_index=True)
+    combined_df = pd.concat([green_data_clean, yellow_data_clean], ignore_index=True)
+    #combined_df = green_data_clean.append(yellow_data_clean, ignore_index=True)
     combined_df.reset_index(inplace=True, drop=True)
 
     output_green = green_data_clean.to_csv(
