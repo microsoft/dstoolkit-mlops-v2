@@ -78,7 +78,7 @@ stages:
       - name: run_id_from_submit_job
         value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ]
       jobs:
-      - job: waitForValidation
+      - job: ApproveDeployment
         displayName: Wait for external validation  
         pool: server    
         timeoutInMinutes: 4320 # job times out in 3 days
