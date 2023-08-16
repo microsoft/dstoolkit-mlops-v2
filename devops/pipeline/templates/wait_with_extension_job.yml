@@ -3,15 +3,17 @@ jobs:
   pool: server
   timeoutInMinutes: 0
   dependsOn: Execute_Job_Pipeline
-  variables: 
-    run_name_from_submit_job: $[ dependencies.Execute_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ] 
+  variables:
+    - name: run_name_from_submit_job
+      value:  $[ dependencies.Execute_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ] 
+
   steps:
   - task: AzureMLJobWaitTask@0
     inputs:
-      # https://github.com/Azure/azure-mlops-automation
-      # a service connection with Azure ML scope (see the doc from the link above)
       serviceConnection: $(AZURE_RM_SVC_CONNECTION)
       resourceGroupName: $(RESOURCE_GROUP_NAME)
       azureMLWorkspaceName: $(WORKSPACE_NAME)
       azureMLWorkspaceLocation: $(CLUSTER_REGION)
       azureMLJobName: $(run_name_from_submit_job)
+
+

@@ -1,0 +1,121 @@
+
+parameters:
+ - name: exec_environment
+   displayName: "Execution Environment"
+   default: "dev"
+ - name: model_type
+   displayName: "type of model to execute"
+ - name: is_batch_deployment
+   displayName: "determine real or batch deployment"
+
+stages:
+    - stage: execute_training_job
+      displayName: execute_training_job
+      dependsOn: 
+      - variable_generation
+      variables:
+      - template: templates/experiment_variables.yml
+      jobs:
+      - job: Execute_ml_Job_Pipeline
+        steps:
+        - template: templates/get_connection_details.yml
+        - template: templates/configure_azureml_agent.yml
+        - template: templates/register_data_asset.yml
+          parameters:
+            step_name: "register training data"
+            script_parameter: |
+              python -m mlops.common.register_data_asset \
+                --subscription_id $(SUBSCRIPTION_ID) \
+                --resource_group_name  $(RESOURCE_GROUP_NAME) \
+                --workspace_name $(WORKSPACE_NAME) \
+                --data_purpose "training_data" \
+                --data_config_path "$(DATA_CONFIG_PATH)" \
+                --environment_name ${{ parameters.exec_environment }}  
+
+        - template: templates/execute_mlops_pipeline.yml
+          parameters:
+            script_parameter: |
+              python -m mlops.${{ parameters.model_type }}.src.mlops_pipeline \
+                --subscription_id $(SUBSCRIPTION_ID) \
+                --resource_group_name $(RESOURCE_GROUP_NAME) \
+                --workspace_name $(WORKSPACE_NAME) \
+                --cluster_name $(CLUSTER_NAME) \
+                --cluster_size $(CLUSTER_SIZE) \
+                --cluster_region $(CLUSTER_REGION) \
+                --build_reference $(BUILD.BUILDID) \
+                --deploy_environment ${{parameters.exec_environment}} \
+                --experiment_name $(EXPERIMENT_NAME) \
+                --display_name $(DISPLAY_NAME) \
+                --wait_for_completion True \
+                --environment_name $(ENVIRONMENT_NAME) \
+                --env_base_image_name $(ENV_BASE_IMAGE_NAME) \
+                --model_name $(MODEL_NAME) \
+                --conda_path $(CONDA_PATH) \
+                --data_config_path "$(DATA_CONFIG_PATH)" \
+                --output_file run_id.txt
+        - task: AzureCLI@2
+          displayName: Read Run ID
+          name: read_run_id
+          inputs:
+            azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+            scriptType: bash
+            scriptLocation: inlineScript
+            workingDirectory: $(System.DefaultWorkingDirectory)
+            inlineScript: |
+              readarray arr <"run_id.txt"
+              run_name=${arr[0]}
+              echo $run_name
+              echo "##vso[task.setvariable variable=RUN_NAME;isOutput=true;]$run_name"
+
+              python -m mlops.common.get_run_metadata \
+                --subscription_id $(SUBSCRIPTION_ID) \
+                --resource_group_name $(RESOURCE_GROUP_NAME) \
+                --workspace_name $(WORKSPACE_NAME) \
+                --run_id $run_name \
+                --output_file_name metadata.txt
+              
+              readarray arr <"metadata.txt"
+              metadata=${arr[0]}
+              echo $metadata
+              echo "##vso[task.setvariable variable=RUN_METADATA;isOutput=true;]$metadata"
+
+
+
+    - stage: deploy
+      displayName: Execute_local_deployment
+      dependsOn: 
+      - variable_generation
+      - execute_training_job
+      variables:
+      - template: templates/experiment_variables.yml
+      - name: run_id_from_submit_job
+        value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ]
+      - name: run_metadata_from_submit_job
+        value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_METADATA'] ]
+      jobs:
+      - job: ApproveDeployment
+        displayName: Approve for Model Deployment  
+        pool: server    
+        timeoutInMinutes: 60 # job times out in 60 minutes
+        steps:   
+        - task: ManualValidation@0
+          timeoutInMinutes: 60 # task times out in 60 minutes
+          inputs:
+            notifyUsers: |
+              rimod@microsoft.com
+            instructions: "$(run_metadata_from_submit_job)"
+            onTimeout: 'reject'
+
+      - template: templates/aml_real_deployment.yml  # Template reference
+        parameters:
+          SUBSCRIPTION_ID: $(SUBSCRIPTION_ID)
+          RESOURCE_GROUP_NAME: $(RESOURCE_GROUP_NAME)
+          WORKSPACE_NAME: $(WORKSPACE_NAME)
+          MODEL_TYPE: ${{ parameters.model_type }}
+          MODEL_NAME: $(MODEL_NAME)
+          RUN_ID: $(run_id_from_submit_job)
+          IS_BATCH_DEPLOYMENT: ${{parameters.is_batch_deployment}} 
+          BATCH_DEPLOYMENT_CONFIG: $(BATCH_DEPLOYMENT_CONFIG)
+          DEPLOY_ENVIRONMENT: ${{parameters.exec_environment}} 
+          DATA_CONFIG_PATH:  $(DATA_CONFIG_PATH)
+          REALTIME_DEPLOYMENT_CONFIG:  $(REALTIME_DEPLOYMENT_CONFIG)

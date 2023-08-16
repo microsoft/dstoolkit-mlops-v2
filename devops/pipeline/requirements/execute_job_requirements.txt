@@ -1,5 +1,5 @@
-azure-cli==2.48.1
-azure-ai-ml==1.6.0
+azure-cli==2.49.0
+azure-ai-ml==1.8.0
 azure-identity==1.11.0
 flake8-docstrings==1.6.0
 flake8==4.0.1
@@ -8,5 +8,5 @@ pytest-cov==3.0.0
 pytest-azurepipelines==1.0.3
 pytest-mock==3.7.0
 pytest==7.1.2
-mlflow==2.3.1
-mldesigner==0.1.0b12
+mlflow==2.4.1
+mldesigner==0.1.0b4

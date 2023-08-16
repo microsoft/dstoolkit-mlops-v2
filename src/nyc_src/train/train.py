@@ -30,7 +30,6 @@ def main(training_data, test_data, model_output, model_metadata):
     for filename in arr:
         print("reading file: %s ..." % filename)
         with open(os.path.join(training_data, filename), "r") as handle:
-            # print (handle.read())
             input_df = pd.read_csv((Path(training_data) / filename))
             df_list.append(input_df)
 
@@ -45,7 +44,6 @@ def main(training_data, test_data, model_output, model_metadata):
 def split(train_data):
     # Split the data into input(X) and output(y)
     y = train_data["cost"]
-    # X = train_data.drop(['cost'], axis=1)
     X = train_data[
         [
             "distance",
@@ -99,7 +97,6 @@ def train_model(trainX, trainy):
 
 
 def write_test_data(testX, testy):
-    # test_data = pd.DataFrame(testX, columns = )
     testX["cost"] = testy
     print(testX.shape)
     testX.to_csv((Path(args.test_data) / "test_data.csv"))

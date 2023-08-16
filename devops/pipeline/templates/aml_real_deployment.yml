@@ -1,0 +1,92 @@
+parameters:
+- name: SUBSCRIPTION_ID
+  type: string
+- name: RESOURCE_GROUP_NAME
+  type: string
+- name: WORKSPACE_NAME
+  type: string
+- name: MODEL_TYPE
+  type: string
+- name: MODEL_NAME
+  type: string
+- name: RUN_ID
+  type: string
+- name: IS_BATCH_DEPLOYMENT
+  type: string
+  default: 'True'
+- name: BATCH_DEPLOYMENT_CONFIG
+  type: string
+- name: DEPLOY_ENVIRONMENT
+  type: string
+- name: DATA_CONFIG_PATH
+  type: string
+- name: REALTIME_DEPLOYMENT_CONFIG
+  type: string
+
+jobs:
+- job: Execute_Deployment_Job
+  dependsOn: ApproveDeployment
+  steps:
+  - template: get_connection_details.yml
+  - template: configure_azureml_agent.yml
+  - template: execute_python_code.yml
+    parameters:
+      step_name: "provision azureml endpoint"
+      script_parameter: |
+        python -m mlops.common.deployment.provision_endpoint \
+          --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
+          --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
+          --workspace_name ${{ parameters.WORKSPACE_NAME }} \
+          --realtime_deployment_config ${{ parameters.REALTIME_DEPLOYMENT_CONFIG }} \
+          --run_id ${{ parameters.RUN_ID }} \
+          --build_id $(Build.Buildid) \
+          --is_batch ${{ parameters.IS_BATCH_DEPLOYMENT }} \
+          --batch_config ${{ parameters.BATCH_DEPLOYMENT_CONFIG }} \
+          --environment_name ${{ parameters.DEPLOY_ENVIRONMENT }} 
+
+
+  - template: execute_python_code.yml
+    parameters:
+      step_name: "provision azureml deployment"
+      script_parameter: |
+        python -m mlops.common.deployment.provision_deployment \
+          --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
+          --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
+          --workspace_name ${{ parameters.WORKSPACE_NAME }} \
+          --model_name ${{ parameters.MODEL_NAME }} \
+          --run_id ${{ parameters.RUN_ID }} \
+          --build_id $(Build.Buildid) \
+          --is_batch ${{ parameters.IS_BATCH_DEPLOYMENT }} \
+          --batch_config ${{ parameters.BATCH_DEPLOYMENT_CONFIG }} \
+          --env_type ${{ parameters.DEPLOY_ENVIRONMENT }} \
+          --realtime_deployment_config ${{ parameters.REALTIME_DEPLOYMENT_CONFIG }} 
+
+  - ${{ if eq(parameters.IS_BATCH_DEPLOYMENT, 'False') }}:
+    - template: execute_python_code.yml
+      parameters:
+        step_name: "test azureml real endpoint"
+        script_parameter: |
+          python -m mlops.common.deployment.test_model_on_aml \
+            --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
+            --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
+            --workspace_name ${{ parameters.WORKSPACE_NAME }} \
+            --realtime_deployment_config ${{ parameters.REALTIME_DEPLOYMENT_CONFIG }} \
+            --environment_name ${{ parameters.DEPLOY_ENVIRONMENT }}
+
+  - ${{ if eq(parameters.IS_BATCH_DEPLOYMENT, 'True') }}:
+    - template: test_batch_deployment.yml
+      parameters:
+        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+        RESOURCE_GROUP_NAME: ${{ parameters.RESOURCE_GROUP_NAME }}
+        WORKSPACE_NAME: ${{ parameters.WORKSPACE_NAME }}
+        DATA_CONFIG_PATH:  ${{ parameters.DATA_CONFIG_PATH }}
+        DATA_PURPOSE: "batch_test_data"
+        ENVIRONMENT_NAME: ${{ parameters.DEPLOY_ENVIRONMENT }}
+        BATCH_DEPLOYMENT_CONFIG: ${{ parameters.BATCH_DEPLOYMENT_CONFIG }}
+
+
+
+
+
+
+

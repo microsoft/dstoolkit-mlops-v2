@@ -1,0 +1,18 @@
+{
+    "batch_config":[
+        {
+            "ML_MODEL_CONFIG_NAME": "nyc_taxi",
+            "ENV_NAME": "dev",
+            "AZURE_RM_SVC_CONNECTION": "azure_connection",
+            "BATCH_CLUSTER_NAME": "new-cluster",
+            "ENDPOINT_NAME": "nyx-taxi-b-e",
+            "DEPLOYMENT_NAME": "nyc-taxi-b-d",
+            "CLUSTER_INSTANCE_COUNT": 2,
+            "MAX_CONCURRENCY_PER_INSTANCE": 2,
+            "MINI_BATCH_SIZE": 10,
+            "OUTPUT_FILE_NAME": "predictions.csv",
+            "MAX_RETRIES": 3,
+            "RETRY_TIMEOUT": 300
+        }
+    ]
+}

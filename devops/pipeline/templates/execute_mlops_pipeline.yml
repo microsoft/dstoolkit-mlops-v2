@@ -7,6 +7,7 @@ steps:
     name: submit_aml_job_task
     displayName: Execute Azure ML pipeline job
     continueOnError: false
+    env: {APPLICATIONINSIGHTS_CONNECTION_STRING: "$(APPLICATIONINSIGHTS-CONNECTION-STRING)"}
     inputs: 
       azureSubscription: $(AZURE_RM_SVC_CONNECTION)
       scriptType: bash
