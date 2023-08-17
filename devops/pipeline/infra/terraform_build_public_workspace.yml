@@ -52,6 +52,5 @@ steps:
     cd dstoolkit-mlops-v2\infrastructure\terraform_templetes\public_workspace
     terraform init
     terraform plan
-    terraform apply --auto-approve 
     echo "Resources have been built. Give it a minute to check through the portal."
   displayName: 'Running Terraform files'
