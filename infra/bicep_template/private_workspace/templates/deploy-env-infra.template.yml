@@ -114,4 +114,5 @@ jobs:
                 privateDnsZoneLinkName='${{parameters.privateDnsZoneLinkName}}' \
                 privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' \
                 privateEndpointName='${{parameters.privateEndpointName}}'
-          enabled: true
+            displayName: 'Bicep Infra Deployment'
+            enabled: true
