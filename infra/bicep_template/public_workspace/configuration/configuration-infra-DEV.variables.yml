@@ -7,7 +7,7 @@ variables:
 
   # DEV Environment
   ENVIRONMENT: DEV
-  RESOURCE_GROUP: rg-mlops-sdkv2-bicep-pubws
+  RESOURCE_GROUP: rg-mlops-sdkv2-bicep-amlsdk
   LOCATION: eastus
   NAMESPACE: mlopsdevtmpl
   SERVICECONNECTION_RG: sdk2deploymenttest
