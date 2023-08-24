@@ -1,0 +1,68 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Pipeline that deploys the infrastructure and sets up compute & data in the AML workspace
+
+trigger:
+- none
+
+pr:
+  branches:
+    include:
+    - main
+    - develop
+  paths:
+    include:
+    - ../public_workspace/configuration/configuration-infra-DEV.variables.yml
+    - infrastructure/bicep_template/public_workspace/PIPELINE-0-setup.yml
+
+
+variables:
+- template: ../public_workspace/configuration/configuration-infra-DEV.variables.yml # DEV as default env
+
+pool:
+  vmImage: 'ubuntu latest'
+
+stages:
+
+####################
+##  DEPLOY INFRA  ##
+####################
+
+# Deploy DEV Environment
+- stage: deployinfra_dev
+  displayName: 'Deploy DEV Environment'
+  variables:
+  - template: /infrastructure/bicep_template/public_workspace/configuration/configuration-infra-DEV.variables.yml
+  jobs:
+  - template: ../public_workspace/templates/deploy-env-infra.template.yml
+    parameters:
+      environmentName: $(ENVIRONMENT)
+      azureMgrConnection: $(SERVICECONNECTION_RG)
+      resourceGroup: $(RESOURCE_GROUP)
+      location: $(LOCATION)
+      variablesTemplateBase: '${{variables.template}}'
+      storageAccount: $(STORAGEACCOUNT)
+      keyVaultName: $(KEYVAULT)
+      appInsightsName: $(APPINSIGHTS)
+      containerRegistryName: $(CONTAINERREGISTRY)
+      amlWorkspaceName: $(AMLWORKSPACE)
+
+# Deploy PRD Environment
+# - stage: deployinfra_prd
+#   displayName: 'Deploy PRD Environment'
+#   condition: eq(variables['build.sourceBranch'], 'refs/heads/main')
+#   variables:
+#   - template: ../configuration/configuration-infra-PRD.variables.yml
+#   jobs:
+#   - template: templates/deploy-env-infra.template.yml
+#     parameters:
+#       environmentName: $(ENVIRONMENT)
+#       serviceConnection: $(SERVICECONNECTION_RG)
+#       resourceGroup: $(RESOURCE_GROUP)
+#       location: $(LOCATION)
+#       storageAccount: $(STORAGEACCOUNT)
+#       keyVault: $(KEYVAULT)
+#       appInsights: $(APPINSIGHTS)
+#       containerRegistry: $(CONTAINERREGISTRY)
+#       amlWorkspace: $(AMLWORKSPACE)

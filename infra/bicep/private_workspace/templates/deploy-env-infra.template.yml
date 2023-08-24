@@ -1,0 +1,117 @@
+parameters:
+- name: environmentName
+  type: string
+- name: azureMgrConnection
+  type: string
+- name: resourceGroup
+  type: string
+- name: location
+  type: string     
+- name: variablesTemplateBase
+  type: string
+- name: storageAccount
+  type: string
+- name: keyVaultName
+  type: string
+- name: appInsightsName  
+  type: string
+- name: containerRegistryName  
+  type: string
+- name: amlWorkspaceName  
+  type: string
+- name: virtualNetworkName  
+  type: string
+- name: privateDnsZoneName  
+  type: string
+- name: privateDnsZoneLinkName  
+  type: string
+- name: privateDnsZoneGroupName  
+  type: string
+- name: privateEndpointName  
+  type: string   
+
+jobs:
+- job: iac_build
+  displayName: 'IaC Build'
+  steps:
+  - task: CopyFiles@2
+    displayName: 'Copy templates'
+    inputs:
+      sourceFolder: '$(Pipeline.Workspace)/s/infrastructure/bicep_template'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+    enabled: true
+
+  - script: |
+      echo $(Pipeline.Workspace)
+      ls $(Pipeline.Workspace)/s/infrastructure
+    enabled: false      
+
+  - script: |
+      echo $(Build.ArtifactStagingDirectory)
+      ls $(Build.ArtifactStagingDirectory)
+    enabled: false   
+
+  - publish: '$(Build.ArtifactStagingDirectory)'
+    artifact: infratemplates 
+    enabled: true
+
+  - script: |
+      echo $(Build.ArtifactStagingDirectory)
+      ls $(Build.ArtifactStagingDirectory)
+    enabled: true      
+
+- deployment: ml_env_deployment
+  displayName: 'ML Environment Deployment'
+  environment: '${{parameters.environmentName}}'  
+  dependsOn: iac_build
+  variables:
+    templateFile: '$(Pipeline.Workspace)/infratemplates/private_workspace/templates/main.bicep'
+
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+
+        - download: current
+          artifact: infratemplates
+
+        - script: |
+            echo 'See the contents of parameters passed in'
+            echo '${{parameters.azureMgrConnection}}'
+            echo '${{parameters.environmentName}}'
+            echo '${{parameters.resourceGroup}}'
+            echo '${{parameters.location}}'
+            echo '${{parameters.variablesTemplateBase}}'
+            echo '${{parameters.storageAccount}}'            
+            ls $(Pipeline.Workspace)
+          enabled: false                            
+
+        - script: |
+            echo 'See the contents of $(Pipeline.Workspace)'           
+            ls $(Pipeline.Workspace)/infratemplates/public_workspace/templates
+          enabled: true  
+
+        - task: AzureCLI@2
+          displayName: 'Deploy private azure machine learning workspace'
+          inputs:
+            azureSubscription: '${{parameters.azureMgrConnection}}'
+            scriptType: bash
+            scriptLocation: inlineScript
+            useGlobalConfig: false
+            inlineScript: |
+              az --version
+              az deployment group create --resource-group '${{parameters.resourceGroup}}' \
+              --template-file $(templateFile) \
+              --parameters \
+                location='${{parameters.location}}' \
+                storageAccount='${{parameters.storageAccount}}' \
+                keyVaultName='${{parameters.keyVaultName}}' \ 
+                appInsightsName='${{parameters.appInsightsName}}' \
+                containerRegistryName='${{parameters.containerRegistryName}}' \
+                amlWorkspaceName='${{parameters.amlWorkspaceName}}' \
+                virtualNetworkName='${{parameters.virtualNetworkName}}' \
+                privateDnsZoneName='${{parameters.privateDnsZoneName}}' \
+                privateDnsZoneLinkName='${{parameters.privateDnsZoneLinkName}}' \
+                privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' \
+                privateEndpointName='${{parameters.privateEndpointName}}'
+          enabled: true
