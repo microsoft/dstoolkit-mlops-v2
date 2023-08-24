@@ -10,8 +10,8 @@ variables:
   RESOURCE_GROUP: rg-pvtws-mlops-sdkv2-bicep-test
   LOCATION: westus2
   NAMESPACE: mlopsdevtmpl
-  SERVICECONNECTION_RG: sdk2deploymenttest
-  SERVICECONNECTION_WS: sdk2deploymenttest
+  SERVICECONNECTION_RG: dstoolkit-mlops-svc
+  SERVICECONNECTION_WS: dstoolkit-mlops-svc
   AMLWORKSPACE: aml$(NAMESPACE)
   STORAGEACCOUNT: sa$(NAMESPACE)
   KEYVAULT: kv$(NAMESPACE)
