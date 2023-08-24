@@ -35,7 +35,7 @@ stages:
   variables:
   - template: /infra/bicep/public_workspace/configuration/configuration-infra-DEV.variables.yml
   jobs:
-  - template: ../public_workspace/templates/deploy-env-infra.template.yml
+  - template: /infra/bicep/public_workspace/templates/deploy-env-infra.template.yml
     parameters:
       environmentName: $(ENVIRONMENT)
       azureMgrConnection: $(SERVICECONNECTION_RG)
