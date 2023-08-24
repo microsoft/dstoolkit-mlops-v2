@@ -84,7 +84,7 @@ jobs:
             echo '${{parameters.variablesTemplateBase}}'
             echo '${{parameters.storageAccount}}'            
             ls $(Pipeline.Workspace)
-          enabled: false                            
+          enabled: true                            
 
         - script: |
             echo 'See the contents of $(Pipeline.Workspace)'           
@@ -114,4 +114,4 @@ jobs:
                 privateDnsZoneLinkName='${{parameters.privateDnsZoneLinkName}}' \
                 privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' \
                 privateEndpointName='${{parameters.privateEndpointName}}'
-          enabled: true
+          enabled: false
