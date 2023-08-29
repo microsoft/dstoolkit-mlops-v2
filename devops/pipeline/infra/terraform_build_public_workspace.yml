@@ -50,7 +50,7 @@ steps:
 
 - script: |
     ls
-    cd infra/infra/terraform/public_workspace/
+    cd infra/terraform/public_workspace/
     ls 
     terraform init
     terraform plan
