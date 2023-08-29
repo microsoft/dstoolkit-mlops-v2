@@ -61,6 +61,7 @@ steps:
     cd infra/terraform/public_workspace/
     
     terraform init
-    # terraform plan
+    terraform plan
+    terraform apply --auto-plan
     echo "Resources have been built. Give it a minute to check through the portal."
   displayName: 'Running Terraform files'
