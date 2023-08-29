@@ -50,7 +50,7 @@ steps:
 
 - script: |
     ls
-    cd dstoolkit-mlops-v2\infrastructure\terraform_templetes\public_workspace
+    cd dstoolkit-mlops-v2/blob/infra/infra/terraform/public_workspace/
     ls 
     terraform init
     terraform plan
