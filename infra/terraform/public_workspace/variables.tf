@@ -1,31 +1,31 @@
 variable "subscription_id" {
   type    = string
-  default = "dbbcdca6-1b09-4291-bc2c-cf41162fdc05"
+  default = "310ab569-9762-484e-8ce9-a650803297ea"
 }
-
 variable "tenant_id" {
   type    = string
-  default = "5d30fd05-535c-4b0e-bd25-bb39a1c98fe3"
+  default = "16b3c013-d300-468d-ac64-7eda0820b6d3"
 }
 variable "client_id" {
   type    = string
-  default = "d14fc959-9ec7-43c3-b26d-ef40968f031a"
+  default = "78c775fe-e914-408d-8105-2ab2b2f4b775"
 }
 variable "client_secret" {
   type    = string
-  default = "eee8Q~~3ky0CCHc7MMTDE5g7Vnu~3TFVttwEkaM~"
+  default = "brU8Q~C2n1C2X9BD9y1busRqQaEV65AN2lOPZcdj"
 }
+
 ##############################
 ## Resource Group Variables
 ##############################
 variable "basename" {
   type    = string
-  default = "mlops"
+  default = "mlopstest"
 }
 
 variable "project_code" {
   type    = string
-  default = "v2test"
+  default = "v2"
 }
 
 variable "version_num" {
