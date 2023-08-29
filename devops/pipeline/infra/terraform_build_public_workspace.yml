@@ -49,6 +49,7 @@ steps:
   displayName: 'Azure CLI Updated and Ubuntu'
 
 - script: |
+    
     cd dstoolkit-mlops-v2\infrastructure\terraform_templetes\public_workspace
     terraform init
     terraform plan
