@@ -49,10 +49,18 @@ steps:
   displayName: 'Azure CLI Updated and Ubuntu'
 
 - script: |
-    ls
+    $tenantid=$(tenant_id)
+    $subscriptionid=$(subscription_id)
+
+    echo $tenantid
+    echo $subscriptionid
+    
+    az login --tenant $tenantid
+    az account set --name $subscriptionid
+
     cd infra/terraform/public_workspace/
-    ls 
+    
     terraform init
-    terraform plan
+    # terraform plan
     echo "Resources have been built. Give it a minute to check through the portal."
   displayName: 'Running Terraform files'
