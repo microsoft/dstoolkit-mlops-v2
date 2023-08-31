@@ -55,8 +55,8 @@ steps:
     echo $tenantid
     echo $subscriptionid
     
-    # az login --tenant $tenantid
-    # az account set --name $subscriptionid
+    az login --tenant $tenantid
+    az account set --name $subscriptionid
     cd infra/terraform/public_workspace/
     
     terraform init
