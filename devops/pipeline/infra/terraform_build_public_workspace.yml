@@ -49,8 +49,8 @@ steps:
   displayName: 'Azure CLI Updated and Ubuntu'
 
 - script: |
-    $tenantid=$(tenant_id)
-    $subscriptionid=$(subscription_id)
+    $tenantid="16b3c013-d300-468d-ac64-7eda0820b6d3"
+    $subscriptionid="310ab569-9762-484e-8ce9-a650803297ea"
 
     echo $tenantid
     echo $subscriptionid
