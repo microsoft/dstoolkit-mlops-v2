@@ -41,6 +41,7 @@ stages:
       azureMgrConnection: $(SERVICECONNECTION_RG)
       resourceGroup: $(RESOURCE_GROUP)
       location: $(LOCATION)
+      variablesTemplateBase: '${{variables.template}}'
       storageAccount: $(STORAGEACCOUNT)
       keyVaultName: $(KEYVAULT)
       appInsightsName: $(APPINSIGHTS)
