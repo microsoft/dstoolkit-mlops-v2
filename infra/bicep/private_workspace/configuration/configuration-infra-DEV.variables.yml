@@ -7,11 +7,11 @@ variables:
 
   # DEV Environment
   ENVIRONMENT: DEV
-  RESOURCE_GROUP: rg-mlops-sdkv2-bicep-test
-  LOCATION: westus2
-  NAMESPACE: mlopsdevtmpl
-  SERVICECONNECTION_RG: dstoolkit-mlops-svc
-  SERVICECONNECTION_WS: dstoolkit-mlops-svc
+  RESOURCE_GROUP: rg-MLOps-V2
+  LOCATION: eastus
+  NAMESPACE: bicmlopsdevtmpl
+  SERVICECONNECTION_RG: dstoolkit-mlops-v2-svc
+  SERVICECONNECTION_WS: dstoolkit-mlops-v2-svc
   AMLWORKSPACE: aml$(NAMESPACE)
   STORAGEACCOUNT: sa$(NAMESPACE)
   KEYVAULT: kv$(NAMESPACE)
