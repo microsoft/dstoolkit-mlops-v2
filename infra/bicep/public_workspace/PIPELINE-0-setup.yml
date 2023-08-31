@@ -47,22 +47,3 @@ stages:
       appInsightsName: $(APPINSIGHTS)
       containerRegistryName: $(CONTAINERREGISTRY)
       amlWorkspaceName: $(AMLWORKSPACE)
-
-# Deploy PRD Environment
-# - stage: deployinfra_prd
-#   displayName: 'Deploy PRD Environment'
-#   condition: eq(variables['build.sourceBranch'], 'refs/heads/main')
-#   variables:
-#   - template: ../configuration/configuration-infra-PRD.variables.yml
-#   jobs:
-#   - template: templates/deploy-env-infra.template.yml
-#     parameters:
-#       environmentName: $(ENVIRONMENT)
-#       serviceConnection: $(SERVICECONNECTION_RG)
-#       resourceGroup: $(RESOURCE_GROUP)
-#       location: $(LOCATION)
-#       storageAccount: $(STORAGEACCOUNT)
-#       keyVault: $(KEYVAULT)
-#       appInsights: $(APPINSIGHTS)
-#       containerRegistry: $(CONTAINERREGISTRY)
-#       amlWorkspace: $(AMLWORKSPACE)

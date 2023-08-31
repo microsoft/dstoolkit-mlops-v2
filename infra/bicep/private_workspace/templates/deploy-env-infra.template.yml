@@ -124,3 +124,13 @@ jobs:
                 privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' \
                 privateEndpointName='${{parameters.privateEndpointName}}'
           enabled: true
+
+          az deployment group create --resource-group '${{parameters.resourceGroup}}' \
+          --template-file $(templateFile) \
+          --parameters location='${{parameters.location}}' \
+          storageAccount='${{parameters.storageAccount}}' \
+          keyVaultName='${{parameters.keyVaultName}}' \
+          appInsightsName='${{parameters.appInsightsName}}' \
+          containerRegistryName='${{parameters.containerRegistryName}}' \
+          amlWorkspaceName='${{parameters.amlWorkspaceName}}'
+      enabled: true                 
