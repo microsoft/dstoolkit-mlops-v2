@@ -101,18 +101,6 @@ jobs:
           enabled: true
         
         - task: AzureCLI@2
-          displayName: 'Register Microsoft.Networks'
-          inputs:
-            azureSubscription: '${{parameters.azureMgrConnection}}'
-            scriptType: bash
-            scriptLocation: inlineScript
-            useGlobalConfig: false
-            inlineScript: |
-              az --version 
-              az provider register --namespace 'Microsoft.Networks'
-          enabled: true
-
-        - task: AzureCLI@2
           displayName: 'Deploy private azure machine learning workspace'
           inputs:
             azureSubscription: '${{parameters.azureMgrConnection}}'
@@ -135,4 +123,4 @@ jobs:
                 privateDnsZoneLinkName='${{parameters.privateDnsZoneLinkName}}' \
                 privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' \
                 privateEndpointName='${{parameters.privateEndpointName}}'
-          enabled: false
+          enabled: true
