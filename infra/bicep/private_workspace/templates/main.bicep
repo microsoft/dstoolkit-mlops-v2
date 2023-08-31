@@ -48,9 +48,6 @@ var appInsightsNameUniqueified = '${appInsightsName}${resourceGroupIdUniqueified
 var containerRegistryNameUniqueified = '${containerRegistryName}${resourceGroupIdUniqueified}'
 var amlWorkspaceNameUniqueified = '${amlWorkspaceName}${resourceGroupIdUniqueified}'
 var virtualNetworkNameUniqueified = '${virtualNetworkName}${resourceGroupIdUniqueified}'
-// var privateDnsZoneNameUniqueified = '${privateDnsZoneName}${resourceGroupIdUniqueified}'
-// var privateDnsZoneLinkNameUniqueified = '${privateDnsZoneLinkName}${resourceGroupIdUniqueified}'
-// var privateDnsZoneGroupNameUniqueified = '${privateDnsZoneGroupName}${resourceGroupIdUniqueified}'
 var privateEndpointNameUniqueified = '${privateEndpointName}${resourceGroupIdUniqueified}'
 
 // storage
