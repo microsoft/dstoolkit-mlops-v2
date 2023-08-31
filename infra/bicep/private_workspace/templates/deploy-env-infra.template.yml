@@ -38,7 +38,7 @@ jobs:
     displayName: 'Copy templates'
     inputs:
       sourceFolder: '$(Pipeline.Workspace)/s/infra/bicep/private_workspace'
-      targetFolder: '$(Build.ArtifactStagingDirectory)'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/private_workspace'
     enabled: true
 
   - script: |
