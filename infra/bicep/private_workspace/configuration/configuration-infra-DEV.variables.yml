@@ -7,7 +7,7 @@ variables:
 
   # DEV Environment
   ENVIRONMENT: DEV
-  RESOURCE_GROUP: rg-MLOps-V2
+  RESOURCE_GROUP: rg-MLOps-V2-1
   LOCATION: eastus
   NAMESPACE: mlopsdevtmpl
   SERVICECONNECTION_RG: dstoolkit-mlops-v2-svc
