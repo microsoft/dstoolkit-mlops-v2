@@ -37,7 +37,7 @@ jobs:
   - task: CopyFiles@2
     displayName: 'Copy templates'
     inputs:
-      sourceFolder: '$(Pipeline.Workspace)/s/infra/bicep'
+      sourceFolder: '$(Pipeline.Workspace)/s/infra/bicep/private_workspace'
       targetFolder: '$(Build.ArtifactStagingDirectory)'
     enabled: true
 
@@ -123,4 +123,4 @@ jobs:
                 privateDnsZoneLinkName='${{parameters.privateDnsZoneLinkName}}' \
                 privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' \
                 privateEndpointName='${{parameters.privateEndpointName}}'
-          enabled: false
+          enabled: true
