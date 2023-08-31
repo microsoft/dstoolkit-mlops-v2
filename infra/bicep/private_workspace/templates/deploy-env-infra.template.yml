@@ -82,7 +82,16 @@ jobs:
             echo '${{parameters.resourceGroup}}'
             echo '${{parameters.location}}'
             echo '${{parameters.variablesTemplateBase}}'
-            echo '${{parameters.storageAccount}}'            
+            echo '${{parameters.storageAccount}}'
+            echo '${{parameters.keyVaultName}}'
+            echo '${{parameters.appInsightsName}}'
+            echo '${{parameters.containerRegistryName}}'
+            echo '${{parameters.amlWorkspaceName}}'
+            echo '${{parameters.virtualNetworkName}}'
+            echo '${{parameters.privateDnsZoneName}}'
+            echo '${{parameters.privateDnsZoneLinkName}}'
+            echo '${{parameters.privateDnsZoneGroupName}}'
+            echo '${{parameters.privateEndpointName}}'            
             ls $(Pipeline.Workspace)
           enabled: true                            
 
@@ -114,4 +123,4 @@ jobs:
                 privateDnsZoneLinkName='${{parameters.privateDnsZoneLinkName}}' \
                 privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' \
                 privateEndpointName='${{parameters.privateEndpointName}}'
-          enabled: true
+          enabled: false
