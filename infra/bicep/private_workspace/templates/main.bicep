@@ -43,7 +43,7 @@ param privateEndpointName string
 
 var resourceGroupIdUniqueified = substring(uniqueString(resourceGroup().id),0,7)
 var storageAccountNameUniqueified = '${storageAccount}${resourceGroupIdUniqueified}'
-var keyVaultNameUniqueified = '${keyVaultName}${resourceGroupIdUniqueified}'
+var keyVaultNameUniqueified = substring('${keyVaultName}${resourceGroupIdUniqueified}',0,20)
 var appInsightsNameUniqueified = '${appInsightsName}${resourceGroupIdUniqueified}'
 var containerRegistryNameUniqueified = '${containerRegistryName}${resourceGroupIdUniqueified}'
 var amlWorkspaceNameUniqueified = '${amlWorkspaceName}${resourceGroupIdUniqueified}'
