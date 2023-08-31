@@ -9,7 +9,7 @@ variables:
   ENVIRONMENT: DEV
   RESOURCE_GROUP: rg-MLOps-V2
   LOCATION: eastus
-  NAMESPACE: bicmlopsdevtmpl
+  NAMESPACE: mlopsdevtmpl
   SERVICECONNECTION_RG: dstoolkit-mlops-v2-svc
   SERVICECONNECTION_WS: dstoolkit-mlops-v2-svc
   AMLWORKSPACE: aml$(NAMESPACE)
