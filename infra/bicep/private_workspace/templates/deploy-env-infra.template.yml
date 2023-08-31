@@ -88,7 +88,7 @@ jobs:
 
         - script: |
             echo 'See the contents of $(Pipeline.Workspace)'           
-            ls $(Pipeline.Workspace)/infratemplates/public_workspace/templates
+            ls $(Pipeline.Workspace)/infratemplates/private_workspace/templates
           enabled: true  
 
         - task: AzureCLI@2
