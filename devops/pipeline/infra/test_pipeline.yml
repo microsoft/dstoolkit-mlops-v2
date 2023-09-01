@@ -1,1 +1,6 @@
-
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'infra_service_connection'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'echo "test"'
