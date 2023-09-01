@@ -4,6 +4,8 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+- group: MLOps-dev-VG
 
 steps:
 
