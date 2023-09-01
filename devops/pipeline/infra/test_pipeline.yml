@@ -9,7 +9,8 @@ steps:
 - task: TerraformInstaller@0
   inputs:
     terraformVersion: 'latest'
-  
+
+steps:  
 - task: TerraformCLI@0
   inputs:
     command: 'validate'
