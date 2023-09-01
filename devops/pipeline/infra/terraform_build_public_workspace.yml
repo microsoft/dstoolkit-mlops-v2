@@ -4,8 +4,8 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-# variables:
-# - group: Terrafomr-Public-Workspace
+variables:
+- group: Terrafomr-Public-Workspace
 
 steps:
 
@@ -50,13 +50,6 @@ steps:
     az config set auto-upgrade.enable=yes
     
   displayName: 'Azure CLI Updated and Ubuntu'
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'infra_service_connection'
-    appType: 'webApp'
-    WebAppName: 
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
 - script: |
 
