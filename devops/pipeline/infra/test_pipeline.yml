@@ -2,6 +2,7 @@ variables:
 - group: tf_public_vg
 
 steps:
+
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'infra_service_connection'
@@ -12,7 +13,7 @@ steps:
 - task: TerraformCLI@0
   inputs:
     command: 'init'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
     
 - task: TerraformCLI@0
   inputs:
