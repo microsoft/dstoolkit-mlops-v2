@@ -10,7 +10,6 @@ steps:
   inputs:
     terraformVersion: 'latest'
 
-steps:  
 - task: TerraformCLI@0
   inputs:
     command: 'validate'
