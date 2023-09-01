@@ -15,13 +15,16 @@ steps:
     command: 'init'
     workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
 
-    
 - task: TerraformCLI@0
   inputs:
     command: 'plan'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/intra/terraform/public_workspace'
+    environmentServiceName: 'infra_service_connection'
+    providerAzureRmSubscriptionId: '310ab569-9762-484e-8ce9-a650803297ea'
+    runAzLogin: true
     commandOptions: '-var "basename=$(basename)" -var "location=$(location)" -var "rg_name=$(rg_name)" -var "subscription_id=$(subscription_id)" -var "tenant_id=$(tenant_id)"  -var "version_num=$(version_num)"'
     allowTelemetryCollection: true
+    
   
 #- task: TerraformCLI@0
 #  inputs:
