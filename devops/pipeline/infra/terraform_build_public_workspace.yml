@@ -54,8 +54,15 @@ steps:
 - script: |
 
     cd infra/terraform/public_workspace/
-    # echo $(basename)
-    # echo $(project_code)
+
+    $subscription_id = $(subscription_id)
+    $tenant_id = $(tenant_id)
+    #echo $tenantid
+    az login --tenant $tenant_id
+    az account set --subscription $subscription_id
+
+    echo $(basename)
+    echo $(project_code)
     # terraform init
     # terraform plan
     # terraform apply --auto-plan
