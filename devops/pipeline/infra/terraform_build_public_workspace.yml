@@ -4,8 +4,8 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-variables:
-- group: Terrafomr-Public-Workspace
+# variables:
+# - group: Terrafomr-Public-Workspace
 
 steps:
 
@@ -61,8 +61,8 @@ steps:
 - script: |
 
     cd infra/terraform/public_workspace/
-    echo $(basename)
-    echo $(project_code)
+    # echo $(basename)
+    # echo $(project_code)
     # terraform init
     # terraform plan
     # terraform apply --auto-plan
