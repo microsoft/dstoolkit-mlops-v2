@@ -14,6 +14,7 @@ steps:
   inputs:
     command: 'init'
     workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+
     
 - task: TerraformCLI@0
   inputs:
