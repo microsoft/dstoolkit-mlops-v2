@@ -6,7 +6,11 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: 'echo "test"'
 
-
+- task: TerraformCLI@0
+  inputs:
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+    allowTelemetryCollection: true
 - task: TerraformCLI@0
   inputs:
     command: 'validate'
