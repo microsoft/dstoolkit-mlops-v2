@@ -4,6 +4,9 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+- group: Terrafomr-Public-Workspace
+
 steps:
 
 - script: |
@@ -47,20 +50,21 @@ steps:
     az config set auto-upgrade.enable=yes
     
   displayName: 'Azure CLI Updated and Ubuntu'
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'infra_service_connection'
+    appType: 'webApp'
+    WebAppName: 
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
 - script: |
-    $tenantid="16b3c013-d300-468d-ac64-7eda0820b6d3"
-    $subscriptionid="310ab569-9762-484e-8ce9-a650803297ea"
 
-    echo $tenantid
-    echo $subscriptionid
-    
-    az login --tenant $tenantid
-    az account set --name $subscriptionid
     cd infra/terraform/public_workspace/
-    
-    terraform init
-    terraform plan
-    terraform apply --auto-plan
-    echo "Resources have been built. Give it a minute to check through the portal."
+    echo $(basename)
+    echo $(project_code)
+    # terraform init
+    # terraform plan
+    # terraform apply --auto-plan
+    # echo "Resources have been built. Give it a minute to check through the portal."
   displayName: 'Running Terraform files'
