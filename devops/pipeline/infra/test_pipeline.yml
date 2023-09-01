@@ -1,3 +1,6 @@
+variables:
+- group: tf_public_vg
+
 steps:
 - task: AzureCLI@2
   inputs:
@@ -9,18 +12,17 @@ steps:
 - task: TerraformCLI@0
   inputs:
     command: 'init'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
-    allowTelemetryCollection: true
-  
-
+    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/'
+    
 - task: TerraformCLI@0
   inputs:
     command: 'plan'
     workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+    commandOptions: '-var "basename=$(basename)" -var "location=$(location)" -var "rg_name=$(rg_name)" -var "subscription_id=$(subscription_id)" -var "tenant_id=$(tenant_id)"  -var "version_num=$(version_num)"'
     allowTelemetryCollection: true
-
-- task: TerraformCLI@0
-  inputs:
-    command: 'apply'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
-    allowTelemetryCollection: true
+  
+#- task: TerraformCLI@0
+#  inputs:
+#    command: 'apply'
+#    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+#    allowTelemetryCollection: true
