@@ -4,8 +4,6 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-variables:
-- group: Terrafomr-Public-Workspace
 
 steps:
 
