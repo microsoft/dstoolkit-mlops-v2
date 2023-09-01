@@ -14,5 +14,10 @@ steps:
 - task: TerraformCLI@0
   inputs:
     command: 'validate'
+    workingDirectory: '$(System.DefaultWorkingDirectory'
+
+- task: TerraformCLI@0
+  inputs:
+    command: 'apply'
     workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
     allowTelemetryCollection: true
