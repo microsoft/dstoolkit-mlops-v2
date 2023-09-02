@@ -76,6 +76,7 @@ jobs:
   dependsOn: iac_build
   variables:
     templateFile: '$(Pipeline.Workspace)/infratemplates/public_workspace/templates/main.bicep'
+    requiresPrivateWorkspace: '${{parameters.requiresPrivateWorkspace}}'
 
   strategy:
     runOnce:
@@ -94,7 +95,7 @@ jobs:
             echo '${{parameters.variablesTemplateBase}}'
             echo '${{parameters.storageAccount}}'
             echo '${{parameters.storageAccount}}'
-            echo '${{parameters.requiresPrivateWorkspace}}'
+            echo '${{variables.requiresPrivateWorkspace}}'
             ls $(Pipeline.Workspace)
           enabled: true                            
 
@@ -115,7 +116,7 @@ jobs:
               --parameters location='${{parameters.location}}' storageAccount='${{parameters.storageAccount}}' keyVaultName='${{parameters.keyVaultName}}' \
               appInsightsName='${{parameters.appInsightsName}}' containerRegistryName='${{parameters.containerRegistryName}}' amlWorkspaceName='${{parameters.amlWorkspaceName}}'
           enabled: true
-          condition: eq( '${{ parameters.requiresPrivateWorkspace}}', 'false')
+          condition: eq( variables.requiresPrivateWorkspace, 'false')
 
         - task: AzureCLI@2
           inputs:
@@ -131,4 +132,4 @@ jobs:
               virtualNetworkName='${{parameters.virtualNetworkName}}' privateDnsZoneName='${{parameters.privateDnsZoneName}}' privateDnsZoneLinkName='${{parameters.privateDnsZoneLinkName}}' \
               privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' privateEndpointName='${{parameters.privateEndpointName}}' requiresPrivateWorkspace ${{parameters.requiresPrivateWorkspace}}
           enabled: true
-          condition: eq( '${{ parameters.requiresPrivateWorkspace}}', 'true')       
+          condition: eq( variables.requiresPrivateWorkspace, 'true')       
