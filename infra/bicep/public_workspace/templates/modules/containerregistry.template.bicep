@@ -15,7 +15,7 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-01-01-pr
   properties: {
     adminUserEnabled: true
   }
-  #disable-next-line BCP187
+  #disable-next-line BCP036
   scale: null
   tags: {
   }
