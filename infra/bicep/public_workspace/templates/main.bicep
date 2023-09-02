@@ -25,16 +25,16 @@ param containerRegistryName string
 @description('Name of the container registry resource.')
 param amlWorkspaceName string
 
-var resourceGroupIdUniqueified = substring(uniqueString(resourceGroup().id),0,7)
-var storageAccountNameUniqueified = substring('${storageAccount}${resourceGroupIdUniqueified}',0,20)
-var keyVaultNameUniqueified = substring('${keyVaultName}${resourceGroupIdUniqueified}',0,20)
-var appInsightsNameUniqueified = '${appInsightsName}${resourceGroupIdUniqueified}'
-var containerRegistryNameUniqueified = '${containerRegistryName}${resourceGroupIdUniqueified}'
-var amlWorkspaceNameUniqueified = '${amlWorkspaceName}${resourceGroupIdUniqueified}'
+//var resourceGroupIdUniqueified = substring(uniqueString(resourceGroup().id),0,7)
+//var storageAccountNameUniqueified = substring('${storageAccount}${resourceGroupIdUniqueified}',0,20)
+//var keyVaultNameUniqueified = substring('${keyVaultName}${resourceGroupIdUniqueified}',0,20)
+//var appInsightsNameUniqueified = '${appInsightsName}${resourceGroupIdUniqueified}'
+//var containerRegistryNameUniqueified = '${containerRegistryName}${resourceGroupIdUniqueified}'
+//var amlWorkspaceNameUniqueified = '${amlWorkspaceName}${resourceGroupIdUniqueified}'
 
 // storage
 module stg './modules/storage.template.bicep' = {
-  name: storageAccountName
+  name: storageAccount
   params:{
     storageAccountName: storageAccount
     location: location

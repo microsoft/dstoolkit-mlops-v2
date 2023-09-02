@@ -6,7 +6,7 @@ param keyVaultName string
 @description('The location into which your Azure resources should be deployed.')
 param location string
 
-resource name_resource 'Microsoft.KeyVault/vaults@2023-02-01' = {
+resource name_resource 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: keyVaultName
   location: location
   properties: {
@@ -19,6 +19,7 @@ resource name_resource 'Microsoft.KeyVault/vaults@2023-02-01' = {
     enabledForTemplateDeployment: true
     accessPolicies: []
   }
+  #disable-next-line BCP187
   scale: null
   tags: {
   }

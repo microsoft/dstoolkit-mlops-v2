@@ -20,7 +20,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2022-09-01' existing = {
   name: storageAccount
 }
 
-resource kv 'Microsoft.KeyVault/vaults@2023-02-01' existing = {
+resource kv 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
   name: keyVaultName
 }
 
@@ -32,7 +32,7 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-01-01-pr
   name: containerRegistryName
 }
 
-resource workspace 'Microsoft.MachineLearningServices/workspaces@2023-04-01' = {
+resource workspace 'Microsoft.MachineLearningServices/workspaces@2022-12-01-preview' = {
   name: amlWorkspaceName
   location: location
   dependsOn: [

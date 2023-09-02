@@ -9,11 +9,13 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-01-01-pr
   location: location
   sku: {
     name: 'Basic'
+    #disable-next-line BCP073
     tier: 'Basic'
   }
   properties: {
     adminUserEnabled: true
   }
+  #disable-next-line BCP187
   scale: null
   tags: {
   }
