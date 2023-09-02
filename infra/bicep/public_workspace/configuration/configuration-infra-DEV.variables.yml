@@ -7,13 +7,13 @@ variables:
 
   # DEV Environment
   ENVIRONMENT: DEV
-  RESOURCE_GROUP: rg-MLOps-V2
+  RESOURCE_GROUP: rg-mlops-sdkv2-bicep-test
   LOCATION: eastus
   NAMESPACE: mlops
   PROJECTCODE: dstk
-  VERSION: 0501
-  SERVICECONNECTION_RG: dstoolkit-mlops-v2-svc
-  SERVICECONNECTION_WS: dstoolkit-mlops-v2-svc
+  VERSION: 0500
+  SERVICECONNECTION_RG: dstoolkit-mlops-svc
+  SERVICECONNECTION_WS: dstoolkit-mlops-svc
   AMLWORKSPACE: mlw-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)
   STORAGEACCOUNT: staccaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)
   KEYVAULT: akvaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)
