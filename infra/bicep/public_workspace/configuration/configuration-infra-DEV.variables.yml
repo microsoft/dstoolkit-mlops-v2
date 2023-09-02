@@ -7,7 +7,7 @@ variables:
 
   # DEV Environment
   ENVIRONMENT: DEV
-  RESOURCE_GROUP: rg-mlops-v2-bic-pub-ws
+  RESOURCE_GROUP: rg-MLOps-V2
   LOCATION: eastus
   NAMESPACE: mlops
   PROJECTCODE: dstk
