@@ -25,6 +25,26 @@ param containerRegistryName string
 @description('Name of the container registry resource.')
 param amlWorkspaceName string
 
+@description('Boolean indicating whether to deploy a private endpoint and the related resources')
+param requiresPrivateWorkspace bool=false
+
+// default value is undefined string unless requiresPrivateWorkspace is true
+
+@description('Name of the vnet resource.')
+param virtualNetworkName string = 'undefined' 
+
+@description('Name of the private dns zone resource.')
+param privateDnsZoneName string = 'undefined' 
+
+@description('Name of the private dns zone link resource.')
+param privateDnsZoneLinkName string = 'undefined'
+
+@description('Name of the private dns zone group resource.')
+param privateDnsZoneGroupName string = 'undefined'
+
+@description('Name of the private endpoint resource.')
+param privateEndpointName string = 'undefined'
+
 //var resourceGroupIdUniqueified = substring(uniqueString(resourceGroup().id),0,7)
 //var storageAccountNameUniqueified = substring('${storageAccount}${resourceGroupIdUniqueified}',0,20)
 //var keyVaultNameUniqueified = substring('${keyVaultName}${resourceGroupIdUniqueified}',0,20)
@@ -82,4 +102,55 @@ module appInsightsResource './modules/appinsights.template.bicep' = {
     containerRegistryName: containerRegistryResource.name
     location: location
   }
-} 
+}
+
+// virtual network
+ module vnet './modules/virtualnetwork.template.bicep' = if(requiresPrivateWorkspace) {
+  name: virtualNetworkName
+  params: {
+    location: location
+    virtualNetworkName: virtualNetworkName
+  }
+}
+
+// private endpoint
+module privateEndpoint './modules/privateendpoint.template.bicep' = if(requiresPrivateWorkspace) {
+  name: privateEndpointName
+  params: {
+    location: location
+    privateEndpointName: privateEndpointName
+    virtualNetworkName: vnet.name
+    amlWorkspaceName: mlworkspace.name
+  }
+}
+
+// private dns zone
+module privateDnsZone './modules/privatednszone.template.bicep' = if(requiresPrivateWorkspace) {
+  name: privateDnsZoneName
+  params: {
+    privateDnsZoneName: privateDnsZoneName
+    virtualNetworkName: vnet.name
+  }
+  dependsOn: [
+    privateEndpoint
+  ]
+}
+
+// private dns zone link
+module privateDnsZoneLink './modules/privatednsvnetlink.template.bicep' = if(requiresPrivateWorkspace) {
+  name: privateDnsZoneLinkName
+  params: {
+    virtualNetworkName: vnet.name
+    privateDnsZoneName: privateDnsZone.name
+  }
+}
+
+// private dns zone group
+module privateDnsZoneGroup './modules/privatednszonegroup.template.bicep' = if(requiresPrivateWorkspace) {
+  name: privateDnsZoneGroupName
+  params: {
+    privateDnsZoneName: privateDnsZone.name
+    privateDnsZoneGroupName: privateDnsZoneGroupName
+    privateEndpointName: privateEndpoint.name
+  }
+}
