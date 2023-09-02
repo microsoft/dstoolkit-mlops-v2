@@ -115,7 +115,6 @@ jobs:
               --parameters location='${{parameters.location}}' storageAccount='${{parameters.storageAccount}}' keyVaultName='${{parameters.keyVaultName}}' \
               appInsightsName='${{parameters.appInsightsName}}' containerRegistryName='${{parameters.containerRegistryName}}' amlWorkspaceName='${{parameters.amlWorkspaceName}}'
           enabled: true
-          condition: eq( $(parameters.requiresPrivateWorkspace), 'false')
 
         - task: AzureCLI@2
           inputs:
@@ -130,5 +129,4 @@ jobs:
               appInsightsName='${{parameters.appInsightsName}}' containerRegistryName='${{parameters.containerRegistryName}}' amlWorkspaceName='${{parameters.amlWorkspaceName}} \
               virtualNetworkName='${{parameters.virtualNetworkName}}' privateDnsZoneName='${{parameters.privateDnsZoneName}}' privateDnsZoneLinkName='${{parameters.privateDnsZoneLinkName}}' \
               privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' privateEndpointName='${{parameters.privateEndpointName}}' requiresPrivateWorkspace ${{parameters.requiresPrivateWorkspace}}
-          enabled: true
-          condition: eq( $(parameters.requiresPrivateWorkspace), 'true')       
+          enabled: false
