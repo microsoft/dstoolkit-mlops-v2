@@ -28,9 +28,6 @@ parameters:
 - name: privateDnsZoneName  
   type: string
   default: 'undefined'
-- name: privateDnsZoneName  
-  type: string
-  default: 'undefined'
 - name: privateDnsZoneLinkName  
   type: string
   default: 'undefined'
