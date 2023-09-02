@@ -11,15 +11,10 @@ pr:
     include:
     - main
     - develop
-  paths:
-    include:
-    - ../public_workspace/configuration/configuration-infra-DEV.variables.yml
-    - infra/bicep/public_workspace/PIPELINE-0-setup.yml
-
-
-variables:
-- template: ../public_workspace/configuration/configuration-infra-DEV.variables.yml # DEV as default env
-
+  # paths:
+  #   include:
+  #   - ../public_workspace/configuration/configuration-infra-DEV.variables.yml
+  #   - infra/bicep/public_workspace/PIPELINE-0-setup.yml
 pool:
   vmImage: 'ubuntu latest'
 
