@@ -19,8 +19,6 @@ resource name_resource 'Microsoft.KeyVault/vaults@2022-07-01' = {
     enabledForTemplateDeployment: true
     accessPolicies: []
   }
-  #disable-next-line BCP036
-  scale: null
   tags: {
   }
 }
