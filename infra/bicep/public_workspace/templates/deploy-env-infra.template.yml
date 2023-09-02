@@ -20,7 +20,7 @@ parameters:
 - name: amlWorkspaceName  
   type: string   
 - name: requiresPrivateWorkspace  
-  type: bool
+  type: boolean
   default: false 
 
 jobs:
