@@ -19,7 +19,10 @@ parameters:
   type: string
 - name: amlWorkspaceName  
   type: string   
-    
+- name: requiresPrivateWorkspace  
+  type: bool
+  default: false 
+
 jobs:
 - job: iac_build
   displayName: 'IaC Build'
@@ -81,23 +84,32 @@ jobs:
             ls $(Pipeline.Workspace)/infratemplates/public_workspace/templates
           enabled: false  
 
-        - task: AzureCLI@2
+          - task: AzureCLI@2
           inputs:
             azureSubscription: '${{parameters.azureMgrConnection}}'
             scriptType: bash
             scriptLocation: inlineScript
             useGlobalConfig: false
             inlineScript: |
-            if [[ ! requiresPrivateWorkspace ]]; then
               az --version
               az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file $(templateFile) \
               --parameters location='${{parameters.location}}' storageAccount='${{parameters.storageAccount}}' keyVaultName='${{parameters.keyVaultName}}' \
               appInsightsName='${{parameters.appInsightsName}}' containerRegistryName='${{parameters.containerRegistryName}}' amlWorkspaceName='${{parameters.amlWorkspaceName}}'
-            else
+          enabled: true
+          condition: eq( parameters['requiresPrivateWorkspace'], 'false')
+
+          - task: AzureCLI@2
+          inputs:
+            azureSubscription: '${{parameters.azureMgrConnection}}'
+            scriptType: bash
+            scriptLocation: inlineScript
+            useGlobalConfig: false
+            inlineScript: |
+              az --version
               az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file $(templateFile) \
               --parameters location='${{parameters.location}}' storageAccount='${{parameters.storageAccount}}' keyVaultName='${{parameters.keyVaultName}}' \
               appInsightsName='${{parameters.appInsightsName}}' containerRegistryName='${{parameters.containerRegistryName}}' amlWorkspaceName='${{parameters.amlWorkspaceName}} \
               virtualNetworkName='${{parameters.virtualNetworkName}}' privateDnsZoneName='${{parameters.privateDnsZoneName}}' privateDnsZoneLinkName='${{parameters.privateDnsZoneLinkName}}' \
-              privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' privateEndpointName='${{parameters.privateEndpointName}}'
-            fi
-          enabled: true       
+              privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' privateEndpointName='${{parameters.privateEndpointName}}' requiresPrivateWorkspace ${{parameters.requiresPrivateWorkspace}}
+          enabled: true
+          condition: eq( parameters['requiresPrivateWorkspace'], 'true')       

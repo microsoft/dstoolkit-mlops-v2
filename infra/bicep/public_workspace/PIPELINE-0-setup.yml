@@ -47,3 +47,4 @@ stages:
       appInsightsName: $(APPINSIGHTS)
       containerRegistryName: $(CONTAINERREGISTRY)
       amlWorkspaceName: $(AMLWORKSPACE)
+      requiresPrivateWorkspace: $(REQUIRESPRIVATEWORKSPACE)
