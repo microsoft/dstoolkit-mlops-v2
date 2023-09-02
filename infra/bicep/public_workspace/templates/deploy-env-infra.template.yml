@@ -27,6 +27,8 @@ jobs:
 - job: iac_build
   displayName: 'IaC Build'
   steps:
+  - checkout:
+    clean: true
   - task: CopyFiles@2
     displayName: 'Copy templates'
     inputs:
