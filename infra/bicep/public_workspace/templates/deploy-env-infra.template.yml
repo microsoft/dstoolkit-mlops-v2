@@ -114,7 +114,7 @@ jobs:
               az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file $(templateFile) \
               --parameters location='${{parameters.location}}' storageAccount='${{parameters.storageAccount}}' keyVaultName='${{parameters.keyVaultName}}' \
               appInsightsName='${{parameters.appInsightsName}}' containerRegistryName='${{parameters.containerRegistryName}}' amlWorkspaceName='${{parameters.amlWorkspaceName}}'
-          enabled: false
+          enabled: true
           condition: eq( '${{ parameters.requiresPrivateWorkspace}}', 'false')
 
         - task: AzureCLI@2
@@ -130,5 +130,5 @@ jobs:
               appInsightsName='${{parameters.appInsightsName}}' containerRegistryName='${{parameters.containerRegistryName}}' amlWorkspaceName='${{parameters.amlWorkspaceName}} \
               virtualNetworkName='${{parameters.virtualNetworkName}}' privateDnsZoneName='${{parameters.privateDnsZoneName}}' privateDnsZoneLinkName='${{parameters.privateDnsZoneLinkName}}' \
               privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' privateEndpointName='${{parameters.privateEndpointName}}' requiresPrivateWorkspace ${{parameters.requiresPrivateWorkspace}}
-          enabled: false
+          enabled: true
           condition: eq( ${{ parameters.requiresPrivateWorkspace}}, 'true')       
