@@ -11,7 +11,7 @@ variables:
   LOCATION: eastus
   NAMESPACE: mlops
   PROJECTCODE: dstk
-  VERSION: 0501
+  VERSION: 0502
   SERVICECONNECTION_RG: dstoolkit-mlops-v2-svc
   SERVICECONNECTION_WS: dstoolkit-mlops-v2-svc
   AMLWORKSPACE: mlw-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)
