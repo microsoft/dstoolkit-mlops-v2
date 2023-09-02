@@ -20,8 +20,8 @@ parameters:
 - name: amlWorkspaceName  
   type: string   
 - name: requiresPrivateWorkspace  
-  type: boolean
-  default: false 
+  type: string
+  default: 'false' 
 
 jobs:
 - job: iac_build
