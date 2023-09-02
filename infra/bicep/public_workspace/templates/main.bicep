@@ -34,9 +34,9 @@ var amlWorkspaceNameUniqueified = '${amlWorkspaceName}${resourceGroupIdUniqueifi
 
 // storage
 module stg './modules/storage.template.bicep' = {
-  name: ${storageAccount}
+  name: storageAccountName
   params:{
-    storageAccountName: ${keyVaultName}
+    storageAccountName: storageAccount
     location: location
     kind: kind
     accessTier: accessTier
@@ -46,36 +46,36 @@ module stg './modules/storage.template.bicep' = {
 
 // key vault
 module kv './modules/keyvault.template.bicep' = {
-  name: ${keyVaultName}
+  name: keyVaultName
   params: {
-    keyVaultName: ${keyVaultName}
+    keyVaultName: keyVaultName
     location: location
   }
 }
 
 // application insights
 module appInsightsResource './modules/appinsights.template.bicep' = {
-  name:${appInsightsName}
+  name:appInsightsName
   params: {
-    appInsightsName: ${appInsightsName}
+    appInsightsName: appInsightsName
     location: location
   }
 }
 
 // container registry
  module containerRegistryResource './modules/containerregistry.template.bicep' = {
-  name: ${containerRegistryName}
+  name: containerRegistryName
   params: {
-    containerRegistryName: ${containerRegistryName}
+    containerRegistryName: containerRegistryName
     location: location
   }
  }
 
  // azure machine learning
  module mlworkspace './modules/mlworkspace.template.bicep' = {
-  name: ${amlWorkspaceName}
+  name: amlWorkspaceName
   params: {
-    amlWorkspaceName: ${amlWorkspaceName}
+    amlWorkspaceName: amlWorkspaceName
     storageAccount: stg.name
     keyVaultName: kv.name
     appInsightsName: appInsightsResource.name
