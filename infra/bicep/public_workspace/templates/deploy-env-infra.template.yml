@@ -21,7 +21,25 @@ parameters:
   type: string   
 - name: requiresPrivateWorkspace  
   type: string
-  default: 'false' 
+  default: 'false'
+- name: virtualNetworkName  
+  type: string
+  default: 'undefined'
+- name: privateDnsZoneName  
+  type: string
+  default: 'undefined'
+- name: privateDnsZoneName  
+  type: string
+  default: 'undefined'
+- name: privateDnsZoneLinkName  
+  type: string
+  default: 'undefined'
+- name: privateDnsZoneGroupName  
+  type: string
+  default: 'undefined'
+- name: privateEndpointName  
+  type: string
+  default: 'undefined'    
 
 jobs:
 - job: iac_build
