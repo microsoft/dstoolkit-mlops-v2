@@ -131,4 +131,4 @@ jobs:
               virtualNetworkName='${{parameters.virtualNetworkName}}' privateDnsZoneName='${{parameters.privateDnsZoneName}}' privateDnsZoneLinkName='${{parameters.privateDnsZoneLinkName}}' \
               privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' privateEndpointName='${{parameters.privateEndpointName}}' requiresPrivateWorkspace ${{parameters.requiresPrivateWorkspace}}
           enabled: true
-          condition: eq( ${{ parameters.requiresPrivateWorkspace}}, 'true')       
+          condition: eq( '${{ parameters.requiresPrivateWorkspace}}', 'true')       
