@@ -16,6 +16,9 @@ pr:
     include:
     - ../public_workspace/configuration/configuration-infra-DEV.variables.yml
     # - infra/bicep/public_workspace/PIPELINE-0-setup.yml
+  
+  variables:
+  - template: ../public_workspace/configuration/configuration-infra-DEV.variables.yml
 
 pool:
   vmImage: 'ubuntu latest'
@@ -29,8 +32,8 @@ stages:
 # Deploy DEV Environment
 - stage: deployinfra_dev
   displayName: 'Deploy DEV Environment'
-  variables:
-  - template: /infra/bicep/public_workspace/configuration/configuration-infra-DEV.variables.yml
+  # variables:
+  # - template: /infra/bicep/public_workspace/configuration/configuration-infra-DEV.variables.yml
   jobs:
   - template: /infra/bicep/public_workspace/templates/deploy-env-infra.template.yml
     parameters:
