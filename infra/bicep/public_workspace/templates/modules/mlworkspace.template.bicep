@@ -49,6 +49,5 @@ resource workspace 'Microsoft.MachineLearningServices/workspaces@2023-04-01' = {
     applicationInsights: appInsights.id
     containerRegistry: containerRegistry.id
     storageAccount: stg.id
-    sku: 'enterprise'
   }
 }
