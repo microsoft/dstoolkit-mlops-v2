@@ -94,6 +94,12 @@ jobs:
             echo '${{parameters.variablesTemplateBase}}'
             echo '${{parameters.storageAccount}}'
             echo '${{parameters.requiresPrivateWorkspace}}'
+            echo '${{parameters.privateDnsZoneName}}'
+            echo '${{parameters.virtualNetworkName}}'
+            echo '${{parameters.privateDnsZoneLinkName}}'
+            echo '${{parameters.privateDnsZoneGroupName}}'
+            echo '${{parameters.privateEndpointName}}'
+
             ls $(Pipeline.Workspace)
           enabled: true                            
 
@@ -140,7 +146,7 @@ jobs:
             useGlobalConfig: false
             inlineScript: |
               az --version
-              if(!requiresPrivateWorkspace){
+              if(-Not (${{parameters.requiresPrivateWorkspace}})){
                 az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file $(templateFile) `
                 --parameters location='${{parameters.location}}' `
                 storageAccount='${{parameters.storageAccount}}' `
