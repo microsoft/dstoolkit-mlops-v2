@@ -146,7 +146,7 @@ jobs:
             useGlobalConfig: false
             inlineScript: |
               az --version
-              if(-Not (${{parameters.requiresPrivateWorkspace}})){
+              if('${{parameters.requiresPrivateWorkspace}}'='false'){
                 az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file $(templateFile) `
                 --parameters location='${{parameters.location}}' `
                 storageAccount='${{parameters.storageAccount}}' `
