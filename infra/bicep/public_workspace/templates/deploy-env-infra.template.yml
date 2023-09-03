@@ -124,10 +124,11 @@ jobs:
 #            useGlobalConfig: false
 #            inlineScript: |
 #              az --version
-#              az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file $(templateFile) \
-#              --parameters location='${{parameters.location}}' storageAccount='${{parameters.storageAccount}}' keyVaultName='${{parameters.keyVaultName}}' \
-#              appInsightsName='${{parameters.appInsightsName}}' containerRegistryName='${{parameters.containerRegistryName}}' amlWorkspaceName='${{parameters.amlWorkspaceName}} \
-#              virtualNetworkName='${{parameters.virtualNetworkName}}' privateDnsZoneName='${{parameters.privateDnsZoneName}}' privateDnsZoneLinkName='${{parameters.privateDnsZoneLinkName}}' \
+#              az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file $(templateFile) `
+#              --parameters location='${{parameters.location}}' storageAccount='${{parameters.storageAccount}}' keyVaultName='${{parameters.keyVaultName}}' `
+#              appInsightsName='${{parameters.appInsightsName}}' containerRegistryName='${{parameters.containerRegistryName}}' amlWorkspaceName='${{parameters.amlWorkspaceName}} `
+#              virtualNetworkName='${{parameters.virtualNetworkName}}' privateDnsZoneName='${{parameters.privateDnsZoneName}}' `
+  privateDnsZoneLinkName='${{parameters.privateDnsZoneLinkName}}' \
 #              privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' privateEndpointName='${{parameters.privateEndpointName}}' requiresPrivateWorkspace='${{parameters.requiresPrivateWorkspace}}'
 #          enabled: true
 
@@ -140,9 +141,13 @@ jobs:
             inlineScript: |
               az --version
               if(!requiresPrivateWorkspace){
-                az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file $(templateFile) \
-                --parameters location='${{parameters.location}}' storageAccount='${{parameters.storageAccount}}' keyVaultName='${{parameters.keyVaultName}}' \
-                appInsightsName='${{parameters.appInsightsName}}' containerRegistryName='${{parameters.containerRegistryName}}' amlWorkspaceName='${{parameters.amlWorkspaceName}}'
+                az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file $(templateFile) `
+                --parameters location='${{parameters.location}}' `
+                storageAccount='${{parameters.storageAccount}}' `
+                keyVaultName='${{parameters.keyVaultName}}' `
+                appInsightsName='${{parameters.appInsightsName}}' `
+                containerRegistryName='${{parameters.containerRegistryName}}' `
+                amlWorkspaceName='${{parameters.amlWorkspaceName}}'
               }
               else {
                 az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file $(templateFile) \
