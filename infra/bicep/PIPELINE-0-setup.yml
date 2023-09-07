@@ -16,7 +16,7 @@ pr:
     include:
     - infra/bicep
   
-variables:
+# variables:
 # - template: /infra/bicep/configuration/configuration-infra-DEV.variables.yml
 # - template: /infra/bicep/configuration/infra_config.json
 # - template: /devops/pipeline/templates/variables_template.yml
