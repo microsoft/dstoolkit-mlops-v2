@@ -28,8 +28,8 @@ stages:
 
 - template: /devops/pipeline/templates/variables_template.yml
   parameters:
-    env_name: ${{parameters.env_name}}
-    model_type: ${{parameters.model_type}}
+    env_name: 'dev'
+    model_type: 'nyc_taxi'
 
 ####################
 ##  DEPLOY INFRA  ##
