@@ -19,14 +19,14 @@ pr:
 variables:
 # - template: /infra/bicep/configuration/configuration-infra-DEV.variables.yml
 # - template: /infra/bicep/configuration/infra_config.json
-- template: /devops/pipeline/templates/variables_template.yml
+# - template: /devops/pipeline/templates/variables_template.yml
 
 pool:
   vmImage: 'ubuntu latest'
 
 stages:
 
-- template: ../templates/variables_template.yml
+- template: /devops/pipeline/templates/variables_template.yml
   parameters:
     env_name: ${{parameters.env_name}}
     model_type: ${{parameters.model_type}}
