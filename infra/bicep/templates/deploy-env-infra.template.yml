@@ -38,10 +38,8 @@ parameters:
   type: string
   default: 'undefined'    
 
-#jobs:
-stages:
-
-  - stage: iac_build
+  jobs:
+  - job: iac_build
     displayName: 'IaC Build'
     steps:
     - checkout: self
@@ -57,7 +55,8 @@ stages:
       artifact: infratemplates 
       enabled: true    
 
-  - stage: infra_deployment
+  - job: infra_deployment
+    displayName: "Infrastructure Deployment"
     steps:
 
       - download: current
