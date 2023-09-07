@@ -26,29 +26,35 @@ pool:
 
 stages:
 
-  - template: /devops/pipeline/templates/variables_template.yml
-    parameters:
-      env_name: 'dev'
-      model_type: 'nyc_taxi'
+  - stage: set_variables
+    displayName: set variables from infra deployment 
+    jobs:
+      - template: /devops/pipeline/templates/variables_template.yml
+        parameters:
+          env_name: 'dev'
+          model_type: 'nyc_taxi'
 
-  - template: /infra/bicep/templates/deploy-env-infra.template.yml
-    parameters:
-      environmentName: $(ENVIRONMENT)
-      azureMgrConnection: $(AZURE_RM_SVC_CONNECTION)
-      resourceGroup: $(RESOURCE_GROUP)
-      location: $(LOCATION)
-      variablesTemplateBase: '${{variables.template}}'
-      storageAccount: $(STORAGEACCOUNT)
-      keyVaultName: $(KEYVAULT)
-      appInsightsName: $(APPINSIGHTS)
-      containerRegistryName: $(CONTAINERREGISTRY)
-      amlWorkspaceName: $(AMLWORKSPACE)
-      virtualNetworkName: $(VIRTUALNETWORK)
-      privateDnsZoneName: $(PRIVATEDNSZONE)
-      privateDnsZoneLinkName: $(PRIVATEDNSZONELINK)
-      privateDnsZoneGroupName: $(PRIVATEDNSZONEGROUP)
-      privateEndpointName: $(PRIVATEENDPOINT)
-      requiresPrivateWorkspace: $(REQUIRESPRIVATEWORKSPACE)
+  - stage: execute_infra_deployment
+    displayName: "Infrastructure Deployment" 
+    jobs:
+      - template: /infra/bicep/templates/deploy-env-infra_pipeline.yml
+        parameters:
+          environmentName: $(ENVIRONMENT)
+          azureMgrConnection: $(AZURE_RM_SVC_CONNECTION)
+          resourceGroup: $(RESOURCE_GROUP)
+          location: $(LOCATION)
+          variablesTemplateBase: '${{variables.template}}'
+          storageAccount: $(STORAGEACCOUNT)
+          keyVaultName: $(KEYVAULT)
+          appInsightsName: $(APPINSIGHTS)
+          containerRegistryName: $(CONTAINERREGISTRY)
+          amlWorkspaceName: $(AMLWORKSPACE)
+          virtualNetworkName: $(VIRTUALNETWORK)
+          privateDnsZoneName: $(PRIVATEDNSZONE)
+          privateDnsZoneLinkName: $(PRIVATEDNSZONELINK)
+          privateDnsZoneGroupName: $(PRIVATEDNSZONEGROUP)
+          privateEndpointName: $(PRIVATEENDPOINT)
+          requiresPrivateWorkspace: $(REQUIRESPRIVATEWORKSPACE)
 
 # ####################
 # ##  DEPLOY INFRA  ##
