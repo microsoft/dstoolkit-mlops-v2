@@ -38,7 +38,7 @@ parameters:
   type: string
   default: 'undefined'    
 
-jobs:
+#jobs:
 - job: iac_build
   displayName: 'IaC Build'
   steps:
