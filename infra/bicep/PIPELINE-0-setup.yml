@@ -26,19 +26,11 @@ pool:
 
 stages:
 
-- template: /devops/pipeline/templates/variables_template.yml
-  parameters:
-    env_name: 'dev'
-    model_type: 'nyc_taxi'
+  - template: /devops/pipeline/templates/variables_template.yml
+    parameters:
+      env_name: 'dev'
+      model_type: 'nyc_taxi'
 
-####################
-##  DEPLOY INFRA  ##
-####################
-
-# Deploy DEV Environment
-- stage: deployinfra_dev
-  displayName: 'Deploy DEV Environment'
-  jobs:
   - template: /infra/bicep/templates/deploy-env-infra.template.yml
     parameters:
       environmentName: $(ENVIRONMENT)
@@ -57,3 +49,30 @@ stages:
       privateDnsZoneGroupName: $(PRIVATEDNSZONEGROUP)
       privateEndpointName: $(PRIVATEENDPOINT)
       requiresPrivateWorkspace: $(REQUIRESPRIVATEWORKSPACE)
+
+# ####################
+# ##  DEPLOY INFRA  ##
+# ####################
+
+# # Deploy DEV Environment
+# - stage: deployinfra_dev
+#   displayName: 'Deploy DEV Environment'
+#   jobs:
+#   - template: /infra/bicep/templates/deploy-env-infra.template.yml
+#     parameters:
+#       environmentName: $(ENVIRONMENT)
+#       azureMgrConnection: $(AZURE_RM_SVC_CONNECTION)
+#       resourceGroup: $(RESOURCE_GROUP)
+#       location: $(LOCATION)
+#       variablesTemplateBase: '${{variables.template}}'
+#       storageAccount: $(STORAGEACCOUNT)
+#       keyVaultName: $(KEYVAULT)
+#       appInsightsName: $(APPINSIGHTS)
+#       containerRegistryName: $(CONTAINERREGISTRY)
+#       amlWorkspaceName: $(AMLWORKSPACE)
+#       virtualNetworkName: $(VIRTUALNETWORK)
+#       privateDnsZoneName: $(PRIVATEDNSZONE)
+#       privateDnsZoneLinkName: $(PRIVATEDNSZONELINK)
+#       privateDnsZoneGroupName: $(PRIVATEDNSZONEGROUP)
+#       privateEndpointName: $(PRIVATEENDPOINT)
+#       requiresPrivateWorkspace: $(REQUIRESPRIVATEWORKSPACE)
