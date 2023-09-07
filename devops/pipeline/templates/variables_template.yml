@@ -76,6 +76,8 @@ stages:
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.DATA_CONFIG_PATH'] ]
     - name: REALTIME_DEPLOYMENT_CONFIG
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.REALTIME_DEPLOYMENT_CONFIG'] ]
+    - name: INFRA_CONFIG_PATH
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.INFRA_CONFIG_PATH'] ]
     steps:
     - script: |
         if [ -z "$(ML_MODEL_CONFIG_NAME)" ]

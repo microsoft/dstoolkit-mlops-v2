@@ -18,7 +18,8 @@ pr:
   
 variables:
 # - template: /infra/bicep/configuration/configuration-infra-DEV.variables.yml
-- template: /infra/bicep/configuration/infra_config.json
+# - template: /infra/bicep/configuration/infra_config.json
+- template: /config/devops/pipeline/templates/variables_template.yml
 
 pool:
   vmImage: 'ubuntu latest'
