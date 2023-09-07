@@ -39,83 +39,76 @@ parameters:
   default: 'undefined'    
 
 #jobs:
-- job: iac_build
-  displayName: 'IaC Build'
-  steps:
-  - checkout: self
-    clean: true
-  - task: CopyFiles@2
-    displayName: 'Copy templates'
-    inputs:
-      sourceFolder: '$(Pipeline.Workspace)/s/infra/bicep'
-      targetFolder: '$(Build.ArtifactStagingDirectory)'
-    enabled: true
+stages:
 
-  - publish: '$(Build.ArtifactStagingDirectory)'
-    artifact: infratemplates 
-    enabled: true    
+  - stage: iac_build
+    displayName: 'IaC Build'
+    steps:
+    - checkout: self
+      clean: true
+    - task: CopyFiles@2
+      displayName: 'Copy templates'
+      inputs:
+        sourceFolder: '$(Pipeline.Workspace)/s/infra/bicep'
+        targetFolder: '$(Build.ArtifactStagingDirectory)'
+      enabled: true
 
-- deployment: ml_env_deployment
-  displayName: 'MlOps Environment Deployment'
-  environment: '${{parameters.environmentName}}'  
-  dependsOn: iac_build
-  variables:
-    templateFile: '$(Pipeline.Workspace)/infratemplates/templates/main.bicep'
+    - publish: '$(Build.ArtifactStagingDirectory)'
+      artifact: infratemplates 
+      enabled: true    
 
-  strategy:
-    runOnce:
-      deploy:
-        steps:
+  - stage: infra_deployment
+    steps:
 
-        - download: current
-          artifact: infratemplates
+      - download: current
+        artifact: infratemplates
 
-        - script: |
-            echo 'See the contents of parameters passed in'
-            echo '${{parameters.azureMgrConnection}}'
-            echo '${{parameters.environmentName}}'
-            echo '${{parameters.resourceGroup}}'
-            echo '${{parameters.location}}'
-            echo '${{parameters.variablesTemplateBase}}'
-            echo '${{parameters.storageAccount}}'
-            echo '${{parameters.requiresPrivateWorkspace}}'
-            echo '${{parameters.privateDnsZoneName}}'
-            echo '${{parameters.virtualNetworkName}}'
-            echo '${{parameters.privateDnsZoneLinkName}}'
-            echo '${{parameters.privateDnsZoneGroupName}}'
-            echo '${{parameters.privateEndpointName}}'
-          enabled: true                            
-        
-        - task: AzureCLI@2
-          inputs:
-            azureSubscription: '${{parameters.azureMgrConnection}}'
-            scriptType: pscore
-            scriptLocation: inlineScript
-            useGlobalConfig: false
-            inlineScript: |
-              az --version
-              if('${{parameters.requiresPrivateWorkspace}}' -eq 'false'){
-                az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file $(templateFile) `
-                --parameters location='${{parameters.location}}' `
-                storageAccount='${{parameters.storageAccount}}' `
-                keyVaultName='${{parameters.keyVaultName}}' `
-                appInsightsName='${{parameters.appInsightsName}}' `
-                containerRegistryName='${{parameters.containerRegistryName}}' `
-                amlWorkspaceName='${{parameters.amlWorkspaceName}}'
-              }
-              else {
-                az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file $(templateFile) `
-                --parameters location='${{parameters.location}}' `
-                storageAccount='${{parameters.storageAccount}}' `
-                keyVaultName='${{parameters.keyVaultName}}' `
-                appInsightsName='${{parameters.appInsightsName}}' `
-                containerRegistryName='${{parameters.containerRegistryName}}' `
-                amlWorkspaceName='${{parameters.amlWorkspaceName}}' `
-                virtualNetworkName='${{parameters.virtualNetworkName}}' `
-                privateDnsZoneName='${{parameters.privateDnsZoneName}}' `
-                privateDnsZoneLinkName='${{parameters.privateDnsZoneLinkName}}' `
-                privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' `
-                privateEndpointName='${{parameters.privateEndpointName}}' `
-                requiresPrivateWorkspace='${{parameters.requiresPrivateWorkspace}}'
-              }
-          enabled: true
+      - script: |
+          echo 'See the contents of parameters passed in'
+          echo '${{parameters.azureMgrConnection}}'
+          echo '${{parameters.environmentName}}'
+          echo '${{parameters.resourceGroup}}'
+          echo '${{parameters.location}}'
+          echo '${{parameters.variablesTemplateBase}}'
+          echo '${{parameters.storageAccount}}'
+          echo '${{parameters.requiresPrivateWorkspace}}'
+          echo '${{parameters.privateDnsZoneName}}'
+          echo '${{parameters.virtualNetworkName}}'
+          echo '${{parameters.privateDnsZoneLinkName}}'
+          echo '${{parameters.privateDnsZoneGroupName}}'
+          echo '${{parameters.privateEndpointName}}'
+        enabled: true                            
+      
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: '${{parameters.azureMgrConnection}}'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          useGlobalConfig: false
+          inlineScript: |
+            az --version
+            if('${{parameters.requiresPrivateWorkspace}}' -eq 'false'){
+              az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file $(templateFile) `
+              --parameters location='${{parameters.location}}' `
+              storageAccount='${{parameters.storageAccount}}' `
+              keyVaultName='${{parameters.keyVaultName}}' `
+              appInsightsName='${{parameters.appInsightsName}}' `
+              containerRegistryName='${{parameters.containerRegistryName}}' `
+              amlWorkspaceName='${{parameters.amlWorkspaceName}}'
+            }
+            else {
+              az deployment group create --resource-group '${{parameters.resourceGroup}}' --template-file $(templateFile) `
+              --parameters location='${{parameters.location}}' `
+              storageAccount='${{parameters.storageAccount}}' `
+              keyVaultName='${{parameters.keyVaultName}}' `
+              appInsightsName='${{parameters.appInsightsName}}' `
+              containerRegistryName='${{parameters.containerRegistryName}}' `
+              amlWorkspaceName='${{parameters.amlWorkspaceName}}' `
+              virtualNetworkName='${{parameters.virtualNetworkName}}' `
+              privateDnsZoneName='${{parameters.privateDnsZoneName}}' `
+              privateDnsZoneLinkName='${{parameters.privateDnsZoneLinkName}}' `
+              privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' `
+              privateEndpointName='${{parameters.privateEndpointName}}' `
+              requiresPrivateWorkspace='${{parameters.requiresPrivateWorkspace}}'
+            }
+        enabled: true
