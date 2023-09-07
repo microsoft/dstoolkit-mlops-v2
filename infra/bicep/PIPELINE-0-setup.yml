@@ -26,6 +26,11 @@ pool:
 
 stages:
 
+- template: ../templates/variables_template.yml
+  parameters:
+    env_name: ${{parameters.env_name}}
+    model_type: ${{parameters.model_type}}
+
 ####################
 ##  DEPLOY INFRA  ##
 ####################
