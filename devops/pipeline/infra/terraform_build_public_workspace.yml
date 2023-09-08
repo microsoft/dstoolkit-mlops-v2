@@ -51,20 +51,36 @@ steps:
     
   displayName: 'Azure CLI Updated and Ubuntu'
 
-- script: |
+# - script: |
 
-    cd infra/terraform/public_workspace/
+#     cd infra/terraform/public_workspace/
 
-    $subscription_id = $(subscription_id)
-    $tenant_id = $(tenant_id)
-    #echo $tenantid
-    # az login --tenant $tenant_id
-    # az account set --subscription $subscription_id
+#     $subscription_id = $(subscription_id)
+#     $tenant_id = $(tenant_id)
+#     #echo $tenantid
+#     # az login --tenant $tenant_id
+#     # az account set --subscription $subscription_id
 
-    echo $(basename)
-    echo $(project_code)
-    terraform init
-    terraform plan
-    terraform apply --auto-plan
-    # echo "Resources have been built. Give it a minute to check through the portal."
-  displayName: 'Running Terraform files'
+#     echo $(basename)
+#     echo $(project_code)
+#     terraform init
+#     terraform plan
+#     terraform apply --auto-plan
+#     # echo "Resources have been built. Give it a minute to check through the portal."
+  
+- task: TerraformInstaller@1
+  inputs:
+    terraformVersion: 'latest'
+
+- task: TerraformCLI@0
+  inputs:
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace/'
+    allowTelemetryCollection: true
+
+
+- task: TerraformCLI@0
+  inputs:
+    command: 'plan'
+    workingDirectory: '$(System.DefaultWorkingDirectory)//infra/terraform/public_workspace/'
+    allowTelemetryCollection: true
