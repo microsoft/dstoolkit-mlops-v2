@@ -32,7 +32,18 @@ steps:
     workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
     allowTelemetryCollection: true
   displayName: Terraform Validate
-  
+
+- task: TerraformCLI@0
+  inputs:
+    command: 'plan'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/intra/terraform/public_workspace'
+    environmentServiceName: 'infra_service_connection'
+    providerAzureRmSubscriptionId: '310ab569-9762-484e-8ce9-a650803297ea'
+    runAzLogin: true
+    commandOptions: '-var "basename=mlops" -var "location=westus2" -var "rg_name=rg-MLOps-V2" -var "subscription_id=310ab569-9762-484e-8ce9-a650803297ea" -var "tenant_id=16b3c013-d300-468d-ac64-7eda0820b6d3"  -var "version_num=001"'
+    allowTelemetryCollection: true
+  displayName: Terrafor Plan
+
 #- task: TerraformCLI@0
 #  inputs:
 #    command: 'plan'
