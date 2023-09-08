@@ -3,10 +3,10 @@ variables:
 
 steps:
 
-- task: TerraformInstaller@1
+- task: TerraformInstaller@0
   inputs:
     terraformVersion: 'latest'
-  displayName: Service Connection
+  displayName: Terraform Installer
 
 
 - task: TerraformCLI@0
