@@ -2,12 +2,12 @@ variables:
 - group: tf_public_vg
 
 steps:
-- task: TerraformInstaller@0
+- task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
   inputs:
     terraformVersion: 'latest'
   displayName: Terraform Version
 
-- task: TerraformCLI@0
+- task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
   inputs:
     command: 'init'
     workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
@@ -18,14 +18,14 @@ steps:
     backendAzureRmKey: mlops.tfstate
   displayName: Terraform Init
   
-- task: TerraformCLI@0
+- task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
   inputs:
     command: 'validate'
     workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
     allowTelemetryCollection: true
   displayName: Terraform Validate
 
-- task: TerraformCLI@0
+- task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
   inputs:
     command: 'plan'
     workingDirectory: '$(System.DefaultWorkingDirectory)/intra/terraform/public_workspace'
@@ -35,7 +35,7 @@ steps:
     allowTelemetryCollection: true
   displayName: Terrafor Plan
     
-- task: TerraformCLI@0
+- task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
   inputs:
     command: 'apply'
     workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
