@@ -16,7 +16,7 @@ steps:
     azureSubscription: 'infra_service_connection'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
-    inlineScript: 'ls'
+    inlineScript: 'cd $(System.DefaultWorkingDirectory)/infra/terraform/public_workspace ls'
   displayName: Current Dictory
 
 - task: TerraformCLI@0
