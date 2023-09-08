@@ -3,7 +3,7 @@ variables:
 
 steps:
 
-- task: TerraformCLI@0
+- task: TerraformCLI@1
   inputs:
     command: 'init'
     workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
@@ -14,14 +14,14 @@ steps:
     backendAzureRmKey: mlops.tfstate
   displayName: Terraform Init
   
-- task: TerraformCLI@0
+- task: TerraformCLI@1
   inputs:
     command: 'validate'
     workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
     allowTelemetryCollection: true
   displayName: Terraform Validate
 
-- task: TerraformCLI@0
+- task: TerraformCLI@1
   inputs:
     command: 'plan'
     workingDirectory: '$(System.DefaultWorkingDirectory)/intra/terraform/public_workspace'
