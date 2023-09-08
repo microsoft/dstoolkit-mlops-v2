@@ -2,6 +2,10 @@ variables:
 - group: tf_public_vg
 
 steps:
+- task: TerraformInstaller@0
+  inputs:
+    terraformVersion: 'latest'
+  displayName: Terraform Version
 
 - task: TerraformCLI@0
   inputs:
