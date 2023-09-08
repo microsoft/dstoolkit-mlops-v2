@@ -17,6 +17,7 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: 'ls'
+  displayName: Current Dictory
 
 - task: TerraformCLI@0
   inputs:
