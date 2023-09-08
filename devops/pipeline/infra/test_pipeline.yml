@@ -9,12 +9,13 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: 'echo "test"'
+  displayName: Service Connection
 
 - task: TerraformCLI@0
   inputs:
     command: 'init'
     workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
-
+  displayName: Terraform Init
 - task: TerraformCLI@0
   inputs:
     command: 'plan'
@@ -24,6 +25,7 @@ steps:
     runAzLogin: true
     commandOptions: '-var "basename=$(basename)" -var "location=$(location)" -var "rg_name=$(rg_name)" -var "subscription_id=$(subscription_id)" -var "tenant_id=$(tenant_id)"  -var "version_num=$(version_num)"'
     allowTelemetryCollection: true
+  displayName: Terrafor Plan
     
   
 #- task: TerraformCLI@0
