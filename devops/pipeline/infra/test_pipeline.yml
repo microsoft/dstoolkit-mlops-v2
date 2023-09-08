@@ -24,6 +24,11 @@ steps:
   inputs:
     command: 'init'
     workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+    backendServiceArm: 'infra_service_connection'
+    backendAzureRmResourceGroupName: 'rg-MLOps-V2'
+    backendAzureRmStorageAccountName: tfstoragev2 
+    backendAzureRmContainerName: terraform
+    backendAzureRmKey: mlops.tfstate
   displayName: Terraform Init
   
 - task: TerraformCLI@0
