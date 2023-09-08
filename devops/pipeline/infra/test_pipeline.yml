@@ -24,8 +24,13 @@ steps:
     workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
   displayName: Terraform Init
   
-
-
+- task: TerraformCLI@0
+  inputs:
+    command: 'validate'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+    allowTelemetryCollection: true
+  displayName: Terraform Validate
+  
 #- task: TerraformCLI@0
 #  inputs:
 #    command: 'plan'
