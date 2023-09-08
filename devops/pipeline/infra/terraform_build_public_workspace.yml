@@ -58,13 +58,13 @@ steps:
     $subscription_id = $(subscription_id)
     $tenant_id = $(tenant_id)
     #echo $tenantid
-    az login --tenant $tenant_id
-    az account set --subscription $subscription_id
+    # az login --tenant $tenant_id
+    # az account set --subscription $subscription_id
 
     echo $(basename)
     echo $(project_code)
-    # terraform init
-    # terraform plan
-    # terraform apply --auto-plan
+    terraform init
+    terraform plan
+    terraform apply --auto-plan
     # echo "Resources have been built. Give it a minute to check through the portal."
   displayName: 'Running Terraform files'
