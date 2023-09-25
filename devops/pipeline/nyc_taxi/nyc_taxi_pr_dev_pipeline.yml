@@ -1,5 +1,5 @@
-pr: none
-trigger:
+trigger: none
+pr:
   branches:
    include:
      - development
