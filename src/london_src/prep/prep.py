@@ -40,7 +40,7 @@ def main(raw_data, prep_data):
 
 
 def data_prep(green_data, yellow_data):
-    # Define useful columns needed for the Azure Machine Learning NYC Taxi tutorial
+    # Define useful columns needed for the Azure Machine Learning London Taxi tutorial
     useful_columns = str(
         [
             "cost",
@@ -58,7 +58,7 @@ def data_prep(green_data, yellow_data):
     ).replace(",", ";")
     print(useful_columns)
 
-    # Rename columns as per Azure Machine Learning NYC Taxi tutorial
+    # Rename columns as per Azure Machine Learning London Taxi tutorial
     green_columns = str(
         {
             "vendorID": "vendor",
