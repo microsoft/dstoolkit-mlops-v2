@@ -64,7 +64,7 @@ else:
 
                 endpoint = BatchEndpoint(
                     name=endpoint_name,
-                    description="A heart condition classifier for batch inference",
+                    description="model with batch endpoint",
                     tags={"build_id": build_id, "run_id": run_id},
                 )
 
