@@ -7,8 +7,8 @@ dependencies:
   - pip:
     - pandas
     - scikit-learn==1.2.0
-    - mlflow==2.4.1
-    - azureml-mlflow==1.52.0
+    - mlflow>=2.7.1
+    - azureml-mlflow>=1.51
     - mldesigner==0.1.0b4
     - azure-ai-ml==1.8.0
     - azure-identity==1.11.0

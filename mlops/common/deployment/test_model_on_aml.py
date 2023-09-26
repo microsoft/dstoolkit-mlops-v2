@@ -26,7 +26,7 @@ for elem in endpoint_config['real_time']:
     if 'ENDPOINT_NAME' in elem and 'ENV_NAME' in elem:
         if environment_name == elem['ENV_NAME']:
             endpoint_name = elem["ENDPOINT_NAME"]
-            deployment_name = elem["ENDPOINT_NAME"]
+            deployment_name = elem["DEPLOYMENT_NAME"]
             test_model_file = elem["TEST_FILE_PATH"]
 
             endpoint_url = ml_client.online_endpoints.get(name=endpoint_name).scoring_uri

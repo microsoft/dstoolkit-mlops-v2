@@ -14,7 +14,7 @@ gl_pipeline_components = []
 
 
 @pipeline()
-def nyc_taxi_data_regression(pipeline_job_input, model_name, build_reference):
+def london_taxi_data_regression(pipeline_job_input, model_name, build_reference):
     prepare_sample_data = gl_pipeline_components[0](
         raw_data=pipeline_job_input,
     )
@@ -70,7 +70,7 @@ def construct_pipeline(
     registered_data_asset = ml_client.data.get(name=dataset_name,label='latest')
 
 
-    parent_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/components")
+    parent_dir = os.path.join(os.getcwd(), "mlops/london_taxi/components")
     #data_dir = os.path.join(os.getcwd(), data_config)
     
     prepare_data = load_component(source=parent_dir + "/prep.yml")
@@ -95,7 +95,7 @@ def construct_pipeline(
     gl_pipeline_components.append(score_data)
     gl_pipeline_components.append(register_model)
 
-    pipeline_job = nyc_taxi_data_regression(
+    pipeline_job = london_taxi_data_regression(
         Input(type="uri_folder", path=registered_data_asset.id), model_name, build_reference
     )
 

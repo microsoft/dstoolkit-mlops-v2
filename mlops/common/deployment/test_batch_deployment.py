@@ -35,9 +35,9 @@ for elem in data_config['datasets']:
         if data_purpose == elem["DATA_PURPOSE"] and environment_name == elem['ENV_NAME']:
             dataset_name = elem["DATASET_NAME"]
 
-            heart_dataset_unlabeled = ml_client.data.get(name=dataset_name, label="latest")
+            dataset_unlabeled = ml_client.data.get(name=dataset_name, label="latest")
 
-            input = Input(type=AssetTypes.URI_FOLDER, path=heart_dataset_unlabeled.id)
+            input = Input(type=AssetTypes.URI_FOLDER, path=dataset_unlabeled.id)
 
 for elem in batch_data['batch_config']:
     if 'ENDPOINT_NAME' in elem and 'ENV_NAME' in elem:

@@ -111,7 +111,7 @@ else:
 
                 deployment = ModelBatchDeployment(
                     name=deployment_name,
-                    description="A heart condition classifier based on XGBoost",
+                    description="model with batch endpoint",
                     endpoint_name=endpoint_name,
                     model=model,
                     compute=batch_cluster_name,
