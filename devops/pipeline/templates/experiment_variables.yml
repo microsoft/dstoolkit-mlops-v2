@@ -2,7 +2,7 @@ variables:
 - name:  ML_MODEL_CONFIG_NAME
   value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.ML_MODEL_CONFIG_NAME'] ]
 - name:  KEYVAULT_NAME
-  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.KEYVAULT_NAME'] ]      
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.KEYVAULT'] ]      
 - name:  EXPERIMENT_BASE_NAME
   value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.EXPERIMENT_BASE_NAME'] ] 
 - name:  ENVIRONMENT_NAME
@@ -24,11 +24,11 @@ variables:
 - name:  MODEL_BASE_NAME
   value: $[ dependencies.variable_generation.load_config_variables.outputs['loading_model_config.MODEL_BASE_NAME'] ]
 - name:  REGISTRY_NAME
-  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.REGISTRY_NAME'] ] 
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.CONTAINERREGISTRY'] ] 
 - name:  RESOURCE_GROUP_NAME
   value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.RESOURCE_GROUP_NAME'] ]
 - name:  WORKSPACE_NAME
-  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.WORKSPACE_NAME'] ]
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.AMLWORKSPACE'] ]
 - name: EXPERIMENT_NAME
   value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.EXPERIMENT_NAME'] ]
 - name: DISPLAY_NAME
@@ -40,4 +40,6 @@ variables:
 - name: DATA_CONFIG_PATH
   value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.DATA_CONFIG_PATH'] ]   
 - name: REALTIME_DEPLOYMENT_CONFIG
-  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.REALTIME_DEPLOYMENT_CONFIG'] ]      
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.REALTIME_DEPLOYMENT_CONFIG'] ]   
+- name: VERSION
+  value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.VERSION'] ]      
