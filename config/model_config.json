@@ -3,7 +3,7 @@
         {
             "ML_MODEL_CONFIG_NAME": "london_taxi",
             "ENV_NAME": "pr",
-            "AZURE_RM_SVC_CONNECTION": "ds-toolkit-v2",
+            "AZURE_RM_SVC_CONNECTION": "dstoolkit-mlops-svc",
             "CLUSTER_NAME": "commandmachine1",
             "CLUSTER_REGION": "eastus",
             "CLUSTER_SIZE": "STANDARD_DS3_v2",
@@ -20,7 +20,7 @@
         {
             "ML_MODEL_CONFIG_NAME": "london_taxi",
             "ENV_NAME": "dev",
-            "AZURE_RM_SVC_CONNECTION": "ds-toolkit-v2",
+            "AZURE_RM_SVC_CONNECTION": "dstoolkit-mlops-svc",
             "CLUSTER_NAME": "commandmachine1",
             "CLUSTER_REGION": "eastus",
             "CLUSTER_SIZE": "STANDARD_DS3_v2",
@@ -37,7 +37,7 @@
         {
             "ML_MODEL_CONFIG_NAME": "nyc_taxi",
             "ENV_NAME": "pr",
-            "AZURE_RM_SVC_CONNECTION": "ds-toolkit-v2",
+            "AZURE_RM_SVC_CONNECTION": "dstoolkit-mlops-svc",
             "CLUSTER_NAME": "commandmachine1",
             "CLUSTER_REGION": "eastus",
             "CLUSTER_SIZE": "STANDARD_DS3_v2",
@@ -54,7 +54,7 @@
         {
             "ML_MODEL_CONFIG_NAME": "nyc_taxi",
             "ENV_NAME": "dev",
-            "AZURE_RM_SVC_CONNECTION": "ds-toolkit-v2",
+            "AZURE_RM_SVC_CONNECTION": "dstoolkit-mlops-svc",
             "CLUSTER_NAME": "commandmachine1",
             "CLUSTER_REGION": "eastus",
             "CLUSTER_SIZE": "STANDARD_DS3_v2",
