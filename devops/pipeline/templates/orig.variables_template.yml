@@ -20,20 +20,7 @@ stages:
           $pvalue = $property.Value
           Write-Output "##vso[task.setvariable variable=$pname;isoutput=true]$pvalue"
           }
-
-        # Get infra variables
-        $json = Get-Content -Raw -Path '$(System.DefaultWorkingDirectory)/config/infra_config.json' | ConvertFrom-Json
-        $firstElement = $json.infra | Select-Object -First 1
         
-        Write-Output $firstElement.KEYVAULT_NAME
-        
-        foreach ($property in $firstElement.PSObject.Properties) {
-          $pname = $property.Name
-          $pvalue = $property.Value
-          Write-Output "##vso[task.setvariable variable=$pname;isoutput=true]$pvalue"
-          }
-            
-            
         $EXPERIMENT_NAME =  "${{ parameters.model_type }}" + "_" + "$($firstElement.EXPERIMENT_BASE_NAME)" + "_" + "${{parameters.env_name}}" + "_" + "$(Build.SourceBranchName)"
         Write-Output "##vso[task.setvariable variable=EXPERIMENT_NAME;isoutput=true]$EXPERIMENT_NAME"
         
@@ -50,7 +37,7 @@ stages:
     - name:  ML_MODEL_CONFIG_NAME
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.ML_MODEL_CONFIG_NAME'] ]
     - name:  KEYVAULT_NAME
-      value: $[ dependencies.load_config_variables.outputs['loading_model_config.KEYVAULT'] ]       
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.KEYVAULT_NAME'] ]       
     - name:  EXPERIMENT_BASE_NAME
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.EXPERIMENT_BASE_NAME'] ] 
     - name:  ENVIRONMENT_NAME
@@ -72,11 +59,11 @@ stages:
     - name:  MODEL_BASE_NAME
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.MODEL_BASE_NAME'] ]
     - name:  REGISTRY_NAME
-      value: $[ dependencies.load_config_variables.outputs['loading_model_config.CONTAINERREGISTRY'] ] 
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.REGISTRY_NAME'] ] 
     - name:  RESOURCE_GROUP_NAME
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.RESOURCE_GROUP_NAME'] ]
     - name:  WORKSPACE_NAME
-      value: $[ dependencies.load_config_variables.outputs['loading_model_config.AMLWORKSPACE'] ]
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.WORKSPACE_NAME'] ]
     - name: EXPERIMENT_NAME
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.EXPERIMENT_NAME'] ]
     - name: DISPLAY_NAME
@@ -89,7 +76,6 @@ stages:
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.DATA_CONFIG_PATH'] ]
     - name: REALTIME_DEPLOYMENT_CONFIG
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.REALTIME_DEPLOYMENT_CONFIG'] ]
-
     steps:
     - script: |
         if [ -z "$(ML_MODEL_CONFIG_NAME)" ]
@@ -109,3 +95,5 @@ stages:
         SecretsFilter: '*'
         RunAsPreJob: false
       name: load_keyvault_secrets
+
+          

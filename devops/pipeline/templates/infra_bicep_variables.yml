@@ -1,0 +1,33 @@
+variables:
+- name:  AZURE_RM_SVC_CONNECTION
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.AZURE_RM_SVC_CONNECTION'] ] 
+- name:  ENVIRONMENT
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.ENVIRONMENT'] ]
+- name:  RESOURCE_GROUP_NAME
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.RESOURCE_GROUP_NAME'] ]
+- name:  LOCATION
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.LOCATION'] ] 
+- name:  STORAGEACCOUNT
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.STORAGEACCOUNT'] ]
+- name:  KEYVAULT_NAME
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.KEYVAULT'] ]      
+- name:  APPINSIGHTS
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.APPINSIGHTS'] ]
+- name:  REGISTRY_NAME
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.CONTAINERREGISTRY'] ] 
+- name:  WORKSPACE_NAME
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.AMLWORKSPACE'] ]
+- name:  VERSION
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.VERSION'] ]
+- name:  REQUIRESPRIVATEWORKSPACE
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.REQUIRESPRIVATEWORKSPACE'] ]
+- name:  VIRTUALNETWORK
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.VIRTUALNETWORK'] ]
+- name:  PRIVATEDNSZONE
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.PRIVATEDNSZONE'] ]
+- name:  PRIVATEDNSZONELINK
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.PRIVATEDNSZONELINK'] ]
+- name:  PRIVATEDNSZONEGROUP
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.PRIVATEDNSZONEGROUP'] ]
+- name:  PRIVATEENDPOINT
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.PRIVATEENDPOINT'] ]

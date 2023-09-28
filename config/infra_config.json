@@ -1,0 +1,27 @@
+{
+    "infra":[
+        {
+            "NAMESPACE": "mlops",
+            "PROJECTCODE": "dstk",
+            "VERSION": "0512",
+            "ENVIRONMENT": "DEV",
+            "LOCATION": "eastus",
+            "AZURE_RM_SVC_CONNECTION": "ds-toolkit-v2",
+            "RESOURCE_GROUP_NAME": "rg-mlops-sdkv2-bicep-1",
+            "AMLWORKSPACE": "mlw-mlops-dstk-0512",
+            "STORAGEACCOUNT":"staccamlmlopsdstk0512",
+            "KEYVAULT":"akvamlmlopsdstk0512",
+            "APPINSIGHTS":"aml-ai-mlops-dstk-0512",
+            "CONTAINERREGISTRY": "crmlopsdstk0512",
+            "VIRTUALNETWORK": "aml-vnet-mlops",
+            "PRIVATEDNSZONE": "dnszone.api.azureml.ms",
+            "PRIVATEDNSZONELINK": "dnszonelink.api.azureml.ms",
+            "PRIVATEDNSZONEGROUP": "dzgmlopsdstk0512",
+            "PRIVATEENDPOINT": "aml-pe-mlops",
+            "REQUIRESPRIVATEWORKSPACE": "true",
+            "CLUSTER_NAME": "commandmachine1",
+            "CLUSTER_SIZE": "STANDARD_DS3_v2"
+
+        }
+    ]
+}
