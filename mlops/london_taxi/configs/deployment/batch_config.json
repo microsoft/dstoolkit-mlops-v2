@@ -5,7 +5,7 @@
             "ENV_NAME": "dev",
             "AZURE_RM_SVC_CONNECTION": "azure_connection",
             "BATCH_CLUSTER_NAME": "commandmachine1",
-            "ENDPOINT_NAME": "london-taxi-be-0511",
+            "ENDPOINT_NAME": "london-taxi-be-0513",
             "DEPLOYMENT_NAME": "london-taxi-bd-d0511",
             "CLUSTER_INSTANCE_COUNT": 2,
             "MAX_CONCURRENCY_PER_INSTANCE": 2,
