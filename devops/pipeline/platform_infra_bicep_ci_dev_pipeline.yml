@@ -107,7 +107,7 @@ stages:
             az --version
             if('${{parameters.requiresPrivateWorkspace}}' -eq 'false'){
               az deployment group create --resource-group '${{parameters.resourceGroup}}' `
-              --template-file '$(Pipeline.Workspace)/infratemplates/infra/bicep/templates/main.bicep' `
+              --template-file '$(Pipeline.Workspace)/infratemplates/infra/bicep/main.bicep' `
               --parameters location='${{parameters.location}}' `
               storageAccount='${{parameters.storageAccount}}' `
               keyVaultName='${{parameters.keyVaultName}}' `
@@ -117,7 +117,7 @@ stages:
             }
             else {
               az deployment group create --resource-group '${{parameters.resourceGroup}}' `
-              --template-file '$(Pipeline.Workspace)/infratemplates/infra/bicep/templates/main.bicep' `
+              --template-file '$(Pipeline.Workspace)/infratemplates/infra/bicep/main.bicep' `
               --parameters location='${{parameters.location}}' `
               storageAccount='${{parameters.storageAccount}}' `
               keyVaultName='${{parameters.keyVaultName}}' `
