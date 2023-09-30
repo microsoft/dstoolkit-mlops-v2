@@ -4,7 +4,7 @@
             "ML_MODEL_CONFIG_NAME": "nyc_taxi",
             "ENV_NAME": "dev",
             "AZURE_RM_SVC_CONNECTION": "azure_connection",
-            "BATCH_CLUSTER_NAME": "commandmachine1",
+            "BATCH_CLUSTER_NAME": "commandmachine1pvtws",
             "ENDPOINT_NAME": "nyc-taxi-be-0515",
             "DEPLOYMENT_NAME": "nyc-taxi-bd-0515",
             "CLUSTER_INSTANCE_COUNT": 2,
