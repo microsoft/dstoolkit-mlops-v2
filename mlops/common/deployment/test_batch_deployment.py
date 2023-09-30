@@ -45,7 +45,8 @@ for elem in batch_data['batch_config']:
             endpoint_name = elem["ENDPOINT_NAME"]
             deployment_name = elem["DEPLOYMENT_NAME"]
 
-
+            print("deployment_name:", deployment_name)
+            print("endpoint_name:", endpoint_name)
             job = ml_client.batch_endpoints.invoke(
                 deployment_name=deployment_name, endpoint_name=endpoint_name, input=input
             )
