@@ -18,7 +18,7 @@
             "PRIVATEDNSZONELINK": "dnszonelink.api.azureml.ms",
             "PRIVATEDNSZONEGROUP": "dzgmlopsdstk0515",
             "PRIVATEENDPOINT": "aml-pe-mlops",
-            "REQUIRESPRIVATEWORKSPACE": "false",
+            "REQUIRESPRIVATEWORKSPACE": "true",
             "CLUSTER_NAME": "commandmachine1",
             "CLUSTER_SIZE": "STANDARD_DS3_v2"
 
