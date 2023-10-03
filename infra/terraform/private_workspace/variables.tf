@@ -1,31 +1,22 @@
-variable "subscription_id" {
-  type    = string
-  default = "0b3f04a9-6375-4341-a513-dd53731a99a4"
-}
-
-variable "tenant_id" {
-  type    = string
-  default = ""
-}
-variable "client_id" {
-  type    = string
-  default = ""
-}
-variable "client_secret" {
-  type    = string
-  default = ""
-}
 ##############################
 ## Resource Group Variables
 ##############################
+variable "rg_name" {
+  type    = string
+    validation {
+        condition = (length(var.rg_name) <= 90 && length(var.rg_name) > 2 && can(regex("[-\\w\\._\\(\\)]+", var.rg_name)) )
+        error_message = "Resource group name may only contain alphanumeric characters, dash, underscores, parentheses and periods."
+    }
+    default = "mlops-test-v2"
+}
 variable "basename" {
   type    = string
-  default = "mlops"
+  default = "tfintegration"
 }
 
 variable "project_code" {
   type    = string
-  default = "v2test"
+  default = "v2"
 }
 
 variable "version_num" {
