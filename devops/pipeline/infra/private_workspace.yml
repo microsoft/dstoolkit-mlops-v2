@@ -9,7 +9,7 @@ steps:
 - task: TerraformTaskV4@4
   inputs:
     command: 'init'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/private_workspace'
     backendServiceArm: 'infra_service_connection'
     backendAzureRmResourceGroupName: 'mlopsv2infra'
     backendAzureRmStorageAccountName: tfstoracct2 
@@ -20,14 +20,14 @@ steps:
   displayName: 'Terraform Validate'
   inputs:
     command: 'validate'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/private_workspace'
 
 
 
 - task: TerraformTaskV4@4
   inputs:
     command: 'plan'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/private_workspace'
     allowTelemetryCollection: true
     environmentServiceNameAzureRM: 'infra_service_connection'
     commandOptions: '-out=tfplan'
@@ -35,6 +35,6 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'apply'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/private_workspace'
     environmentServiceNameAzureRM: 'infra_service_connection'
     commandOptions: '-auto-approve -input=false  tfplan'
