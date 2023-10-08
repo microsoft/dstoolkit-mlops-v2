@@ -1,0 +1,144 @@
+parameters:
+- name: environmentName
+  type: string
+- name: azureMgrConnection
+  type: string
+- name: resourceGroup
+  type: string
+- name: location
+  type: string     
+- name: storageAccount
+  type: string
+- name: keyVaultName
+  type: string
+- name: appInsightsName  
+  type: string
+- name: containerRegistryName  
+  type: string
+- name: amlWorkspaceName  
+  type: string   
+- name: requiresPrivateWorkspace  
+  type: string
+  default: 'false'
+- name: virtualNetworkName  
+  type: string
+  default: 'undefined'
+- name: privateDnsZoneName  
+  type: string
+  default: 'undefined'
+- name: privateDnsZoneLinkName  
+  type: string
+  default: 'undefined'
+- name: privateDnsZoneGroupName  
+  type: string
+  default: 'undefined'
+- name: privateEndpointName  
+  type: string
+  default: 'undefined'
+- name: clusterName  
+  type: string
+  default: 'commandmachine1'
+- name: clusterSize  
+  type: string
+  default: 'STANDARD_DS3_v2'
+  
+stages:
+
+  - stage: deploy_mlops_infrastructure
+    displayName: Deploy MLOps Infrastructure
+    dependsOn:
+      - infra_variable_generation
+    variables:
+      - template: templates/infra_bicep_variables.yml
+    jobs:
+    - job: Deploy_MLOps_v2_Infrastructure  
+      steps:
+      - script: |
+          echo 'See the contents of parameters passed in'
+          echo '${{parameters.azureMgrConnection}}'
+          echo '${{parameters.environmentName}}'
+          echo '${{parameters.resourceGroup}}'
+          echo '${{parameters.location}}'
+          echo '${{parameters.storageAccount}}'
+          echo '${{parameters.keyVaultName}}'
+          echo '${{parameters.appInsightsName}}'
+          echo '${{parameters.containerRegistryName}}'
+          echo '${{parameters.amlWorkspaceName}}'
+          echo '${{parameters.requiresPrivateWorkspace}}'
+          echo '${{parameters.privateDnsZoneName}}'
+          echo '${{parameters.virtualNetworkName}}'
+          echo '${{parameters.privateDnsZoneLinkName}}'
+          echo '${{parameters.privateDnsZoneGroupName}}'
+          echo '${{parameters.privateEndpointName}}'
+          echo '${{parameters.clusterName}}'
+          echo '${{parameters.clusterSize}}'
+        enabled: true
+
+      - task: TerraformInstaller@1
+        displayName: 'Terraform Install'
+        inputs:
+          terraformVersion: 'latest'
+
+
+      - task: TerraformTaskV4@4
+        displayName: 'Terraform Init'
+        inputs:
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+          backendServiceArm: '${{parameters.azureMgrConnection}}'
+          backendAzureRmResourceGroupName: '${{parameters.resourceGroup}}'
+          backendAzureRmStorageAccountName: stacctfstatemlopsv2010 
+          backendAzureRmContainerName: terraform
+          backendAzureRmKey: mlops.tfstate
+
+      - task: TerraformTaskV4@4
+        displayName: 'Terraform Validate'
+        inputs:
+          command: 'validate'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+
+      - task: TerraformTaskV4@4
+        displayName: 'Terraform Plan'
+        inputs:
+          command: 'plan'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+          allowTelemetryCollection: true
+          environmentServiceNameAzureRM: '${{parameters.azureMgrConnection}}'
+          commandOptions: '-out=tfplan'
+
+      - task: TerraformTaskV4@4
+        displayName: 'Terraform Apply'
+        inputs:
+          provider: 'azurerm'
+          command: 'apply'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+          environmentServiceNameAzureRM: '${{parameters.azureMgrConnection}}'
+          commandOptions: '-auto-approve -input=false  tfplan'
+
+      - task: AzureCLI@2
+        displayName: Add compute to workspace
+        inputs:
+          azureSubscription: '${{parameters.azureMgrConnection}}'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          useGlobalConfig: false
+          inlineScript: |
+            az --version
+            az extension add -n ml -y
+            az ml compute create --name '${{parameters.clusterName}}' --size '${{parameters.clusterSize}}' `
+            --type AmlCompute --resource-group '${{parameters.resourceGroup}}' --workspace-name '${{parameters.amlWorkspaceName}}'
+        enabled: true
+
+      - task: AzureCLI@2
+        displayName: Add Key Vault access policy to service principal backing service connection
+        inputs:
+          azureSubscription: '${{parameters.azureMgrConnection}}'
+          scriptType: pscore
+          addSpnToEnvironment: true
+          scriptLocation: inlineScript
+          useGlobalConfig: false
+          inlineScript: |
+            az --version
+            $id = (az ad sp show --id $env:servicePrincipalId --query id)
+            az keyvault set-policy --name ${{parameters.keyVaultName}} --object-id $id --secret-permissions get list
+        enabled: true  

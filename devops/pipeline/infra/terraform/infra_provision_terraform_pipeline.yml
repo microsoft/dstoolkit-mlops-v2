@@ -1,0 +1,39 @@
+pr: none
+trigger:
+  branches:
+   include:
+     - new-bicep-dev
+     - new-bicep-dev-workingbranch
+  paths:
+    include:
+      - config/*
+      - devops/*
+      - infra/bicep/*
+
+pool:
+  vmImage: ubuntu-latest
+
+
+variables:
+- group: mlops_platform_infra_dev_vg
+
+stages:
+  - template: ../../templates/variables_template_infra.yml
+  - template: ../../platform_infra_terraform_pipeline.yml
+    parameters:
+      environmentName: $(ENVIRONMENT)
+      azureMgrConnection: $(AZURE_RM_SVC_CONNECTION)
+      resourceGroup: $(RESOURCE_GROUP_NAME)
+      location: $(LOCATION)
+      storageAccount: $(STORAGEACCOUNT)
+      keyVaultName: $(KEYVAULT_NAME)
+      appInsightsName: $(APPINSIGHTS)
+      containerRegistryName: $(REGISTRY_NAME)
+      amlWorkspaceName: $(WORKSPACE_NAME)
+      virtualNetworkName: $(VIRTUALNETWORK)
+      privateDnsZoneName: $(PRIVATEDNSZONE)
+      privateDnsZoneLinkName: $(PRIVATEDNSZONELINK)
+      privateDnsZoneGroupName: $(PRIVATEDNSZONEGROUP)
+      privateEndpointName: $(PRIVATEENDPOINT)
+      requiresPrivateWorkspace: $(REQUIRESPRIVATEWORKSPACE) 
+
