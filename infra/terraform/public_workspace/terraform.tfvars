@@ -1,5 +1,5 @@
-rg_name = "rg-mlops-tf" 
+rg_name = "rg-mlops-terraform" 
 location = "eastus"
 basename = "mlops"
-project_code = "v2"
-version_num = "011"
+project_code = "dstk"
+version_num = "001"
