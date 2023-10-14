@@ -1,4 +1,4 @@
-rg_name = "rg-mlops-terraform" 
+rg_name = "rg-terraform" 
 location = "eastus"
 basename = "mlops"
 project_code = "dstk"
