@@ -20,8 +20,6 @@ For key below, replace the token with a value:
 - #{NAMESPACE}#: a base name used to construct consistent azure resource names.
 - #{PROJECTCODE}#: a string used to construct consistent azure resource names project modifier.
 - #{VERSION}#: a three-digit version string used to uniqueify azure resource names, ml endpoints, and ml deployments.
-- #{ENVIRONMENT}#: a string indicating the environment of the azure resources (i.e. dev,qa,test,prod,nonprod)
-- #{LOCATION}#: the azure region within which to deploy the azure resources.
 - #{AZURE_RM_SVC_CONNECTION}#: the name of service connection to be used to execute all Azure DevOps pipelines.
 - #{RESOURCE_GROUP_NAME}#: the resource group to which azure resources will be deployed.
 - #{CLUSTER_NAME}#: the name of the compute resource in the azure machine learning resource
