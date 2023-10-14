@@ -7,7 +7,7 @@
             "ENVIRONMENT": "DEV",
             "LOCATION": "eastus",
             "AZURE_RM_SVC_CONNECTION": "dstoolkit-mlops-svc",
-            "RESOURCE_GROUP_NAME": "rg-mlops-terraform",
+            "RESOURCE_GROUP_NAME": "rg-terraform",
             "AMLWORKSPACE": "mlw-mlops-dstk-002",
             "STORAGEACCOUNT":"staccamlmlopsdstk002",
             "KEYVAULT":"akvamlmlopsdstk002",
