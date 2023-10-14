@@ -89,7 +89,7 @@ stages:
             appInsightsName='${{parameters.appInsightsName}}' `
             containerRegistryName='${{parameters.containerRegistryName}}' `
             amlWorkspaceName='${{parameters.amlWorkspaceName}}'
-        enabled: false
+        enabled: true
 
       - task: AzureCLI@2
         displayName: Add compute to workspace
