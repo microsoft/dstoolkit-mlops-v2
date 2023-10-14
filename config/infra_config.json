@@ -1,19 +1,16 @@
 {
     "infra":[
         {
-            "NAMESPACE": "mlops",
-            "PROJECTCODE": "dstk",
-            "VERSION": "003",
             "ENVIRONMENT": "DEV",
             "LOCATION": "eastus",
-            "AZURE_RM_SVC_CONNECTION": "svc-bicep",
-            "RESOURCE_GROUP_NAME": "rg-bicep",
-            "AMLWORKSPACE": "mlw-mlops-dstk-003",
-            "STORAGEACCOUNT":"staccamlmlopsdstk003",
-            "KEYVAULT":"akvamlmlopsdstk003",
-            "APPINSIGHTS":"aml-ai-mlops-dstk-003",
-            "CONTAINERREGISTRY": "crmlopsdstk003",
-            "CLUSTER_NAME": "commandmachine1",
+            "AZURE_RM_SVC_CONNECTION": "#{AZURE_RM_SVC_CONNECTION}#",
+            "RESOURCE_GROUP_NAME": "#{RESOURCE_GROUP_NAME}#",
+            "AMLWORKSPACE": "mlw-#{NAMESPACE}#-#{PROJECTCODE}#-#{VERSION}#",
+            "STORAGEACCOUNT":"staccaml#{NAMESPACE}##{PROJECTCODE}##{VERSION}#",
+            "KEYVAULT":"akvaml#{NAMESPACE}##{PROJECTCODE}##{VERSION}#",
+            "APPINSIGHTS":"aml-ai-#{NAMESPACE}#-#{PROJECTCODE}#-#{VERSION}#",
+            "CONTAINERREGISTRY": "cr#{NAMESPACE}##{PROJECTCODE}##{VERSION}#",
+            "CLUSTER_NAME": "#{CLUSTER_NAME}#",
             "CLUSTER_SIZE": "STANDARD_DS3_v2"
 
         }

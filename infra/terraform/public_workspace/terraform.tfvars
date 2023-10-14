@@ -1,4 +1,4 @@
-rg_name = "rg-bicep" 
+rg_name = "#{RESOURCE_GROUP_NAME}#" 
 location = "eastus"
 basename = "mlops"
 project_code = "dstk"
