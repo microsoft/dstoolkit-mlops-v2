@@ -14,7 +14,7 @@ Information about variable groups in Azure DevOps can be found in [this document
 
 **Step n.** Create a *development* branch and make it as default one to make sure that all PRs should go towards to it. This template assumes that the team works at a *development* branch as a primary source for coding and improving the model quality. Later, you can implement Azure Pipeline that moves code from the *development* branch into qa/main or executes a release process right away. Release management is not in scope of this template.
 
-**Step n.** In the development branch, set values for tokenized variables in the infra_config.json file. The infra provisioning pipeline uses multiple variables.
+**Step n.** In the development branch, set values for tokenized variables in the infra_config.json and terraform.tfvars files. The infra provisioning pipeline uses multiple variables.
 For key below, replace the token with a value:
 
 - #{NAMESPACE}#: a base name used to construct consistent azure resource names.
