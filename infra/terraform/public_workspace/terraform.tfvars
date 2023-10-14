@@ -1,5 +1,5 @@
 rg_name = "#{RESOURCE_GROUP_NAME}#" 
 location = "eastus"
-basename = "mlops"
-project_code = "dstk"
+basename = "#{NAMESPACE}#"
+project_code = "#{PROJECTCODE}#"
 version_num = "#{VERSION}#"
