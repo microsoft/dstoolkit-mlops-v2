@@ -6,7 +6,7 @@ In order to setup the repository, you need to complete few steps.
 
 **Step n.** Create a resource group into which the Azure Machine Learning resources will be deployed.
 
-**Step n.** Create a service connection for your Azure DevOps project. You can use [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) as a reference. Use Azure Resource Manager as a type of the service connection. Set the resource group created above as the 
+**Step n.** Create a service connection for your Azure DevOps project. You can use [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) as a reference. Use Azure Resource Manager as a type of the service connection. Set resource group created to the resource group created above. 
 
 **Step n.** Create a new variable group mlops_platform_dev_vg and add "AZURE_RM_SVC_CONNECTION" variable with the name of the service connection created in the preceding step. 
 
