@@ -10,20 +10,20 @@ In order to setup the repository, you need to complete few steps.
 
 Information about variable groups in Azure DevOps can be found in [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops&tabs=classic).
 
-**Step 3.** Create a *development* branch and make it as default one to make sure that all PRs should go towards to it. This template assumes that the team works at a *development* branch as a primary source for coding and improving the model quality. Later, you can implement Azure Pipeline that mode code from the *development* branch into qa/main or execute a release process right away. Release management is not in scope of this template.
+**Step 3.** Create a *development* branch and make it as default one to make sure that all PRs should go towards to it. This template assumes that the team works at a *development* branch as a primary source for coding and improving the model quality. Later, you can implement Azure Pipeline that moves code from the *development* branch into qa/main or executes a release process right away. Release management is not in scope of this template.
 
 **Step 4.** In the development branch, set values for tokenized variables in the infra_config.json file. The infra provisioning pipeline uses multiple variables.
 For key below, replace the token with a value:
 
-- #{NAMESPACE}: a base name used to construct consistent azure resource names.
-- #{PROJECTCODE}: a string used to construct consistent azure resource names project modifier.
-- #{VERSION}: a three-digit version string used to uniqueify azure resource names, ml endpoints, and ml deployments.
-- #{ENVIRONMENT}: a string indicating the environment of the azure resources (i.e. dev,qa,test,prod,nonprod)
-- #{LOCATION}: the azure region within which to deploy the azure resources.
+- #{NAMESPACE}#: a base name used to construct consistent azure resource names.
+- #{PROJECTCODE}#: a string used to construct consistent azure resource names project modifier.
+- #{VERSION}#: a three-digit version string used to uniqueify azure resource names, ml endpoints, and ml deployments.
+- #{ENVIRONMENT}#: a string indicating the environment of the azure resources (i.e. dev,qa,test,prod,nonprod)
+- #{LOCATION}#: the azure region within which to deploy the azure resources.
 - #{AZURE_RM_SVC_CONNECTION}#: the name of service connection to be used to execute all Azure DevOps pipelines.
 - #{RESOURCE_GROUP_NAME}#: the resource group to which azure resources will be deployed.
-- #{CLUSTER_NAME}: the name of the compute resource in the azure machine learning resource
-- #{CLUSTER_SIZE}: the sku value of the compute resource in the azure machine learning resource (i.e. STANDARD_DS3_v2)
+- #{CLUSTER_NAME}#: the name of the compute resource in the azure machine learning resource
+- #{CLUSTER_SIZE}#: the sku value of the compute resource in the azure machine learning resource (i.e. STANDARD_DS3_v2)
 
 **Step 5.** In the development branch, set values for variables in the model_config.json file. The pipeline uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi)
 
@@ -53,7 +53,7 @@ More details about how to create a basic Azure Pipeline can be found [here](http
 
 More details about how to create a policy can be found [here](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser).
 
-**Step 9. (Optional)** It's a common practice to execute training job on the full dataset once PR has been merged into the development branch. At the same time, the training process can take much time (many hours or even days) and Azure DevOps agent will not be able to let you know about the status due to timeout settings. So, it's very hard to implement a single CI Build that is waiting for a new model (training results) and execute other steps after that (model approval, model movement into qa environment, model deployment etc).
+**Step 9. (Optional)** It's a common practice to execute a training job on the full dataset once a PR has been merged into the development branch. At the same time, the training process can take a long time (many hours or even days) and Azure DevOps agent will not be able to let you know about the status due to timeout settings. So, it's very hard to implement a single CI Build that is waiting for a new model (training results) and execute other steps after that (model approval, model movement into qa environment, model deployment etc).
 
 Azure ML provides a solution that allows us to implement a *server* task in Azure DevOps Build and wait for the result of the pipeline training job with no Azure DevOps agent holding. Thanks to that it's possible to wait for results any amount of time and execute all other steps right after completion of the Azure ML training job. As for now, the feature is in active development, but you can [visit this link](https://github.com/Azure/azure-mlops-automation) to check the status and find how to get access. This new Azure ML feature can be included in your CI Build thanks to the extension that Azure ML team built or you can use RestAPITask for a direct REST call. In this template we implemented a version with the extension.
 
