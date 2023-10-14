@@ -8,11 +8,11 @@
             "LOCATION": "eastus",
             "AZURE_RM_SVC_CONNECTION": "svc-bicep",
             "RESOURCE_GROUP_NAME": "rg-bicep",
-            "AMLWORKSPACE": "mlw-mlops-dstk-002",
-            "STORAGEACCOUNT":"staccamlmlopsdstk002",
-            "KEYVAULT":"akvamlmlopsdstk002",
-            "APPINSIGHTS":"aml-ai-mlops-dstk-002",
-            "CONTAINERREGISTRY": "crmlopsdstk002",
+            "AMLWORKSPACE": "mlw-mlops-dstk-003",
+            "STORAGEACCOUNT":"staccamlmlopsdstk003",
+            "KEYVAULT":"akvamlmlopsdstk003",
+            "APPINSIGHTS":"aml-ai-mlops-dstk-003",
+            "CONTAINERREGISTRY": "crmlopsdstk003",
             "CLUSTER_NAME": "commandmachine1",
             "CLUSTER_SIZE": "STANDARD_DS3_v2"
 
