@@ -13,6 +13,12 @@
             "KEYVAULT":"akvamlmlopsdstk002",
             "APPINSIGHTS":"aml-ai-mlops-dstk-002",
             "CONTAINERREGISTRY": "crmlopsdstk002",
+            "VIRTUALNETWORK": "aml-vnet-mlops",
+            "PRIVATEDNSZONE": "dnszone.api.azureml.ms",
+            "PRIVATEDNSZONELINK": "dnszonelink.api.azureml.ms",
+            "PRIVATEDNSZONEGROUP": "dzgmlopsdstk002",
+            "PRIVATEENDPOINT": "aml-pe-mlops",
+            "REQUIRESPRIVATEWORKSPACE": "false",
             "CLUSTER_NAME": "commandmachine1",
             "CLUSTER_SIZE": "STANDARD_DS3_v2"
 

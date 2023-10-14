@@ -18,24 +18,6 @@ parameters:
   type: string
 - name: amlWorkspaceName  
   type: string   
-- name: requiresPrivateWorkspace  
-  type: string
-  default: 'false'
-- name: virtualNetworkName  
-  type: string
-  default: 'undefined'
-- name: privateDnsZoneName  
-  type: string
-  default: 'undefined'
-- name: privateDnsZoneLinkName  
-  type: string
-  default: 'undefined'
-- name: privateDnsZoneGroupName  
-  type: string
-  default: 'undefined'
-- name: privateEndpointName  
-  type: string
-  default: 'undefined'
 - name: clusterName  
   type: string
   default: 'commandmachine1'
@@ -86,12 +68,6 @@ stages:
           echo '${{parameters.appInsightsName}}'
           echo '${{parameters.containerRegistryName}}'
           echo '${{parameters.amlWorkspaceName}}'
-          echo '${{parameters.requiresPrivateWorkspace}}'
-          echo '${{parameters.privateDnsZoneName}}'
-          echo '${{parameters.virtualNetworkName}}'
-          echo '${{parameters.privateDnsZoneLinkName}}'
-          echo '${{parameters.privateDnsZoneGroupName}}'
-          echo '${{parameters.privateEndpointName}}'
           echo '${{parameters.clusterName}}'
           echo '${{parameters.clusterSize}}'
         enabled: true
@@ -105,32 +81,14 @@ stages:
           useGlobalConfig: false
           inlineScript: |
             az --version
-            if('${{parameters.requiresPrivateWorkspace}}' -eq 'false'){
-              az deployment group create --resource-group '${{parameters.resourceGroup}}' `
-              --template-file '$(Pipeline.Workspace)/infratemplates/infra/bicep/main.bicep' `
-              --parameters location='${{parameters.location}}' `
-              storageAccount='${{parameters.storageAccount}}' `
-              keyVaultName='${{parameters.keyVaultName}}' `
-              appInsightsName='${{parameters.appInsightsName}}' `
-              containerRegistryName='${{parameters.containerRegistryName}}' `
-              amlWorkspaceName='${{parameters.amlWorkspaceName}}'
-            }
-            else {
-              az deployment group create --resource-group '${{parameters.resourceGroup}}' `
-              --template-file '$(Pipeline.Workspace)/infratemplates/infra/bicep/main.bicep' `
-              --parameters location='${{parameters.location}}' `
-              storageAccount='${{parameters.storageAccount}}' `
-              keyVaultName='${{parameters.keyVaultName}}' `
-              appInsightsName='${{parameters.appInsightsName}}' `
-              containerRegistryName='${{parameters.containerRegistryName}}' `
-              amlWorkspaceName='${{parameters.amlWorkspaceName}}' `
-              virtualNetworkName='${{parameters.virtualNetworkName}}' `
-              privateDnsZoneName='${{parameters.privateDnsZoneName}}' `
-              privateDnsZoneLinkName='${{parameters.privateDnsZoneLinkName}}' `
-              privateDnsZoneGroupName='${{parameters.privateDnsZoneGroupName}}' `
-              privateEndpointName='${{parameters.privateEndpointName}}' `
-              requiresPrivateWorkspace='${{parameters.requiresPrivateWorkspace}}'
-            }
+            az deployment group create --resource-group '${{parameters.resourceGroup}}' `
+            --template-file '$(Pipeline.Workspace)/infratemplates/infra/bicep/main.bicep' `
+            --parameters location='${{parameters.location}}' `
+            storageAccount='${{parameters.storageAccount}}' `
+            keyVaultName='${{parameters.keyVaultName}}' `
+            appInsightsName='${{parameters.appInsightsName}}' `
+            containerRegistryName='${{parameters.containerRegistryName}}' `
+            amlWorkspaceName='${{parameters.amlWorkspaceName}}'
         enabled: false
 
       - task: AzureCLI@2

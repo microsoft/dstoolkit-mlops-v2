@@ -17,24 +17,6 @@ parameters:
   type: string
 - name: amlWorkspaceName  
   type: string   
-- name: requiresPrivateWorkspace  
-  type: string
-  default: 'false'
-- name: virtualNetworkName  
-  type: string
-  default: 'undefined'
-- name: privateDnsZoneName  
-  type: string
-  default: 'undefined'
-- name: privateDnsZoneLinkName  
-  type: string
-  default: 'undefined'
-- name: privateDnsZoneGroupName  
-  type: string
-  default: 'undefined'
-- name: privateEndpointName  
-  type: string
-  default: 'undefined'
 - name: clusterName  
   type: string
   default: 'commandmachine1'
@@ -64,12 +46,6 @@ stages:
           echo '${{parameters.appInsightsName}}'
           echo '${{parameters.containerRegistryName}}'
           echo '${{parameters.amlWorkspaceName}}'
-          echo '${{parameters.requiresPrivateWorkspace}}'
-          echo '${{parameters.privateDnsZoneName}}'
-          echo '${{parameters.virtualNetworkName}}'
-          echo '${{parameters.privateDnsZoneLinkName}}'
-          echo '${{parameters.privateDnsZoneGroupName}}'
-          echo '${{parameters.privateEndpointName}}'
           echo '${{parameters.clusterName}}'
           echo '${{parameters.clusterSize}}'
         enabled: true
