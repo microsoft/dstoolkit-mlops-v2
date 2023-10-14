@@ -6,7 +6,7 @@
             "AZURE_RM_SVC_CONNECTION": "#{AZURE_RM_SVC_CONNECTION}#",
             "BATCH_CLUSTER_NAME": "#{CLUSTER_NAME}#",
             "ENDPOINT_NAME": "london-taxi-be-#{VERSION}#",
-            "DEPLOYMENT_NAME": "london-taxi-bd-d#{VERSION}#",
+            "DEPLOYMENT_NAME": "london-taxi-bd-#{VERSION}#",
             "CLUSTER_INSTANCE_COUNT": 2,
             "MAX_CONCURRENCY_PER_INSTANCE": 2,
             "MINI_BATCH_SIZE": 10,
