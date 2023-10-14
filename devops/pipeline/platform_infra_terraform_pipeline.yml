@@ -62,6 +62,7 @@ stages:
           command: 'init'
           workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
           backendServiceArm: '${{parameters.azureMgrConnection}}'
+          ensureBackend: true
           backendAzureRmResourceGroupName: '${{parameters.resourceGroup}}'
           backendAzureRmStorageAccountName: stacctfstatemlopsv2010 
           backendAzureRmContainerName: terraform
