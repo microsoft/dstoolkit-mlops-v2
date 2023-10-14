@@ -3,7 +3,7 @@
         {
             "ML_MODEL_CONFIG_NAME": "nyc_taxi",
             "ENV_NAME": "dev",
-            "AZURE_RM_SVC_CONNECTION": "svc-terraform",
+            "AZURE_RM_SVC_CONNECTION": "svc-bicep",
             "SCORE_FILE_NAME": "score.py",
             "TEST_FILE_PATH": "model/nyc_taxi/sample-request.json",
             "ENDPOINT_NAME": "nyc-taxi-rte-002",
