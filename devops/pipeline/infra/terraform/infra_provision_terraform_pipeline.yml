@@ -30,10 +30,3 @@ stages:
       appInsightsName: $(APPINSIGHTS)
       containerRegistryName: $(REGISTRY_NAME)
       amlWorkspaceName: $(WORKSPACE_NAME)
-      virtualNetworkName: $(VIRTUALNETWORK)
-      privateDnsZoneName: $(PRIVATEDNSZONE)
-      privateDnsZoneLinkName: $(PRIVATEDNSZONELINK)
-      privateDnsZoneGroupName: $(PRIVATEDNSZONEGROUP)
-      privateEndpointName: $(PRIVATEENDPOINT)
-      requiresPrivateWorkspace: $(REQUIRESPRIVATEWORKSPACE) 
-

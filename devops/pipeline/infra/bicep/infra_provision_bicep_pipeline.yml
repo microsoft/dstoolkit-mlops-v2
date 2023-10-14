@@ -19,7 +19,7 @@ variables:
 
 stages:
   - template: ../../templates/variables_template_infra.yml
-  - template: ../../platform_infra_bicep_ci_dev_pipeline.yml
+  - template: ../../platform_infra_bicep_pipeline.yml
     parameters:
       environmentName: $(ENVIRONMENT)
       azureMgrConnection: $(AZURE_RM_SVC_CONNECTION)
