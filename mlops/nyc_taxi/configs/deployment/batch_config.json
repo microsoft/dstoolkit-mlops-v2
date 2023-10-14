@@ -3,7 +3,7 @@
         {
             "ML_MODEL_CONFIG_NAME": "nyc_taxi",
             "ENV_NAME": "dev",
-            "AZURE_RM_SVC_CONNECTION": "dstoolkit-mlops-svc",
+            "AZURE_RM_SVC_CONNECTION": "svc-terraform",
             "BATCH_CLUSTER_NAME": "commandmachine1",
             "ENDPOINT_NAME": "nyc-taxi-be-002",
             "DEPLOYMENT_NAME": "nyc-taxi-bd-002",

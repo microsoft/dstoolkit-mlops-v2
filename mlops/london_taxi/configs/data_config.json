@@ -3,7 +3,7 @@
         {
             "ML_MODEL_CONFIG_NAME": "london_taxi",
             "ENV_NAME": "pr",
-            "AZURE_RM_SVC_CONNECTION": "dstoolkit-mlops-svc",
+            "AZURE_RM_SVC_CONNECTION": "svc-terraform",
             "DATA_PURPOSE": "pr_data",
             "DATA_PATH":"mlops/london_taxi/data",
             "DATASET_NAME":"london_taxi_pr_data",
@@ -12,7 +12,7 @@
         {
             "ML_MODEL_CONFIG_NAME": "london_taxi",
             "ENV_NAME": "dev",
-            "AZURE_RM_SVC_CONNECTION": "dstoolkit-mlops-svc",
+            "AZURE_RM_SVC_CONNECTION": "svc-terraform",
             "DATA_PURPOSE": "batch_test_data",
             "DATA_PATH":"mlops/london_taxi/batch_test_data",
             "DATASET_NAME":"london_taxi_batch_test",
@@ -21,7 +21,7 @@
         {
             "ML_MODEL_CONFIG_NAME": "london_taxi",
             "ENV_NAME": "dev",
-            "AZURE_RM_SVC_CONNECTION": "dstoolkit-mlops-svc",
+            "AZURE_RM_SVC_CONNECTION": "svc-terraform",
             "DATA_PURPOSE": "training_data",
             "DATA_PATH":"mlops/london_taxi/data",
             "DATASET_NAME":"london_taxi_training",
