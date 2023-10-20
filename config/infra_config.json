@@ -3,14 +3,14 @@
         {
             "ENVIRONMENT": "DEV",
             "LOCATION": "eastus",
-            "AZURE_RM_SVC_CONNECTION": "#{AZURE_RM_SVC_CONNECTION}#",
-            "RESOURCE_GROUP_NAME": "#{RESOURCE_GROUP_NAME}#",
-            "AMLWORKSPACE": "mlw-#{NAMESPACE}#-#{PROJECTCODE}#-#{VERSION}#",
-            "STORAGEACCOUNT":"staccaml#{NAMESPACE}##{PROJECTCODE}##{VERSION}#",
-            "KEYVAULT":"akvaml#{NAMESPACE}##{PROJECTCODE}##{VERSION}#",
-            "APPINSIGHTS":"aml-ai-#{NAMESPACE}#-#{PROJECTCODE}#-#{VERSION}#",
-            "CONTAINERREGISTRY": "cr#{NAMESPACE}##{PROJECTCODE}##{VERSION}#",
-            "CLUSTER_NAME": "#{CLUSTER_NAME}#",
+            "AZURE_RM_SVC_CONNECTION": "azure_connection",
+            "RESOURCE_GROUP_NAME": "mlops",
+            "AMLWORKSPACE": "mlw-mlops-fri-test",
+            "STORAGEACCOUNT":"staccamlmlopsfritest",
+            "KEYVAULT":"akvamlmlopsfritest",
+            "APPINSIGHTS":"aml-ai-mlops-fri-test",
+            "CONTAINERREGISTRY": "crmlopsfritest",
+            "CLUSTER_NAME": "fri_command_test",
             "CLUSTER_SIZE": "STANDARD_DS3_v2"
 
         }

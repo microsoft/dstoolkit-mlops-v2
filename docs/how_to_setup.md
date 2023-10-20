@@ -20,9 +20,9 @@ For key below, replace the token with a value:
 - #{NAMESPACE}#: a base name used to construct consistent azure resource names.
 - #{PROJECTCODE}#: a string used to construct consistent azure resource names project modifier.
 - #{VERSION}#: a three-digit version string used to uniqueify azure resource names, ml endpoints, and ml deployments.
-- #{AZURE_RM_SVC_CONNECTION}#: the name of service connection to be used to execute all Azure DevOps pipelines.
-- #{RESOURCE_GROUP_NAME}#: the resource group to which azure resources will be deployed.
-- #{CLUSTER_NAME}#: the name of the compute resource in the azure machine learning resource
+- azure_connection: the name of service connection to be used to execute all Azure DevOps pipelines.
+- mlops: the resource group to which azure resources will be deployed.
+- fri_command_test: the name of the compute resource in the azure machine learning resource
 
 **Step n.** In the development branch, set values for variables in the model_config.json file. The pipeline uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi)
 

@@ -3,8 +3,8 @@
         {
             "ML_MODEL_CONFIG_NAME": "london_taxi",
             "ENV_NAME": "pr",
-            "AZURE_RM_SVC_CONNECTION": "#{AZURE_RM_SVC_CONNECTION}#",
-            "CLUSTER_NAME": "#{CLUSTER_NAME}#",
+            "AZURE_RM_SVC_CONNECTION": "azure_connection",
+            "CLUSTER_NAME": "fri_command_test",
             "CLUSTER_REGION": "eastus",
             "CLUSTER_SIZE": "STANDARD_DS3_v2",
             "CONDA_PATH": "mlops/london_taxi/environment/conda.yml",
@@ -20,8 +20,8 @@
         {
             "ML_MODEL_CONFIG_NAME": "london_taxi",
             "ENV_NAME": "dev",
-            "AZURE_RM_SVC_CONNECTION": "#{AZURE_RM_SVC_CONNECTION}#",
-            "CLUSTER_NAME": "#{CLUSTER_NAME}#",
+            "AZURE_RM_SVC_CONNECTION": "azure_connection",
+            "CLUSTER_NAME": "fri_command_test",
             "CLUSTER_REGION": "eastus",
             "CLUSTER_SIZE": "STANDARD_DS3_v2",
             "CONDA_PATH": "mlops/london_taxi/environment/conda.yml",
@@ -37,8 +37,8 @@
         {
             "ML_MODEL_CONFIG_NAME": "nyc_taxi",
             "ENV_NAME": "pr",
-            "AZURE_RM_SVC_CONNECTION": "#{AZURE_RM_SVC_CONNECTION}#",
-            "CLUSTER_NAME": "#{CLUSTER_NAME}#",
+            "AZURE_RM_SVC_CONNECTION": "azure_connection",
+            "CLUSTER_NAME": "fri_command_test",
             "CLUSTER_REGION": "eastus",
             "CLUSTER_SIZE": "STANDARD_DS3_v2",
             "CONDA_PATH": "mlops/nyc_taxi/environment/conda.yml",
@@ -54,8 +54,8 @@
         {
             "ML_MODEL_CONFIG_NAME": "nyc_taxi",
             "ENV_NAME": "dev",
-            "AZURE_RM_SVC_CONNECTION": "#{AZURE_RM_SVC_CONNECTION}#",
-            "CLUSTER_NAME": "#{CLUSTER_NAME}#",
+            "AZURE_RM_SVC_CONNECTION": "azure_connection",
+            "CLUSTER_NAME": "fri_command_test",
             "CLUSTER_REGION": "eastus",
             "CLUSTER_SIZE": "STANDARD_DS3_v2",
             "CONDA_PATH": "mlops/nyc_taxi/environment/conda.yml",

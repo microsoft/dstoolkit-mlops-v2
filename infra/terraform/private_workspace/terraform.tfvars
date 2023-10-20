@@ -1,5 +1,0 @@
-rg_name = "mlopsv2infra" 
-location = "eastus"
-basename = "tftest"
-project_code = "v2"
-version_num = "01"
