@@ -19,15 +19,7 @@ variables:
   value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.AMLWORKSPACE'] ]
 - name:  VERSION
   value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.VERSION'] ]
-- name:  REQUIRESPRIVATEWORKSPACE
-  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.REQUIRESPRIVATEWORKSPACE'] ]
-- name:  VIRTUALNETWORK
-  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.VIRTUALNETWORK'] ]
-- name:  PRIVATEDNSZONE
-  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.PRIVATEDNSZONE'] ]
-- name:  PRIVATEDNSZONELINK
-  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.PRIVATEDNSZONELINK'] ]
-- name:  PRIVATEDNSZONEGROUP
-  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.PRIVATEDNSZONEGROUP'] ]
-- name:  PRIVATEENDPOINT
-  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.PRIVATEENDPOINT'] ]
+- name:  CLUSTER_NAME
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.CLUSTER_NAME'] ]
+- name:  CLUSTER_SIZE
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.CLUSTER_SIZE'] ]
