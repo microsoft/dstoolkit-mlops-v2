@@ -44,7 +44,9 @@ For key below, replace the token with a value:
 
 **Step n.** Create an azure pipeline to deploy the infrastructure.  Your pipeline should be based on either a bicep (infra_provision_bicep_pipeline.yml) or a terraform (infra_provision_terraform_pipeline.yml) Azure Pipelines yaml file. 
 
-**Step n.** Create an Azure Pipelines to operate the pr and dev modes of the model. The new Azure Pipeline should be based on the existing YAML file named model_pipeline.yml.
+**Step n.** Create an Azure Pipelines to operate the pr modes of the model. The new Azure Pipeline should be based on the existing YAML file named model_pr.yml.
+
+**Step n.** Create an Azure Pipelines to operate the ci modes of the model. The new Azure Pipeline should be based on the existing YAML file named model_ci.yml.
 
 More details about how to create a basic Azure Pipeline can be found [here](https://learn.microsoft.com/en-us/azure/devops/pipelines/create-first-pipeline?view=azure-devops&tabs).
 

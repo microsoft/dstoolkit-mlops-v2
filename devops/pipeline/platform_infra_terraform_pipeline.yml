@@ -1,25 +1,14 @@
 parameters:
-- name: environmentName
-  type: string
 - name: azureMgrConnection
   type: string
 - name: resourceGroup
   type: string
-- name: location
-  type: string     
-- name: storageAccount
-  type: string
 - name: keyVaultName
-  type: string
-- name: appInsightsName  
-  type: string
-- name: containerRegistryName  
   type: string
 - name: amlWorkspaceName  
   type: string   
 - name: clusterName  
   type: string
-  default: 'commandmachine1'
 - name: clusterSize  
   type: string
   default: 'STANDARD_DS3_v2'
@@ -38,13 +27,10 @@ stages:
       - script: |
           echo 'See the contents of parameters passed in'
           echo '${{parameters.azureMgrConnection}}'
-          echo '${{parameters.environmentName}}'
           echo '${{parameters.resourceGroup}}'
           echo '${{parameters.location}}'
           echo '${{parameters.storageAccount}}'
           echo '${{parameters.keyVaultName}}'
-          echo '${{parameters.appInsightsName}}'
-          echo '${{parameters.containerRegistryName}}'
           echo '${{parameters.amlWorkspaceName}}'
           echo '${{parameters.clusterName}}'
           echo '${{parameters.clusterSize}}'

@@ -20,7 +20,6 @@ parameters:
   type: string   
 - name: clusterName  
   type: string
-  default: 'commandmachine1'
 - name: clusterSize  
   type: string
   default: 'STANDARD_DS3_v2'
