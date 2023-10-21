@@ -21,12 +21,13 @@ variables:
 
 parameters:
  - name: env_name
-   displayName: "Execution Environment (ie pr or dev)"
+   displayName: "Execution Environment"
+   default: "pr"
  - name: model_type
-   displayName: "model type (ie london_taxi or nyc_taxi)"
- - name: is_batch_deployment
-   default: 'None'
-   displayName: "****Only for dev***: None when env_name=pr, OR True for batch endpoint and False for real-time endpoint"
+   displayName: "Model type (ie london_taxi or nyc_taxi)"
+   values:
+   - nyc_taxi
+   - london_taxi
 
 stages:
   - template: templates/variables_template.yml
@@ -35,15 +36,7 @@ stages:
       model_type: ${{parameters.model_type}}
 
 
-  - ${{ if eq(parameters.env_name, 'pr') }}:
-    - template: platform_pr_dev_pipeline.yml
-      parameters:
-        exec_environment: ${{ parameters.env_name }}
-        model_type: ${{ parameters.model_type }}
-
-  - ${{ if eq(parameters.env_name, 'dev') }}:
-    - template: platform_ci_dev_pipeline.yml
-      parameters:
-        exec_environment: ${{ parameters.env_name }}
-        model_type: ${{ parameters.model_type }}
-        is_batch_deployment: ${{ parameters.is_batch_deployment }}
+  - template: platform_pr_dev_pipeline.yml
+    parameters:
+      exec_environment: ${{ parameters.env_name }}
+      model_type: ${{ parameters.model_type }}
