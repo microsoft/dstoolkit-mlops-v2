@@ -7,9 +7,7 @@ stages:
         $json = Get-Content -Raw -Path '$(System.DefaultWorkingDirectory)/config/infra_config.json' | ConvertFrom-Json
         $firstElement = $json.infra | Select-Object -First 1
         
-        Write-Output $firstElement.KEYVAULT_NAME
-
-
+        Write-Host $firstElement.KEYVAULT_NAME
         
         foreach ($property in $firstElement.PSObject.Properties) {
           $pname = $property.Name
@@ -37,28 +35,15 @@ stages:
     - name:  WORKSPACE_NAME
       value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.AMLWORKSPACE'] ]
     - name: STORAGEACCOUNT
-      value: $[ dependencies.load_config_variables.outputs['loading_infra_config.STORAGEACCOUNT'] ]
+      value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.STORAGEACCOUNT'] ]
     - name: APPINSIGHTS
-      value: $[ dependencies.load_config_variables.outputs['loading_infra_config.APPINSIGHTS'] ]
+      value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.APPINSIGHTS'] ]
     - name: CLUSTER_NAME
-      value: $[ dependencies.load_config_variables.outputs['loading_infra_config.CLUSTER_NAME'] ]
+      value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.CLUSTER_NAME'] ]
     - name: CLUSTER_SIZE
-      value: $[ dependencies.load_config_variables.outputs['loading_infra_config.CLUSTER_SIZE'] ]
+      value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.CLUSTER_SIZE'] ]
     - name: VERSION
-      value: $[ dependencies.load_config_variables.outputs['loading_infra_config.VERSION'] ]
-    - name: REQUIRESPRIVATEWORKSPACE
-      value: $[ dependencies.load_config_variables.outputs['loading_infra_config.REQUIRESPRIVATEWORKSPACE'] ]
-    - name: VIRTUALNETWORK
-      value: $[ dependencies.load_config_variables.outputs['loading_infra_config.VIRTUALNETWORK'] ]
-    - name: PRIVATEDNSZONE
-      value: $[ dependencies.load_config_variables.outputs['loading_infra_config.PRIVATEDNSZONE'] ]
-    - name: PRIVATEDNSZONELINK
-      value: $[ dependencies.load_config_variables.outputs['loading_infra_config.PRIVATEDNSZONELINK'] ]
-    - name: PRIVATEDNSZONEGROUP
-      value: $[ dependencies.load_config_variables.outputs['loading_infra_config.PRIVATEDNSZONEGROUP'] ]
-    - name: PRIVATEENDPOINT
-      value: $[ dependencies.load_config_variables.outputs['loading_infra_config.PRIVATEENDPOINT'] ]                  
-
+      value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.VERSION'] ]
     steps:
     - script: |
         if [ -z "$(REGISTRY_NAME)" ]
