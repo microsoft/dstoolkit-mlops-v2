@@ -20,5 +20,5 @@ stages:
       appInsightsName: $(APPINSIGHTS)
       containerRegistryName: $(REGISTRY_NAME)
       amlWorkspaceName: $(WORKSPACE_NAME)
-      clusterName:  $(CLUSTER_NAME)
+      clusterName: $(CLUSTER_NAME)
 

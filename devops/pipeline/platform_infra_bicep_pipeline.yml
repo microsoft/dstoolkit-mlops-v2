@@ -98,6 +98,7 @@ stages:
           scriptLocation: inlineScript
           useGlobalConfig: false
           inlineScript: |
+            Write-Host "cluster is ${{parameters.clusterName}} and cluster-size is ${{parameters.clusterSize}}"
             az --version
             az extension add -n ml -y
             az ml compute create --name '${{parameters.clusterName}}' --size '${{parameters.clusterSize}}' `
