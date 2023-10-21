@@ -31,7 +31,9 @@ parameters:
  - name: is_batch_deployment
    default: 'True'
    displayName: "****True for batch endpoint and False for real-time endpoint"
-
+   values:
+   - True
+   - False
 stages:
   - template: templates/variables_template.yml
     parameters:
