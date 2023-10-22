@@ -69,7 +69,7 @@ stages:
           echo '${{parameters.amlWorkspaceName}}'
           echo '${{parameters.clusterName}}'
           echo '${{parameters.clusterSize}}'
-        enabled: true
+        enabled: false
 
       - task: AzureCLI@2
         displayName: Provision MLOps Infrastructure

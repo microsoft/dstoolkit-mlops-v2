@@ -32,7 +32,7 @@ stages:
           echo '${{parameters.amlWorkspaceName}}'
           echo '${{parameters.clusterName}}'
           echo '${{parameters.clusterSize}}'
-        enabled: true
+        enabled: false
 
       - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@1
         displayName: 'Terraform Install'
