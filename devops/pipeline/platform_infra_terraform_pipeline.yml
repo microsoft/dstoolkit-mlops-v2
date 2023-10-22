@@ -28,8 +28,6 @@ stages:
           echo 'See the contents of parameters passed in'
           echo '${{parameters.azureMgrConnection}}'
           echo '${{parameters.resourceGroup}}'
-          echo '${{parameters.location}}'
-          echo '${{parameters.storageAccount}}'
           echo '${{parameters.keyVaultName}}'
           echo '${{parameters.amlWorkspaceName}}'
           echo '${{parameters.clusterName}}'
