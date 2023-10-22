@@ -55,6 +55,7 @@ stages:
       steps:
       - download: current
         artifact: infratemplates
+        displayName: Download IaC Templates
 
       - script: |
           echo 'See the contents of parameters passed in'
