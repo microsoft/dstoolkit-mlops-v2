@@ -14,6 +14,5 @@ stages:
       azureMgrConnection: $(AZURE_RM_SVC_CONNECTION)
       resourceGroup: $(RESOURCE_GROUP_NAME)
       keyVaultName: $(KEYVAULT_NAME)
-      appInsightsName: $(APPINSIGHTS)
       amlWorkspaceName: $(WORKSPACE_NAME)
       clusterName: $(CLUSTER_NAME)
