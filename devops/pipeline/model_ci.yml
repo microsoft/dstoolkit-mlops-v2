@@ -30,7 +30,7 @@ parameters:
    - london_taxi
  - name: is_batch_deployment
    default: 'True'
-   displayName: "****True for batch endpoint and False for real-time endpoint"
+   displayName: "Batch Deployment? (Select True for Batch Deployments, and False for Real-Time Deployments)"
    values:
    - True
    - False
