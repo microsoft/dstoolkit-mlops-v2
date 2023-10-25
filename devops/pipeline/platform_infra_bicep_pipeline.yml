@@ -70,7 +70,7 @@ stages:
           echo '${{parameters.amlWorkspaceName}}'
           echo '${{parameters.clusterName}}'
           echo '${{parameters.clusterSize}}'
-        enabled: false
+        enabled: true
 
       - task: AzureCLI@2
         displayName: Provision MLOps Infrastructure
@@ -89,7 +89,7 @@ stages:
             appInsightsName='${{parameters.appInsightsName}}' `
             containerRegistryName='${{parameters.containerRegistryName}}' `
             amlWorkspaceName='${{parameters.amlWorkspaceName}}'
-        enabled: true
+        enabled: false
 
       - task: AzureCLI@2
         displayName: Add compute to workspace
@@ -104,7 +104,7 @@ stages:
             az extension add -n ml -y
             az ml compute create --name '${{parameters.clusterName}}' --size '${{parameters.clusterSize}}' `
             --type AmlCompute --resource-group '${{parameters.resourceGroup}}' --workspace-name '${{parameters.amlWorkspaceName}}'
-        enabled: true
+        enabled: false
 
       - task: AzureCLI@2
         displayName: Add Key Vault access policy to service principal backing service connection
@@ -118,4 +118,4 @@ stages:
             az --version
             $id = (az ad sp show --id $env:servicePrincipalId --query id)
             az keyvault set-policy --name ${{parameters.keyVaultName}} --object-id $id --secret-permissions get list
-        enabled: true              
+        enabled: false              
