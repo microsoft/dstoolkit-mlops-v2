@@ -50,11 +50,11 @@ stages:
     dependsOn: load_config_variables
     variables:
     - name: NAMESPACE
-      value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.NAMESPACE'] ]
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.NAMESPACE'] ]
     - name: PROJECTCODE
-      value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.PROJECTCODE'] ]
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.PROJECTCODE'] ]
     - name: VERSION
-      value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.VERSION'] ]
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.VERSION'] ]
     - name:  ML_MODEL_CONFIG_NAME
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.ML_MODEL_CONFIG_NAME'] ]
     - name:  KEYVAULT_NAME
