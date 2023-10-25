@@ -46,6 +46,12 @@ For key below, supply a value or accept the defaults in the terraform.tfvars fil
 - REALTIME_DEPLOYMENT_CONFIG: relative path to the realtime_config.json file.
 - DATA_CONFIG_PATH: relative path to the data_config.json.
 
+**Step n.** In the development branch, set values or accept the defaults for variables in the /mlops/london_taxi/configs/deployment/batch_config.json file. 
+BATCH_CLUSTER_NAME: The unique name for a cluster to be used for batch inferencing.
+
+**Step n.** In the development branch, set values or accept the defaults for variables in the /mlops/nyc_taxi/configs/deployment/batch_config.json file. 
+BATCH_CLUSTER_NAME: The unique name for a cluster to be used for batch inferencing.
+
 **Step n.** Create an azure pipeline to deploy the infrastructure.  Your pipeline should be based on either a bicep (infra_provision_bicep_pipeline.yml) or a terraform (infra_provision_terraform_pipeline.yml) Azure Pipelines yaml file. 
 
 **Step n.** Create an Azure Pipelines to operate the pr modes of the model. The new Azure Pipeline should be based on the existing YAML file named model_pr.yml.
