@@ -1,10 +1,10 @@
 variables:
 - name:  NAMESPACE
-  value: $[ dependencies.load_config_variables.outputs['loading_model_config.NAMESPACE'] ]
+  value: $[stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.NAMESPACE'] ]
 - name:  PROJECTCODE
-  value: $[ dependencies.load_config_variables.outputs['loading_model_config.PROJECTCODE'] ]
+  value: $[stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.PROJECTCODE'] ]
 - name:  VERSION
-  value: $[ dependencies.load_config_variables.outputs['loading_model_config.VERSION'] ]
+  value: $[stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.VERSION'] ]
 - name:  ML_MODEL_CONFIG_NAME
   value: $[ stageDependencies.variable_generation.load_config_variables.outputs['loading_model_config.ML_MODEL_CONFIG_NAME'] ]
 - name:  KEYVAULT_NAME
