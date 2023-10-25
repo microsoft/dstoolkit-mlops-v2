@@ -21,5 +21,6 @@ stages:
       containerRegistryName: $(REGISTRY_NAME)
       amlWorkspaceName: $(WORKSPACE_NAME)
       clusterName: $(CLUSTER_NAME)
+      clusterSize: $(CLUSTER_SIZE)
       batchClusterName: $(BATCH_CLUSTER_NAME)
 

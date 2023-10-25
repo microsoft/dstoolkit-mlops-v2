@@ -22,7 +22,6 @@ parameters:
   type: string
 - name: clusterSize  
   type: string
-  default: 'STANDARD_DS3_v2'
 - name: batchClusterName  
   type: string  
   
