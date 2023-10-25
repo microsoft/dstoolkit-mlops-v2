@@ -16,6 +16,3 @@ stages:
       keyVaultName: $(KEYVAULT_NAME)
       amlWorkspaceName: $(WORKSPACE_NAME)
       clusterName: $(CLUSTER_NAME)
-      namespace: $(NAMESPACE)
-      projectcode: $(PROJECTCODE)
-      version: $(VERSION)
