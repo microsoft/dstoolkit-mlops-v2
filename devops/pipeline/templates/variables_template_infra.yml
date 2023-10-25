@@ -33,7 +33,7 @@ stages:
     - name:  LOCATION
       value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.LOCATION'] ]       
     - name:  KEYVAULT_NAME
-      value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.akvaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)'] ]       
+      value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.akvaml${NAMESPACE}${PROJECTCODE}${VERSION}'] ]       
     - name:  REGISTRY_NAME
       value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.CONTAINERREGISTRY'] ] 
     - name:  RESOURCE_GROUP_NAME
