@@ -1,11 +1,14 @@
 {
     "infra":[
         {
+            "NAMESPACE": "mlops",
+            "PROJECTCODE": "dstk",
+            "VERSION": "010",
             "ENVIRONMENT": "DEV",
             "LOCATION": "eastus",
             "AZURE_RM_SVC_CONNECTION": "#{AZURE_RM_SVC_CONNECTION}#",
             "RESOURCE_GROUP_NAME": "#{RESOURCE_GROUP_NAME}#",
-            "AMLWORKSPACE": "mlw-#{NAMESPACE}#-#{PROJECTCODE}#-#{VERSION}#",
+            "AMLWORKSPACE": "mlw-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)",
             "STORAGEACCOUNT":"staccaml#{NAMESPACE}##{PROJECTCODE}##{VERSION}#",
             "KEYVAULT":"akvaml#{NAMESPACE}##{PROJECTCODE}##{VERSION}#",
             "APPINSIGHTS":"aml-ai-#{NAMESPACE}#-#{PROJECTCODE}#-#{VERSION}#",
