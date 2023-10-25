@@ -19,6 +19,7 @@ stages:
           $pname = $property.Name
           $pvalue = $property.Value
           Write-Output "##vso[task.setvariable variable=$pname;isoutput=true]$pvalue"
+          Write-Host $pname, $pvalue
           }
 
         # Get infra variables
@@ -31,6 +32,7 @@ stages:
           $pname = $property.Name
           $pvalue = $property.Value
           Write-Output "##vso[task.setvariable variable=$pname;isoutput=true]$pvalue"
+          Write-Host $pname, $pvalue
           }
             
             
