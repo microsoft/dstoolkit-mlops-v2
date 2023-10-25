@@ -29,6 +29,10 @@ stages:
       - infra_variable_generation
     variables:
       - template: templates/infra_bicep_variables.yml
+        TF_VAR_basename: '${{parameters.namespace}}'
+        TF_VAR_project_code: '${{parameters.projectcode}}'
+        TF_VAR_version_num: '${{parameters.version}}'
+        TF_VAR_rg_name: '${{parameters.resourceGroup}}'      
     jobs:
     - job: Deploy_MLOps_v2_Infrastructure  
       steps:
@@ -84,11 +88,6 @@ stages:
 
       - task: TerraformTaskV4@4
         displayName: 'Terraform Apply'
-        variables:
-          TF_VAR_basename: '${{parameters.namespace}}'
-          TF_VAR_project_code: '${{parameters.projectcode}}'
-          TF_VAR_version_num: '${{parameters.version}}'
-          TF_VAR_rg_name: '${{parameters.resourceGroup}}'
         inputs:
           provider: 'azurerm'
           command: 'apply'
