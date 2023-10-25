@@ -11,15 +11,7 @@ parameters:
   type: string
 - name: clusterSize  
   type: string
-  default: 'STANDARD_DS3_v2'
-- name: namespace  
-  type: string
-  default: 'mlops'
-- name: projectcode  
-  type: string
-  default: 'dstk'
-- name: version  
-  type: string      
+  default: 'STANDARD_DS3_v2'    
   
 stages:
 
@@ -32,11 +24,6 @@ stages:
    
     jobs:
     - job: Deploy_MLOps_v2_Infrastructure  
-      variables:
-        TF_VAR_basename: '${{parameters.namespace}}'
-        TF_VAR_project_code: '${{parameters.projectcode}}'
-        TF_VAR_version_num: '${{parameters.version}}'
-        TF_VAR_rg_name: '${{parameters.resourceGroup}}'   
       steps:
       - script: |
           echo 'See the contents of parameters passed in'
@@ -46,9 +33,6 @@ stages:
           echo '${{parameters.amlWorkspaceName}}'
           echo '${{parameters.clusterName}}'
           echo '${{parameters.clusterSize}}'
-          echo '${{parameters.namespace}}'
-          echo '${{parameters.projectcode}}'
-          echo '${{parameters.version}}'
 
         enabled: true
 

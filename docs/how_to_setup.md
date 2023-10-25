@@ -14,23 +14,27 @@ Information about variable groups in Azure DevOps can be found in [this document
 
 **Step n.** Create a *development* branch and make it as default one to make sure that all PRs should go towards to it. This template assumes that the team works at a *development* branch as a primary source for coding and improving the model quality. Later, you can implement Azure Pipeline that moves code from the *development* branch into qa/main or executes a release process right away. Release management is not in scope of this template.
 
-**Step n.** In the development branch, set values for tokenized variables in the infra_config.json and terraform.tfvars files. The infra provisioning pipeline uses multiple variables.
-For key below, replace the token with a value:
+**Step n.** In the development branch, follow the steps below : 
+For keys below, supply a value or accept the default in the infra_config.json:
+**Note: It is important to set a unique version number to avoid attempting to deploy resources that already exist.**
+- NAMESPACE: a base name used to construct consistent azure resource names.
+- PROJECTCODE: a string used to construct consistent azure resource names project modifier.
+- VERSION: a three-digit version string used to uniqueify azure resource names, ml endpoints, and ml deployments.
+- AZURE_RM_SVC_CONNECTION: the name of service connection to be used to execute all Azure DevOps pipelines.
+- RESOURCE_GROUP_NAME: the resource group to which azure resources will be deployed.
+- CLUSTER_NAME: the name of the compute resource in the azure machine learning resource
 
-- #{NAMESPACE}#: a base name used to construct consistent azure resource names.
-- #{PROJECTCODE}#: a string used to construct consistent azure resource names project modifier.
-- #{VERSION}#: a three-digit version string used to uniqueify azure resource names, ml endpoints, and ml deployments.
-- #{AZURE_RM_SVC_CONNECTION}#: the name of service connection to be used to execute all Azure DevOps pipelines.
-- #{RESOURCE_GROUP_NAME}#: the resource group to which azure resources will be deployed.
-- #{CLUSTER_NAME}#: the name of the compute resource in the azure machine learning resource
+For key below, supply a value or accept the defaults in the terraform.tfvars file
+**Note: It is important to set a unique version number to avoid attempting to deploy resources that already exist.**
+- rg-name: the name of the resource group into which to deploy resources.
+- basename: a base name used to construct consistent azure resource names.
+- project_code: a string used to construct consistent azure resource names project modifier.
+- version_num: a three-digit version string used to uniqueify azure resource names, ml endpoints, and ml deployments.
 
-**Step n.** In the development branch, set values for variables in the model_config.json file. The pipeline uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi)
+**Step n.** In the development branch, set values or accept the defaults for variables in the model_config.json file. The pipeline uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi)
 
 - ML_MODEL_CONFIG_NAME: The unique model name used internally by the pipelines.
 - ENV_NAME: name of the environment. e.g pr, dev, test, prod.
-- AZURE_RM_SVC_CONNECTION: the name of service connection configured in Azure DevOps.
-- CLUSTER_NAME: an Azure ML compute cluster name to start jobs.
-- CLUSTER_SIZE: a size of the cluster in Azure ML to start jobs.
 - CLUSTER_REGION: a location/region where the cluster should be created.
 - CONDA_PATH: a location of the conda file (mlops/nyc_taxi/environment/conda.yml).
 - DISPLAY_BASE_NAME: a run base name (see EXPERIMENT_BASE_NAME for details).
