@@ -12,25 +12,8 @@ stages:
         foreach ($property in $firstElement.PSObject.Properties) {
           $pname = $property.Name
           $pvalue = $property.Value
-          if ($pname -eq 'NAMESPACE'){
-            $namespace = $pvalue
-          }
-          if ($pname -eq 'PROJECTCODE'){
-            $projectcode = $pvalue
-          }
-          if ($pname -eq 'VERSION'){
-            $version = $pvalue
-          }
-
-          if ($pname -eq 'KEYVAULT_NAME'){
-            $keyvaultname = akvaml$(namespace)$(projectcode)$(version)
-            Write-Output "##vso[task.setvariable variable=$pname;isoutput=true]$keyvaultname" 
-            Write-Host $pname, $keyvaultname
-          }
-          else {
-            Write-Output "##vso[task.setvariable variable=$pname;isoutput=true]$pvalue"
-            Write-Host $pname, $pvalue
-          }  
+          Write-Output "##vso[task.setvariable variable=$pname;isoutput=true]$pvalue"
+          Write-Host $pname, $pvalue            
         }
       name: loading_infra_config
 
