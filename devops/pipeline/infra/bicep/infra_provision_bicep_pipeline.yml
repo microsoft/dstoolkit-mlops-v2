@@ -4,8 +4,8 @@ pool:
   vmImage: ubuntu-latest
 
 
-# variables:
-# - group: mlops_platform_infra_dev_vg
+variables:
+- group: mlops_platform_infra_dev_vg
 
 stages:
   - template: ../../templates/variables_template_infra.yml

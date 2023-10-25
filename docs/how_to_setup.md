@@ -4,13 +4,16 @@ This template supports Azure ML as a platform for ML, and Azure DevOps as a plat
 
 In order to setup the repository, you need to complete few steps.
 
+**Predeployment Setup**
+
 **Step n.** Create a resource group into which the Azure Machine Learning resources will be deployed.
 
-**Step n.** Create a service connection for your Azure DevOps project. You can use [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) as a reference. Use Azure Resource Manager as a type of the service connection. Set resource group created to the resource group created above. 
-
-**Step n.** Create a new variable group and add "AZURE_RM_SVC_CONNECTION" variable with the name of the service connection created in the preceding step. 
+**Step n.** Create a new variable group and add "AZURE_RM_SVC_CONNECTION" variable with the name of the service connection to be used for running the pipelines. 
 
 Information about variable groups in Azure DevOps can be found in [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops&tabs=classic).
+
+
+**Step n.** Create a service connection having the same value as that which it has in the variable group created above. You can use [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) as a reference. Use Azure Resource Manager as a type of the service connection. Set resource group created to the resource group created above. 
 
 **Step n.** Create a *development* branch and make it as default one to make sure that all PRs should go towards to it. This template assumes that the team works at a *development* branch as a primary source for coding and improving the model quality. Later, you can implement Azure Pipeline that moves code from the *development* branch into qa/main or executes a release process right away. Release management is not in scope of this template.
 
@@ -51,6 +54,13 @@ For key below, supply a value or accept the defaults in the terraform.tfvars fil
 **Step n.** In the development branch, set values or accept the defaults for variables in the /mlops/london_taxi/configs/deployment/batch_config.json and  /mlops/nyc_taxi/configs/deployment/batch_config.json files. 
 BATCH_CLUSTER_NAME: The unique name for a cluster to be used for batch inferencing. **Since this is created by the Infrastructure deployment, the name must match the value in /config/infra_config.yml**
 
+**Step n.** In the following files, locate the string "- group:" and set the value to the name of the variable group created above.
+- model_ci.yml
+- model_pr.yml
+- infra_provision_bicep_pipeline.yml
+- infra_provision_terraform_pipeline.yml 
+
+
 **Step n.** Create an azure pipeline to deploy the infrastructure.  Your pipeline should be based on either a bicep (infra_provision_bicep_pipeline.yml) or a terraform (infra_provision_terraform_pipeline.yml) Azure Pipelines yaml file. 
 
 **Step n.** Create an Azure Pipelines to operate the pr modes of the model. The new Azure Pipeline should be based on the existing YAML file named model_pr.yml.
@@ -67,5 +77,11 @@ More details about how to create a policy can be found [here](https://learn.micr
 
 Azure ML provides a solution that allows us to implement a *server* task in Azure DevOps Build and wait for the result of the pipeline training job with no Azure DevOps agent holding. Thanks to that it's possible to wait for results any amount of time and execute all other steps right after completion of the Azure ML training job. As for now, the feature is in active development, but you can [visit this link](https://github.com/Azure/azure-mlops-automation) to check the status and find how to get access. This new Azure ML feature can be included in your CI Build thanks to the extension that Azure ML team built or you can use RestAPITask for a direct REST call. In this template we implemented a version with the extension.
 
-Now, you can create a PR and test the flow.
+**Provision Infrastructure**
+- Execute the infrastructure provision pipeline (infra_provision_bicep_pipeline.yml OR infra_provision_terraform_pipeline.yml).
 
+**Run PR pipeline**
+- Execute the Azure Pipeline for model generation (model_pr.yml)
+
+**Run CI pipeline**
+- Execute the Azure Pipeline for model generation (model_ci.yml)
