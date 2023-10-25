@@ -22,7 +22,8 @@ For keys below, supply a value or accept the default in the infra_config.json:
 - VERSION: a three-digit version string used to uniqueify azure resource names, ml endpoints, and ml deployments.
 - AZURE_RM_SVC_CONNECTION: the name of service connection to be used to execute all Azure DevOps pipelines.
 - RESOURCE_GROUP_NAME: the resource group to which azure resources will be deployed.
-- CLUSTER_NAME: the name of the compute resource in the azure machine learning resource
+- CLUSTER_NAME: the name of the compute resource for pr deployment for training and inferencing in the azure machine learning resource
+- BATCH_CLUSTER_NAME: the name of the compute resource for batch inferencing in the azure machine learning resource
 
 For key below, supply a value or accept the defaults in the terraform.tfvars file
 **Note: It is important to set a unique version number to avoid attempting to deploy resources that already exist.**
@@ -46,11 +47,8 @@ For key below, supply a value or accept the defaults in the terraform.tfvars fil
 - REALTIME_DEPLOYMENT_CONFIG: relative path to the realtime_config.json file.
 - DATA_CONFIG_PATH: relative path to the data_config.json.
 
-**Step n.** In the development branch, set values or accept the defaults for variables in the /mlops/london_taxi/configs/deployment/batch_config.json file. 
-BATCH_CLUSTER_NAME: The unique name for a cluster to be used for batch inferencing.
-
-**Step n.** In the development branch, set values or accept the defaults for variables in the /mlops/nyc_taxi/configs/deployment/batch_config.json file. 
-BATCH_CLUSTER_NAME: The unique name for a cluster to be used for batch inferencing.
+**Step n.** In the development branch, set values or accept the defaults for variables in the /mlops/london_taxi/configs/deployment/batch_config.json and  /mlops/nyc_taxi/configs/deployment/batch_config.json files. 
+BATCH_CLUSTER_NAME: The unique name for a cluster to be used for batch inferencing. **Since this is created by the Infrastructure deployment, the name must match the value in /config/infra_config.yml**
 
 **Step n.** Create an azure pipeline to deploy the infrastructure.  Your pipeline should be based on either a bicep (infra_provision_bicep_pipeline.yml) or a terraform (infra_provision_terraform_pipeline.yml) Azure Pipelines yaml file. 
 

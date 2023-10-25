@@ -23,6 +23,8 @@ parameters:
 - name: clusterSize  
   type: string
   default: 'STANDARD_DS3_v2'
+- name: batchClusterName  
+  type: string  
   
 stages:
   - stage: publish_IaC_templates
@@ -70,6 +72,7 @@ stages:
           echo '${{parameters.amlWorkspaceName}}'
           echo '${{parameters.clusterName}}'
           echo '${{parameters.clusterSize}}'
+          echo '${{parameters.batchClusterName}}'
         enabled: true
 
       - task: AzureCLI@2
@@ -103,6 +106,21 @@ stages:
             az --version
             az extension add -n ml -y
             az ml compute create --name '${{parameters.clusterName}}' --size '${{parameters.clusterSize}}' `
+            --type AmlCompute --resource-group '${{parameters.resourceGroup}}' --workspace-name '${{parameters.amlWorkspaceName}}'
+        enabled: true
+
+      - task: AzureCLI@2
+        displayName: Add compute to workspace
+        inputs:
+          azureSubscription: '${{parameters.azureMgrConnection}}'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          useGlobalConfig: false
+          inlineScript: |
+            Write-Host "cluster is ${{parameters.clusterName}} and cluster-size is ${{parameters.clusterSize}}"
+            az --version
+            az extension add -n ml -y
+            az ml compute create --name '${{parameters.batchclusterName}}' --size '${{parameters.clusterSize}}' `
             --type AmlCompute --resource-group '${{parameters.resourceGroup}}' --workspace-name '${{parameters.amlWorkspaceName}}'
         enabled: true
 

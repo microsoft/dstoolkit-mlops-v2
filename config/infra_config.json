@@ -3,7 +3,7 @@
         {
             "NAMESPACE": "mlops",
             "PROJECTCODE": "dstk",
-            "VERSION": "012",
+            "VERSION": "013",
             "ENVIRONMENT": "DEV",
             "LOCATION": "eastus",
             "AZURE_RM_SVC_CONNECTION": "svc-bicep",
@@ -14,6 +14,7 @@
             "APPINSIGHTS":"aml-ai-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)",
             "CONTAINERREGISTRY": "cr$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
             "CLUSTER_NAME": "cluster$(VERSION)",
+            "BATCH_CLUSTER_NAME": "batchcluster",
             "CLUSTER_SIZE": "STANDARD_DS3_v2"
 
         }

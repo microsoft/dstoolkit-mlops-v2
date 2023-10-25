@@ -49,6 +49,8 @@ stages:
       value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.CLUSTER_NAME'] ]
     - name: CLUSTER_SIZE
       value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.CLUSTER_SIZE'] ]
+    - name: BATCH_CLUSTER_NAME
+      value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.BATCH_CLUSTER_NAME'] ]
 
     steps:
     - script: |
