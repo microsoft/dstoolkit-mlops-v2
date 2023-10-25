@@ -86,10 +86,10 @@ stages:
         displayName: 'Terraform Apply'
         inputs:
           provider: 'azurerm'
-          command: 'apply -var "basename=${{parameters.namespace}}" -var "project_code=${{parameters.projectcode}}" -var "version_num=${{parameters.version}}" -var "rg-name=${{parameters.resourceGroup}}"'
+          command: 'apply'
           workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
           environmentServiceNameAzureRM: '${{parameters.azureMgrConnection}}'
-          commandOptions: '-auto-approve -input=false  tfplan'
+          commandOptions: '-auto-approve -input=false  tfplan  -var "basename=${{parameters.namespace}}" -var "project_code=${{parameters.projectcode}}" -var "version_num=${{parameters.version}}" -var "rg-name=${{parameters.resourceGroup}}"'
         enabled: true
 
       - task: AzureCLI@2
