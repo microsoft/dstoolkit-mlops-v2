@@ -16,8 +16,8 @@ pool:
   vmImage: ubuntu-latest
 
 
-variables:
-- group: mlops_platform_infra_dev_vg
+# variables:
+# - group: mlops_platform_infra_dev_vg
 
 parameters:
  - name: env_name
