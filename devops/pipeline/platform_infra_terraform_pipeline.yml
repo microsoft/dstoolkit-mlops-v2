@@ -75,7 +75,7 @@ stages:
       - task: TerraformTaskV4@4
         displayName: 'Terraform Plan'
         inputs:
-          command: 'plan -var basename="${{parameters.namespace}}" -var project_code="${{parameters.projectcode}}" -var version_num="${{parameters.version}}" -var rg-name="${{parameters.resourceGroup}}"'
+          command: 'plan'
           workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
           allowTelemetryCollection: true
           environmentServiceNameAzureRM: '${{parameters.azureMgrConnection}}'
@@ -86,7 +86,7 @@ stages:
         displayName: 'Terraform Apply'
         inputs:
           provider: 'azurerm'
-          command: 'apply'
+          command: 'apply -var "basename=${{parameters.namespace}}" -var "project_code=${{parameters.projectcode}}" -var "version_num=${{parameters.version}}" -var "rg-name=${{parameters.resourceGroup}}"'
           workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
           environmentServiceNameAzureRM: '${{parameters.azureMgrConnection}}'
           commandOptions: '-auto-approve -input=false  tfplan'
