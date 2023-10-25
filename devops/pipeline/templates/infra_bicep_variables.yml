@@ -1,4 +1,10 @@
 variables:
+- name: NAMESPACE
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.NAMESPACE'] ]
+- name: PROJECTCODE
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.PROJECTCODE'] ]
+- name: VERSION
+  value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.VERSION'] ]
 - name:  AZURE_RM_SVC_CONNECTION
   value: $[ stageDependencies.infra_variable_generation.load_infra_config_variables.outputs['loading_infra_config.AZURE_RM_SVC_CONNECTION'] ] 
 - name:  ENVIRONMENT
