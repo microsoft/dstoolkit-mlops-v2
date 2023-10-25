@@ -29,6 +29,7 @@ stages:
           else {
             Write-Output "##vso[task.setvariable variable=$pname;isoutput=true]$pvalue" | Write-Host $pname, $pvalue
           }  
+        }
       name: loading_infra_config
 
       
