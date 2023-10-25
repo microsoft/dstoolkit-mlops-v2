@@ -12,11 +12,24 @@ stages:
         foreach ($property in $firstElement.PSObject.Properties) {
           $pname = $property.Name
           $pvalue = $property.Value
-          Write-Output "##vso[task.setvariable variable=$pname;isoutput=true]$pvalue"
-          Write-Host $pname, $pvalue
-          }  
+          if $pname -eq 'NAMESPACE'{
+            $namespace = $pvalue
+          }
+          if $pname -eq 'PROJECTCODE'{
+            $projectcode = $pvalue
+          }
+          if $pname -eq 'VERSION'{
+            $version = $pvalue
+          }
+          
+          switch ($pname)
+          {
+            "KEYVAULT_NAME" {Write-Output "##vso[task.setvariable variable=$pname;isoutput=true]akvaml$(namespace)$(projectcode)$(version)}  
+          Default {Write-Output "##vso[task.setvariable variable=$pname;isoutput=true]$pvalue" | Write-Host $pname, $pvalue}
+        }  
       name: loading_infra_config
 
+      
   - job: validate_assign_infra_variables
     dependsOn: load_infra_config_variables
     variables:
@@ -33,7 +46,7 @@ stages:
     - name:  LOCATION
       value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.LOCATION'] ]       
     - name:  KEYVAULT_NAME
-      value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.akvaml${NAMESPACE}${PROJECTCODE}${VERSION}'] ]       
+      value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.KEYVAULT_NAME'] ]       
     - name:  REGISTRY_NAME
       value: $[ dependencies.load_infra_config_variables.outputs['loading_infra_config.CONTAINERREGISTRY'] ] 
     - name:  RESOURCE_GROUP_NAME
