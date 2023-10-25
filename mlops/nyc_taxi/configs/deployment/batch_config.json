@@ -3,6 +3,7 @@
         {
             "ML_MODEL_CONFIG_NAME": "nyc_taxi",
             "ENV_NAME": "dev",
+            "BATCH_CLUSTER_NAME": "batchnyccluster",
             "ENDPOINT_NAME": "nyc-taxi-be",
             "DEPLOYMENT_NAME": "nyc-taxi-bd",
             "CLUSTER_INSTANCE_COUNT": 2,
