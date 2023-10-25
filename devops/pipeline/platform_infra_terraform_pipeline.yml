@@ -12,6 +12,14 @@ parameters:
 - name: clusterSize  
   type: string
   default: 'STANDARD_DS3_v2'
+- name: namespace  
+  type: string
+  default: 'mlops'
+- name: projectcode  
+  type: string
+  default: 'dstk'
+- name: version  
+  type: string      
   
 stages:
 
@@ -32,6 +40,10 @@ stages:
           echo '${{parameters.amlWorkspaceName}}'
           echo '${{parameters.clusterName}}'
           echo '${{parameters.clusterSize}}'
+          echo '${{parameters.namespace}}'
+          echo '${{parameters.projectcode}}'
+          echo '${{parameters.version}}'
+
         enabled: true
 
       - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@1
@@ -74,7 +86,7 @@ stages:
         displayName: 'Terraform Apply'
         inputs:
           provider: 'azurerm'
-          command: 'apply'
+          command: 'apply -var-file=terraform.tfvars -var namespace=${{parameters.namespace}} -var projectcode=${{parameters.projectcode}} -var version=${{parameters.version}} -var rg-name=${{parameters.resourceGroup}}'
           workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
           environmentServiceNameAzureRM: '${{parameters.azureMgrConnection}}'
           commandOptions: '-auto-approve -input=false  tfplan'
