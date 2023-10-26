@@ -3,7 +3,7 @@
         {
             "ENVIRONMENT": "DEV",
             "LOCATION": "eastus",
-            "AZURE_RM_SVC_CONNECTION": "#{AZURE_RM_SVC_CONNECTION}#",
+            "AZURE_RM_SVC_CONNECTION": "mlopssvcconn"
             "RESOURCE_GROUP_NAME": "#{RESOURCE_GROUP_NAME}#",
             "AMLWORKSPACE": "mlw-#{NAMESPACE}#-#{PROJECTCODE}#-#{VERSION}#",
             "STORAGEACCOUNT":"staccaml#{NAMESPACE}##{PROJECTCODE}##{VERSION}#",
