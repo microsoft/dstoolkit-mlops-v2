@@ -97,6 +97,21 @@ stages:
         enabled: true
 
       - task: AzureCLI@2
+        displayName: Add batch inferencing compute to workspace
+        inputs:
+          azureSubscription: '${{parameters.azureMgrConnection}}'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          useGlobalConfig: false
+          inlineScript: |
+            Write-Host "cluster is ${{parameters.clusterName}} and cluster-size is ${{parameters.clusterSize}}"
+            az --version
+            az extension add -n ml -y
+            az ml compute create --name '${{parameters.batchclusterName}}' --size '${{parameters.clusterSize}}' `
+            --type AmlCompute --resource-group '${{parameters.resourceGroup}}' --workspace-name '${{parameters.amlWorkspaceName}}'
+        enabled: true
+        
+      - task: AzureCLI@2
         displayName: Add Key Vault access policy to service principal backing service connection
         inputs:
           azureSubscription: '${{parameters.azureMgrConnection}}'

@@ -3,7 +3,7 @@
         {
             "NAMESPACE": "mlops",
             "PROJECTCODE": "dstk",
-            "VERSION": "017",
+            "VERSION": "018",
             "ENVIRONMENT": "DEV",
             "LOCATION": "eastus",
             "AZURE_RM_SVC_CONNECTION": "svc-terraform",
