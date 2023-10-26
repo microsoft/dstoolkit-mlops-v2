@@ -51,8 +51,6 @@ For key below, supply a value or accept the defaults in the terraform.tfvars fil
 - REALTIME_DEPLOYMENT_CONFIG: relative path to the realtime_config.json file.
 - DATA_CONFIG_PATH: relative path to the data_config.json.
 
-**Step n.** In the development branch, set values or accept the defaults for variables in the /mlops/london_taxi/configs/deployment/batch_config.json and  /mlops/nyc_taxi/configs/deployment/batch_config.json files. 
-BATCH_CLUSTER_NAME: The unique name for a cluster to be used for batch inferencing. **Since this is created by the Infrastructure deployment, the name must match the value in /config/infra_config.yml**
 
 **Step n.** In the following files, locate the string "- group:" and set the value to the name of the variable group created above.
 - model_ci.yml
@@ -60,20 +58,21 @@ BATCH_CLUSTER_NAME: The unique name for a cluster to be used for batch inferenci
 - infra_provision_bicep_pipeline.yml
 - infra_provision_terraform_pipeline.yml 
 
-**Step n.** Using the value for VERSION from infra_config.json, append the version number to the end of the following properties in all batch_config.jsonn and realtime_config.json files.
+**Step n.**  In all batch_config.json and realtime_config.json files, provide a unique name for the following properties.
+- BATCH_CLUSTER_NAME: The unique name for a cluster to be used for batch inferencing. 
+**Since this is created by the Infrastructure deployment, the name must match the value in /config/infra_config.yml**
 - ENDPOINT_NAME
 - DEPLOYMENT_NAME
- 
 
 **Step n.** Create an azure pipeline to deploy the infrastructure.  Your pipeline should be based on either a bicep (infra_provision_bicep_pipeline.yml) or a terraform (infra_provision_terraform_pipeline.yml) Azure Pipelines yaml file. 
 
-**Step n.** Create an Azure Pipelines to operate the pr modes of the model. The new Azure Pipeline should be based on the existing YAML file named model_pr.yml.
+**Step n.** Create an Azure Pipeline to operate build validation. The new Azure Pipeline should be based on the existing YAML file named model_pr.yml.
 
-**Step n.** Create an Azure Pipelines to operate the ci modes of the model. The new Azure Pipeline should be based on the existing YAML file named model_ci.yml.
+**Step n.** Create an Azure Pipeline for continuous integration. The new Azure Pipeline should be based on the existing YAML file named model_ci.yml.
 
 More details about how to create a basic Azure Pipeline can be found [here](https://learn.microsoft.com/en-us/azure/devops/pipelines/create-first-pipeline?view=azure-devops&tabs).
 
-**Step n.** Setup a branch policy for the *development* branch. At this stage we have an Azure Pipeline that should be executed on every PR to the *development* branch. At the same time successful completion of the build is not a requirement. So, it's important to add our PR build as a policy. Pay special attention that pr_to_dev_pipeline.yml](../devops/pipeline/pr_to_dev_pipeline.yml) has various paths in place. We are using these paths to limit number of runs if the current PR doesn't affect ML component (for example, PR modifies a documentation file). Therefore, setting up the policy you need to make sure that you are using the same set of paths in the *Path filter* field.
+**Step n.** Setup a branch policy for the *development* branch. At this stage we have an Azure Pipeline that should be executed on every PR to the *development* branch. At the same time successful completion of the build is not a requirement. So, it's important to add our PR build as a policy. Pay special attention that model_pr.yml](../devops/pipeline/model_pr.yml) has various paths in place. We are using these paths to limit number of runs if the current PR doesn't affect ML component (for example, PR modifies a documentation file). Therefore, setting up the policy you need to make sure that you are using the same set of paths in the *Path filter* field.
 
 More details about how to create a policy can be found [here](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser).
 
