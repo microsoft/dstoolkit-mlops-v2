@@ -17,6 +17,7 @@ Information about variable groups in Azure DevOps can be found in [this document
 
 **Step n.** Create a *development* branch and make it as default one to make sure that all PRs should go towards to it. This template assumes that the team works at a *development* branch as a primary source for coding and improving the model quality. Later, you can implement Azure Pipeline that moves code from the *development* branch into qa/main or executes a release process right away. Release management is not in scope of this template.
 
+**General Infrastructure instructions**
 **Step n.** In the development branch, follow the steps below : 
 For keys below, supply a value or accept the default in the infra_config.json:
 **Note: It is important to set a unique version number to avoid attempting to deploy resources that already exist.**
@@ -28,6 +29,8 @@ For keys below, supply a value or accept the default in the infra_config.json:
 - CLUSTER_NAME: the name of the compute resource for pr deployment for training and inferencing in the azure machine learning resource
 - BATCH_CLUSTER_NAME: the name of the compute resource for batch inferencing in the azure machine learning resource
 
+
+**Note: Terraform Only Instructions**
 For key below, supply a value or accept the defaults in the terraform.tfvars file
 **Note: It is important to set a unique version number to avoid attempting to deploy resources that already exist.**
 - rg-name: the name of the resource group into which to deploy resources.
