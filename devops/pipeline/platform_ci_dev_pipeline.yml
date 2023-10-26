@@ -119,3 +119,4 @@ stages:
           DEPLOY_ENVIRONMENT: ${{parameters.exec_environment}} 
           DATA_CONFIG_PATH:  $(DATA_CONFIG_PATH)
           REALTIME_DEPLOYMENT_CONFIG:  $(REALTIME_DEPLOYMENT_CONFIG)
+          VERSION:  $(VERSION)

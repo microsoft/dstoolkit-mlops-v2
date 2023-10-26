@@ -60,6 +60,7 @@ BATCH_CLUSTER_NAME: The unique name for a cluster to be used for batch inferenci
 - infra_provision_bicep_pipeline.yml
 - infra_provision_terraform_pipeline.yml 
 
+**Step n.** Using the value for VERSION from infra_config.yml, append the version number to the end of the following properties in all batch_config.yml files. 
 
 **Step n.** Create an azure pipeline to deploy the infrastructure.  Your pipeline should be based on either a bicep (infra_provision_bicep_pipeline.yml) or a terraform (infra_provision_terraform_pipeline.yml) Azure Pipelines yaml file. 
 

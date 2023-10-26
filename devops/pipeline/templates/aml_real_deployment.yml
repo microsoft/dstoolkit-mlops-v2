@@ -22,6 +22,8 @@ parameters:
   type: string
 - name: REALTIME_DEPLOYMENT_CONFIG
   type: string
+  - name: VERSION
+    type: string
 
 jobs:
 - job: Execute_Deployment_Job
@@ -42,7 +44,8 @@ jobs:
           --build_id $(Build.Buildid) \
           --is_batch ${{ parameters.IS_BATCH_DEPLOYMENT }} \
           --batch_config ${{ parameters.BATCH_DEPLOYMENT_CONFIG }} \
-          --environment_name ${{ parameters.DEPLOY_ENVIRONMENT }} 
+          --environment_name ${{ parameters.DEPLOY_ENVIRONMENT }}
+
 
 
   - template: execute_python_code.yml
