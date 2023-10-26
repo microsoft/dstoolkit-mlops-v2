@@ -85,7 +85,7 @@ stages:
         enabled: true
 
       - task: AzureCLI@2
-        displayName: Add compute to workspace
+        displayName: Add general purpose compute to workspace
         inputs:
           azureSubscription: '${{parameters.azureMgrConnection}}'
           scriptType: pscore
