@@ -16,3 +16,4 @@ stages:
       keyVaultName: $(KEYVAULT_NAME)
       amlWorkspaceName: $(WORKSPACE_NAME)
       clusterName: $(CLUSTER_NAME)
+      batchClusterName: $(BATCH_CLUSTER_NAME)

@@ -11,7 +11,9 @@ parameters:
   type: string
 - name: clusterSize  
   type: string
-  default: 'STANDARD_DS3_v2'    
+  default: 'STANDARD_DS3_v2'
+- name: batchClusterName  
+  type: string    
   
 stages:
 
@@ -110,7 +112,7 @@ stages:
             az ml compute create --name '${{parameters.batchclusterName}}' --size '${{parameters.clusterSize}}' `
             --type AmlCompute --resource-group '${{parameters.resourceGroup}}' --workspace-name '${{parameters.amlWorkspaceName}}'
         enabled: true
-        
+
       - task: AzureCLI@2
         displayName: Add Key Vault access policy to service principal backing service connection
         inputs:
