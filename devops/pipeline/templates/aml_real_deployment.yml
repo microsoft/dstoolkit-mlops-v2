@@ -22,8 +22,8 @@ parameters:
   type: string
 - name: REALTIME_DEPLOYMENT_CONFIG
   type: string
-  - name: VERSION
-    type: string
+- name: VERSION
+  type: string
 
 jobs:
 - job: Execute_Deployment_Job
