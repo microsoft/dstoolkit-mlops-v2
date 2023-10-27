@@ -6,20 +6,19 @@ In order to setup the repository, you need to complete few steps.
 
 **Predeployment Setup**
 
-**Step n.** Create a resource group into which the Azure Machine Learning resources will be deployed.
+**Assumption:**
+You have setup an app registration, granted the resulting service principal, at least Contributor, and User Access Administrator on the target subscription.
 
-**Step n.** Create a new variable group and add "AZURE_RM_SVC_CONNECTION" variable with the name of the service connection to be used for running the pipelines. 
 
+**Step n.** Create a service connection. You can use [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) as a reference. Use Azure Resource Manager as a type of the service connection, and use the Manual option when creating the service connection.
+
+**Step n.** Create a new variable group, mlops_platform_dev_vg, add "AZURE_RM_SVC_CONNECTION" variable with the name of the service connection created above. 
 Information about variable groups in Azure DevOps can be found in [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops&tabs=classic).
-
-
-**Step n.** Create a service connection having the same value as that which it has in the variable group created above. You can use [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) as a reference. Use Azure Resource Manager as a type of the service connection. Set resource group created to the resource group created above. 
 
 **Step n.** Create a *development* branch and make it as default one to make sure that all PRs should go towards to it. This template assumes that the team works at a *development* branch as a primary source for coding and improving the model quality. Later, you can implement Azure Pipeline that moves code from the *development* branch into qa/main or executes a release process right away. Release management is not in scope of this template.
 
 **General Infrastructure instructions**
-**Step n.** In the development branch, follow the steps below : 
-For keys below, supply a value or accept the default in the infra_config.json:
+**Step n.** In the development branch, for the properties below, supply a value or accept the default in the infra_config.json:
 **Note: It is important to set a unique version number to avoid attempting to deploy resources that already exist.**
 - NAMESPACE: a base name used to construct consistent azure resource names.
 - PROJECTCODE: a string used to construct consistent azure resource names project modifier.

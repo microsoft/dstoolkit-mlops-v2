@@ -1,3 +1,8 @@
+targetScope = 'subscription'
+
+@description('The resource group into which your Azure resources should be deployed.')
+param resourceGroupName string
+
 @description('The location into which your Azure resources should be deployed.')
 param location string
 
@@ -25,9 +30,16 @@ param containerRegistryName string
 @description('Name of the container registry resource.')
 param amlWorkspaceName string
 
+resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
+  name: resourceGroupName
+  location: location
+  tags: {}
+}
+
 // storage
 module stg './modules/storage.template.bicep' = {
   name: storageAccount
+  scope: resourceGroup(rg.name)
   params:{
     storageAccountName: storageAccount
     location: location
@@ -40,6 +52,7 @@ module stg './modules/storage.template.bicep' = {
 // key vault
 module kv './modules/keyvault.template.bicep' = {
   name: keyVaultName
+  scope: resourceGroup(rg.name)
   params: {
     keyVaultName: keyVaultName
     location: location
@@ -49,6 +62,7 @@ module kv './modules/keyvault.template.bicep' = {
 // application insights
 module appInsightsResource './modules/appinsights.template.bicep' = {
   name:appInsightsName
+  scope: resourceGroup(rg.name)
   params: {
     appInsightsName: appInsightsName
     location: location
@@ -58,6 +72,7 @@ module appInsightsResource './modules/appinsights.template.bicep' = {
 // container registry
  module containerRegistryResource './modules/containerregistry.template.bicep' = {
   name: containerRegistryName
+  scope: resourceGroup(rg.name)
   params: {
     containerRegistryName: containerRegistryName
     location: location
@@ -67,6 +82,7 @@ module appInsightsResource './modules/appinsights.template.bicep' = {
  // azure machine learning
  module mlworkspace './modules/mlworkspace.template.bicep' = {
   name: amlWorkspaceName
+  scope: resourceGroup(rg.name)
   params: {
     amlWorkspaceName: amlWorkspaceName
     storageAccount: stg.name
