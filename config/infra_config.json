@@ -2,7 +2,7 @@
     "infra":[
         {
             "NAMESPACE": "mlops",
-            "PROJECTCODE": "dstk",
+            "PROJECTCODE": "dstk1",
             "VERSION": "019",
             "ENVIRONMENT": "DEV",
             "LOCATION": "eastus",
