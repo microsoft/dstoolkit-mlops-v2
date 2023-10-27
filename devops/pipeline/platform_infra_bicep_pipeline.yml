@@ -83,9 +83,9 @@ stages:
           useGlobalConfig: false
           inlineScript: |
             az --version
-            az deployment group create --resource-group '${{parameters.resourceGroup}}' `
+            az deployment sub create --location='${{parameters.location}}' `
             --template-file '$(Pipeline.Workspace)/infratemplates/infra/bicep/main.bicep' `
-            --parameters resourceGroupName='${{parameters.resourceGroup}}' location='${{parameters.location}}' `
+            --parameters resourceGroupName='${{parameters.resourceGroup}}' `
             storageAccount='${{parameters.storageAccount}}' `
             keyVaultName='${{parameters.keyVaultName}}' `
             appInsightsName='${{parameters.appInsightsName}}' `
