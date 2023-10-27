@@ -42,7 +42,7 @@ module stg './modules/storage.template.bicep' = {
   scope: resourceGroup(rg.name)
   params:{
     storageAccountName: storageAccount
-    location: location
+    location: rg.location
     kind: kind
     accessTier: accessTier
     accountType: sku
@@ -55,7 +55,7 @@ module kv './modules/keyvault.template.bicep' = {
   scope: resourceGroup(rg.name)
   params: {
     keyVaultName: keyVaultName
-    location: location
+    location: rg.location
   }
 }
 
@@ -65,7 +65,7 @@ module appInsightsResource './modules/appinsights.template.bicep' = {
   scope: resourceGroup(rg.name)
   params: {
     appInsightsName: appInsightsName
-    location: location
+    location: rg.location
   }
 }
 
@@ -75,7 +75,7 @@ module appInsightsResource './modules/appinsights.template.bicep' = {
   scope: resourceGroup(rg.name)
   params: {
     containerRegistryName: containerRegistryName
-    location: location
+    location: rg.location
   }
  }
 
@@ -89,6 +89,6 @@ module appInsightsResource './modules/appinsights.template.bicep' = {
     keyVaultName: kv.name
     appInsightsName: appInsightsResource.name
     containerRegistryName: containerRegistryResource.name
-    location: location
+    location: rg.location
   }
 }
