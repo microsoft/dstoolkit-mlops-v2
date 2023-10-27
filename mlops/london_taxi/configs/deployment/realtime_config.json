@@ -6,7 +6,7 @@
             "AZURE_RM_SVC_CONNECTION": "#{AZURE_RM_SVC_CONNECTION}#",
             "SCORE_FILE_NAME": "score.py",
             "TEST_FILE_PATH": "model/london_taxi/sample-request.json",
-            "ENDPOINT_NAME": "london-taxi-rtee-019",
+            "ENDPOINT_NAME": "london-taxi-rtee-100",
             "ENDPOINT_DESC": "An online endpoint serving an MLflow model for online taxi",
             "DEPLOYMENT_DESC": "",
             "DEPLOYMENT_NAME": "london-taxi-rte-019",
