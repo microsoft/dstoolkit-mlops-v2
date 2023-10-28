@@ -10,7 +10,7 @@ In order to setup the repository, you need to complete few steps.
 You have setup an app registration, granted the resulting service principal, at least Contributor, and User Access Administrator on the target subscription.
 
 
-**Step n.** Create a service connection. You can use [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) as a reference. Use Azure Resource Manager as a type of the service connection, and use the Manual option when creating the service connection.
+**Step n.** Create a service connection. You can use [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) as a reference. Use Azure Resource Manager as service connection type, and use the Manual option when creating the service connection.
 
 **Step n.** Create a new variable group, mlops_platform_dev_vg, add "AZURE_RM_SVC_CONNECTION" variable with the name of the service connection created above. 
 Information about variable groups in Azure DevOps can be found in [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops&tabs=classic).

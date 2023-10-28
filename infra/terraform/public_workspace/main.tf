@@ -10,6 +10,7 @@ resource "azurerm_application_insights" "aml_appins" {
   location            = var.location
   resource_group_name = var.rg_name
   application_type    = "web"
+  depends_on = [azurerm_resource_group.rg]
 }
 
 resource "azurerm_key_vault" "akv" {
@@ -18,6 +19,7 @@ resource "azurerm_key_vault" "akv" {
   resource_group_name = var.rg_name
   tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name            = "premium"
+  depends_on = [azurerm_resource_group.rg]
 }
 
 resource "azurerm_storage_account" "stacc" {
@@ -26,6 +28,7 @@ resource "azurerm_storage_account" "stacc" {
   resource_group_name      = var.rg_name
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  depends_on = [azurerm_resource_group.rg]
 }
 
 resource "azurerm_container_registry" "acr" {
@@ -34,6 +37,7 @@ resource "azurerm_container_registry" "acr" {
   resource_group_name           = var.rg_name
   sku                           = "Basic"
   admin_enabled                 = true
+  depends_on = [azurerm_resource_group.rg]
   }
 
   resource "azurerm_machine_learning_workspace" "adl_mlw" {
@@ -45,6 +49,7 @@ resource "azurerm_container_registry" "acr" {
   storage_account_id            = azurerm_storage_account.stacc.id
   container_registry_id         = azurerm_container_registry.acr.id
   public_network_access_enabled = true
+  depends_on = [azurerm_resource_group.rg]
   identity {
     type = "SystemAssigned"
   }
