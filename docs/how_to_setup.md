@@ -28,16 +28,6 @@ Information about variable groups in Azure DevOps can be found in [this document
 - CLUSTER_NAME: the name of the compute resource for pr deployment for training and inferencing in the azure machine learning resource
 - BATCH_CLUSTER_NAME: the name of the compute resource for batch inferencing in the azure machine learning resource
 
-
-**Note: Terraform Only Instructions**
-For key below, supply a value or accept the defaults in the terraform.tfvars file
-**Note: It is important to set a unique version number to avoid attempting to deploy resources that already exist.**
-- rg-name: the name of the resource group into which to deploy resources.
-- basename: a base name used to construct consistent azure resource names.
-- project_code: a string used to construct consistent azure resource names project modifier.
-- version_num: a three-digit version string used to uniqueify azure resource names, ml endpoints, and ml deployments.
-
-
 **Step n.** In the development branch, set values or accept the defaults for variables in the model_config.json file. The pipeline uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi)
 
 - ML_MODEL_CONFIG_NAME: The unique model name used internally by the pipelines.
