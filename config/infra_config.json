@@ -3,11 +3,11 @@
         {
             "NAMESPACE": "mlops",
             "PROJECTCODE": "dstk",
-            "VERSION": "024",
+            "VERSION": "025",
             "ENVIRONMENT": "DEV",
             "LOCATION": "eastus",
             "AZURE_RM_SVC_CONNECTION": "svc-bicep-2",
-            "RESOURCE_GROUP_NAME": "rg-bicep-2",
+            "RESOURCE_GROUP_NAME": "rg-terraform",
             "AMLWORKSPACE": "mlw-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)",
             "STORAGEACCOUNT":"staccaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
             "KEYVAULT":"akvaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
