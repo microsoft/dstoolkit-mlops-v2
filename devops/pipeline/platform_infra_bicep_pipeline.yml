@@ -75,7 +75,7 @@ stages:
         enabled: true
 
       - task: AzureCLI@2
-        displayName: Provision MLOps Infrastructure
+        displayName: Provision AzureML Infrastructure
         inputs:
           azureSubscription: '${{parameters.azureMgrConnection}}'
           scriptType: pscore
@@ -94,7 +94,7 @@ stages:
         enabled: true
 
       - task: AzureCLI@2
-        displayName: Add general purpose compute to workspace
+        displayName: Add Compute Cluster
         inputs:
           azureSubscription: '${{parameters.azureMgrConnection}}'
           scriptType: pscore
@@ -109,7 +109,7 @@ stages:
         enabled: true
 
       - task: AzureCLI@2
-        displayName: Add batch inferencing compute to workspace
+        displayName: Add Batch Cluster
         inputs:
           azureSubscription: '${{parameters.azureMgrConnection}}'
           scriptType: pscore
