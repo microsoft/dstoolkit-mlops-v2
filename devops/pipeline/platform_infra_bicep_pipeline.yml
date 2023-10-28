@@ -84,7 +84,7 @@ stages:
           inlineScript: |
             az --version
             az deployment sub create --location='${{parameters.location}}' `
-            --template-file '$(Pipeline.Workspace)/infratemplates/infra/bicep/main.bicep' `
+            --template-file '$(Pipeline.Workspace)/infratemplates/infra/bicep/public_workspace/main.bicep' `
             --parameters resourceGroupName='${{parameters.resourceGroup}}' location='${{parameters.location}}' `
             storageAccount='${{parameters.storageAccount}}' `
             keyVaultName='${{parameters.keyVaultName}}' `
