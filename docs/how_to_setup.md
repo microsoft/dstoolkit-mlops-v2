@@ -43,13 +43,6 @@ Information about variable groups in Azure DevOps can be found in [this document
 - REALTIME_DEPLOYMENT_CONFIG: relative path to the realtime_config.json file.
 - DATA_CONFIG_PATH: relative path to the data_config.json.
 
-
-**Step n.** In the following files, locate the string "- group:" and set the value to the name of the variable group created above.
-- model_ci.yml
-- model_pr.yml
-- infra_provision_bicep_pipeline.yml
-- infra_provision_terraform_pipeline.yml 
-
 **Step n.**  In all batch_config.json and realtime_config.json files, provide a unique name for the following properties.
 - BATCH_CLUSTER_NAME: The unique name for a cluster to be used for batch inferencing. 
 **Since this is created by the Infrastructure deployment, the name must match the value in /config/infra_config.yml**
@@ -58,13 +51,17 @@ Information about variable groups in Azure DevOps can be found in [this document
 
 **Step n.** Create an azure pipeline to deploy the infrastructure.  Your pipeline should be based on either a bicep (infra_provision_bicep_pipeline.yml) or a terraform (infra_provision_terraform_pipeline.yml) Azure Pipelines yaml file. 
 
-**Step n.** Create an Azure Pipeline to operate build validation. The new Azure Pipeline should be based on the existing YAML file named model_pr.yml.
+**Step n.** Create one or more Azure Pipelines to setup build validation for the any of the use cases listed below:
+- nyc_taxi_pr_dev_pipeline.yml
+- london_taxi_pr_dev_pipeline.yml
 
-**Step n.** Create an Azure Pipeline for continuous integration. The new Azure Pipeline should be based on the existing YAML file named model_ci.yml.
+**Step n.** Create one or more Azure Pipelines to setup continuous integration for the any of the use cases listed below:
+- nyc_taxi_ci_dev_pipeline.yml
+- london_taxi_ci_dev_pipeline.yml
 
 More details about how to create a basic Azure Pipeline can be found [here](https://learn.microsoft.com/en-us/azure/devops/pipelines/create-first-pipeline?view=azure-devops&tabs).
 
-**Step n.** Setup a branch policy for the *development* branch. At this stage we have an Azure Pipeline that should be executed on every PR to the *development* branch. At the same time successful completion of the build is not a requirement. So, it's important to add our PR build as a policy. Pay special attention that model_pr.yml](../devops/pipeline/model_pr.yml) has various paths in place. We are using these paths to limit number of runs if the current PR doesn't affect ML component (for example, PR modifies a documentation file). Therefore, setting up the policy you need to make sure that you are using the same set of paths in the *Path filter* field.
+**Step n.** Setup a branch policy for the *development* branch. At this stage we have one or more Azure Pipeline(s) that should be executed on every PR to the *development* branch. At the same time successful completion of the build is not a requirement. So, it's important to add our PR build as a policy. Pay special attention that model_pr.yml](../devops/pipeline/model_pr.yml) has various paths in place. We are using these paths to limit number of runs if the current PR doesn't affect ML component (for example, PR modifies a documentation file). Therefore, setting up the policy you need to make sure that you are using the same set of paths in the *Path filter* field.
 
 More details about how to create a policy can be found [here](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser).
 
@@ -76,7 +73,7 @@ Azure ML provides a solution that allows us to implement a *server* task in Azur
 - Execute the infrastructure provision pipeline (infra_provision_bicep_pipeline.yml OR infra_provision_terraform_pipeline.yml).
 
 **Run PR pipeline**
-- Execute the Azure Pipeline for model generation (model_pr.yml)
+- Execute any of the Azure Pipelines created above for build validation
 
 **Run CI pipeline**
-- Execute the Azure Pipeline for model generation (model_ci.yml)
+- Execute any of the Azure Pipelines created above for continuous integration
