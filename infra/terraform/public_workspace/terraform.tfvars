@@ -1,5 +1,5 @@
-rg_name = "rg-terraform" 
+rg_name = "rg-terraform-1" 
 location = "eastus"
 basename = "mlops"
 project_code = "dstk"
-version_num = "018"
+version_num = "022"
