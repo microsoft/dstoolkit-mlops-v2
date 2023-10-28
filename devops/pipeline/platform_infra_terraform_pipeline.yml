@@ -55,15 +55,11 @@ stages:
           enableTelemetry: false
         enabled: true 
 
-      - script: |
-          cat $(System.DefaultWorkingDirectory)/infra/terraform/public_workspace/terraform.tfvars'
-        enabled: true
-
       - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@1
         displayName: 'Terraform Install'
         inputs:
           terraformVersion: 'latest'
-        enabled: false
+        enabled: true
 
 
       - task: TerraformTaskV4@4
@@ -77,14 +73,14 @@ stages:
           backendAzureRmStorageAccountName: stacctfstatemlopsv2010 
           backendAzureRmContainerName: terraform
           backendAzureRmKey: mlops.tfstate
-        enabled: false
+        enabled: true
 
       - task: TerraformTaskV4@4
         displayName: 'Terraform Validate'
         inputs:
           command: 'validate'
           workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
-        enabled: false
+        enabled: true
 
       - task: TerraformTaskV4@4
         displayName: 'Terraform Plan'
@@ -94,7 +90,7 @@ stages:
           allowTelemetryCollection: true
           environmentServiceNameAzureRM: '${{parameters.azureMgrConnection}}'
           commandOptions: '-out=tfplan'
-        enabled: false
+        enabled: true
 
       - task: TerraformTaskV4@4
         displayName: 'Terraform Apply'
@@ -104,7 +100,7 @@ stages:
           workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
           environmentServiceNameAzureRM: '${{parameters.azureMgrConnection}}'
           commandOptions: '-auto-approve -input=false  tfplan'
-        enabled: false
+        enabled: true
 
       - task: AzureCLI@2
         displayName: Add Compute Cluster
@@ -118,7 +114,7 @@ stages:
             az extension add -n ml -y
             az ml compute create --name '${{parameters.clusterName}}' --size '${{parameters.clusterSize}}' `
             --type AmlCompute --resource-group '${{parameters.resourceGroup}}' --workspace-name '${{parameters.amlWorkspaceName}}'
-        enabled: false
+        enabled: true
 
       - task: AzureCLI@2
         displayName: Add Batch Cluster
@@ -133,7 +129,7 @@ stages:
             az extension add -n ml -y
             az ml compute create --name '${{parameters.batchclusterName}}' --size '${{parameters.clusterSize}}' `
             --type AmlCompute --resource-group '${{parameters.resourceGroup}}' --workspace-name '${{parameters.amlWorkspaceName}}'
-        enabled: false
+        enabled: true
 
       - task: AzureCLI@2
         displayName: Add Key Vault access policy to service principal backing service connection
@@ -147,4 +143,4 @@ stages:
             az --version
             $id = (az ad sp show --id $env:servicePrincipalId --query id)
             az keyvault set-policy --name ${{parameters.keyVaultName}} --object-id $id --secret-permissions get list
-        enabled: false  
+        enabled: true  
