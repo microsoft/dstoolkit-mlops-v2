@@ -39,7 +39,7 @@ stages:
 
       - task: qetza.replacetokens.replacetokens-task.replacetokens@5
         inputs:
-          rootDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform'
+          rootDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
           targetFiles: '*.tfvars'
           encoding: 'auto'
           tokenPattern: 'custom'
