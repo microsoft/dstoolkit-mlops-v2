@@ -1,13 +1,13 @@
 {
     "infra":[
         {
-            "NAMESPACE": "mlops",
-            "PROJECTCODE": "dstk",
-            "VERSION": "025",
+            "NAMESPACE": "abcd",
+            "PROJECTCODE": "test",
+            "VERSION": "010",
             "ENVIRONMENT": "DEV",
             "LOCATION": "eastus",
-            "AZURE_RM_SVC_CONNECTION": "svc-bicep-2",
-            "RESOURCE_GROUP_NAME": "rg-terraform",
+            "AZURE_RM_SVC_CONNECTION": "azure-connection",
+            "RESOURCE_GROUP_NAME": "RG3010",
             "AMLWORKSPACE": "mlw-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)",
             "STORAGEACCOUNT":"staccaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
             "KEYVAULT":"akvaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
