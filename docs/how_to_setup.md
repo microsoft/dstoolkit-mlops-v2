@@ -8,7 +8,7 @@ In order to setup the repository, you need to complete few steps.
 
 **Assumption:**
 You have setup an app registration, granted the resulting service principal, at least Contributor, and User Access Administrator on the target subscription.
-
+**Use this document as a reference: [Create a Microsoft Entra application and service principal that can access resources](https://learn.microsoft.com/en-us/entra/identity-platform/howto-create-service-principal-portal)
 
 **Step n.** Create a service connection. You can use [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) as a reference. Use Azure Resource Manager as service connection type, and use the Manual option when creating the service connection.
 
