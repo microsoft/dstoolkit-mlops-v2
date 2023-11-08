@@ -3,7 +3,7 @@
         {
             "NAMESPACE": "mlops",
             "PROJECTCODE": "dstest1",
-            "VERSION": "090",
+            "VERSION": "091",
             "ENVIRONMENT": "DEV",
             "LOCATION": "eastus",
             "AZURE_RM_SVC_CONNECTION": "svcconntest",
