@@ -2,8 +2,8 @@
     "infra":[
         {
             "NAMESPACE": "mlops",
-            "PROJECTCODE": "dastest1",
-            "VERSION": "0025",
+            "PROJECTCODE": "dstest1",
+            "VERSION": "090",
             "ENVIRONMENT": "DEV",
             "LOCATION": "eastus",
             "AZURE_RM_SVC_CONNECTION": "svcconntest",
