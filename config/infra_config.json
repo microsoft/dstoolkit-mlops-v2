@@ -3,11 +3,11 @@
         {
             "NAMESPACE": "mlops",
             "PROJECTCODE": "dstk",
-            "VERSION": "052",
+            "VERSION": "026",
             "ENVIRONMENT": "DEV",
             "LOCATION": "eastus",
             "AZURE_RM_SVC_CONNECTION": "azure_connection",
-            "RESOURCE_GROUP_NAME": "t-mlops-test",
+            "RESOURCE_GROUP_NAME": "b-mlops-test",
             "AMLWORKSPACE": "mlw-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)",
             "STORAGEACCOUNT":"staccaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
             "KEYVAULT":"akvaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
