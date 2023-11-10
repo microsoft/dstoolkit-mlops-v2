@@ -1,16 +1,20 @@
 {
     "infra":[
         {
+            "NAMESPACE": "mlops",
+            "PROJECTCODE": "dstk",
+            "VERSION": "052",
             "ENVIRONMENT": "DEV",
             "LOCATION": "eastus",
-            "AZURE_RM_SVC_CONNECTION": "mlopssvcconn"
-            "RESOURCE_GROUP_NAME": "#{RESOURCE_GROUP_NAME}#",
-            "AMLWORKSPACE": "mlw-#{NAMESPACE}#-#{PROJECTCODE}#-#{VERSION}#",
-            "STORAGEACCOUNT":"staccaml#{NAMESPACE}##{PROJECTCODE}##{VERSION}#",
-            "KEYVAULT":"akvaml#{NAMESPACE}##{PROJECTCODE}##{VERSION}#",
-            "APPINSIGHTS":"aml-ai-#{NAMESPACE}#-#{PROJECTCODE}#-#{VERSION}#",
-            "CONTAINERREGISTRY": "cr#{NAMESPACE}##{PROJECTCODE}##{VERSION}#",
-            "CLUSTER_NAME": "#{CLUSTER_NAME}#",
+            "AZURE_RM_SVC_CONNECTION": "azure_connection",
+            "RESOURCE_GROUP_NAME": "t-mlops-test",
+            "AMLWORKSPACE": "mlw-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)",
+            "STORAGEACCOUNT":"staccaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
+            "KEYVAULT":"akvaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
+            "APPINSIGHTS":"aml-ai-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)",
+            "CONTAINERREGISTRY": "cr$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
+            "CLUSTER_NAME": "cluster$(VERSION)",
+            "BATCH_CLUSTER_NAME": "batchcluster",
             "CLUSTER_SIZE": "STANDARD_DS3_v2"
 
         }

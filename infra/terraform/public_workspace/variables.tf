@@ -10,10 +10,7 @@
 #   type    = string
 #   default = ""
 # }
-# variable "client_secret" {
-#   type    = string
-#   default = ""
-# }
+
 
 ##############################
 ## Resource Group Variables

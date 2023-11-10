@@ -4,33 +4,34 @@ This template supports Azure ML as a platform for ML, and Azure DevOps as a plat
 
 In order to setup the repository, you need to complete few steps.
 
-**Step n.** Create a resource group into which the Azure Machine Learning resources will be deployed.
+**Predeployment Setup**
 
-**Step n.** Create a service connection for your Azure DevOps project with name "mlopssvcconn" . You can use [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) as a reference. Use Azure Resource Manager as a type of the service connection. Set resource group created to the resource group created above. 
+**Assumption:**
+You have setup an app registration, granted the resulting service principal, at least Contributor, and User Access Administrator on the target subscription.
+**Use this document as a reference: [Create a Microsoft Entra application and service principal that can access resources](https://learn.microsoft.com/en-us/entra/identity-platform/howto-create-service-principal-portal)
 
-**Step n.** Create a new variable group mlops_platform_infra_dev_vg and add "AZURE_RM_SVC_CONNECTION" variable with the name of the service connection created in the preceding step. 
+**Step n.** Create a service connection. You can use [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) as a reference. Use Azure Resource Manager as service connection type, and use the Manual option when creating the service connection.
 
+**Step n.** Create a new variable group, mlops_platform_dev_vg, add "AZURE_RM_SVC_CONNECTION" variable with the name of the service connection created above. 
 Information about variable groups in Azure DevOps can be found in [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops&tabs=classic).
 
 **Step n.** Create a *development* branch and make it as default one to make sure that all PRs should go towards to it. This template assumes that the team works at a *development* branch as a primary source for coding and improving the model quality. Later, you can implement Azure Pipeline that moves code from the *development* branch into qa/main or executes a release process right away. Release management is not in scope of this template.
 
-**Step n.** In the development branch, set values for tokenized variables in the infra_config.json and terraform.tfvars files. The infra provisioning pipeline uses multiple variables.
-For key below, replace the token with a value:
+**General Infrastructure instructions**
+**Step n.** In the development branch, for the properties below, supply a value or accept the default in the infra_config.json:
+**Note: It is important to set a unique version number to avoid attempting to deploy resources that already exist.**
+- NAMESPACE: a base name used to construct consistent azure resource names.
+- PROJECTCODE: a string used to construct consistent azure resource names project modifier.
+- VERSION: a three-digit version string used to uniqueify azure resource names, ml endpoints, and ml deployments.
+- AZURE_RM_SVC_CONNECTION: the name of service connection to be used to execute all Azure DevOps pipelines.
+- RESOURCE_GROUP_NAME: the resource group to which azure resources will be deployed.
+- CLUSTER_NAME: the name of the compute resource for pr deployment for training and inferencing in the azure machine learning resource
+- BATCH_CLUSTER_NAME: the name of the compute resource for batch inferencing in the azure machine learning resource
 
-- #{NAMESPACE}#: a base name used to construct consistent azure resource names.
-- #{PROJECTCODE}#: a string used to construct consistent azure resource names project modifier.
-- #{VERSION}#: a three-digit version string used to uniqueify azure resource names, ml endpoints, and ml deployments.
-- #{AZURE_RM_SVC_CONNECTION}#: the name of service connection to be used to execute all Azure DevOps pipelines.
-- #{RESOURCE_GROUP_NAME}#: the resource group to which azure resources will be deployed.
-- #{CLUSTER_NAME}#: the name of the compute resource in the azure machine learning resource
-
-**Step n.** In the development branch, set values for variables in the model_config.json file. The pipeline uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi)
+**Step n.** In the development branch, set values or accept the defaults for variables in the model_config.json file. The pipeline uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi)
 
 - ML_MODEL_CONFIG_NAME: The unique model name used internally by the pipelines.
 - ENV_NAME: name of the environment. e.g pr, dev, test, prod.
-- AZURE_RM_SVC_CONNECTION: the name of service connection configured in Azure DevOps.
-- CLUSTER_NAME: an Azure ML compute cluster name to start jobs.
-- CLUSTER_SIZE: a size of the cluster in Azure ML to start jobs.
 - CLUSTER_REGION: a location/region where the cluster should be created.
 - CONDA_PATH: a location of the conda file (mlops/nyc_taxi/environment/conda.yml).
 - DISPLAY_BASE_NAME: a run base name (see EXPERIMENT_BASE_NAME for details).
@@ -42,15 +43,25 @@ For key below, replace the token with a value:
 - REALTIME_DEPLOYMENT_CONFIG: relative path to the realtime_config.json file.
 - DATA_CONFIG_PATH: relative path to the data_config.json.
 
+**Step n.**  In all batch_config.json and realtime_config.json files, provide a unique name for the following properties.
+- BATCH_CLUSTER_NAME: The unique name for a cluster to be used for batch inferencing. 
+**Note: Since this cluster is created by the Infrastructure deployment, the name must match the value for BATCH_CLUSTER_NAME in /config/infra_config.yml**
+- ENDPOINT_NAME
+- DEPLOYMENT_NAME
+
 **Step n.** Create an azure pipeline to deploy the infrastructure.  Your pipeline should be based on either a bicep (infra_provision_bicep_pipeline.yml) or a terraform (infra_provision_terraform_pipeline.yml) Azure Pipelines yaml file. 
 
-**Step n.** Create an Azure Pipelines to operate the pr modes of the model. The new Azure Pipeline should be based on the existing YAML file named model_pr.yml.
+**Step n.** Create one or more Azure Pipelines to setup build validation for the any of the use cases listed below:
+- nyc_taxi_pr_dev_pipeline.yml
+- london_taxi_pr_dev_pipeline.yml
 
-**Step n.** Create an Azure Pipelines to operate the ci modes of the model. The new Azure Pipeline should be based on the existing YAML file named model_ci.yml.
+**Step n.** Create one or more Azure Pipelines to setup continuous integration for the any of the use cases listed below:
+- nyc_taxi_ci_dev_pipeline.yml
+- london_taxi_ci_dev_pipeline.yml
 
 More details about how to create a basic Azure Pipeline can be found [here](https://learn.microsoft.com/en-us/azure/devops/pipelines/create-first-pipeline?view=azure-devops&tabs).
 
-**Step n.** Setup a branch policy for the *development* branch. At this stage we have an Azure Pipeline that should be executed on every PR to the *development* branch. At the same time successful completion of the build is not a requirement. So, it's important to add our PR build as a policy. Pay special attention that pr_to_dev_pipeline.yml](../devops/pipeline/pr_to_dev_pipeline.yml) has various paths in place. We are using these paths to limit number of runs if the current PR doesn't affect ML component (for example, PR modifies a documentation file). Therefore, setting up the policy you need to make sure that you are using the same set of paths in the *Path filter* field.
+**Step n.** Setup a branch policy for the *development* branch. At this stage we have one or more Azure Pipeline(s) that should be executed on every PR to the *development* branch. At the same time successful completion of the build is not a requirement. So, it's important to add our PR build as a policy. Pay special attention that model_pr.yml](../devops/pipeline/model_pr.yml) has various paths in place. We are using these paths to limit number of runs if the current PR doesn't affect ML component (for example, PR modifies a documentation file). Therefore, setting up the policy you need to make sure that you are using the same set of paths in the *Path filter* field.
 
 More details about how to create a policy can be found [here](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser).
 
@@ -58,5 +69,14 @@ More details about how to create a policy can be found [here](https://learn.micr
 
 Azure ML provides a solution that allows us to implement a *server* task in Azure DevOps Build and wait for the result of the pipeline training job with no Azure DevOps agent holding. Thanks to that it's possible to wait for results any amount of time and execute all other steps right after completion of the Azure ML training job. As for now, the feature is in active development, but you can [visit this link](https://github.com/Azure/azure-mlops-automation) to check the status and find how to get access. This new Azure ML feature can be included in your CI Build thanks to the extension that Azure ML team built or you can use RestAPITask for a direct REST call. In this template we implemented a version with the extension.
 
-Now, you can create a PR and test the flow.
 
+**Manual Execution**
+
+**Provision Infrastructure**
+- Execute the infrastructure provision pipeline (infra_provision_bicep_pipeline.yml OR infra_provision_terraform_pipeline.yml).
+
+**Run PR pipeline**
+- Execute any of the Azure Pipelines created above for build validation
+
+**Run CI pipeline**
+- Execute any of the Azure Pipelines created above for continuous integration

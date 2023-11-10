@@ -22,7 +22,8 @@ parameters:
   type: string
 - name: clusterSize  
   type: string
-  default: 'STANDARD_DS3_v2'
+- name: batchClusterName  
+  type: string  
   
 stages:
   - stage: publish_IaC_templates
@@ -70,10 +71,11 @@ stages:
           echo '${{parameters.amlWorkspaceName}}'
           echo '${{parameters.clusterName}}'
           echo '${{parameters.clusterSize}}'
-        enabled: false
+          echo '${{parameters.batchClusterName}}'
+        enabled: true
 
       - task: AzureCLI@2
-        displayName: Provision MLOps Infrastructure
+        displayName: Provision AzureML Infrastructure
         inputs:
           azureSubscription: '${{parameters.azureMgrConnection}}'
           scriptType: pscore
@@ -81,9 +83,9 @@ stages:
           useGlobalConfig: false
           inlineScript: |
             az --version
-            az deployment group create --resource-group '${{parameters.resourceGroup}}' `
-            --template-file '$(Pipeline.Workspace)/infratemplates/infra/bicep/main.bicep' `
-            --parameters location='${{parameters.location}}' `
+            az deployment sub create --location='${{parameters.location}}' `
+            --template-file '$(Pipeline.Workspace)/infratemplates/infra/bicep/public_workspace/main.bicep' `
+            --parameters resourceGroupName='${{parameters.resourceGroup}}' location='${{parameters.location}}' `
             storageAccount='${{parameters.storageAccount}}' `
             keyVaultName='${{parameters.keyVaultName}}' `
             appInsightsName='${{parameters.appInsightsName}}' `
@@ -92,7 +94,7 @@ stages:
         enabled: true
 
       - task: AzureCLI@2
-        displayName: Add compute to workspace
+        displayName: Add Compute Cluster
         inputs:
           azureSubscription: '${{parameters.azureMgrConnection}}'
           scriptType: pscore
@@ -103,6 +105,21 @@ stages:
             az --version
             az extension add -n ml -y
             az ml compute create --name '${{parameters.clusterName}}' --size '${{parameters.clusterSize}}' `
+            --type AmlCompute --resource-group '${{parameters.resourceGroup}}' --workspace-name '${{parameters.amlWorkspaceName}}'
+        enabled: true
+
+      - task: AzureCLI@2
+        displayName: Add Batch Cluster
+        inputs:
+          azureSubscription: '${{parameters.azureMgrConnection}}'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          useGlobalConfig: false
+          inlineScript: |
+            Write-Host "cluster is ${{parameters.clusterName}} and cluster-size is ${{parameters.clusterSize}}"
+            az --version
+            az extension add -n ml -y
+            az ml compute create --name '${{parameters.batchclusterName}}' --size '${{parameters.clusterSize}}' `
             --type AmlCompute --resource-group '${{parameters.resourceGroup}}' --workspace-name '${{parameters.amlWorkspaceName}}'
         enabled: true
 

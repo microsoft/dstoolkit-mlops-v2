@@ -12,6 +12,8 @@ parameters:
 - name: clusterSize  
   type: string
   default: 'STANDARD_DS3_v2'
+- name: batchClusterName  
+  type: string    
   
 stages:
 
@@ -21,6 +23,7 @@ stages:
       - infra_variable_generation
     variables:
       - template: templates/infra_bicep_variables.yml
+   
     jobs:
     - job: Deploy_MLOps_v2_Infrastructure  
       steps:
@@ -32,12 +35,31 @@ stages:
           echo '${{parameters.amlWorkspaceName}}'
           echo '${{parameters.clusterName}}'
           echo '${{parameters.clusterSize}}'
-        enabled: false
+        enabled: true
+
+      - task: qetza.replacetokens.replacetokens-task.replacetokens@5
+        inputs:
+          rootDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+          targetFiles: '*.tfvars'
+          encoding: 'auto'
+          tokenPattern: 'custom'
+          writeBOM: true
+          actionOnMissing: 'warn'
+          keepToken: false
+          actionOnNoFiles: 'continue'
+          enableTransforms: true
+          transformPrefix: '#{'
+          transformSuffix: '}#'
+          enableRecursion: false
+          useLegacyPattern: false
+          enableTelemetry: false
+        enabled: true 
 
       - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@1
         displayName: 'Terraform Install'
         inputs:
           terraformVersion: 'latest'
+        enabled: true
 
 
       - task: TerraformTaskV4@4
@@ -51,12 +73,14 @@ stages:
           backendAzureRmStorageAccountName: stacctfstatemlopsv2010 
           backendAzureRmContainerName: terraform
           backendAzureRmKey: mlops.tfstate
+        enabled: true
 
       - task: TerraformTaskV4@4
         displayName: 'Terraform Validate'
         inputs:
           command: 'validate'
           workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
+        enabled: true
 
       - task: TerraformTaskV4@4
         displayName: 'Terraform Plan'
@@ -66,6 +90,7 @@ stages:
           allowTelemetryCollection: true
           environmentServiceNameAzureRM: '${{parameters.azureMgrConnection}}'
           commandOptions: '-out=tfplan'
+        enabled: true
 
       - task: TerraformTaskV4@4
         displayName: 'Terraform Apply'
@@ -75,9 +100,10 @@ stages:
           workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
           environmentServiceNameAzureRM: '${{parameters.azureMgrConnection}}'
           commandOptions: '-auto-approve -input=false  tfplan'
+        enabled: true
 
       - task: AzureCLI@2
-        displayName: Add compute to workspace
+        displayName: Add Compute Cluster
         inputs:
           azureSubscription: '${{parameters.azureMgrConnection}}'
           scriptType: pscore
@@ -87,6 +113,21 @@ stages:
             az --version
             az extension add -n ml -y
             az ml compute create --name '${{parameters.clusterName}}' --size '${{parameters.clusterSize}}' `
+            --type AmlCompute --resource-group '${{parameters.resourceGroup}}' --workspace-name '${{parameters.amlWorkspaceName}}'
+        enabled: true
+
+      - task: AzureCLI@2
+        displayName: Add Batch Cluster
+        inputs:
+          azureSubscription: '${{parameters.azureMgrConnection}}'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          useGlobalConfig: false
+          inlineScript: |
+            Write-Host "cluster is ${{parameters.clusterName}} and cluster-size is ${{parameters.clusterSize}}"
+            az --version
+            az extension add -n ml -y
+            az ml compute create --name '${{parameters.batchclusterName}}' --size '${{parameters.clusterSize}}' `
             --type AmlCompute --resource-group '${{parameters.resourceGroup}}' --workspace-name '${{parameters.amlWorkspaceName}}'
         enabled: true
 

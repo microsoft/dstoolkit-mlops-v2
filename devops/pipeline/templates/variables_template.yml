@@ -19,6 +19,7 @@ stages:
           $pname = $property.Name
           $pvalue = $property.Value
           Write-Output "##vso[task.setvariable variable=$pname;isoutput=true]$pvalue"
+          Write-Host $pname, $pvalue
           }
 
         # Get infra variables
@@ -31,6 +32,7 @@ stages:
           $pname = $property.Name
           $pvalue = $property.Value
           Write-Output "##vso[task.setvariable variable=$pname;isoutput=true]$pvalue"
+          Write-Host $pname, $pvalue
           }
             
             
@@ -47,6 +49,12 @@ stages:
   - job: validate_assign_variables
     dependsOn: load_config_variables
     variables:
+    - name: NAMESPACE
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.NAMESPACE'] ]
+    - name: PROJECTCODE
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.PROJECTCODE'] ]
+    - name: VERSION
+      value: $[ dependencies.load_config_variables.outputs['loading_model_config.VERSION'] ]
     - name:  ML_MODEL_CONFIG_NAME
       value: $[ dependencies.load_config_variables.outputs['loading_model_config.ML_MODEL_CONFIG_NAME'] ]
     - name:  KEYVAULT_NAME
