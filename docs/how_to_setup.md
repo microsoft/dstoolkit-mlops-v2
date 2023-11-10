@@ -45,7 +45,7 @@ Information about variable groups in Azure DevOps can be found in [this document
 
 **Step n.**  In all batch_config.json and realtime_config.json files, provide a unique name for the following properties.
 - BATCH_CLUSTER_NAME: The unique name for a cluster to be used for batch inferencing. 
-**Since this cluster is created by the Infrastructure deployment, the name must match the value in /config/infra_config.yml**
+**Note: Since this cluster is created by the Infrastructure deployment, the name must match the value for BATCH_CLUSTER_NAME in /config/infra_config.yml**
 - ENDPOINT_NAME
 - DEPLOYMENT_NAME
 
