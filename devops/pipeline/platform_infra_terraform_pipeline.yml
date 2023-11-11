@@ -83,7 +83,7 @@ stages:
           useGlobalConfig: false
           inlineScript: |
             az --version
-            az storage account create --name 'stacctfstate${{parameters.version}}' --resource-group 'rg-stacctfstate${{parameters.version}}' --sku Standard_LRS '
+            az storage account create --name 'stacctfstate${{parameters.version}}' --resource-group 'rg-stacctfstate${{parameters.version}}' --sku Standard_LRS
         enabled: true
 
       - task: AzureCLI@2
