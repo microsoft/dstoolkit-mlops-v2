@@ -1,0 +1,41 @@
+pr: none
+trigger:
+  branches:
+   include:
+     - development
+  paths:
+    include:
+      - devops/*
+      - mlops/common/*
+      - mlops/london_taxi/*
+      - src/london_src/*
+      - model/london_taxi/*
+      - src/shared/*
+
+pool:
+  vmImage: ubuntu-latest
+
+
+variables:
+- group: mlops_platform_infra_dev_vg
+
+parameters:
+ - name: env_name
+   displayName: "Execution Environment"
+   default: "dev"
+ - name: model_type
+   displayName: "model type"
+   default: "london_taxi"
+ - name: is_batch_deployment
+   displayName: "True for batch endpoint and False for real-time endpoint"
+
+stages:
+  - template: ../templates/variables_template.yml
+    parameters:
+      env_name: ${{parameters.env_name}}
+      model_type: ${{parameters.model_type}}
+  - template: ../platform_ci_dev_pipeline.yml
+    parameters:
+      exec_environment: ${{ parameters.env_name }}
+      model_type: ${{ parameters.model_type }}
+      is_batch_deployment: ${{ parameters.is_batch_deployment }}
