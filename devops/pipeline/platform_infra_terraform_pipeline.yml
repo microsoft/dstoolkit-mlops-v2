@@ -78,7 +78,7 @@ stages:
           useGlobalConfig: false
           inlineScript: |
             az --version
-            az storage account create --name 'stacctfstate${{parameters.version}} --resource-group 'rg-stacctfstate${{parameters.version}}' --sku Standard_LRS '
+            az storage account create --name 'stacctfstate${{parameters.version}}' --resource-group 'rg-stacctfstate${{parameters.version}}' --sku Standard_LRS '
         enabled: true
 
       - task: AzureCLI@2
@@ -107,8 +107,8 @@ stages:
           workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
           backendServiceArm: '${{parameters.azureMgrConnection}}'
           ensureBackend: true
-          backendAzureRmResourceGroupName: '${{parameters.resourceGroup}}'
-          backendAzureRmStorageAccountName: stacctfstatemlopsv2010 
+          backendAzureRmResourceGroupName: 'rg-stacctfstate${{parameters.version}}'
+          backendAzureRmStorageAccountName: 'stacctfstate${{parameters.version}}' 
           backendAzureRmContainerName: terraform
           backendAzureRmKey: mlops.tfstate
         enabled: true
