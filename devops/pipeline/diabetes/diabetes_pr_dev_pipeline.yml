@@ -7,9 +7,9 @@ pr:
     include:
       - devops/*
       - mlops/common/*
-      - mlops/london_taxi/*
-      - src/london_src/*
-      - model/london_taxi/*
+      - mlops/diabetes/*
+      - src/diabetes/*
+      - model/diabetes/*
       - src/shared/*
 
 pool:

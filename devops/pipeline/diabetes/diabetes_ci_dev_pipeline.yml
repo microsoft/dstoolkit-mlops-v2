@@ -7,9 +7,9 @@ trigger:
     include:
       - devops/*
       - mlops/common/*
-      - mlops/london_taxi/*
-      - src/london_src/*
-      - model/london_taxi/*
+      - mlops/diabetes/*
+      - src/diabetes/*
+      - model/diabetes/*
       - src/shared/*
 
 pool:
@@ -25,7 +25,7 @@ parameters:
    default: "dev"
  - name: model_type
    displayName: "model type"
-   default: "london_taxi"
+   default: "diabetes"
  - name: is_batch_deployment
    displayName: "True for batch endpoint and False for real-time endpoint"
 
