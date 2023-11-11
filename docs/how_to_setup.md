@@ -12,7 +12,7 @@ You have setup an app registration, granted the resulting service principal, at 
 
 **Step 1.** Create a service connection. You can use [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) as a reference. Use the Azure Resource Manager as service connection type, and use the Manual option when creating the service connection.
 
-**Step 2.** Create a new variable group named named **"mlops_platform_dev_vg"**, add "AZURE_RM_SVC_CONNECTION" variable with the name of the service connection created above. 
+**Step 2.** Create a new variable group named **"mlops_platform_dev_vg"**, add "AZURE_RM_SVC_CONNECTION" variable with the name of the service connection created above. 
 Information about variable groups in Azure DevOps can be found in [this document](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops&tabs=classic).
 
 **Step 3.** Create a *development* branch and make it the default branch so that all PRs merge to it. This guide assumes that the team works with a *development* branch as the primary source for coding and improving model quality. Later, you can implement an Azure Pipeline to move code from the *development* branch to qa/main or that executes a release process with each check-in. However, release management is not in scope of this guide.
