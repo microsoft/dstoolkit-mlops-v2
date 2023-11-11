@@ -5,7 +5,7 @@
             "ENV_NAME": "pr",
             "DATA_PURPOSE": "pr_data",
             "DATA_PATH":"mlops/diabetes/data",
-            "DATASET_NAME":"nyc_taxi_pr_data",
+            "DATASET_NAME":"diabetes_pr_data",
             "DATASET_DESC":"this dataset is for pr validation only"
         },
         {
@@ -13,7 +13,7 @@
             "ENV_NAME": "dev",
             "DATA_PURPOSE": "batch_test_data",
             "DATA_PATH":"mlops/diabetes/batch_test_data",
-            "DATASET_NAME":"nyc_taxi_batch_test",
+            "DATASET_NAME":"diabetes_batch_test",
             "DATASET_DESC":"this dataset is for testing batch deployments"
         },
         {
@@ -21,7 +21,7 @@
             "ENV_NAME": "dev",
             "DATA_PURPOSE": "training_data",
             "DATA_PATH":"mlops/diabetes/data",
-            "DATASET_NAME":"nyc_taxi_training",
+            "DATASET_NAME":"diabetes_training",
             "DATASET_DESC":"this dataset is for training models"
         }
     ]
