@@ -36,7 +36,7 @@ def main(raw_data, prep_data):
     # Prep the green and yellow taxi data
     # green_data = df_list[0]
     # yellow_data = df_list[1]
-    data = df_list[1]
+    data = df_list[0]
 
     data_prep(data)
 
