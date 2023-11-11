@@ -17,3 +17,4 @@ stages:
       amlWorkspaceName: $(WORKSPACE_NAME)
       clusterName: $(CLUSTER_NAME)
       batchClusterName: $(BATCH_CLUSTER_NAME)
+      version: $(VERSION)

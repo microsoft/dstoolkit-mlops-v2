@@ -13,6 +13,8 @@ parameters:
   type: string
   default: 'STANDARD_DS3_v2'
 - name: batchClusterName  
+  type: string
+- name: version  
   type: string    
   
 stages:
@@ -54,6 +56,42 @@ stages:
           useLegacyPattern: false
           enableTelemetry: false
         enabled: true 
+
+      - task: AzureCLI@2
+        displayName: Add tfstate resource group
+        inputs:
+          azureSubscription: '${{parameters.azureMgrConnection}}'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          useGlobalConfig: false
+          inlineScript: |
+            az --version
+            az group create --name 'rg-stacctfstate${{parameters.version}}'
+        enabled: true
+
+      - task: AzureCLI@2
+        displayName: Add tfstate account
+        inputs:
+          azureSubscription: '${{parameters.azureMgrConnection}}'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          useGlobalConfig: false
+          inlineScript: |
+            az --version
+            az storage account create --name 'stacctfstate${{parameters.version}} --resource-group 'rg-stacctfstate${{parameters.version}}' --sku Standard_LRS '
+        enabled: true
+
+      - task: AzureCLI@2
+        displayName: Add terraform container
+        inputs:
+          azureSubscription: '${{parameters.azureMgrConnection}}'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          useGlobalConfig: false
+          inlineScript: |
+            az --version
+            az storage container create --name terraform --account-name 'stacctfstate${{parameters.version}}'
+        enabled: true
 
       - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@1
         displayName: 'Terraform Install'
