@@ -18,7 +18,7 @@ Information about variable groups in Azure DevOps can be found in [this document
 **Step 3.** Create a *development* branch and make it the default branch so that all PRs merge to it. This guide assumes that the team works with a *development* branch as the primary source for coding and improving model quality. Later, you can implement an Azure Pipeline to move code from the *development* branch to qa/main or that executes a release process with each check-in. However, release management is not in scope of this guide.
 
 **Setup the Infrastructure configuration**
-**Step 4.** In the development branch, for the properties below, supply a value or accept the defaults in the file, **infra_config.json**:
+**Step 4.** In the development branch, for the properties below, supply a value or accept the defaults in the file, *infra_config.json*:
 **Note: It is important to set a unique version number to avoid attempting to deploy resources that already exist.**
 - **NAMESPACE:** a base name used to construct consistent azure resource names.
 - **PROJECTCODE:** a string used to construct consistent azure resource names having a project modifier.
@@ -28,7 +28,7 @@ Information about variable groups in Azure DevOps can be found in [this document
 - **CLUSTER_NAME:** the name of the compute resource to be used by Model Factory for training, and deployments.
 - **BATCH_CLUSTER_NAME:** the name of the compute resource for batch inferencing in the azure machine learning resource.
 
-**Step 5.** In the development branch, set values or accept the defaults for variables in the **model_config.json** file. The pipeline uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi)
+**Step 5.** In the development branch, set values or accept the defaults for variables in the *model_config.json* file. The pipeline uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi)
 
 - **ML_MODEL_CONFIG_NAME:** The unique model name used internally by the pipelines.
 - **ENV_NAME:** name of the environment. e.g pr, dev, test, prod.
@@ -43,7 +43,7 @@ Information about variable groups in Azure DevOps can be found in [this document
 - **REALTIME_DEPLOYMENT_CONFIG:** relative path to the realtime_config.json file.
 - **DATA_CONFIG_PATH:** relative path to the data_config.json.
 
-**Step 6.**  In all **batch_config.json** and **realtime_config.json** files, provide a unique name for the following properties:
+**Step 6.**  In all *batch_config.json* and *realtime_config.json* files, provide a unique name for the following properties:
 - **BATCH_CLUSTER_NAME:** The unique name for a cluster to be used for batch inferencing. 
 **Note: Since this cluster is created by the Infrastructure deployment, the name must match the value for BATCH_CLUSTER_NAME in /config/infra_config.yml**
 - **ENDPOINT_NAME:** The unique name for a batch or real-time endpoint.
