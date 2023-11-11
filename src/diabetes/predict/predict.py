@@ -34,7 +34,10 @@ def load_test_data(test_data):
             df_list.append(input_df)
 
     test_data = df_list[0]
-    testy = test_data["outcome"]
+    
+    print(test_data.head)
+    print(test_data.columns)
+    testy = test_data["Outcome"]
     testX = test_data[
         [
             "pregnancies",
@@ -63,7 +66,7 @@ def predict(testX, testy, model_input, prediction_path):
 
     # Compare predictions to actuals (testy)
     output_data = pd.DataFrame(testX)
-    output_data["actual_cost"] = testy
+    output_data["outcome"] = testy
 
     # Save the output data with feature columns, predicted cost, and actual cost in csv file
     output_data = output_data.to_csv((Path(prediction_path) / "predictions.csv"))
