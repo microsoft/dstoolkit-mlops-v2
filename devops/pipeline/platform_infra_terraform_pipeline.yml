@@ -15,6 +15,8 @@ parameters:
 - name: batchClusterName  
   type: string
 - name: version  
+  type: string
+- name: location  
   type: string    
   
 stages:
@@ -37,6 +39,9 @@ stages:
           echo '${{parameters.amlWorkspaceName}}'
           echo '${{parameters.clusterName}}'
           echo '${{parameters.clusterSize}}'
+          echo '${{parameters.version}}'
+          echo '${{parameters.location}}'
+
         enabled: true
 
       - task: qetza.replacetokens.replacetokens-task.replacetokens@5
@@ -66,7 +71,7 @@ stages:
           useGlobalConfig: false
           inlineScript: |
             az --version
-            az group create --name 'rg-stacctfstate${{parameters.version}}'
+            az group create --location ${{parameters.location}} --name 'rg-stacctfstate${{parameters.version}}'
         enabled: true
 
       - task: AzureCLI@2

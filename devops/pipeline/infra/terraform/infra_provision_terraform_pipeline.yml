@@ -18,3 +18,4 @@ stages:
       clusterName: $(CLUSTER_NAME)
       batchClusterName: $(BATCH_CLUSTER_NAME)
       version: $(VERSION)
+      location: $(LOCATION)
