@@ -85,7 +85,7 @@ def train_model(trainX, trainy):
 
 
 def write_test_data(testX, testy):
-    testX["cost"] = testy
+    testX["outcome"] = testy
     print(testX.shape)
     testX.to_csv((Path(args.test_data) / "test_data.csv"))
 
