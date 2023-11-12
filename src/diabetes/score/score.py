@@ -48,8 +48,8 @@ def write_results(model, predictions, test_data, score_report):
     # The coefficients
     print("Coefficients: \n", model.coef_)
 
-    actuals = test_data["actual_cost"]
-    predictions = test_data["predicted_cost"]
+    actuals = test_data["actual_outcome"]
+    predictions = test_data["predicted_outcome"]
 
     mse = mean_squared_error(actuals, predictions)
     r2 = r2_score(actuals, predictions)

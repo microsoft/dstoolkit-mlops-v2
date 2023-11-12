@@ -37,7 +37,7 @@ def load_test_data(test_data):
     
     print(test_data.head)
     print(test_data.columns)
-    testy = test_data["Outcome"]
+    testy = test_data["outcome"]
     testX = test_data[
         [
             "pregnancies",
