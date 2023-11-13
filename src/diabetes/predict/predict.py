@@ -35,8 +35,8 @@ def load_test_data(test_data):
 
     test_data = df_list[0]
     
-    print(test_data.head)
-    print(test_data.columns)
+    # print(test_data.head)
+    # print(test_data.columns)
     testy = test_data["outcome"]
     testX = test_data[
         [
