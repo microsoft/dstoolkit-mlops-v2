@@ -59,14 +59,14 @@ def predict(testX, testy, model_input, prediction_path):
     # Load the model from input port
     model = pickle.load(open((Path(model_input) / "model.sav"), "rb"))
 
-    # Make predictions on testX data and record them in a column named predicted_cost
+    # Make predictions on testX data and record them in a column named predicted_outcome
     predictions = model.predict(testX)
-    testX["predicted_cost"] = predictions
+    testX["predicted_outcome"] = predictions
     print(testX.shape)
 
     # Compare predictions to actuals (testy)
     output_data = pd.DataFrame(testX)
-    output_data["outcome"] = testy
+    output_data["actual_outcome"] = testy
 
     # Save the output data with feature columns, predicted cost, and actual cost in csv file
     output_data = output_data.to_csv((Path(prediction_path) / "predictions.csv"))
