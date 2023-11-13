@@ -72,7 +72,7 @@ stages:
           echo '${{parameters.clusterName}}'
           echo '${{parameters.clusterSize}}'
           echo '${{parameters.batchClusterName}}'
-        enabled: true
+        enabled: false
 
       - task: AzureCLI@2
         displayName: Provision AzureML Infrastructure

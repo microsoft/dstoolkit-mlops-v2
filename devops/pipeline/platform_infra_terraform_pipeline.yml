@@ -42,7 +42,7 @@ stages:
           echo '${{parameters.version}}'
           echo '${{parameters.location}}'
 
-        enabled: true
+        enabled: false
 
       - task: qetza.replacetokens.replacetokens-task.replacetokens@5
         inputs:
