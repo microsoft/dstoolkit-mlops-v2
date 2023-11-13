@@ -48,7 +48,7 @@ def write_results(model, predictions, test_data, score_report):
     # The coefficients
     print("Coefficients: \n", model.coef_)
     
-    print(test_data,head)
+
     actuals = test_data["actual_outcome"]
     predictions = test_data["predicted_outcome"]
 
