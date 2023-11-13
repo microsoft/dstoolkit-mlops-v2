@@ -100,7 +100,7 @@ def data_prep(data):
     # )
     merged_data = combined_df.to_csv(os.path.join(prep_data, "merged_data.csv"))
 
-    print(merged_data.columns)
+
 
     print("Finish")
 
