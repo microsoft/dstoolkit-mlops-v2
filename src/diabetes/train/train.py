@@ -2,11 +2,14 @@ import argparse
 from pathlib import Path
 import os
 import pandas as pd
-from sklearn.linear_model import LinearRegression
+# from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 import pickle
 import mlflow
 import json
+
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.metrics import classification_report
 
 
 def main(training_data, test_data, model_output, model_metadata):
@@ -71,8 +74,16 @@ def train_model(trainX, trainy):
     mlflow.autolog()
     # Train a Linear Regression Model with the train set
     with mlflow.start_run() as run:
-        model = LinearRegression().fit(trainX, trainy)
+        # model = LinearRegression().fit(trainX, trainy)
+
+        model = GradientBoostingClassifier(
+        n_estimators=100, learning_rate=0.1
+    )
         print(model.score(trainX, trainy))
+
+        y_pred = model.predict(trainX)
+        print(classification_report(trainX, y_pred))
+
 
         # Output the model, metadata and test data
         run_id = mlflow.active_run().info.run_id

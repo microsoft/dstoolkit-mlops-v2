@@ -4,9 +4,12 @@ import os
 from pathlib import Path
 from sklearn.linear_model import LinearRegression
 import pickle
-from sklearn.metrics import mean_squared_error, r2_score
+# from sklearn.metrics import mean_squared_error, r2_score
 import mlflow
 import json
+
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
 
 
 def main(predictions, model, score_report):
@@ -51,25 +54,40 @@ def write_results(model, predictions, test_data, score_report):
 
     actuals = test_data["actual_outcome"]
     predictions = test_data["predicted_outcome"]
+    
 
-    mse = mean_squared_error(actuals, predictions)
-    r2 = r2_score(actuals, predictions)
+   
 
-    mlflow.log_metric("scoring_mse", mse)
-    mlflow.log_metric("scoring_r2", r2)
+    # mse = mean_squared_error(actuals, predictions)
+    # r2 = r2_score(actuals, predictions)
 
-    # The mean squared error
-    print("Mean squared error: %.2f" % mse)
-    # The coefficient of determination: 1 is perfect prediction
-    print("Coefficient of determination: %.2f" % r2)
+    # Compute classification metrics
+    accuracy = accuracy_score(actuals, predictions)
+    precision = precision_score(actuals, predictions)
+    recall = recall_score(actuals, predictions)
+    f1 = f1_score(actuals, predictions)
+
+    mlflow.log_metric("accuracy", accuracy)
+    mlflow.log_metric("precision", precision)
+
+
+    mlflow.log_metric("recall", recall)
+    mlflow.log_metric("f1", f1)
+                      
+
+    # # The mean squared error
+    # print("Mean squared error: %.2f" % mse)
+    # # The coefficient of determination: 1 is perfect prediction
+    # print("Coefficient of determination: %.2f" % r2)
     print("Model: ", model)
 
     # Print score report to a text file
     model_score = {
-        "mse": mean_squared_error(actuals, predictions),
-        "coff": str(model.coef_),
-        "cod": r2_score(actuals, predictions),
-    }
+        "accuracy": accuracy,
+        "precision": precision ,
+        "recall": recall ,
+        "f1" : f1
+     }
     with open((Path(score_report) / "score.txt"), "w") as json_file:
         json.dump(model_score, json_file, indent=4)
 
