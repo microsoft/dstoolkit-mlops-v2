@@ -88,7 +88,7 @@ def train_model(trainX, trainy):
         y_pred = model.predict(trainX)
 
         print (y_pred)
-        print(classification_report(trainY, y_pred))
+        print(classification_report(trainy, y_pred))
         # cm = confusion_matrix(trainX, y_pred)
         # print(cm)
 
