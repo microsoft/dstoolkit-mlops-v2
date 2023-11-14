@@ -13,22 +13,27 @@ def main(model_metadata, model_name, score_report, build_reference):
 
         score_file = open(Path(args.score_report) / "score.txt")
         score_data = json.load(score_file)
-        cod = score_data["cod"]
-        mse = score_data["mse"]
-        coff = score_data["coff"]
+        accuracy = score_data["accuracy"]
+        precision = score_data["precision"]
+        recall = score_data["recall"]
+        f1 = score_data["f1"]
 
         model_version = mlflow.register_model(run_uri, model_name)
 
         client = mlflow.MlflowClient()
         client.set_model_version_tag(
-            name=model_name, version=model_version.version, key="mse", value=mse
+            name=model_name, version=model_version.version, key="precision", value=precision
         )
         client.set_model_version_tag(
-            name=model_name, version=model_version.version, key="coff", value=coff
+            name=model_name, version=model_version.version, key="recall", value=recall
         )
         client.set_model_version_tag(
-            name=model_name, version=model_version.version, key="cod", value=cod
+            name=model_name, version=model_version.version, key="accuracy", value=accuracy
         )
+        client.set_model_version_tag(
+            name=model_name, version=model_version.version, key="f1", value=f1
+        )
+
         client.set_model_version_tag(
             name=model_name,
             version=model_version.version,
