@@ -77,9 +77,9 @@ def train_model(trainX, trainy):
     with mlflow.start_run() as run:
         # model = LinearRegression().fit(trainX, trainy)
 
-    #     model = GradientBoostingClassifier(
-    #     n_estimators=100, learning_rate=0.1
-    # )
+        model = GradientBoostingClassifier(
+        n_estimators=100, learning_rate=0.1
+    )
         model = SVC(kernel='linear', C=1.0)
         model.fit(trainX, trainy)
 
@@ -88,9 +88,9 @@ def train_model(trainX, trainy):
         y_pred = model.predict(trainX)
 
         print (y_pred)
-        # print(classification_report(trainX, y_pred))
-        cm = confusion_matrix(trainX, y_pred)
-        print(cm)
+        print(classification_report(trainY, y_pred))
+        # cm = confusion_matrix(trainX, y_pred)
+        # print(cm)
 
 
         # Output the model, metadata and test data
