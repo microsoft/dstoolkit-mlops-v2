@@ -79,7 +79,10 @@ def train_model(trainX, trainy):
         model = GradientBoostingClassifier(
         n_estimators=100, learning_rate=0.1
     )
-        print(model.score(trainX, trainy))
+        
+        model.fit(trainX, trainy)
+
+        # print(model.score(trainX, trainy))
 
         y_pred = model.predict(trainX)
         print(classification_report(trainX, y_pred))
