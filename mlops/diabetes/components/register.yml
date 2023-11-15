@@ -1,0 +1,25 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: register_diabetes
+display_name: RegisterDiabetes
+version: 1
+type: command
+inputs:
+  model_metadata:
+    type: uri_folder
+  model_name:
+    type: string
+  score_report:
+    type: uri_folder
+  build_reference:
+    type: string
+code: ./../../../
+environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
+command: >-
+  python -m src.diabetes.register.register 
+  --model_metadata ${{inputs.model_metadata}}  
+  --model_name ${{inputs.model_name}}
+  --score_report ${{inputs.score_report}}
+  --build_reference ${{inputs.build_reference}}
+
+
+
