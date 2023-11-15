@@ -3,10 +3,9 @@
         {
             "ML_MODEL_CONFIG_NAME": "nyc_taxi",
             "ENV_NAME": "dev",
-            "AZURE_RM_SVC_CONNECTION": "azure_connection",
-            "BATCH_CLUSTER_NAME": "new-cluster",
-            "ENDPOINT_NAME": "nyx-taxi-b-e",
-            "DEPLOYMENT_NAME": "nyc-taxi-b-d",
+            "BATCH_CLUSTER_NAME": "batchcluster",
+            "ENDPOINT_NAME": "nyc-taxi-be-100b",
+            "DEPLOYMENT_NAME": "nyc-taxi-bd-100b",
             "CLUSTER_INSTANCE_COUNT": 2,
             "MAX_CONCURRENCY_PER_INSTANCE": 2,
             "MINI_BATCH_SIZE": 10,

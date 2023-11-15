@@ -1,0 +1,5 @@
+rg_name = "#{RESOURCE_GROUP_NAME}#" 
+location = "#{LOCATION}#"
+basename = "#{NAMESPACE}#"
+project_code = "#{PROJECTCODE}#"
+version_num = "#{VERSION}#"

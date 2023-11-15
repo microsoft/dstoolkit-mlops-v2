@@ -67,7 +67,7 @@ def main():
     )
     parser.add_argument("--min_instances", type=int, default=0)
     parser.add_argument("--max_instances", type=int, default=4)
-    parser.add_argument("--idle_time_before_scale_down", type=int, default=120)
+    parser.add_argument("--idle_time_before_scale_down", type=int, default=1800)
 
     args = parser.parse_args()
     get_compute(
