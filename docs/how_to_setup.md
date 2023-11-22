@@ -12,7 +12,52 @@ This template supports Azure Machine Learning (ML) as a platform for ML, and Azu
 - Azure DevOps organization and project. Follow the instructions here: [Create a project in Azure DevOps](https://learn.microsoft.com/en-us/azure/devops/organizations/projects/create-project?view=azure-devops&tabs=browser) 
 - You have setup an app registration, granted the resulting service principal, at least Contributor, and User Access Administrator on the target subscription.
 **Use this document as a reference: [Create a Microsoft Entra application and service principal that can access resources](https://learn.microsoft.com/en-us/entra/identity-platform/howto-create-service-principal-portal)
+If you prefer scripting the service principal creation, then follow the steps below:
 
+## Create Azure service principal
+
+Create an Azure service principal for the purpose of working with this repository. You can add more depending on number of environments you want to work on (Dev or Prod or Both). Service principals can be created using cloud shell, bash, PowerShell or from Azure UI. If your subscription is a part of an organization with multiple tenants, ensure that the Service Principal has access across tenants. 
+
+1. Copy the following bash commands to your computer and update the **spname** (of your choice) and **subscriptionId** variables with the values for your project. This command will also grant the **Owner** role to the service principal in the subscription provided. This is required for Azure DevOps Pipelines and GitHub Actions to properly create and use resources in that subscription. 
+
+    ``` bash
+    spname="<your sp name>"
+    roleName="Owner"
+    subscriptionId="<subscription Id>"
+    servicePrincipalName="Azure-ARM-${spname}"
+
+    # Verify the ID of the active subscription
+    echo "Using subscription ID $subscriptionID"
+    echo "Creating SP for RBAC with name $servicePrincipalName, with role $roleName and in scopes     /subscriptions/$subscriptionId"
+    
+    az ad sp create-for-rbac --name $servicePrincipalName --role $roleName --scopes /subscriptions/$subscriptionId --sdk-auth 
+    
+    echo "Please ensure that the information created here is properly saved for future use."
+
+1. Copy your edited commands into the Azure Shell and run them (**Ctrl** + **Shift** + **v**). If executing the commands on local machine, ensure Azure CLI is installed and successfully able to access after executing `az login` command. Azure CLI can be installed using information available [How to install the Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
+
+1. After running these commands, you'll be presented with information related to the service principal. 
+
+    ```json
+
+      {
+      "clientId": "<service principal client id>",  
+      "clientSecret": "<service principal client secret>",
+      "subscriptionId": "<Azure subscription id>",  
+      "tenantId": "<Azure tenant id>",
+      "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
+      "resourceManagerEndpointUrl": "https://management.azure.com/", 
+      "activeDirectoryGraphResourceId": "https://graph.windows.net/", 
+      "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
+      "galleryEndpointUrl": "https://gallery.azure.com/",
+      "managementEndpointUrl": "https://management.core.windows.net/" 
+      }
+    ```
+
+1. Copy the output, braces included. Save this information to a safe location, you'll need it later when setting the configuration for infrastructure provisioning and model operations.
+
+1. Close the Cloud Shell once the service principal is created.
+   
 ## Steps
 
 **Step 1.** Create a service connection. Review [Manage service connections](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) for instructions. 
@@ -21,7 +66,7 @@ Launch the Service Connection Wizard ![image](https://github.com/microsoft/dstoo
 
 ![image](https://github.com/microsoft/dstoolkit-mlops-v2/assets/15255737/32e6b323-289a-4030-a628-52261eefe58a) <br>**Use the Azure Resource Manager as service connection type**</br>    
 
-![image](https://github.com/microsoft/dstoolkit-mlops-v2/assets/15255737/4dbb36fa-6511-442f-9e6e-bb805a68f827)<br>**Use the Manual option when creating the service connection**</br> 
+![image](https://github.com/microsoft/dstoolkit-mlops-v2/assets/15255737/4dbb36fa-6511-442f-9e6e-bb805a68f827)<br>**Choose the Service principal (manual) radio button, enter the required subscription, name, etc details making sure to use the service principal created above in the ensuing dialog.**</br> 
     
 
 **Step 2.** Create a new variable group named **"mlops_platform_dev_vg"**, add "AZURE_RM_SVC_CONNECTION" variable with the name of the service connection created above. 
@@ -57,7 +102,7 @@ Information about variable groups in Azure DevOps can be found in [Add & use var
 - **DATA_CONFIG_PATH:** relative path to the *data_config.json*.
 
 **Step 6.**  In all *batch_config.json* and *realtime_config.json* files for each model, provide a unique name for the following properties:
-- **BATCH_CLUSTER_NAME:** The unique name for a cluster to be used for batch inferencing. **Note: Since this cluster is created by the Infrastructure deployment, the name must match the value for BATCH_CLUSTER_NAME in */config/infra_config.yml* **
+- **BATCH_CLUSTER_NAME:** The unique name for a cluster to be used for batch inferencing. **Note: Since this cluster is created by the Infrastructure deployment, the name must match the value for BATCH_CLUSTER_NAME in */config/infra_config.yml***
 - **ENDPOINT_NAME:** The unique name for a batch or real-time endpoint.
 - **DEPLOYMENT_NAME** The unique name for a batch or real-time deployment.
 
@@ -76,11 +121,6 @@ Details about how to create a basic Azure Pipeline can be found in [Create your 
 
 **Step 10.** Setup a branch policy for the *development* branch. At this stage we have one or more Azure Pipeline(s) that should be executed on every PR to the *development* branch. At the same time successful completion of the build is not a requirement when files not affecting operation of the model are changed. Set up the the *Path filter* field in the policy to respond to changes in same set of paths specified in the *_pr_dev_pipeline.yml files.
 More details about how to create a policy can be found [Branch policies and settings](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser).
-
-**Step 11. (Optional)** It's a common practice to execute a training job on the full dataset once a PR has been merged into the development branch. At the same time, the training process can take a long time (many hours or even days) and Azure DevOps agent will not be able to report on the status of the training job due to timeout settings. So, it's very hard to implement a single CI Build that will wait for a new model (training results) and execute the remaining steps after model approval, model movement promotion to a qa environment, and eventual model deployment etc.
-
-Azure ML provides a solution that allows us to implement a *server* task in Azure DevOps Build and wait for the result of the pipeline training job with no Azure DevOps agent holding. Thanks to that it's possible to wait for results any amount of time and execute all other steps right after completion of the Azure ML training job. As for now, the feature is in active development, but you can [visit this link](https://github.com/Azure/azure-mlops-automation) to check the status and find how to get access. This new Azure ML feature can be included in your CI Build thanks to the extension that Azure ML team built or you can use RestAPITask for a direct REST call. In this template we implemented a version with the extension.
-
 
 ## Execute Pipelines
 
