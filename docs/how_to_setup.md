@@ -122,11 +122,6 @@ Details about how to create a basic Azure Pipeline can be found in [Create your 
 **Step 10.** Setup a branch policy for the *development* branch. At this stage we have one or more Azure Pipeline(s) that should be executed on every PR to the *development* branch. At the same time successful completion of the build is not a requirement when files not affecting operation of the model are changed. Set up the the *Path filter* field in the policy to respond to changes in same set of paths specified in the *_pr_dev_pipeline.yml files.
 More details about how to create a policy can be found [Branch policies and settings](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser).
 
-**Step 11. (Optional)** It's a common practice to execute a training job on the full dataset once a PR has been merged into the development branch. At the same time, the training process can take a long time (many hours or even days) and Azure DevOps agent will not be able to report on the status of the training job due to timeout settings. So, it's very hard to implement a single CI Build that will wait for a new model (training results) and execute the remaining steps after model approval, model movement promotion to a qa environment, and eventual model deployment etc.
-
-Azure ML provides a solution that allows us to implement a *server* task in Azure DevOps Build and wait for the result of the pipeline training job with no Azure DevOps agent holding. Thanks to that it's possible to wait for results any amount of time and execute all other steps right after completion of the Azure ML training job. As for now, the feature is in active development, but you can [visit this link](https://github.com/Azure/azure-mlops-automation) to check the status and find how to get access. This new Azure ML feature can be included in your CI Build thanks to the extension that Azure ML team built or you can use RestAPITask for a direct REST call. In this template we implemented a version with the extension.
-
-
 ## Execute Pipelines
 
 **Step 12.** *Provision Infrastructure* - Execute the infrastructure provision pipeline (infra_provision_bicep_pipeline.yml OR infra_provision_terraform_pipeline.yml).
