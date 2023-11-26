@@ -1,0 +1,25 @@
+{
+    "real_time":[
+        {
+            "ML_MODEL_CONFIG_NAME": "house_prices",
+            "ENV_NAME": "dev",
+            "AZURE_RM_SVC_CONNECTION": "ws-mlops-skdv2-test",
+            "SCORE_FILE_NAME": "score.py",
+            "TEST_FILE_PATH": "model/house_prices/sample-request.json",
+            "ENDPOINT_NAME": "house_prices-predict",
+            "ENDPOINT_DESC": "An online endpoint serving an MLflow model for the online house_prices",
+            "DEPLOYMENT_DESC": "",
+            "DEPLOYMENT_NAME": "house_prices-predict",
+            "DEPLOYMENT_TRAFFIC_ALLOCATION": 100,
+            "DEPLOYMENT_VM_SIZE": "Standard_F4s_v2",
+            "DEPLOYMENT_BASE_IMAGE_NAME": "mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04",
+            "DEPLOYMENT_CONDA_PATH": "model/house_prices/environment/conda.yml",
+            "SCORE_DIR": "model/house_prices/scoring",
+            "DEPLOYMENT_INSTANCE_COUNT": 1,
+            "ENVIRONMENT_VARIABLES": {
+                "key1": "value1",
+                "key2": "value2"
+            }
+        }
+    ]
+}
