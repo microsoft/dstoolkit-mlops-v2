@@ -1,6 +1,6 @@
 {
     "models":[
-        {
+                {
             "ML_MODEL_CONFIG_NAME": "london_taxi",
             "ENV_NAME": "pr",
             "CLUSTER_REGION": "eastus",
@@ -60,6 +60,36 @@
             "BATCH_DEPLOYMENT_CONFIG": "mlops/nyc_taxi/configs/deployment/batch_config.json",
             "DATA_CONFIG_PATH": "mlops/nyc_taxi/configs/data_config.json"          
         },
+        {
+            "ML_MODEL_CONFIG_NAME": "diabetes",
+            "ENV_NAME": "pr",
+            "CLUSTER_REGION": "eastus",
+            "CLUSTER_SIZE": "STANDARD_DS3_v2",
+            "CONDA_PATH": "mlops/diabetes/environment/conda.yml",
+            "DISPLAY_BASE_NAME": "mlops",
+            "ENV_BASE_IMAGE_NAME": "mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04",
+            "ENVIRONMENT_NAME": "sklearn-python3",
+            "EXPERIMENT_BASE_NAME": "diabetes",
+            "MODEL_BASE_NAME": "cls",
+            "REALTIME_DEPLOYMENT_CONFIG": "mlops/diabetes/configs/deployment/realtime_config.json",
+            "BATCH_DEPLOYMENT_CONFIG": "mlops/diabetes/configs/deployment/batch_config.json",
+            "DATA_CONFIG_PATH": "mlops/diabetes/configs/data_config.json"          
+        },
+        {
+            "ML_MODEL_CONFIG_NAME": "diabetes",
+            "ENV_NAME": "dev",
+            "CLUSTER_REGION": "eastus",
+            "CLUSTER_SIZE": "STANDARD_DS3_v2",
+            "CONDA_PATH": "mlops/diabetes/environment/conda.yml",
+            "DISPLAY_BASE_NAME": "mlops",
+            "ENV_BASE_IMAGE_NAME": "mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04",
+            "ENVIRONMENT_NAME": "sklearn-python3",
+            "EXPERIMENT_BASE_NAME": "diabetes",
+            "MODEL_BASE_NAME": "cls",
+            "REALTIME_DEPLOYMENT_CONFIG": "mlops/diabetes/configs/deployment/realtime_config.json",
+            "BATCH_DEPLOYMENT_CONFIG": "mlops/diabetes/configs/deployment/batch_config.json",
+            "DATA_CONFIG_PATH": "mlops/diabetes/configs/data_config.json"          
+        }
         {
             "ML_MODEL_CONFIG_NAME": "house_prices",
             "ENV_NAME": "pr",
