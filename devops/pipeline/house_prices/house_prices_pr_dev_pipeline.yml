@@ -1,0 +1,38 @@
+pr: none
+trigger:
+  branches:
+   include:
+     - development
+  paths:
+    include:
+      - devops/*
+      - mlops/common/*
+      - mlops/house_prices/*
+      - src/nyc_src/*
+      - model/house_prices/*
+      - src/shared/*
+
+pool:
+  vmImage: ubuntu-latest
+
+
+variables:
+- group: mlops_ipkit_new_usercase
+
+parameters:
+ - name: env_name
+   displayName: "Execution Environment"
+   default: "pr"
+ - name: model_type
+   displayName: "model type"
+   default: "house_prices"
+
+stages:
+  - template: ../templates/variables_template.yml
+    parameters:
+      env_name: ${{parameters.env_name}}
+      model_type: ${{parameters.model_type}}
+  - template: ../platform_pr_dev_pipeline.yml
+    parameters:
+      exec_environment: ${{ parameters.env_name }}
+      model_type: ${{ parameters.model_type }}

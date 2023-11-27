@@ -2,16 +2,12 @@ import argparse
 from pathlib import Path
 import os
 import pandas as pd
-# from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 import pickle
 import mlflow
 import json
 
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.metrics import classification_report
-from sklearn.metrics import confusion_matrix
-from sklearn.svm import SVC 
 
 def main(training_data, test_data, model_output, model_metadata):
     print("Hello training world...")
@@ -35,31 +31,17 @@ def main(training_data, test_data, model_output, model_metadata):
         print("reading file: %s ..." % filename)
         with open(os.path.join(training_data, filename), "r") as handle:
             input_df = pd.read_csv((Path(training_data) / filename))
-            df_list.append(input_df)
 
-    train_data = df_list[0]
-    print(train_data.columns)
-
-    trainX, testX, trainy, testy = split(train_data)
+    trainX, testX, trainy, testy = split(input_df)
     write_test_data(testX, testy)
     train_model(trainX, trainy)
 
 
-def split(train_data):
+def split(df):
     # Split the data into input(X) and output(y)
-    y = train_data["outcome"]
-    X = train_data[
-        [
-            "pregnancies",
-            "glucose",
-            "bloodpressure",
-            "skinthickness",
-            "insulin",
-            "bmi",
-            "diabetespedigreefunction",
-            "age",
-        ]
-    ]
+    y = df["SalePrice"]
+    #X = df.loc[:, df.columns != 'SalePrice']
+    X = df[['LotFrontage','MasVnrArea','BsmtFinSF1','BsmtFinSF2','BsmtUnfSF','TotalBsmtSF','BsmtFullBath','BsmtHalfBath','GarageYrBlt','GarageCars','GarageArea']]
 
     # Split the data into train and test sets
     trainX, testX, trainy, testy = train_test_split(
@@ -75,23 +57,8 @@ def train_model(trainX, trainy):
     mlflow.autolog()
     # Train a Linear Regression Model with the train set
     with mlflow.start_run() as run:
-        # model = LinearRegression().fit(trainX, trainy)
-
-        model = GradientBoostingClassifier(
-        n_estimators=100, learning_rate=0.1
-    )
-        # model = SVC(kernel='linear', C=1.0)
-        model.fit(trainX, trainy)
-
-        # print(model.score(trainX, trainy))
-
-        y_pred = model.predict(trainX)
-
-        print (y_pred)
-        print(classification_report(trainy, y_pred))
-        # cm = confusion_matrix(trainX, y_pred)
-        # print(cm)
-
+        model = LinearRegression().fit(trainX, trainy)
+        print(model.score(trainX, trainy))
 
         # Output the model, metadata and test data
         run_id = mlflow.active_run().info.run_id
@@ -104,7 +71,7 @@ def train_model(trainX, trainy):
 
 
 def write_test_data(testX, testy):
-    testX["outcome"] = testy
+    testX["SalePrice"] = testy
     print(testX.shape)
     testX.to_csv((Path(args.test_data) / "test_data.csv"))
 
