@@ -12,6 +12,7 @@ from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 from sklearn.svm import SVC 
+import xgboost as xgb 
 
 def main(training_data, test_data, model_output, model_metadata):
     print("Hello training world...")
@@ -77,10 +78,9 @@ def train_model(trainX, trainy):
     with mlflow.start_run() as run:
         # model = LinearRegression().fit(trainX, trainy)
 
-        model = GradientBoostingClassifier(
-        n_estimators=100, learning_rate=0.1
-    )
-        # model = SVC(kernel='linear', C=1.0)
+        model = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1)
+        #model = xgb.XGBClassifier(objective="binary:logistic", random_state=42)
+        #model = SVC(kernel='linear', C=1.0)
         model.fit(trainX, trainy)
 
         # print(model.score(trainX, trainy))
