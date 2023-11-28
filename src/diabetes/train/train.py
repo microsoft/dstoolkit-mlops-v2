@@ -78,8 +78,8 @@ def train_model(trainX, trainy):
     with mlflow.start_run() as run:
         # model = LinearRegression().fit(trainX, trainy)
 
-       # model = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1)
-        model = xgb.XGBClassifier(objective="binary:logistic", random_state=42)
+        model = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1)
+        #model = xgb.XGBClassifier(objective="binary:logistic", random_state=42)
         #model = SVC(kernel='linear', C=1.0)
         model.fit(trainX, trainy)
 
