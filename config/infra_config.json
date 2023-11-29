@@ -1,9 +1,9 @@
 {
     "infra":[
         {
-            "NAMESPACE": "das",
+            "NAMESPACE": "ritb",
             "PROJECTCODE": "testb",
-            "VERSION": "61",
+            "VERSION": "199",
             "ENVIRONMENT": "DEV",
             "LOCATION": "eastus",
             "AZURE_RM_SVC_CONNECTION": "azure_connection",
