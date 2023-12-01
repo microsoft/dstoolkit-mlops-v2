@@ -5,7 +5,7 @@
             "PROJECTCODE": "premain",
             "VERSION": "001",
             "ENVIRONMENT": "dev",
-            "LOCATION": "westus",
+            "LOCATION": "eastus",
             "AZURE_RM_SVC_CONNECTION": "svc-bicep-2",
             "RESOURCE_GROUP_NAME": "bicep-premain",
             "AMLWORKSPACE": "mlw-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)",

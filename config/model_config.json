@@ -3,7 +3,7 @@
         {
             "ML_MODEL_CONFIG_NAME": "london_taxi",
             "ENV_NAME": "pr",
-            "CLUSTER_REGION": "westus",
+            "CLUSTER_REGION": "eastus",
             "CLUSTER_SIZE": "STANDARD_DS3_v2",
             "CONDA_PATH": "mlops/london_taxi/environment/conda.yml",
             "DISPLAY_BASE_NAME": "premain",
@@ -18,7 +18,7 @@
         {
             "ML_MODEL_CONFIG_NAME": "london_taxi",
             "ENV_NAME": "dev",
-            "CLUSTER_REGION": "westus",
+            "CLUSTER_REGION": "eastus",
             "CLUSTER_SIZE": "STANDARD_DS3_v2",
             "CONDA_PATH": "mlops/london_taxi/environment/conda.yml",
             "DISPLAY_BASE_NAME": "premain",
@@ -33,7 +33,7 @@
         {
             "ML_MODEL_CONFIG_NAME": "nyc_taxi",
             "ENV_NAME": "pr",
-            "CLUSTER_REGION": "westus",
+            "CLUSTER_REGION": "eastus",
             "CLUSTER_SIZE": "STANDARD_DS3_v2",
             "CONDA_PATH": "mlops/nyc_taxi/environment/conda.yml",
             "DISPLAY_BASE_NAME": "premain",
@@ -48,7 +48,7 @@
         {
             "ML_MODEL_CONFIG_NAME": "nyc_taxi",
             "ENV_NAME": "dev",
-            "CLUSTER_REGION": "westus",
+            "CLUSTER_REGION": "eastus",
             "CLUSTER_SIZE": "STANDARD_DS3_v2",
             "CONDA_PATH": "mlops/nyc_taxi/environment/conda.yml",
             "DISPLAY_BASE_NAME": "premain",
