@@ -1,21 +1,21 @@
 {
     "infra":[
         {
-            "NAMESPACE": "ritb",
-            "PROJECTCODE": "testb",
-            "VERSION": "199",
-            "ENVIRONMENT": "DEV",
-            "LOCATION": "eastus",
-            "AZURE_RM_SVC_CONNECTION": "azure_connection",
-            "RESOURCE_GROUP_NAME": "dsttestb",
+            "NAMESPACE": "",
+            "PROJECTCODE": "",
+            "VERSION": "",
+            "ENVIRONMENT": "",
+            "LOCATION": "",
+            "AZURE_RM_SVC_CONNECTION": "",
+            "RESOURCE_GROUP_NAME": "",
             "AMLWORKSPACE": "mlw-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)",
             "STORAGEACCOUNT":"staccaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
             "KEYVAULT":"akvaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
             "APPINSIGHTS":"aml-ai-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)",
             "CONTAINERREGISTRY": "cr$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
             "CLUSTER_NAME": "cluster$(VERSION)",
-            "BATCH_CLUSTER_NAME": "batchcluster",
-            "CLUSTER_SIZE": "STANDARD_DS3_v2"
+            "BATCH_CLUSTER_NAME": "",
+            "CLUSTER_SIZE": ""
 
         }
     ]
