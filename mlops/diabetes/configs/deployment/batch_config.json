@@ -1,11 +1,11 @@
 {
     "batch_config":[
         {
-            "ML_MODEL_CONFIG_NAME": "london_taxi",
+            "ML_MODEL_CONFIG_NAME": "diabetes",
             "ENV_NAME": "dev",
             "BATCH_CLUSTER_NAME": "biceppremain",
-            "ENDPOINT_NAME": "london-taxi-be-100b",
-            "DEPLOYMENT_NAME": "london-taxi-bd-100b",
+            "ENDPOINT_NAME": "diabetes-be-100d",
+            "DEPLOYMENT_NAME": "diabetes-bd-100d",
             "CLUSTER_INSTANCE_COUNT": 2,
             "MAX_CONCURRENCY_PER_INSTANCE": 2,
             "MINI_BATCH_SIZE": 10,
