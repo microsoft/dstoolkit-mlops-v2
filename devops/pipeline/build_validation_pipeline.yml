@@ -17,6 +17,7 @@ jobs:
 
   - script: |
       flake8 .
+      flake8 ../mlops
     displayName: "Lint with flake8"
 
   - script: |
