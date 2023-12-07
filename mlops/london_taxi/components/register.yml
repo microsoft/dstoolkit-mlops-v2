@@ -13,7 +13,7 @@ inputs:
   build_reference:
     type: string
 code: ./../../../
-environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
+environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu@latest
 command: >-
   python -m src.london_src.register.register 
   --model_metadata ${{inputs.model_metadata}}  
