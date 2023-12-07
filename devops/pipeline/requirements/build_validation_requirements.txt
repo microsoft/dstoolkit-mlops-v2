@@ -1,6 +1,6 @@
-flake8-docstrings==1.6.0
-flake8==4.0.1
-pep8-naming==0.13.0
+flake8-docstrings==1.7.0
+flake8==6.1.0
+pep8-naming==0.13.3
 pytest-cov==3.0.0
 pytest-azurepipelines==1.0.3
 pytest-mock==3.7.0

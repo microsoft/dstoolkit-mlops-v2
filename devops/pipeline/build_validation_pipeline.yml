@@ -16,9 +16,8 @@ jobs:
     displayName: "Load Python Dependencies"
 
   - script: |
-      flake8-docstrings==1.7.0
-      flake8==6.1.0
-      pep8-naming==0.13.3
+      flake8 .
+      flake8 ../../mlops
     displayName: "Lint with flake8"
 
   - script: |
