@@ -3,7 +3,7 @@
         {
             "NAMESPACE": "mlw",
             "PROJECTCODE": "postreview",
-            "VERSION": "002",
+            "VERSION": "003",
             "ENVIRONMENT": "dev",
             "LOCATION": "eastus",
             "AZURE_RM_SVC_CONNECTION": "svc-bicep-2",
