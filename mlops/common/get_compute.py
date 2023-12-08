@@ -3,7 +3,7 @@ from azure.identity import DefaultAzureCredential
 import argparse
 from azure.ai.ml.entities import AmlCompute
 
-
+# function for getting compute resource to use based on inputs 
 def get_compute(
     subscription_id: str,
     resource_group_name: str,
@@ -46,7 +46,7 @@ def get_compute(
         raise
     return compute_object
 
-
+# main function: parse inputs, call get compute 
 def main():
     parser = argparse.ArgumentParser("get_compute")
     parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
