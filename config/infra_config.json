@@ -7,7 +7,7 @@
             "ENVIRONMENT": "dev",
             "LOCATION": "eastus",
             "AZURE_RM_SVC_CONNECTION": "svc-bicep-2",
-            "RESOURCE_GROUP_NAME": "rg-terraform-001",
+            "RESOURCE_GROUP_NAME": "rg-terraform-003",
             "AMLWORKSPACE": "mlw-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)",
             "STORAGEACCOUNT":"staccaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
             "KEYVAULT":"akvaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
