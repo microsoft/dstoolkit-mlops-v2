@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/azureml/minimal-ubuntu20.04-py38-cuda11.6.2-gpu-inference:latest
+FROM mcr.microsoft.com/azureml/minimal-ubuntu20.04-py38-cpu-inference:latest
 
 ARG model_folder
 ARG model_registered_name
