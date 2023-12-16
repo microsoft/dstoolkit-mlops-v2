@@ -64,4 +64,5 @@ for elem in batch_data['batch_config']:
             )
 
             ml_client.jobs.download(name=scoring_job.name, download_path=".", output_name="score")
+
             

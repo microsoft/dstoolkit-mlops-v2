@@ -39,5 +39,3 @@ for elem in endpoint_config['real_time']:
             )
 
             print(request_result)
-            
-            
