@@ -17,7 +17,7 @@ real_config = args.realtime_deployment_config
 environment_name = args.environment_name
 
 ml_client = MLClient(
-    DefaultAzureCredential(), args.subscription_id,  args.resource_group_name,  args.workspace_name
+    DefaultAzureCredential(), args.subscription_id, args.resource_group_name, args.workspace_name
 )
 
 config_file = open(real_config)
@@ -39,3 +39,4 @@ for elem in endpoint_config['real_time']:
             )
 
             print(request_result)
+            

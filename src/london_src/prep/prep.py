@@ -1,13 +1,7 @@
 import argparse
 from pathlib import Path
-from typing_extensions import Concatenate
-from uuid import uuid4
-from datetime import datetime
 import os
 import pandas as pd
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
-import pickle
 
 
 def main(raw_data, prep_data):
@@ -94,12 +88,11 @@ def data_prep(green_data, yellow_data):
     print("green_columns: " + green_columns)
     print("yellow_columns: " + yellow_columns)
 
-    green_data_clean = cleanseData(green_data, green_columns, useful_columns)
-    yellow_data_clean = cleanseData(yellow_data, yellow_columns, useful_columns)
+    green_data_clean = cleansedata(green_data, green_columns, useful_columns)
+    yellow_data_clean = cleansedata(yellow_data, yellow_columns, useful_columns)
 
     # Append yellow data to green data
     combined_df = pd.concat([green_data_clean, yellow_data_clean], ignore_index=True)
-    #combined_df = green_data_clean.append(yellow_data_clean, ignore_index=True)
     combined_df.reset_index(inplace=True, drop=True)
 
     output_green = green_data_clean.to_csv(
@@ -125,7 +118,7 @@ def get_dict(dict_str):
     return new_dict
 
 
-def cleanseData(data, columns, useful_columns):
+def cleansedata(data, columns, useful_columns):
     useful_columns = [
         s.strip().strip("'") for s in useful_columns.strip("[]").split(";")
     ]

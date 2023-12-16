@@ -2,7 +2,6 @@ import argparse
 import pandas as pd
 import os
 from pathlib import Path
-from sklearn.linear_model import LinearRegression
 import pickle
 from sklearn.metrics import mean_squared_error, r2_score
 import mlflow
@@ -11,7 +10,6 @@ import json
 
 def main(predictions, model, score_report):
     print("hello scoring world...")
-
 
     lines = [
         f"Model path: {model}",

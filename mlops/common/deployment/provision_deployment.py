@@ -23,7 +23,7 @@ parser.add_argument("--workspace_name", type=str, help="Azure Machine learning W
 parser.add_argument("--model_name", type=str, help="registered model name to be deployed", required=True)
 parser.add_argument("--build_id", type=str, help="Azure DevOps build id for deployment", required=True)
 parser.add_argument("--run_id", type=str, help="AML run id for model generation", required=True)
-parser.add_argument("--is_batch", type=str, help="True for batch endpoint and False for real-time endpoint", required=True)
+parser.add_argument("--is_batch", type=str, help="Endpoint Type: True for batch; False for real-time", required=True)
 parser.add_argument("--batch_config", type=str, help="file path of batch config")
 parser.add_argument("--env_type", type=str, help="env name (dev, test, prod) for deployment", required=True)
 parser.add_argument("--realtime_deployment_config", type=str, help="file path of realtime config")
@@ -69,7 +69,7 @@ if batch == "False":
                 deployment_desc = elem["DEPLOYMENT_DESC"]
                 environment_variables = elem["ENVIRONMENT_VARIABLES"]
 
-                
+
                 environment = Environment(
                     conda_file=deployment_conda_path,
                     image=deployment_base_image,
@@ -86,7 +86,7 @@ if batch == "False":
                     ),
                     instance_type=deployment_vm_size,
                     instance_count=deployment_instance_count,
-                    environment_variables = dict(environment_variables),
+                    environment_variables=dict(environment_variables),
                     tags={"build_id": build_id, "run_id": run_id},
                 )
 
@@ -132,4 +132,4 @@ else:
                 endpoint = ml_client.batch_endpoints.get(endpoint_name)
                 endpoint.defaults.deployment_name = deployment_name
                 ml_client.batch_endpoints.begin_create_or_update(endpoint).result()
-
+                

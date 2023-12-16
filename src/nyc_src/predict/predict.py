@@ -5,8 +5,15 @@ from pathlib import Path
 from sklearn.linear_model import LinearRegression
 import pickle
 
-# main function
+
 def main(model_input, test_data, prediction_path):
+    """Load test data, call predict function.
+
+    Args:
+        model_input (string): path to model pickle file 
+        test_data (string): path to test data
+        prediction_path (string): path to which to write prediction
+    """
     lines = [
         f"Model path: {model_input}",
         f"Test data path: {test_data}",
@@ -20,8 +27,15 @@ def main(model_input, test_data, prediction_path):
     predict(testX, testy, model_input, prediction_path)
 
 
-# Load and split the test data
 def load_test_data(test_data):
+    """Load and split the test data
+
+    Args:
+        test_data (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     print("mounted_path files: ")
     arr = os.listdir(test_data)
 
@@ -65,6 +79,8 @@ def load_test_data(test_data):
 
 
 def predict(testX, testy, model_input, prediction_path):
+
+
     # Load the model from input port
     model = pickle.load(open((Path(model_input) / "model.sav"), "rb"))
 

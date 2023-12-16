@@ -2,12 +2,17 @@ import argparse
 import pandas as pd
 import os
 from pathlib import Path
-from sklearn.linear_model import LinearRegression
 import pickle
 
 
-
 def main(model_input, test_data, prediction_path):
+    """Load test data, call predict function.
+
+    Args:
+        model_input (string): path to model pickle file 
+        test_data (string): path to test data
+        prediction_path (string): path to which to write prediction
+    """
     lines = [
         f"Model path: {model_input}",
         f"Test data path: {test_data}",

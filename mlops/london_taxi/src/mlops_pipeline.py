@@ -69,10 +69,8 @@ def construct_pipeline(
 
     registered_data_asset = ml_client.data.get(name=dataset_name,label='latest')
 
-
     parent_dir = os.path.join(os.getcwd(), "mlops/london_taxi/components")
-    #data_dir = os.path.join(os.getcwd(), data_config)
-    
+
     prepare_data = load_component(source=parent_dir + "/prep.yml")
     transform_data = load_component(source=parent_dir + "/transform.yml")
     train_model = load_component(source=parent_dir + "/train.yml")
@@ -185,7 +183,7 @@ def execute_pipeline(
                 raise Exception("Sorry, exiting job with failure..")
     except Exception as ex:
         print(
-            "Oops! invalid credentials or error while creating ML environment.. Try again..."
+            "Oops! invalid credentials or error while creating ML environment.. Try again...", ex
         )
         raise
 
@@ -214,9 +212,8 @@ def prepare_and_execute(
     data_config_path: str
 ):
     ml_client = MLClient(
-        DefaultAzureCredential(), subscription_id,  resource_group_name,  workspace_name
+        DefaultAzureCredential(), subscription_id, resource_group_name, workspace_name
     )
-
 
     compute = get_compute(
         subscription_id,

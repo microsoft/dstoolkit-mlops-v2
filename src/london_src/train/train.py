@@ -12,7 +12,6 @@ import json
 def main(training_data, test_data, model_output, model_metadata):
     print("Hello training world...")
 
-
     lines = [
         f"Training data path: {training_data}",
         f"Test data path: {test_data}",

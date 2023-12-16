@@ -12,7 +12,7 @@ parser.add_argument("--workspace_name", type=str, help="Azure Machine learning W
 parser.add_argument("--data_purpose", type=str, help="data to be registered identified by purpose", required=True)
 parser.add_argument("--data_config_path", type=str, help="data config file path", required=True)
 parser.add_argument("--environment_name",type=str,help="environment name (e.g. dev, test, prod)", required=True)
- 
+
 args = parser.parse_args()
 
 data_purpose = args.data_purpose
@@ -33,7 +33,6 @@ for elem in data_config['datasets']:
             dataset_desc = elem["DATASET_DESC"]
             dataset_name = elem["DATASET_NAME"]
 
-
             aml_dataset = Data(
                 path=data_path,
                 type=AssetTypes.URI_FOLDER,
@@ -47,3 +46,4 @@ for elem in data_config['datasets']:
 
             print(aml_dataset_unlabeled.latest_version)
             print(aml_dataset_unlabeled.id)
+            

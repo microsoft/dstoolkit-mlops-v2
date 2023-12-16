@@ -1,9 +1,9 @@
 
 from azure.ai.ml import MLClient
 from azure.identity import DefaultAzureCredential
-import mlflow
 import argparse
 import json
+
 
 def get_run_metadata(
     subscription_id: str,
@@ -12,7 +12,6 @@ def get_run_metadata(
     run_id: str,
     output_file_name: str,
 ):
-
 
     client = MLClient(
         DefaultAzureCredential(),
@@ -35,8 +34,6 @@ def get_run_metadata(
     if output_file_name is not None:
         with open(output_file_name, "w") as out_file:
             out_file.write(json.dumps(metadata))
-
-
 
 def main():
     parser = argparse.ArgumentParser("get_run_metadata")

@@ -1,6 +1,5 @@
 import mlflow
 import argparse
-import os
 import json
 from pathlib import Path
 
@@ -10,7 +9,6 @@ def main(model_metadata, model_name, score_report, build_reference):
         run_file = open(args.model_metadata)
         model_metadata = json.load(run_file)
         run_uri = model_metadata["run_uri"]
-
 
         score_file = open(Path(args.score_report) / "score.txt")
         score_data = json.load(score_file)

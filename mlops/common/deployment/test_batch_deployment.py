@@ -16,7 +16,7 @@ parser.add_argument("--batch_config", type=str, help="file path of batch config"
 args = parser.parse_args()
 
 ml_client = MLClient(
-    DefaultAzureCredential(), args.subscription_id,  args.resource_group_name,  args.workspace_name
+    DefaultAzureCredential(), args.subscription_id, args.resource_group_name, args.workspace_name
 )
 data_purpose = args.data_purpose
 data_config_path = args.data_config_path
@@ -64,3 +64,4 @@ for elem in batch_data['batch_config']:
             )
 
             ml_client.jobs.download(name=scoring_job.name, download_path=".", output_name="score")
+            

@@ -17,7 +17,7 @@ def get_workspace(subscription_id: str, resource_group_name: str, workspace_name
         print(f"Reference to {workspace_name} has been obtained.")
         return workspace
     except Exception as ex:
-        print("Oops!  invalid credentials.. Try again...")
+        print("Oops!  invalid credentials.. Try again...", ex)
         raise
 
 

@@ -3,7 +3,7 @@ from azure.identity import DefaultAzureCredential
 import argparse
 from azure.ai.ml.entities import AmlCompute
 
-# function for getting compute resource to use based on inputs 
+
 def get_compute(
     subscription_id: str,
     resource_group_name: str,
@@ -15,6 +15,10 @@ def get_compute(
     max_instances: int,
     idle_time_before_scale_down: int,
 ):
+    """
+    Function for getting compute resource to use based on inputs
+    """
+    
     compute_object = None
     try:
         client = MLClient(
@@ -42,12 +46,16 @@ def get_compute(
             ).result()
             print(f"A new cluster {cluster_name} has been created.")
     except Exception as ex:
-        print("Oops!  invalid credentials.. Try again...")
+        print("Oops!  invalid credentials.. Try again...", ex)
         raise
     return compute_object
 
-# main function: parse inputs, call get compute 
+
 def main():
+    """
+    Main function: parse inputs, call get compute 
+    """
+    
     parser = argparse.ArgumentParser("get_compute")
     parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
     parser.add_argument(
