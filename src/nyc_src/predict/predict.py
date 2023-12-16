@@ -2,7 +2,6 @@ import argparse
 import pandas as pd
 import os
 from pathlib import Path
-from sklearn.linear_model import LinearRegression
 import pickle
 
 
@@ -10,7 +9,7 @@ def main(model_input, test_data, prediction_path):
     """Load test data, call predict function.
 
     Args:
-        model_input (string): path to model pickle file 
+        model_input (string): path to model pickle file
         test_data (string): path to test data
         prediction_path (string): path to which to write prediction
     """
@@ -79,8 +78,6 @@ def load_test_data(test_data):
 
 
 def predict(testX, testy, model_input, prediction_path):
-
-
     # Load the model from input port
     model = pickle.load(open((Path(model_input) / "model.sav"), "rb"))
 
@@ -95,6 +92,7 @@ def predict(testX, testy, model_input, prediction_path):
 
     # Save the output data with feature columns, predicted cost, and actual cost in csv file
     output_data = output_data.to_csv((Path(prediction_path) / "predictions.csv"))
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("predict")

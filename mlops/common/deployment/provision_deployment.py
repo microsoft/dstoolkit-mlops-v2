@@ -69,7 +69,6 @@ if batch == "False":
                 deployment_desc = elem["DEPLOYMENT_DESC"]
                 environment_variables = elem["ENVIRONMENT_VARIABLES"]
 
-
                 environment = Environment(
                     conda_file=deployment_conda_path,
                     image=deployment_base_image,

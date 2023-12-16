@@ -35,6 +35,7 @@ def get_run_metadata(
         with open(output_file_name, "w") as out_file:
             out_file.write(json.dumps(metadata))
 
+
 def main():
     parser = argparse.ArgumentParser("get_run_metadata")
     parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
