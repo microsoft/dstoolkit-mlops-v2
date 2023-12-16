@@ -67,5 +67,3 @@ else:
                 )
 
                 ml_client.batch_endpoints.begin_create_or_update(endpoint).result()
-
-                

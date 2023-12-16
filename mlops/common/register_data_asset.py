@@ -46,4 +46,3 @@ for elem in data_config['datasets']:
 
             print(aml_dataset_unlabeled.latest_version)
             print(aml_dataset_unlabeled.id)
-   

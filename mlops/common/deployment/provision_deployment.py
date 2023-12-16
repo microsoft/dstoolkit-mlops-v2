@@ -131,5 +131,3 @@ else:
                 endpoint = ml_client.batch_endpoints.get(endpoint_name)
                 endpoint.defaults.deployment_name = deployment_name
                 ml_client.batch_endpoints.begin_create_or_update(endpoint).result()
-
-                
