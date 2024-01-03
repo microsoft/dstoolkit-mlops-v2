@@ -15,9 +15,7 @@ def get_compute(
     max_instances: int,
     idle_time_before_scale_down: int,
 ):
-    """
-    Function for getting compute resource to use based on inputs
-    """
+    """Function for getting compute resource to use based on inputs."""
     compute_object = None
     try:
         client = MLClient(
@@ -51,9 +49,7 @@ def get_compute(
 
 
 def main():
-    """
-    Main function: parse inputs, call get compute
-    """
+    """Main function: parse inputs, call get compute."""
     parser = argparse.ArgumentParser("get_compute")
     parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
     parser.add_argument(

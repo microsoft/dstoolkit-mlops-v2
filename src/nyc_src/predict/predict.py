@@ -27,7 +27,8 @@ def main(model_input, test_data, prediction_path):
 
 
 def load_test_data(test_data):
-    """Load and split the test data
+    """
+    Load and split the test data.
 
     Args:
         test_data (_type_): _description_
