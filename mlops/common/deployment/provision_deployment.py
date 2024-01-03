@@ -107,12 +107,20 @@ else:
                 output_file_name = elem["OUTPUT_FILE_NAME"]
                 max_retries = elem["MAX_RETRIES"]
                 retry_timeout = elem["RETRY_TIMEOUT"]
+                conda_file = elem["CONDA_FILE"]
+
+                environment = Environment(
+                    name="prs-env",
+                    conda_file=conda_file,
+                    image="mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04:latest",
+                )
 
                 deployment = ModelBatchDeployment(
                     name=deployment_name,
                     description="model with batch endpoint",
                     endpoint_name=endpoint_name,
                     model=model,
+                    environment=environment,
                     compute=batch_cluster_name,
                     settings=ModelBatchDeploymentSettings(
                         instance_count=cluster_instance_count,
