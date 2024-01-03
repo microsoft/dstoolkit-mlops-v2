@@ -107,7 +107,7 @@ else:
                 output_file_name = elem["OUTPUT_FILE_NAME"]
                 max_retries = elem["MAX_RETRIES"]
                 retry_timeout = elem["RETRY_TIMEOUT"]
-                conda_file = elem["CONDA_FILE"]
+                conda_file = elem["DEPLOYMENT_CONDA_PATH"]
 
                 environment = Environment(
                     name="prs-env",
