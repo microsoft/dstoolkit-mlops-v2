@@ -67,7 +67,7 @@ def construct_pipeline(
             if deploy_environment == elem['ENV_NAME']:
                 dataset_name = elem["DATASET_NAME"]
 
-    registered_data_asset = ml_client.data.get(name=dataset_name,label='latest')
+    registered_data_asset = ml_client.data.get(name=dataset_name, label='latest')
     parent_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/components")
 
     prepare_data = load_component(source=parent_dir + "/prep.yml")

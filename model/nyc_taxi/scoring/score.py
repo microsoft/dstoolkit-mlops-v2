@@ -11,7 +11,7 @@ def init():
     You can write the logic here to perform init operations like caching the model in memory
     """
     global model
-    model_path = os.path.join(os.getenv("AZUREML_MODEL_DIR"),"model", "model.pkl")
+    model_path = os.path.join(os.getenv("AZUREML_MODEL_DIR"), "model", "model.pkl")
 
     # deserialize the model file back into a sklearn model
     model = joblib.load(model_path)

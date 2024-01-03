@@ -19,7 +19,7 @@ parser.add_argument("--run_id", type=str, help="AML run id for model generation"
 parser.add_argument("--build_id", type=str, help="Azure DevOps build id for deployment", required=True)
 parser.add_argument("--is_batch", type=str, help="Endpoint Type: True for batch; False for real-time", required=True)
 parser.add_argument("--batch_config", type=str, help="file path of batch config")
-parser.add_argument("--environment_name",type=str,help="environment name (e.g. dev, test, prod)", required=True)
+parser.add_argument("--environment_name", type=str, help="environment name (e.g. dev, test, prod)", required=True)
 args = parser.parse_args()
 
 batch = args.is_batch
