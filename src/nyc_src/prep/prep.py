@@ -22,9 +22,8 @@ def main(raw_data, prep_data):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(raw_data, filename), "r") as handle:
-            input_df = pd.read_csv((Path(raw_data) / filename))
-            df_list.append(input_df)
+        input_df = pd.read_csv((Path(raw_data) / filename))
+        df_list.append(input_df)
 
     # Prep the green and yellow taxi data
     green_data = df_list[0]
@@ -96,13 +95,13 @@ def data_prep(green_data, yellow_data):
     combined_df = pd.concat([green_data_clean, yellow_data_clean], ignore_index=True)
     combined_df.reset_index(inplace=True, drop=True)
 
-    output_green = green_data_clean.to_csv(
+    green_data_clean.to_csv(
         os.path.join(prep_data, "green_prep_data.csv")
     )
-    output_yellow = yellow_data_clean.to_csv(
+    yellow_data_clean.to_csv(
         os.path.join(prep_data, "yellow_prep_data.csv")
     )
-    merged_data = combined_df.to_csv(os.path.join(prep_data, "merged_data.csv"))
+    combined_df.to_csv(os.path.join(prep_data, "merged_data.csv"))
 
     print("Finish")
 

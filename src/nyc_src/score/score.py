@@ -29,9 +29,8 @@ def main(predictions, model, score_report):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(predictions, filename), "r") as handle:
-            input_df = pd.read_csv((Path(predictions) / filename))
-            df_list.append(input_df)
+        input_df = pd.read_csv((Path(predictions) / filename))
+        df_list.append(input_df)
 
     test_data = df_list[0]
 

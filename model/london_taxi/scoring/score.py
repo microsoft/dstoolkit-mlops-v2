@@ -7,7 +7,7 @@ import joblib
 
 def init():
     """
-    This function is called when the container is initialized/started, typically after create/update of the deployment.
+    Initialize the service instance on startup.
 
     You can write the logic here to perform init operations like caching the model in memory.
     """
@@ -23,7 +23,7 @@ def init():
 
 def run(raw_data):
     """
-    This function is called for every invocation of the endpoint to perform the actual scoring/prediction.
+    Execure inferencing logic on a request.
 
     In the example we extract the data from the json input and call the scikit-learn model's predict()
     method and return the result back.

@@ -29,9 +29,8 @@ def main(training_data, test_data, model_output, model_metadata):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(training_data, filename), "r") as handle:
-            input_df = pd.read_csv((Path(training_data) / filename))
-            df_list.append(input_df)
+        input_df = pd.read_csv((Path(training_data) / filename))
+        df_list.append(input_df)
 
     train_data = df_list[0]
     print(train_data.columns)

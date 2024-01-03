@@ -35,9 +35,8 @@ def load_test_data(test_data):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(test_data, filename), "r") as handle:
-            input_df = pd.read_csv((Path(test_data) / filename))
-            df_list.append(input_df)
+        input_df = pd.read_csv((Path(test_data) / filename))
+        df_list.append(input_df)
 
     test_data = df_list[0]
     testy = test_data["cost"]

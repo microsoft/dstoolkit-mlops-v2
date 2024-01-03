@@ -15,7 +15,7 @@ def get_compute(
     max_instances: int,
     idle_time_before_scale_down: int,
 ):
-    """Function for getting compute resource to use based on inputs."""
+    """Get an existing compute or create a new one."""
     compute_object = None
     try:
         client = MLClient(
@@ -27,7 +27,7 @@ def get_compute(
         try:
             compute_object = client.compute.get(cluster_name)
             print(f"Found existing compute target {cluster_name}, so using it.")
-        except:
+        except Exception:
             print(f"{cluster_name} is not found! Trying to create a new one.")
             compute_object = AmlCompute(
                 name=cluster_name,
@@ -49,7 +49,7 @@ def get_compute(
 
 
 def main():
-    """Main function: parse inputs, call get compute."""
+    """Take command line parameters and returns a reference to the compute."""
     parser = argparse.ArgumentParser("get_compute")
     parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
     parser.add_argument(
