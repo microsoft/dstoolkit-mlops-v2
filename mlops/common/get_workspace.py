@@ -1,3 +1,11 @@
+"""
+This module provides utilities for accessing and managing an Azure Machine Learning workspace.
+
+It includes functionality to authenticate with Azure using default credentials and to retrieve 
+information about a specified Azure Machine Learning workspace. This is particularly useful 
+for automated scripts that need to interact with Azure ML resources, ensuring they can 
+securely access the necessary workspace.
+"""
 from azure.ai.ml import MLClient
 from azure.identity import DefaultAzureCredential
 import argparse

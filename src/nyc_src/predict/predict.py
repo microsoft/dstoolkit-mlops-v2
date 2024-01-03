@@ -1,3 +1,11 @@
+"""
+This module is designed for making predictions using a machine learning model.
+
+It includes functionality to load test data, load a pre-trained model, make predictions on the test data,
+and save these predictions. The module can be run as a script, allowing users to specify the model file,
+test data, and prediction output path via command-line arguments.
+"""
+
 import argparse
 import pandas as pd
 import os

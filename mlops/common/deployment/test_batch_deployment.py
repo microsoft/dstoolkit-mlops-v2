@@ -1,3 +1,12 @@
+"""
+This module provides functionalities for testing a machine learning model deployed on Azure.
+
+The script requires various arguments like subscription ID, resource group name, workspace name, 
+data purpose, data configuration path, environment name, and batch configuration path to be provided.
+It uses these arguments to connect to Azure Machine Learning services using MLClient, retrieves 
+the specified dataset, and invokes a batch endpoint for model testing.
+"""
+
 import argparse
 import json
 from azure.ai.ml import MLClient, Input

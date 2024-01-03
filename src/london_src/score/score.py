@@ -1,3 +1,12 @@
+"""
+This module provides functionality for scoring a machine learning model.
+
+It allows users to load a trained model and a dataset containing actual and predicted values, 
+then evaluates the model's performance by calculating metrics such as Mean Squared Error (MSE) 
+and the Coefficient of Determination (R^2). The module also supports logging these metrics 
+using MLflow and outputs a score report.
+"""
+
 import argparse
 import pandas as pd
 import os

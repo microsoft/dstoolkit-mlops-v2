@@ -1,3 +1,16 @@
+"""
+This module provides functionality for scoring a machine learning model.
+
+It includes capabilities to load test data, make predictions using a pre-trained model,
+and save these predictions. The module is designed to work with a specific data format,
+expecting features related to taxi trip data. It outputs the predictions along with actual
+values for further analysis.
+
+The module can be executed as a script with command-line arguments specifying paths for the model,
+test data, and the location to save predictions. It is designed to be used in a machine learning
+operations (MLOps) context, where automated scoring of models is a key step in the model evaluation process.
+"""
+
 import argparse
 import pandas as pd
 import os

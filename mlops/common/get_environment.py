@@ -1,3 +1,11 @@
+"""
+This module is designed to facilitate the creation and management of Azure Machine Learning environments.
+
+It leverages the Azure AI ML Client for communicating with Azure ML services, enabling users to create or 
+update machine learning environments in an Azure subscription. The module provides functionality to authenticate 
+with Azure, define environment specifications, and perform environment setup or updates.
+"""
+
 from azure.ai.ml import MLClient
 from azure.identity import DefaultAzureCredential
 import argparse

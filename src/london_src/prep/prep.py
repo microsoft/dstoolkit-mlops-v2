@@ -1,3 +1,12 @@
+"""
+This module processes and prepares taxi data for machine learning analysis.
+
+The module includes functionalities for reading raw taxi data, cleaning it, 
+and transforming it into a format suitable for machine learning models. It specifically
+handles green and yellow taxi data, applying predefined transformations and combining
+the datasets. The output is saved as prepared data files for subsequent analysis.
+"""
+
 import argparse
 from pathlib import Path
 import os

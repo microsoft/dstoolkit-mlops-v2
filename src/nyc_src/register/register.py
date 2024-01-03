@@ -1,3 +1,7 @@
+"""
+This module is designed for registering machine learning models in MLflow with associated metadata and evaluation scores.
+"""
+
 import mlflow
 import argparse
 import json

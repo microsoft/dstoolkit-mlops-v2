@@ -1,3 +1,16 @@
+"""
+This module provides functionality for testing a machine learning model deployed 
+in an Azure Machine Learning environment. It uses command-line arguments to specify 
+the Azure subscription, resource group, and workspace details, along with configuration 
+for a real-time deployment environment.
+
+The script reads deployment configuration from a specified JSON file and determines 
+the appropriate endpoint and deployment settings based on the provided environment 
+name (e.g., dev, test, prod). It then uses the Azure Machine Learning client to interact 
+with the specified deployment, sending a test request to the model endpoint and 
+displaying the result.
+"""
+
 import argparse
 import json
 from azure.ai.ml import MLClient

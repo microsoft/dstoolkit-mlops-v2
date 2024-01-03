@@ -1,3 +1,8 @@
+"""
+This module is designed to register machine learning models with MLflow, tag them with
+relevant metrics and information, and manage model versioning.
+"""
+
 import mlflow
 import argparse
 import json

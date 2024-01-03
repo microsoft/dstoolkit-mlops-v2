@@ -1,3 +1,15 @@
+"""
+This module is designed to train a machine learning model using provided 
+training data, evaluate the model, and save the model along with its metadata.
+
+The module performs the following key steps:
+1. Reading and combining data from specified training data files.
+2. Splitting the combined data into training and testing datasets.
+3. Training a Linear Regression model using the training dataset.
+4. Using MLflow for logging and tracking experiments.
+5. Saving the trained model and its metadata to specified paths.
+"""
+
 import argparse
 from pathlib import Path
 import os

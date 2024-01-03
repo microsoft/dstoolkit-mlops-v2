@@ -1,3 +1,7 @@
+"""
+This module is responsible for transforming and preparing taxi data for further analysis and model training.
+"""
+
 import argparse
 from pathlib import Path
 import os

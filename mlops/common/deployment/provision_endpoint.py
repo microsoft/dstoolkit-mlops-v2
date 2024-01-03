@@ -1,3 +1,10 @@
+"""
+This module is designed for provisioning Azure Machine Learning endpoints, supporting both real-time and batch processing.
+
+It utilizes the Azure ML SDK (MLClient) to create or update managed online and batch endpoints in an Azure ML workspace.
+The script is intended to be run as a command-line utility and requires several arguments to specify the Azure subscription, 
+resource group, workspace, and details related to the endpoint configuration.
+"""
 
 import json
 import argparse
