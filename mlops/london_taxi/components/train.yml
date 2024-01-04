@@ -14,7 +14,7 @@ outputs:
   model_metadata:
     type: uri_file
 code: ./../../../
-environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu@latest
+environment: azureml:AzureML-sklearn-1.1-ubuntu20.04-py38-cpu@latest
 command: >-
   python -m src.london_src.train.train
   --training_data ${{inputs.training_data}} 

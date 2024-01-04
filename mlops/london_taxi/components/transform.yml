@@ -10,7 +10,7 @@ outputs:
   transformed_data:
     type: uri_folder
 code: ./../../../
-environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu@latest
+environment: azureml:AzureML-sklearn-1.1-ubuntu20.04-py38-cpu@latest
 command: >-
   python -m src.london_src.transform.transform
   --clean_data ${{inputs.clean_data}} 

@@ -112,7 +112,7 @@ else:
                 environment = Environment(
                     name="prs-env",
                     conda_file=conda_file,
-                    image="mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04:latest",
+                    image="mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04:latest",
                 )
 
                 deployment = ModelBatchDeployment(
