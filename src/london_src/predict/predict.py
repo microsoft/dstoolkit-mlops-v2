@@ -1,3 +1,16 @@
+"""
+This module provides functionality for scoring a machine learning model.
+
+It includes capabilities to load test data, make predictions using a pre-trained model,
+and save these predictions. The module is designed to work with a specific data format,
+expecting features related to taxi trip data. It outputs the predictions along with actual
+values for further analysis.
+
+The module can be executed as a script with command-line arguments specifying paths for the model,
+test data, and the location to save predictions. It is designed to be used in a machine learning
+operations (MLOps) context, where automated scoring of models is a key step in the model evaluation process.
+"""
+
 import argparse
 import pandas as pd
 import os
@@ -22,8 +35,8 @@ def main(model_input, test_data, prediction_path):
     for line in lines:
         print(line)
 
-    testX, testy = load_test_data(test_data)
-    predict(testX, testy, model_input, prediction_path)
+    test_x, testy = load_test_data(test_data)
+    predict(test_x, testy, model_input, prediction_path)
 
 
 # Load and split the test data
@@ -35,13 +48,12 @@ def load_test_data(test_data):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(test_data, filename), "r") as handle:
-            input_df = pd.read_csv((Path(test_data) / filename))
-            df_list.append(input_df)
+        input_df = pd.read_csv((Path(test_data) / filename))
+        df_list.append(input_df)
 
     test_data = df_list[0]
     testy = test_data["cost"]
-    testX = test_data[
+    test_x = test_data[
         [
             "distance",
             "dropoff_latitude",
@@ -65,22 +77,22 @@ def load_test_data(test_data):
             "dropoff_second",
         ]
     ]
-    print(testX.shape)
-    print(testX.columns)
-    return testX, testy
+    print(test_x.shape)
+    print(test_x.columns)
+    return test_x, testy
 
 
-def predict(testX, testy, model_input, prediction_path):
+def predict(test_x, testy, model_input, prediction_path):
     # Load the model from input port
     model = pickle.load(open((Path(model_input) / "model.sav"), "rb"))
 
-    # Make predictions on testX data and record them in a column named predicted_cost
-    predictions = model.predict(testX)
-    testX["predicted_cost"] = predictions
-    print(testX.shape)
+    # Make predictions on test_x data and record them in a column named predicted_cost
+    predictions = model.predict(test_x)
+    test_x["predicted_cost"] = predictions
+    print(test_x.shape)
 
     # Compare predictions to actuals (testy)
-    output_data = pd.DataFrame(testX)
+    output_data = pd.DataFrame(test_x)
     output_data["actual_cost"] = testy
 
     # Save the output data with feature columns, predicted cost, and actual cost in csv file

@@ -1,3 +1,11 @@
+"""
+This module provides functionality for scoring a machine learning model.
+
+It allows users to load a trained model and a dataset containing actual and predicted values,
+then evaluates the model's performance by calculating metrics such as Mean Squared Error (MSE)
+and the Coefficient of Determination (R^2). The module also supports logging these metrics
+using MLflow and outputs a score report.
+"""
 import argparse
 import pandas as pd
 import os
@@ -29,9 +37,8 @@ def main(predictions, model, score_report):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(predictions, filename), "r") as handle:
-            input_df = pd.read_csv((Path(predictions) / filename))
-            df_list.append(input_df)
+        input_df = pd.read_csv((Path(predictions) / filename))
+        df_list.append(input_df)
 
     test_data = df_list[0]
 

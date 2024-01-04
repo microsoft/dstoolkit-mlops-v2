@@ -1,3 +1,15 @@
+"""
+This module defines a machine learning pipeline for processing, training, and evaluating data.
+
+The pipeline executes the following steps in order:
+1. Prepare Sample Data: Preprocesses raw data to make it suitable for further processing and analysis.
+2. Transform Sample Data: Performs advanced data transformations such as feature engineering.
+3. Train with Sample Data: Trains a machine learning model using the transformed data.
+4. Predict with Sample Data: Uses the trained model to make predictions on new data.
+5. Score with Sample Data: Evaluates the model's performance based on its predictions.
+6. Finalize and Persist Model: Handles tasks like persisting model metadata, registering the model,
+and generating reports.
+"""
 from azure.identity import DefaultAzureCredential
 import argparse
 from azure.ai.ml.dsl import pipeline
@@ -32,7 +44,7 @@ def nyc_taxi_data_regression(pipeline_job_input, model_name, build_reference):
         predictions=predict_with_sample_data.outputs.predictions,
         model=train_with_sample_data.outputs.model_output,
     )
-    register_model_with_sample_data = gl_pipeline_components[5](
+    gl_pipeline_components[5](
         model_metadata=train_with_sample_data.outputs.model_metadata,
         model_name=model_name,
         score_report=score_with_sample_data.outputs.score_report,
@@ -67,7 +79,7 @@ def construct_pipeline(
             if deploy_environment == elem['ENV_NAME']:
                 dataset_name = elem["DATASET_NAME"]
 
-    registered_data_asset = ml_client.data.get(name=dataset_name,label='latest')
+    registered_data_asset = ml_client.data.get(name=dataset_name, label='latest')
     parent_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/components")
 
     prepare_data = load_component(source=parent_dir + "/prep.yml")

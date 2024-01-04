@@ -1,3 +1,13 @@
+"""
+This module is responsible for transforming pre-processed data for the London Taxi dataset.
+
+The module includes a main function that orchestrates the reading of cleaned data,
+performs further transformations, and outputs the transformed data for model training.
+The transformations involve filtering out geographical coordinates outside the city borders,
+normalizing data types, splitting datetime fields into more granular components, and
+filtering out outliers in the dataset.
+"""
+
 import argparse
 from pathlib import Path
 import os
@@ -21,9 +31,8 @@ def main(clean_data, transformed_data):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(clean_data, filename), "r") as handle:
-            input_df = pd.read_csv((Path(clean_data) / filename))
-            df_list.append(input_df)
+        input_df = pd.read_csv((Path(clean_data) / filename))
+        df_list.append(input_df)
 
     # Transform the data
     combined_df = df_list[1]

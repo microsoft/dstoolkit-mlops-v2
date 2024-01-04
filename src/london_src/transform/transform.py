@@ -1,3 +1,5 @@
+"""This module is responsible for transforming and preparing taxi data."""
+
 import argparse
 from pathlib import Path
 import os
@@ -21,9 +23,8 @@ def main(clean_data, transformed_data):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(clean_data, filename), "r") as handle:
-            input_df = pd.read_csv((Path(clean_data) / filename))
-            df_list.append(input_df)
+        input_df = pd.read_csv((Path(clean_data) / filename))
+        df_list.append(input_df)
 
     # Transform the data
     combined_df = df_list[1]

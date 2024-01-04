@@ -1,3 +1,4 @@
+"""This module is designed to register machine learning models with MLflow."""
 import mlflow
 import argparse
 import json
