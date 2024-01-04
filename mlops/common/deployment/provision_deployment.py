@@ -147,5 +147,6 @@ else:
                 ml_client.batch_deployments.begin_create_or_update(deployment).result()
 
                 endpoint = ml_client.batch_endpoints.get(endpoint_name)
-                endpoint.defaults.deployment_name = deployment_name
+                endpoint.defaults.deployment_name = deployment.name
                 ml_client.batch_endpoints.begin_create_or_update(endpoint).result()
+                print(f"The default deployment is {endpoint.defaults.deployment_name}")
