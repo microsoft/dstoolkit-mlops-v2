@@ -1,9 +1,9 @@
 """
 This module is designed to preprocess taxi data for the Azure Machine Learning NYC Taxi tutorial.
 
-It includes functions for reading raw taxi data (both green and yellow taxi data), 
-cleaning it, and transforming it into a format suitable for machine learning modeling. 
-The module focuses on selecting useful columns, renaming them as per tutorial specifications, 
+It includes functions for reading raw taxi data (both green and yellow taxi data),
+cleaning it, and transforming it into a format suitable for machine learning modeling.
+The module focuses on selecting useful columns, renaming them as per tutorial specifications,
 and concatenating the green and yellow taxi data into a single dataset.
 """
 

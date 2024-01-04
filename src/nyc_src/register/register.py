@@ -1,7 +1,4 @@
-"""
-This module is designed for registering machine learning models in MLflow with associated metadata and evaluation scores.
-"""
-
+"""This module is designed for registering machine learning models in MLflow."""
 import mlflow
 import argparse
 import json

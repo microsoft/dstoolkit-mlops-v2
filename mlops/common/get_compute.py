@@ -1,11 +1,10 @@
 """
 This module provides functionality for managing Azure Machine Learning compute resources.
 
-It includes functions to get an existing compute target or create a new one in an Azure Machine Learning workspace. The module uses the Azure Machine Learning SDK for Python to interact with Azure resources. It is designed to be run as a standalone script with command-line arguments for specifying the details of the Azure Machine Learning compute target.
-
-Functions:
-    get_compute: Retrieves an existing compute target or creates a new one based on the specified parameters.
-    main: Parses command-line arguments and calls the get_compute function.
+It includes functions to get an existing compute target or create a new one in an Azure
+Machine Learning workspace. The module uses the Azure Machine Learning SDK for Python to
+interact with Azure resources. It is designed to be run as a standalone script with command-line
+arguments for specifying the details of the Azure Machine Learning compute target.
 """
     
 from azure.ai.ml import MLClient

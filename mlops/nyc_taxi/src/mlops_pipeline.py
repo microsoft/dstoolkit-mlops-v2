@@ -1,5 +1,5 @@
 """
-This module defines a machine learning pipeline for processing, training, and evaluating data. 
+This module defines a machine learning pipeline for processing, training, and evaluating data.
 
 The pipeline executes the following steps in order:
 1. Prepare Sample Data: Preprocesses raw data to make it suitable for further processing and analysis.
@@ -7,9 +7,8 @@ The pipeline executes the following steps in order:
 3. Train with Sample Data: Trains a machine learning model using the transformed data.
 4. Predict with Sample Data: Uses the trained model to make predictions on new data.
 5. Score with Sample Data: Evaluates the model's performance based on its predictions.
-6. Finalize and Persist Model: Handles tasks like persisting model metadata, registering the model, and generating reports.
-
-Each component in the pipeline takes specific inputs and produces outputs that are used by subsequent components, ensuring a seamless flow of data through the pipeline.
+6. Finalize and Persist Model: Handles tasks like persisting model metadata, registering the model,
+and generating reports.
 """
 from azure.identity import DefaultAzureCredential
 import argparse

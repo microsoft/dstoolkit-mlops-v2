@@ -1,12 +1,12 @@
 """
-This script automates the deployment of machine learning models in Azure Machine Learning. 
+This script automates the deployment of machine learning models in Azure Machine Learning.
 
-It supports both batch and real-time deployment scenarios, determining the type based on the 
-provided arguments. The script reads configuration details from specified JSON files and uses 
-these to set up and configure the model deployments. 
+It supports both batch and real-time deployment scenarios, determining the type based on the
+provided arguments. The script reads configuration details from specified JSON files and uses
+these to set up and configure the model deployments.
 
-It also handles various deployment settings such as endpoint names, deployment names, environment 
-variables, and computing resources. The script is intended to be run with command-line arguments 
+It also handles various deployment settings such as endpoint names, deployment names, environment
+variables, and computing resources. The script is intended to be run with command-line arguments
 specifying Azure subscription details, model information, and deployment preferences.
 """
 import json

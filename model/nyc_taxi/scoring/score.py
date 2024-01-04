@@ -1,7 +1,4 @@
-"""
-This module provides the functionality for initializing and running a machine learning model in an Azure ML environment.
-"""
-
+"""This module provides the functionality for initializing and running a machine learning model."""
 import os
 import logging
 import json

@@ -1,6 +1,5 @@
 """
-This module is designed to train a machine learning model using provided 
-training data, evaluate the model, and save the model along with its metadata.
+This module is designed to train a machine learning model.
 
 The module performs the following key steps:
 1. Reading and combining data from specified training data files.

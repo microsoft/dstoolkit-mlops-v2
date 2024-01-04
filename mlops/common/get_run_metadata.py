@@ -1,8 +1,8 @@
 """
 This module provides functionality to retrieve and store metadata for a specific Azure Machine Learning run.
 
-It utilizes the Azure ML SDK to interact with an Azure Machine Learning workspace and extract metadata 
-related to a specified run. The metadata includes various details such as the run's URL, display name, 
+It utilizes the Azure ML SDK to interact with an Azure Machine Learning workspace and extract metadata
+related to a specified run. The metadata includes various details such as the run's URL, display name,
 experiment name, and other relevant information.
 """
 from azure.ai.ml import MLClient

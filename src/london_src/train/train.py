@@ -1,11 +1,9 @@
 """
-This module is responsible for training a machine learning model to predict costs using 
-the provided dataset. It includes functionality for data preprocessing, model training, 
-evaluation, and saving the trained model and metadata.
+This module is responsible for training a machine learning model using the provided dataset.
 
-The module uses Linear Regression from scikit-learn for model training and leverages 
-MLflow for experiment tracking. The data is split into training and test sets, with the 
-model being trained on the training set. The test data and model outputs are saved for 
+The module uses Linear Regression from scikit-learn for model training and leverages
+MLflow for experiment tracking. The data is split into training and test sets, with the
+model being trained on the training set. The test data and model outputs are saved for
 further evaluation and deployment.
 """
 

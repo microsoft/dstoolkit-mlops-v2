@@ -1,8 +1,4 @@
-"""
-This module is designed to register machine learning models with MLflow, tag them with
-relevant metrics and information, and manage model versioning.
-"""
-
+"""This module is designed to register machine learning models with MLflow."""
 import mlflow
 import argparse
 import json
