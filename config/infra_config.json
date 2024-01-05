@@ -2,8 +2,8 @@
     "infra":[
         {
             "NAMESPACE": "cit",
-            "PROJECTCODE": "postreview",
-            "VERSION": "00",
+            "PROJECTCODE": "postrev",
+            "VERSION": "005",
             "ENVIRONMENT": "dev",
             "LOCATION": "eastus",
             "AZURE_RM_SVC_CONNECTION": "svc-bicep-2",
