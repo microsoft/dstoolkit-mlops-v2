@@ -1,7 +1,7 @@
 {
     "infra":[
         {
-            "NAMESPACE": "citest",
+            "NAMESPACE": "cit",
             "PROJECTCODE": "postreview",
             "VERSION": "004",
             "ENVIRONMENT": "dev",
