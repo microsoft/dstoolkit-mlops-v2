@@ -1,13 +1,13 @@
 {
     "infra":[
         {
-            "NAMESPACE": "mlw",
+            "NAMESPACE": "citest",
             "PROJECTCODE": "postreview",
-            "VERSION": "003",
+            "VERSION": "004",
             "ENVIRONMENT": "dev",
             "LOCATION": "eastus",
             "AZURE_RM_SVC_CONNECTION": "svc-bicep-2",
-            "RESOURCE_GROUP_NAME": "rg-terraform-003",
+            "RESOURCE_GROUP_NAME": "rg-bicep-004",
             "AMLWORKSPACE": "mlw-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)",
             "STORAGEACCOUNT":"staccaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
             "KEYVAULT":"akvaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
