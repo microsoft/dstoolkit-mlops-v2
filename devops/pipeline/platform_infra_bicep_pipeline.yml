@@ -123,10 +123,6 @@ stages:
             --type AmlCompute --resource-group '${{parameters.resourceGroup}}' --workspace-name '${{parameters.amlWorkspaceName}}'
         enabled: true
 
-      - task: Delay@1
-        inputs:
-          delayForMinutes: '5'
-
       - task: AzureCLI@2
         displayName: Add Key Vault access policy to service principal backing service connection
         inputs:
@@ -138,5 +134,9 @@ stages:
           inlineScript: |
             az --version
             $id = (az ad sp show --id $env:servicePrincipalId --query id)
+            Do {
+                $kv = (az keyvault show --name ${{parameters.keyVaultName}} --query id)
+                Start-Sleep -Seconds 15
+                } Until ($kv -ne $null)
             az keyvault set-policy --name ${{parameters.keyVaultName}} --object-id $id --secret-permissions get list
         enabled: true              
