@@ -68,13 +68,14 @@ if batch == "False":
                 deployment_instance_count = elem["DEPLOYMENT_INSTANCE_COUNT"]
                 deployment_desc = elem["DEPLOYMENT_DESC"]
                 environment_variables = elem["ENVIRONMENT_VARIABLES"]
-                env.python.user_managed_dependencies = True
+
                 
                 environment = Environment(
                     conda_file=deployment_conda_path,
                     image=deployment_base_image,
                 )
-
+                environment.python.user_managed_dependencies = True
+                
                 blue_deployment = ManagedOnlineDeployment(
                     name=deployment_name,
                     endpoint_name=endpoint_name,
