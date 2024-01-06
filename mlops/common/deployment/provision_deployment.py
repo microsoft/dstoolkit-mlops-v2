@@ -68,7 +68,7 @@ if batch == "False":
                 deployment_instance_count = elem["DEPLOYMENT_INSTANCE_COUNT"]
                 deployment_desc = elem["DEPLOYMENT_DESC"]
                 environment_variables = elem["ENVIRONMENT_VARIABLES"]
-
+                env.python.user_managed_dependencies = True
                 
                 environment = Environment(
                     conda_file=deployment_conda_path,
