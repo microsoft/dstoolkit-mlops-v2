@@ -123,6 +123,10 @@ stages:
             --type AmlCompute --resource-group '${{parameters.resourceGroup}}' --workspace-name '${{parameters.amlWorkspaceName}}'
         enabled: true
 
+      - task: Delay@1
+        inputs:
+          delayForMinutes: '5'
+
       - task: AzureCLI@2
         displayName: Add Key Vault access policy to service principal backing service connection
         inputs:
