@@ -72,8 +72,7 @@ if batch == "False":
                 
                 environment = Environment(
                     conda_file=deployment_conda_path,
-                    image=deployment_base_image,
-                    user_managed_dependencies = True
+                    image=deployment_base_image
                 )
                 
                 blue_deployment = ManagedOnlineDeployment(
@@ -116,8 +115,8 @@ else:
                 environment = Environment(
                     conda_file=deployment_conda_path,
                     image=deployment_base_image,
+                    user_managed_dependencies = True
                 )
-                environment.python.user_managed_dependencies = True
                 
                 deployment = ModelBatchDeployment(
                     name=deployment_name,
