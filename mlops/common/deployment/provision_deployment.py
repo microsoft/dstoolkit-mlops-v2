@@ -109,6 +109,8 @@ else:
                 output_file_name = elem["OUTPUT_FILE_NAME"]
                 max_retries = elem["MAX_RETRIES"]
                 retry_timeout = elem["RETRY_TIMEOUT"]
+                deployment_conda_path = elem["DEPLOYMENT_CONDA_PATH"]
+                deployment_base_image = elem["DEPLOYMENT_BASE_IMAGE_NAME"]
 
                 
                 environment = Environment(
