@@ -114,8 +114,7 @@ else:
                 
                 environment = Environment(
                     conda_file=deployment_conda_path,
-                    image=deployment_base_image,
-                    user_managed_dependencies = True
+                    image=deployment_base_image
                 )
                 
                 deployment = ModelBatchDeployment(
