@@ -73,8 +73,8 @@ if batch == "False":
                 environment = Environment(
                     conda_file=deployment_conda_path,
                     image=deployment_base_image,
+                    user_managed_dependencies = True
                 )
-                environment.python.user_managed_dependencies = True
                 
                 blue_deployment = ManagedOnlineDeployment(
                     name=deployment_name,
