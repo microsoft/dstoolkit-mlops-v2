@@ -110,12 +110,20 @@ else:
                 max_retries = elem["MAX_RETRIES"]
                 retry_timeout = elem["RETRY_TIMEOUT"]
 
+                
+                environment = Environment(
+                    conda_file=deployment_conda_path,
+                    image=deployment_base_image,
+                )
+                environment.python.user_managed_dependencies = True
+                
                 deployment = ModelBatchDeployment(
                     name=deployment_name,
                     description="model with batch endpoint",
                     endpoint_name=endpoint_name,
                     model=model,
                     compute=batch_cluster_name,
+                    environment=environment,
                     settings=ModelBatchDeploymentSettings(
                         instance_count=cluster_instance_count,
                         max_concurrency_per_instance=max_concurrency_per_instance,
