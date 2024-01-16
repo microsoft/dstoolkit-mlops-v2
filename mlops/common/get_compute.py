@@ -6,7 +6,7 @@ Machine Learning workspace. The module uses the Azure Machine Learning SDK for P
 interact with Azure resources. It is designed to be run as a standalone script with command-line
 arguments for specifying the details of the Azure Machine Learning compute target.
 """
-    
+
 from azure.ai.ml import MLClient
 from azure.identity import DefaultAzureCredential
 import argparse

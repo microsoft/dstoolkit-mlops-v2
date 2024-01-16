@@ -18,7 +18,18 @@ def get_run_metadata(
     run_id: str,
     output_file_name: str,
 ):
+    """
+    Get information about a job run and save information into a file.
 
+    This is an utility method that is going to be used in DevOps pipelines.
+
+    Parameters:
+      subscription_id (str): a subscription id where the workspace is located
+      resource_group_name (str): a resource group where the workspace is located
+      workspace_name (str): name of the Azure ML workspace
+      run_id (str): id of the run to check
+      output_file_name (str): a path to a file to save the results
+    """
     client = MLClient(
         DefaultAzureCredential(),
         subscription_id=subscription_id,
@@ -43,6 +54,11 @@ def get_run_metadata(
 
 
 def main():
+    """
+    Get information about a job run and save information into a file.
+
+    This is an entry point to invoke get_run_metadata from the command line interface.
+    """
     parser = argparse.ArgumentParser("get_run_metadata")
     parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
     parser.add_argument(
