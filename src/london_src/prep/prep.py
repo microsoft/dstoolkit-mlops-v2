@@ -14,6 +14,13 @@ import pandas as pd
 
 
 def main(raw_data, prep_data):
+    """
+    Read existing csv files and invoke preprocessing step.
+
+    Parameters:
+      raw_data (str): a folder to read csv files
+      prep_data (str): a folder for preprocessed data
+    """
     print("hello training world...")
 
     lines = [
@@ -38,10 +45,21 @@ def main(raw_data, prep_data):
     green_data = df_list[0]
     yellow_data = df_list[1]
 
-    data_prep(green_data, yellow_data)
+    data_prep(green_data, yellow_data, prep_data)
 
 
-def data_prep(green_data, yellow_data):
+def data_prep(green_data, yellow_data, prep_data):
+    """
+    Merge two data sets for different taxi vendors.
+
+    The method maps columns in two data sets and remove distinct columns
+     saving results as a csv file.
+
+    Parameters:
+      green_data (pandas.DataFrame): incoming data frame for green taxi
+      yellow_data (pandas.DataFrame): incoming data frame for yellow taxi
+      prep_data (str): a folder for preprocessed data
+    """
     # Define useful columns needed for the Azure Machine Learning London Taxi tutorial
     useful_columns = str(
         [
@@ -117,6 +135,15 @@ def data_prep(green_data, yellow_data):
 # These functions ensure that null data is removed from the dataset,
 # which will help increase machine learning model accuracy.
 def get_dict(dict_str):
+    """
+    Ensure that null data is removed from the dataset to increase machine learning model accuracy.
+
+    Parameters:
+      dict_str (Dictionary): a string with separated elements
+
+    Returns:
+      Dictionary: an updated dictionary
+    """
     pairs = dict_str.strip("{}").split(";")
     new_dict = {}
     for pair in pairs:
@@ -127,6 +154,17 @@ def get_dict(dict_str):
 
 
 def cleansedata(data, columns, useful_columns):
+    """
+    Clean dataset removing NA values.
+
+    Parameters:
+      data (pandas.DataFrame): initial data
+      columns (str): a list of columns in initial dataset
+      useful_columns (str): columns to retain
+
+    Returns:
+      DataFrame: an updated data set
+    """
     useful_columns = [
         s.strip().strip("'") for s in useful_columns.strip("[]").split(";")
     ]
@@ -151,7 +189,5 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    raw_data = args.raw_data
-    prep_data = args.prep_data
 
-    main(raw_data, prep_data)
+    main(args.raw_data, args.prep_data)

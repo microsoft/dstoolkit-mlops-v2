@@ -16,6 +16,13 @@ import numpy as np
 
 
 def main(clean_data, transformed_data):
+    """
+    Initiate transformation and save results into csv file.
+
+    Parameters:
+      clean_data (str): a folder to store results
+      transformed_data (DataFrame): an initial data frame for transformation
+    """
     lines = [
         f"Clean data path: {clean_data}",
         f"Transformed data output path: {transformed_data}",
@@ -50,6 +57,17 @@ def main(clean_data, transformed_data):
 
 
 def transform_data(combined_df):
+    """
+    Transform a dataframe to prepare it for training.
+
+    The method is implementing data cleaning and normalization
+
+    Parameters:
+      combined_df (pandas.DataFrame): incoming data frame
+
+    Returns:
+        DataFrame: transformed data frame
+    """
     combined_df = combined_df.astype(
         {
             "pickup_longitude": "float64",

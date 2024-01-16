@@ -36,13 +36,13 @@ def main(model_input, test_data, prediction_path):
 
 def load_test_data(test_data):
     """
-    Load and split the test data.
+    Load test data and store it in two data frames.
 
-    Args:
-        test_data (_type_): _description_
+    Parameters:
+      test_data (pandas.DataFrame): input data
 
     Returns:
-        _type_: _description_
+      (DataFrame, DataFrame): input data with no expected results and expected results in te second frame
     """
     print("mounted_path files: ")
     arr = os.listdir(test_data)
@@ -86,6 +86,15 @@ def load_test_data(test_data):
 
 
 def predict(test_x, testy, model_input, prediction_path):
+    """
+    Predict results on a batch and save them into csv file altogether wit expected results.
+
+    Parameters:
+      test_x (pandas.DataFrame): input data to predict
+      testy (pandas.DataFrame): expected results
+      model_input (str): an input folder with the model
+      prediction_path (str): a resulting folder
+    """
     # Load the model from input port
     model = pickle.load(open((Path(model_input) / "model.sav"), "rb"))
 

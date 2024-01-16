@@ -19,6 +19,15 @@ import json
 
 
 def main(training_data, test_data, model_output, model_metadata):
+    """
+    Read training data, split data and initiate training.
+
+    Parameters:
+      training_data (str): training data folder
+      test_data (str): test data folder
+      model_output (str): a folder to store model files
+      model_metadata (str): a file to store information about thr model
+    """
     print("Hello training world...")
 
     lines = [
