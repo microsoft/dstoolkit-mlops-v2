@@ -10,6 +10,18 @@ import json
 
 
 def main(training_data, test_data, model_output, model_metadata):
+    """
+    Main function for training the model.
+
+    Args:
+        training_data (str): Path to the training data.
+        test_data (str): Path to the test data.
+        model_output (str): Path to save the trained model.
+        model_metadata (str): Path to save the model metadata.
+
+    Returns:
+        None
+    """
     print("Hello training world...")
 
 
@@ -43,7 +55,18 @@ def main(training_data, test_data, model_output, model_metadata):
 
 
 def split(train_data):
-    # Split the data into input(X) and output(y)
+    """
+    Split the data into train and test sets.
+
+    Parameters:
+    train_data (DataFrame): The input data containing features and target variable.
+
+    Returns:
+    trainX (DataFrame): The training data features.
+    testX (DataFrame): The testing data features.
+    trainy (Series): The training data target variable.
+    testy (Series): The testing data target variable.
+    """
     y = train_data["cost"]
     X = train_data[
         [
@@ -70,7 +93,6 @@ def split(train_data):
         ]
     ]
 
-    # Split the data into train and test sets
     trainX, testX, trainy, testy = train_test_split(
         X, y, test_size=0.3, random_state=42
     )
@@ -81,6 +103,16 @@ def split(train_data):
 
 
 def train_model(trainX, trainy):
+    """
+    Train a Linear Regression Model with the given train set.
+
+    Parameters:
+    trainX (array-like): The input features for training the model.
+    trainy (array-like): The target variable for training the model.
+
+    Returns:
+    None
+    """
     mlflow.autolog()
     # Train a Linear Regression Model with the train set
     with mlflow.start_run() as run:
@@ -98,6 +130,16 @@ def train_model(trainX, trainy):
 
 
 def write_test_data(testX, testy):
+    """
+    Write test data to a CSV file.
+
+    Args:
+        testX (pandas.DataFrame): The test features.
+        testy (pandas.Series): The test labels.
+
+    Returns:
+        None
+    """
     testX["cost"] = testy
     print(testX.shape)
     testX.to_csv((Path(args.test_data) / "test_data.csv"))

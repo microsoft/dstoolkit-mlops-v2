@@ -15,6 +15,23 @@ gl_pipeline_components = []
 
 @pipeline()
 def london_taxi_data_regression(pipeline_job_input, model_name, build_reference):
+    """
+    Perform data regression for London taxi data.
+
+    Args:
+        pipeline_job_input (str): The input data for the pipeline job.
+        model_name (str): The name of the model.
+        build_reference (str): The reference for the build.
+
+    Returns:
+        dict: A dictionary containing the outputs of the pipeline job, including:
+            - pipeline_job_prepped_data: The prepped data.
+            - pipeline_job_transformed_data: The transformed data.
+            - pipeline_job_trained_model: The trained model.
+            - pipeline_job_test_data: The test data.
+            - pipeline_job_predictions: The predictions.
+            - pipeline_job_score_report: The score report.
+    """
     prepare_sample_data = gl_pipeline_components[0](
         raw_data=pipeline_job_input,
     )
@@ -59,6 +76,22 @@ def construct_pipeline(
     data_config_path: str,
     ml_client
 ):
+    """
+    Constructs a pipeline job for the London Taxi MLOps project.
+
+    Args:
+        cluster_name (str): The name of the cluster to use for pipeline execution.
+        environment_name (str): The name of the environment to use for pipeline execution.
+        display_name (str): The display name of the pipeline job.
+        deploy_environment (str): The environment to deploy the pipeline job to.
+        build_reference (str): The build reference for the pipeline job.
+        model_name (str): The name of the model.
+        data_config_path (str): The path to the data configuration file.
+        ml_client: The ML client object.
+
+    Returns:
+        pipeline_job: The constructed pipeline job.
+    """
     dataset_name = None
     config_file = open(data_config_path)
     data_config = json.load(config_file)
@@ -126,6 +159,25 @@ def execute_pipeline(
     wait_for_completion: str,
     output_file: str,
 ):
+    """
+    Executes a pipeline job in Azure Machine Learning service.
+
+    Args:
+        subscription_id (str): The Azure subscription ID.
+        resource_group_name (str): The name of the resource group.
+        workspace_name (str): The name of the Azure Machine Learning workspace.
+        experiment_name (str): The name of the experiment.
+        pipeline_job (pipeline): The pipeline job to be executed.
+        wait_for_completion (str): Indicates whether to wait for the job to complete. 
+                                  Accepted values: "True" or "False".
+        output_file (str): The path to the output file where the job name will be written.
+
+    Raises:
+        Exception: If the job fails to complete.
+
+    Returns:
+        None
+    """
     try:
         client = MLClient(
             DefaultAzureCredential(),
@@ -213,10 +265,35 @@ def prepare_and_execute(
     output_file: str,
     data_config_path: str
 ):
+    """
+    Prepares and executes the MLOps pipeline.
+
+    Args:
+        subscription_id (str): The Azure subscription ID.
+        resource_group_name (str): The name of the Azure resource group.
+        workspace_name (str): The name of the Azure Machine Learning workspace.
+        cluster_name (str): The name of the Azure Machine Learning compute cluster.
+        cluster_size (str): The desired size of the compute cluster.
+        cluster_region (str): The Azure region where the compute cluster is located.
+        min_instances (int): The minimum number of compute instances in the cluster.
+        max_instances (int): The maximum number of compute instances in the cluster.
+        idle_time_before_scale_down (int): The idle time in minutes before scaling down the cluster.
+        env_base_image_name (str): The name of the base environment image.
+        conda_path (str): The path to the Conda environment.
+        environment_name (str): The name of the Azure Machine Learning environment.
+        env_description (str): The description of the Azure Machine Learning environment.
+        wait_for_completion (str): Whether to wait for the pipeline execution to complete.
+        display_name (str): The display name of the pipeline.
+        experiment_name (str): The name of the Azure Machine Learning experiment.
+        deploy_environment (str): The environment to deploy the model to.
+        build_reference (str): The reference to the build configuration.
+        model_name (str): The name of the model.
+        output_file (str): The path to the output file.
+        data_config_path (str): The path to the data configuration file.
+    """
     ml_client = MLClient(
         DefaultAzureCredential(), subscription_id,  resource_group_name,  workspace_name
     )
-
 
     compute = get_compute(
         subscription_id,
@@ -265,6 +342,35 @@ def prepare_and_execute(
 
 
 def main():
+    """
+    Main function that parses command line arguments and calls the prepare_and_execute function.
+
+    Args:
+        --subscription_id (str): Azure subscription id
+        --resource_group_name (str): Azure Machine learning resource group
+        --workspace_name (str): Azure Machine learning Workspace name
+        --cluster_name (str): Azure Machine learning cluster name
+        --cluster_size (str): Azure Machine learning cluster size
+        --cluster_region (str): Azure Machine learning cluster region
+        --min_instances (int): Minimum number of instances for the cluster (default: 0)
+        --max_instances (int): Maximum number of instances for the cluster (default: 4)
+        --idle_time_before_scale_down (int): Idle time in seconds before scaling down the cluster (default: 1800)
+        --build_reference (str): Unique identifier for Azure DevOps pipeline run
+        --deploy_environment (str): Execution and deployment environment (e.g., dev, prod, test)
+        --experiment_name (str): Job execution experiment name
+        --display_name (str): Job execution run name
+        --wait_for_completion (str): Determine if pipeline should wait for job completion
+        --environment_name (str): Azure Machine Learning Environment name for job execution
+        --env_base_image_name (str): Environment custom base image name
+        --conda_path (str): Path to conda requirements file
+        --env_description (str): Description of the environment (default: "Environment created using Conda.")
+        --model_name (str): Name used for registration of model (default: "Name used for registration of model")
+        --output_file (str): A file to save run id
+        --data_config_path (str): Data config path (required)
+
+    Returns:
+        None
+    """
     parser = argparse.ArgumentParser("build_environment")
     parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
     parser.add_argument(

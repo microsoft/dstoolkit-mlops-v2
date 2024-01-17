@@ -10,6 +10,17 @@ import json
 
 
 def main(predictions, model, score_report):
+    """
+    Main function for scoring the predictions using a trained model.
+
+    Args:
+        predictions (str): Path to the directory containing prediction files.
+        model (str): Path to the trained model file.
+        score_report (str): Path to save the scoring output.
+
+    Returns:
+        None
+    """
     print("hello scoring world...")
 
 
@@ -44,6 +55,18 @@ def main(predictions, model, score_report):
 
 # Print the results of scoring the predictions against actual values in the test data
 def write_results(model, predictions, test_data, score_report):
+    """
+    Writes the results of model evaluation to a text file and logs metrics using MLflow.
+
+    Args:
+        model: The trained model.
+        predictions: The predicted values.
+        test_data: The test data containing the actual values.
+        score_report: The path to the directory where the score report will be saved.
+
+    Returns:
+        None
+    """
     # The coefficients
     print("Coefficients: \n", model.coef_)
 
