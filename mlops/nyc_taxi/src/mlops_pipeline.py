@@ -345,7 +345,6 @@ def prepare_and_execute(
 def main():
     """
     Entry point of the MLOps pipeline.
-    
     Parses command line arguments and calls the `prepare_and_execute` function
     with the parsed arguments.
     """
