@@ -20,7 +20,7 @@ import json
 
 def main(predictions, model, score_report):
     """
-    Loads the test data and model, and writes the results of the model scoring.
+    Load the test data and model, and write the results of the model scoring.
 
     Parameters:
     predictions (str): Path to the predictions.
@@ -29,7 +29,7 @@ def main(predictions, model, score_report):
 
     Returns:
     None
-    """    
+    """
     print("hello scoring world...")
 
     lines = [
@@ -65,7 +65,7 @@ def main(predictions, model, score_report):
 
 def write_results(model, predictions, test_data, score_report):
     """
-    Calculates and logs the model's mean squared error and coefficient of determination.
+    Calculate and log the model's mean squared error and coefficient of determination.
 
     Parameters:
     model (sklearn model): The trained model.
@@ -75,7 +75,7 @@ def write_results(model, predictions, test_data, score_report):
 
     Returns:
     None
-    """    
+    """
     # The coefficients
     print("Coefficients: \n", model.coef_)
 

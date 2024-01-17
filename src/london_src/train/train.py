@@ -60,7 +60,7 @@ def main(training_data, test_data, model_output, model_metadata):
 
 def split(train_data):
     """
-    Splits the input data into training and testing sets.
+    Split the input data into training and testing sets.
 
     Parameters:
     train_data (DataFrame): The input data.
@@ -110,7 +110,7 @@ def split(train_data):
 
 def train_model(train_x, trainy):
     """
-    Trains a Linear Regression model and saves the model and its metadata.
+    Train a Linear Regression model and save the model and its metadata.
 
     Parameters:
     trainX (DataFrame): The training data.
@@ -118,7 +118,7 @@ def train_model(train_x, trainy):
 
     Returns:
     None
-    """       
+    """
     mlflow.autolog()
     # Train a Linear Regression Model with the train set
     with mlflow.start_run() as run:
@@ -137,7 +137,7 @@ def train_model(train_x, trainy):
 
 def write_test_data(test_x, testy):
     """
-    Writes the testing data to a CSV file.
+    Write the testing data to a CSV file.
 
     Parameters:
     testX (DataFrame): The testing data.
@@ -145,7 +145,7 @@ def write_test_data(test_x, testy):
 
     Returns:
     None
-    """    
+    """
     test_x["cost"] = testy
     print(test_x.shape)
     test_x.to_csv((Path(args.test_data) / "test_data.csv"))

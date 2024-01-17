@@ -36,8 +36,8 @@ def london_taxi_data_regression(pipeline_job_input, model_name, build_reference)
     build_reference (str): Reference for the build.
 
     Returns:
-    dict: A dictionary containing paths to the prepped data, transformed data, trained model, test data, predictions, and score report.
-    """    
+    dict: A dictionary containing paths to various data, the model, predictions, and score report.
+    """
     prepare_sample_data = gl_pipeline_components[0](
         raw_data=pipeline_job_input,
     )
@@ -172,7 +172,7 @@ def execute_pipeline(
         workspace_name (str): The name of the Azure Machine Learning workspace.
         experiment_name (str): The name of the experiment.
         pipeline_job (pipeline): The pipeline job to be executed.
-        wait_for_completion (str): Indicates whether to wait for the job to complete. Valid values are "True" or "False".
+        wait_for_completion (str): Boolean indicating whether to wait for the job to complete. Valid values: "True" or "False".
         output_file (str): The path to the output file where the job name will be written.
 
     Raises:
@@ -180,7 +180,7 @@ def execute_pipeline(
 
     Returns:
         None
-    """    
+    """
     try:
         client = MLClient(
             DefaultAzureCredential(),
@@ -293,7 +293,7 @@ def prepare_and_execute(
         model_name (str): Name of the model.
         output_file (str): Path to the output file.
         data_config_path (str): Path to the data configuration file.
-    """    
+    """
     ml_client = MLClient(
         DefaultAzureCredential(), subscription_id, resource_group_name, workspace_name
     )
@@ -350,7 +350,7 @@ def main():
     
     Parses command line arguments and calls the `prepare_and_execute` function
     with the parsed arguments.
-    """    
+    """
     parser = argparse.ArgumentParser("build_environment")
     parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
     parser.add_argument(
