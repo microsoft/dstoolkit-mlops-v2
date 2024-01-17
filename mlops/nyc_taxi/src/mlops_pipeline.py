@@ -344,10 +344,7 @@ def prepare_and_execute(
 
 def main():
     """
-    Entry point of the MLOps pipeline.
-    
-    Parses command line arguments and calls the `prepare_and_execute` function
-    with the parsed arguments.
+    Parse the command line arguments and call the `prepare_and_execute` function.
     """
     parser = argparse.ArgumentParser("build_environment")
     parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
