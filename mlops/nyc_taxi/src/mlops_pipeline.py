@@ -28,7 +28,7 @@ gl_pipeline_components = []
 @pipeline()
 def nyc_taxi_data_regression(pipeline_job_input, model_name, build_reference):
     """
-    Runs a pipeline for regression analysis on NYC taxi data.
+    Run a pipeline for regression analysis on NYC taxi data.
 
     Parameters:
     pipeline_job_input (str): Path to the input data.
@@ -83,7 +83,7 @@ def construct_pipeline(
     ml_client
 ):
     """
-    Constructs a pipeline job for NYC taxi data regression.
+    Construct a pipeline job for NYC taxi data regression.
 
     Args:
         cluster_name (str): The name of the cluster to use for pipeline execution.
@@ -162,7 +162,7 @@ def execute_pipeline(
     output_file: str,
 ):
     """
-    Executes a pipeline job in Azure Machine Learning service.
+    Execute a pipeline job in Azure Machine Learning service.
 
     Args:
         subscription_id (str): The Azure subscription ID.
@@ -170,7 +170,7 @@ def execute_pipeline(
         workspace_name (str): The name of the Azure Machine Learning workspace.
         experiment_name (str): The name of the experiment.
         pipeline_job (pipeline): The pipeline job to be executed.
-        wait_for_completion (str): Boolean indicating whether to wait for the job to complete. Valid values: "True" or "False".
+        wait_for_completion (str): "True" or "False" indicates whether to wait for the job to complete.
         output_file (str): The path to the output file where the job name will be written.
 
     Raises:
@@ -267,7 +267,7 @@ def prepare_and_execute(
     data_config_path: str
 ):
     """
-    Prepares and executes the MLOps pipeline.
+    Prepare and execute the MLOps pipeline.
 
     Args:
         subscription_id (str): Azure subscription ID.
