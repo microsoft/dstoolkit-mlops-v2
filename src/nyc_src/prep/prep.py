@@ -191,4 +191,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    main(args.raw_data, args.raw_data)
+    main(args.raw_data, args.prep_data)
