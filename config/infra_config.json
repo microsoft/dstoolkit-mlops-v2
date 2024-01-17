@@ -1,8 +1,8 @@
 {
     "infra":[
         {
-            "NAMESPACE": "mlw",
-            "PROJECTCODE": "cit-postrev",
+            "NAMESPACE": "cit",
+            "PROJECTCODE": "postrev",
             "VERSION": "005",
             "ENVIRONMENT": "dev",
             "LOCATION": "eastus",
