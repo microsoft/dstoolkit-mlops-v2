@@ -18,7 +18,7 @@ jobs:
   - script: |
       flake8 .
     displayName: "Lint with flake8"
-    enabled: false
+    enabled: true
 
   - script: |
       pytest test/${{ parameters.model_type }}  --ignore=sandbox/ --junitxml=junit/test-results.xml --cov=. --cov-report=xml
