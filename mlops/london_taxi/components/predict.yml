@@ -11,10 +11,10 @@ inputs:
 outputs:
   predictions:
     type: uri_folder
-environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
+environment:  azureml:AzureML-sklearn-1.1-ubuntu20.04-py38-cpu@latest
 code: ./../../../
 command: >-
-  python -m src.london_src.predict.predict 
+  python -m src.london_src.predict.predict
   --model_input ${{inputs.model_input}} 
   --test_data ${{inputs.test_data}}
   --predictions ${{outputs.predictions}}

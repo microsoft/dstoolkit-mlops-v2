@@ -1,3 +1,12 @@
+"""
+This module is responsible for training a machine learning model using the provided dataset.
+
+The module uses Linear Regression from scikit-learn for model training and leverages
+MLflow for experiment tracking. The data is split into training and test sets, with the
+model being trained on the training set. The test data and model outputs are saved for
+further evaluation and deployment.
+"""
+
 import argparse
 from pathlib import Path
 import os
@@ -10,8 +19,16 @@ import json
 
 
 def main(training_data, test_data, model_output, model_metadata):
-    print("Hello training world...")
+    """
+    Read training data, split data and initiate training.
 
+    Parameters:
+      training_data (str): training data folder
+      test_data (str): test data folder
+      model_output (str): a folder to store model files
+      model_metadata (str): a file to store information about thr model
+    """
+    print("Hello training world...")
 
     lines = [
         f"Training data path: {training_data}",
@@ -30,22 +47,33 @@ def main(training_data, test_data, model_output, model_metadata):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(training_data, filename), "r") as handle:
-            input_df = pd.read_csv((Path(training_data) / filename))
-            df_list.append(input_df)
+        input_df = pd.read_csv((Path(training_data) / filename))
+        df_list.append(input_df)
 
     train_data = df_list[0]
     print(train_data.columns)
 
-    trainX, testX, trainy, testy = split(train_data)
-    write_test_data(testX, testy)
-    train_model(trainX, trainy)
+    train_x, test_x, trainy, testy = split(train_data)
+    write_test_data(test_x, testy)
+    train_model(train_x, trainy)
 
 
 def split(train_data):
+    """
+    Split the input data into training and testing sets.
+
+    Parameters:
+    train_data (DataFrame): The input data.
+
+    Returns:
+    trainX (DataFrame): The training data.
+    testX (DataFrame): The testing data.
+    trainy (Series): The training labels.
+    testy (Series): The testing labels.
+    """
     # Split the data into input(X) and output(y)
     y = train_data["cost"]
-    X = train_data[
+    x = train_data[
         [
             "distance",
             "dropoff_latitude",
@@ -71,21 +99,31 @@ def split(train_data):
     ]
 
     # Split the data into train and test sets
-    trainX, testX, trainy, testy = train_test_split(
-        X, y, test_size=0.3, random_state=42
+    train_x, test_x, trainy, testy = train_test_split(
+        x, y, test_size=0.3, random_state=42
     )
-    print(trainX.shape)
-    print(trainX.columns)
+    print(train_x.shape)
+    print(train_x.columns)
 
-    return trainX, testX, trainy, testy
+    return train_x, test_x, trainy, testy
 
 
-def train_model(trainX, trainy):
+def train_model(train_x, trainy):
+    """
+    Train a Linear Regression model and save the model and its metadata.
+
+    Parameters:
+    trainX (DataFrame): The training data.
+    trainy (Series): The training labels.
+
+    Returns:
+    None
+    """
     mlflow.autolog()
     # Train a Linear Regression Model with the train set
     with mlflow.start_run() as run:
-        model = LinearRegression().fit(trainX, trainy)
-        print(model.score(trainX, trainy))
+        model = LinearRegression().fit(train_x, trainy)
+        print(model.score(train_x, trainy))
 
         # Output the model, metadata and test data
         run_id = mlflow.active_run().info.run_id
@@ -97,10 +135,20 @@ def train_model(trainX, trainy):
         pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
 
 
-def write_test_data(testX, testy):
-    testX["cost"] = testy
-    print(testX.shape)
-    testX.to_csv((Path(args.test_data) / "test_data.csv"))
+def write_test_data(test_x, testy):
+    """
+    Write the testing data to a CSV file.
+
+    Parameters:
+    testX (DataFrame): The testing data.
+    testy (Series): The testing labels.
+
+    Returns:
+    None
+    """
+    test_x["cost"] = testy
+    print(test_x.shape)
+    test_x.to_csv((Path(args.test_data) / "test_data.csv"))
 
 
 if __name__ == "__main__":

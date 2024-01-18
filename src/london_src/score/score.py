@@ -1,8 +1,15 @@
+"""
+This module provides functionality for scoring a machine learning model.
+
+It allows users to load a trained model and a dataset containing actual and predicted values,
+then evaluates the model's performance by calculating metrics such as Mean Squared Error (MSE)
+and the Coefficient of Determination (R^2). The module also supports logging these metrics
+using MLflow and outputs a score report.
+"""
 import argparse
 import pandas as pd
 import os
 from pathlib import Path
-from sklearn.linear_model import LinearRegression
 import pickle
 from sklearn.metrics import mean_squared_error, r2_score
 import mlflow
@@ -10,8 +17,18 @@ import json
 
 
 def main(predictions, model, score_report):
-    print("hello scoring world...")
+    """
+    Load the test data and model, and write the results of the model scoring.
 
+    Parameters:
+    predictions (str): Path to the predictions.
+    model (str): Path to the model.
+    score_report (str): Path to the score report.
+
+    Returns:
+    None
+    """
+    print("hello scoring world...")
 
     lines = [
         f"Model path: {model}",
@@ -31,9 +48,8 @@ def main(predictions, model, score_report):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(predictions, filename), "r") as handle:
-            input_df = pd.read_csv((Path(predictions) / filename))
-            df_list.append(input_df)
+        input_df = pd.read_csv((Path(predictions) / filename))
+        df_list.append(input_df)
 
     test_data = df_list[0]
 
@@ -44,6 +60,18 @@ def main(predictions, model, score_report):
 
 # Print the results of scoring the predictions against actual values in the test data
 def write_results(model, predictions, test_data, score_report):
+    """
+    Calculate and log the model's mean squared error and coefficient of determination.
+
+    Parameters:
+    model (sklearn model): The trained model.
+    predictions (DataFrame): The model's predictions.
+    test_data (DataFrame): The test data.
+    score_report (str): Path to the score report.
+
+    Returns:
+    None
+    """
     # The coefficients
     print("Coefficients: \n", model.coef_)
 

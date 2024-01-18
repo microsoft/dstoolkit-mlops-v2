@@ -1,3 +1,14 @@
+"""
+This module is designed to register data assets in an Azure Machine Learning environment.
+
+It utilizes the Azure AI MLClient from the Azure Machine Learning SDK to interact with Azure resources.
+The module parses command-line arguments to receive necessary details like subscription ID, resource group name,
+workspace name, data purpose, data configuration path, and environment name.
+
+The script reads a configuration file to identify and register datasets in Azure Machine Learning based on their purpose
+and the specified environment (development, test, production, etc.). It supports operations like creating or updating
+data assets and retrieving the latest version of these assets.
+"""
 from azure.ai.ml import MLClient
 from azure.identity import DefaultAzureCredential
 import argparse
@@ -11,8 +22,8 @@ parser.add_argument("--resource_group_name", type=str, help="Azure Machine learn
 parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name", required=True)
 parser.add_argument("--data_purpose", type=str, help="data to be registered identified by purpose", required=True)
 parser.add_argument("--data_config_path", type=str, help="data config file path", required=True)
-parser.add_argument("--environment_name",type=str,help="environment name (e.g. dev, test, prod)", required=True)
- 
+parser.add_argument("--environment_name", type=str, help="environment name (e.g. dev, test, prod)", required=True)
+
 args = parser.parse_args()
 
 data_purpose = args.data_purpose
@@ -32,7 +43,6 @@ for elem in data_config['datasets']:
             data_path = elem["DATA_PATH"]
             dataset_desc = elem["DATASET_DESC"]
             dataset_name = elem["DATASET_NAME"]
-
 
             aml_dataset = Data(
                 path=data_path,

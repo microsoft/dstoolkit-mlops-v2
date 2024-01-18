@@ -15,6 +15,10 @@ jobs:
       pip install -r devops/pipeline/requirements/build_validation_requirements.txt
     displayName: "Load Python Dependencies"
 
+  - script: |
+      flake8 .
+    displayName: "Lint with flake8"
+    enabled: true
 
   - script: |
       pytest test/${{ parameters.model_type }}  --ignore=sandbox/ --junitxml=junit/test-results.xml --cov=. --cov-report=xml

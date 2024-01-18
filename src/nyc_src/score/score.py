@@ -1,8 +1,17 @@
+"""
+This module is designed for scoring a machine learning model by comparing its predictions against actual values.
+
+The module accomplishes several key tasks:
+- It loads test data and a machine learning model.
+- It calculates scoring metrics such as mean squared error (MSE) and the coefficient of determination (R^2).
+- It logs these metrics using mlflow.
+- It outputs a scoring report with key model performance metrics.
+"""
+
 import argparse
 import pandas as pd
 import os
 from pathlib import Path
-from sklearn.linear_model import LinearRegression
 import pickle
 from sklearn.metrics import mean_squared_error, r2_score
 import mlflow
@@ -10,6 +19,17 @@ import json
 
 
 def main(predictions, model, score_report):
+    """
+    Load the test data and model, and write the results of the model scoring.
+
+    Parameters:
+    predictions (str): Path to the predictions.
+    model (str): Path to the model.
+    score_report (str): Path to the score report.
+
+    Returns:
+    None
+    """
     print("hello scoring world...")
 
     lines = [
@@ -30,9 +50,8 @@ def main(predictions, model, score_report):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(predictions, filename), "r") as handle:
-            input_df = pd.read_csv((Path(predictions) / filename))
-            df_list.append(input_df)
+        input_df = pd.read_csv((Path(predictions) / filename))
+        df_list.append(input_df)
 
     test_data = df_list[0]
 
@@ -45,6 +64,18 @@ def main(predictions, model, score_report):
 
 
 def write_results(model, predictions, test_data, score_report):
+    """
+    Calculate and log the model's mean squared error and coefficient of determination.
+
+    Parameters:
+    model (sklearn model): The trained model.
+    predictions (DataFrame): The model's predictions.
+    test_data (DataFrame): The test data.
+    score_report (str): Path to the score report.
+
+    Returns:
+    None
+    """
     # The coefficients
     print("Coefficients: \n", model.coef_)
 

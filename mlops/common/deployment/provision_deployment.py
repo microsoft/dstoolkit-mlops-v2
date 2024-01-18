@@ -1,4 +1,14 @@
+"""
+This script automates the deployment of machine learning models in Azure Machine Learning.
 
+It supports both batch and real-time deployment scenarios, determining the type based on the
+provided arguments. The script reads configuration details from specified JSON files and uses
+these to set up and configure the model deployments.
+
+It also handles various deployment settings such as endpoint names, deployment names, environment
+variables, and computing resources. The script is intended to be run with command-line arguments
+specifying Azure subscription details, model information, and deployment preferences.
+"""
 import json
 import argparse
 from azure.ai.ml import MLClient
@@ -23,7 +33,7 @@ parser.add_argument("--workspace_name", type=str, help="Azure Machine learning W
 parser.add_argument("--model_name", type=str, help="registered model name to be deployed", required=True)
 parser.add_argument("--build_id", type=str, help="Azure DevOps build id for deployment", required=True)
 parser.add_argument("--run_id", type=str, help="AML run id for model generation", required=True)
-parser.add_argument("--is_batch", type=str, help="True for batch endpoint and False for real-time endpoint", required=True)
+parser.add_argument("--is_batch", type=str, help="Endpoint Type: True for batch; False for real-time", required=True)
 parser.add_argument("--batch_config", type=str, help="file path of batch config")
 parser.add_argument("--env_type", type=str, help="env name (dev, test, prod) for deployment", required=True)
 parser.add_argument("--realtime_deployment_config", type=str, help="file path of realtime config")
@@ -69,7 +79,6 @@ if batch == "False":
                 deployment_desc = elem["DEPLOYMENT_DESC"]
                 environment_variables = elem["ENVIRONMENT_VARIABLES"]
 
-                
                 environment = Environment(
                     conda_file=deployment_conda_path,
                     image=deployment_base_image,
@@ -86,7 +95,7 @@ if batch == "False":
                     ),
                     instance_type=deployment_vm_size,
                     instance_count=deployment_instance_count,
-                    environment_variables = dict(environment_variables),
+                    environment_variables=dict(environment_variables),
                     tags={"build_id": build_id, "run_id": run_id},
                 )
 
@@ -108,12 +117,20 @@ else:
                 output_file_name = elem["OUTPUT_FILE_NAME"]
                 max_retries = elem["MAX_RETRIES"]
                 retry_timeout = elem["RETRY_TIMEOUT"]
+                conda_file = elem["DEPLOYMENT_CONDA_PATH"]
+
+                environment = Environment(
+                    name="prs-env",
+                    conda_file=conda_file,
+                    image="mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04:latest",
+                )
 
                 deployment = ModelBatchDeployment(
                     name=deployment_name,
                     description="model with batch endpoint",
                     endpoint_name=endpoint_name,
                     model=model,
+                    environment=environment,
                     compute=batch_cluster_name,
                     settings=ModelBatchDeploymentSettings(
                         instance_count=cluster_instance_count,
@@ -130,6 +147,6 @@ else:
                 ml_client.batch_deployments.begin_create_or_update(deployment).result()
 
                 endpoint = ml_client.batch_endpoints.get(endpoint_name)
-                endpoint.defaults.deployment_name = deployment_name
+                endpoint.defaults.deployment_name = deployment.name
                 ml_client.batch_endpoints.begin_create_or_update(endpoint).result()
-
+                print(f"The default deployment is {endpoint.defaults.deployment_name}")
