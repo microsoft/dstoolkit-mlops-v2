@@ -13,8 +13,6 @@ stages:
         $json = Get-Content -Raw -Path '$(System.DefaultWorkingDirectory)/config/model_config.json' | ConvertFrom-Json
         $firstElement = $json.models | Where-Object {($_.ML_MODEL_CONFIG_NAME -eq "${{ parameters.model_type }}") -and ($_.ENV_NAME -eq "${{ parameters.env_name }}")} | Select-Object -First 1
         
-        Write-Output $firstElement.KEYVAULT_NAME
-        
         foreach ($property in $firstElement.PSObject.Properties) {
           $pname = $property.Name
           $pvalue = $property.Value
@@ -24,11 +22,11 @@ stages:
 
         # Get infra variables
         $json = Get-Content -Raw -Path '$(System.DefaultWorkingDirectory)/config/infra_config.json' | ConvertFrom-Json
-        $firstElement = $json.infra | Where-Object {($_.ENVIRONMENT -eq "$($firstElement.ENVIRONMENT_NAME)")} | Select-Object -First 1
+        $firstElement_infra = $json.infra | Where-Object {($_.ENVIRONMENT -eq "$($firstElement.ENVIRONMENT_NAME)")} | Select-Object -First 1
         
-        Write-Output $firstElement.KEYVAULT_NAME
-        
-        foreach ($property in $firstElement.PSObject.Properties) {
+        Write-Output $firstElement_infra.KEYVAULT_NAME
+
+        foreach ($property in $firstElement_infra.PSObject.Properties) {
           $pname = $property.Name
           $pvalue = $property.Value
           Write-Output "##vso[task.setvariable variable=$pname;isoutput=true]$pvalue"
