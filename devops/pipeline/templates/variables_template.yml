@@ -24,7 +24,7 @@ stages:
 
         # Get infra variables
         $json = Get-Content -Raw -Path '$(System.DefaultWorkingDirectory)/config/infra_config.json' | ConvertFrom-Json
-        $firstElement = $json.models | Where-Object {($_.ENVIRONMENT -eq "$firstElement.ENVIRONMENT_NAME")} | Select-Object -First 1
+        $firstElement = $json.infra | Where-Object {($_.ENVIRONMENT -eq "$firstElement.ENVIRONMENT_NAME")} | Select-Object -First 1
         
         Write-Output $firstElement.KEYVAULT_NAME
         
