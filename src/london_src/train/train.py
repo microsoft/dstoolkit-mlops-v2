@@ -54,6 +54,12 @@ def main(training_data, test_data, model_output, model_metadata):
     print(train_data.columns)
 
     train_x, test_x, trainy, testy = split(train_data)
+    signature = infer_signature(test_x, testy)
+    mlflow.sklearn.log_model(model, 
+                        artifact_path="regression", 
+                        conda_env=custom_env,
+                        signature=signature,
+                        input_example=input_example)
     write_test_data(test_x, testy)
     train_model(train_x, trainy)
 
@@ -119,12 +125,23 @@ def train_model(train_x, trainy):
     Returns:
     None
     """
-    mlflow.autolog()
+    # mlflow.autolog()
+    mlflow.autolog(log_models=False)
+    
+    # Conda environment
+    custom_env =_mlflow_conda_env(
+        additional_conda_deps=None,
+        additional_pip_deps=["xgboost==1.5.2"],
+        additional_conda_channels=None,
+    )
+
     # Train a Linear Regression Model with the train set
     with mlflow.start_run() as run:
+        
+       
         model = LinearRegression().fit(train_x, trainy)
         print(model.score(train_x, trainy))
-
+ 
         # Output the model, metadata and test data
         run_id = mlflow.active_run().info.run_id
         model_uri = f"runs:/{run_id}/model"
@@ -133,7 +150,20 @@ def train_model(train_x, trainy):
             json.dump(model_data, json_file, indent=4)
 
         pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
+        
+        # Conda environment
+        custom_env = _mlflow_conda_env(
+            additional_conda_deps=None,
+            additional_pip_deps=["pandas","scikit-learn==1.3.0","mlflow>=2.9.2","azureml-mlflow>=1.53"
+                                 ,"mldesigner==0.1.0b4","azure-ai-ml==1.10.0","azure-identity==1.15.0",
+                                 "azure-keyvault-secrets==4.7.0"],
+            additional_conda_channels=None,
+        )
 
+        # Log the model manually
+        mlflow.sklearn.log_model(model, 
+                                artifact_path="regressor", 
+                                conda_env=custom_env)
 
 def write_test_data(test_x, testy):
     """
