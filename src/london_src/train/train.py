@@ -54,12 +54,6 @@ def main(training_data, test_data, model_output, model_metadata):
     print(train_data.columns)
 
     train_x, test_x, trainy, testy = split(train_data)
-    signature = infer_signature(test_x, testy)
-    mlflow.sklearn.log_model(model, 
-                        artifact_path="regression", 
-                        conda_env=custom_env,
-                        signature=signature,
-                        input_example=input_example)
     write_test_data(test_x, testy)
     train_model(train_x, trainy)
 
