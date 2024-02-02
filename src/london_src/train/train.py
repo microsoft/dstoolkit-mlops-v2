@@ -15,6 +15,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 import pickle
 import mlflow
+from mlflow.utils.environment import _mlflow_conda_env
 import json
 
 
@@ -121,13 +122,6 @@ def train_model(train_x, trainy):
     """
     # mlflow.autolog()
     mlflow.autolog(log_models=False)
-    
-    # Conda environment
-    custom_env =_mlflow_conda_env(
-        additional_conda_deps=None,
-        additional_pip_deps=["xgboost==1.5.2"],
-        additional_conda_channels=None,
-    )
 
     # Train a Linear Regression Model with the train set
     with mlflow.start_run() as run:
