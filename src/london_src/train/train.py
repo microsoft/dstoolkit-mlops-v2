@@ -129,16 +129,7 @@ def train_model(train_x, trainy):
        
         model = LinearRegression().fit(train_x, trainy)
         print(model.score(train_x, trainy))
- 
-        # Output the model, metadata and test data
-        run_id = mlflow.active_run().info.run_id
-        model_uri = f"runs:/{run_id}/model"
-        model_data = {"run_id": run.info.run_id, "run_uri": model_uri}
-        with open(args.model_metadata, "w") as json_file:
-            json.dump(model_data, json_file, indent=4)
 
-        pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
-        
         # Conda environment
         custom_env = _mlflow_conda_env(
             additional_conda_deps=None,
@@ -148,10 +139,21 @@ def train_model(train_x, trainy):
             additional_conda_channels=None,
         )
 
-        # Log the model manually
+        # Log the model
         mlflow.sklearn.log_model(model, 
                                 artifact_path="regressor", 
                                 conda_env=custom_env)
+         
+        # Output the model, metadata and test data
+        run_id = mlflow.active_run().info.run_id
+        model_uri = f"runs:/{run_id}/model"
+        model_data = {"run_id": run.info.run_id, "run_uri": model_uri}
+        with open(args.model_metadata, "w") as json_file:
+            json.dump(model_data, json_file, indent=4)
+
+        pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
+        
+
 
 def write_test_data(test_x, testy):
     """
