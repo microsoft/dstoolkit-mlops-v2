@@ -42,7 +42,7 @@ stages:
         $DISPLAY_NAME =  "${{ parameters.model_type }}" + "_" + "$($firstElement.DISPLAY_BASE_NAME)" + "_" + "${{parameters.env_name}}" + "_" + "$(Build.BuildID)"
         Write-Output "##vso[task.setvariable variable=DISPLAY_NAME;isoutput=true]$DISPLAY_NAME"
         Write-Output $DISPLAY_NAME
-        $MODEL_NAME =  "${{ parameters.model_type }}" + "_" + "$($firstElement.MODEL_BASE_NAME)" + "_" + "${{parameters.env_name}}" + "_" + "$(Build.SourceBranchName)"
+        $MODEL_NAME =  "${{ parameters.model_type }}" + "_" + "$($firstElement.MODEL_BASE_NAME)" + "_" + "${{parameters.env_name}}" + "_" + "$(Build.SourceBranchName)"+ "_" + "$(Build.BuildID)"
         Write-Output "##vso[task.setvariable variable=MODEL_NAME;isoutput=true]$MODEL_NAME"  
       name: loading_model_config
 
