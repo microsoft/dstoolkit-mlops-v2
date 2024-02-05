@@ -54,9 +54,14 @@ def main(training_data, test_data, model_output, model_metadata):
     train_data = df_list[0]
     print(train_data.columns)
 
+    # split the data
     train_x, test_x, trainy, testy = split(train_data)
     write_test_data(test_x, testy)
+    # train the model
     train_model(train_x, trainy)
+    model = pickle.load(open((Path(model_output) / "model.sav"), "rb"))
+    # log the model
+    mlflow_log_model(model)
 
 
 def split(train_data):
@@ -137,21 +142,7 @@ def train_model(train_x, trainy):
         with open(args.model_metadata, "w") as json_file:
             json.dump(model_data, json_file, indent=4)
 
-        pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))
-    
-    # Conda environment
-    custom_env = _mlflow_conda_env(
-        additional_conda_deps=None,
-        additional_pip_deps=["pandas","scikit-learn==1.3.0","mlflow>=2.9.2","azureml-mlflow>=1.53"
-                                ,"mldesigner==0.1.0b4","azure-ai-ml==1.10.0","azure-identity==1.15.0",
-                                "azure-keyvault-secrets==4.7.0"],
-        additional_conda_channels=None,
-    )
-
-    # Log the model
-    mlflow.sklearn.log_model(model, 
-                            artifact_path="regressor", 
-                            conda_env=custom_env)        
+        pickle.dump(model, open((Path(args.model_output) / "model.sav"), "wb"))       
 
 
 def write_test_data(test_x, testy):
@@ -169,6 +160,20 @@ def write_test_data(test_x, testy):
     print(test_x.shape)
     test_x.to_csv((Path(args.test_data) / "test_data.csv"))
 
+def mlflow_log_model(model):
+    # Conda environment
+    custom_env = _mlflow_conda_env(
+        additional_conda_deps=None,
+        additional_pip_deps=["pandas","scikit-learn==1.3.0","mlflow>=2.9.2","azureml-mlflow>=1.53"
+                                ,"mldesigner==0.1.0b4","azure-ai-ml==1.10.0","azure-identity==1.15.0",
+                                "azure-keyvault-secrets==4.7.0"],
+        additional_conda_channels=None,
+    )
+
+    # Log the model
+    mlflow.sklearn.log_model(model, 
+                            artifact_path="regressor", 
+                            conda_env=custom_env) 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("train")
