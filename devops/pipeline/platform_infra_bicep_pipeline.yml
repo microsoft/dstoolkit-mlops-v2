@@ -136,7 +136,7 @@ stages:
             $id = (az ad sp show --id $env:servicePrincipalId --query id)
             do {
                 Start-Sleep -s 30
-                $id = (az keyvault show --name ${{parameters.keyVaultName}} --query id)
-            } until ($id -ne $null)
+                $kvid = (az keyvault show --name ${{parameters.keyVaultName}} --query id)
+            } until ($kvid -ne $null)
             az keyvault set-policy --name ${{parameters.keyVaultName}} --object-id $id --secret-permissions get list
         enabled: true              
