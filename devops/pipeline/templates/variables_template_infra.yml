@@ -1,3 +1,7 @@
+parameters:
+ - name: env_name
+   displayName: "Deployment Environment"
+
 stages:
 - stage: infra_variable_generation
   jobs:
@@ -5,7 +9,7 @@ stages:
     steps:
     - powershell: |
         $json = Get-Content -Raw -Path '$(System.DefaultWorkingDirectory)/config/infra_config.json' | ConvertFrom-Json
-        $firstElement = $json.infra | Select-Object -First 1
+        $firstElement = $json.infra | Where-Object {($_.ENVIRONMENT -eq "${{ parameters.env_name }}")} | Select-Object -First 1
         
         Write-Host $firstElement.KEYVAULT_NAME
         
