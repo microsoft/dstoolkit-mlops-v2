@@ -133,6 +133,9 @@ stages:
           useGlobalConfig: false
           inlineScript: |
             az --version
-            $id = (az ad sp show --id $env:servicePrincipalId --query id)
+            do {
+                Start-Sleep -s 30
+                $id = (az ad sp show --id $env:servicePrincipalId --query id)
+            } until ($id -ne $null)
             az keyvault set-policy --name ${{parameters.keyVaultName}} --object-id $id --secret-permissions get list
         enabled: true              
