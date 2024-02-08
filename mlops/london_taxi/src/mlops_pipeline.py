@@ -254,49 +254,49 @@ def prepare_and_execute(
 
     ml_client = MLClient(
         DefaultAzureCredential(),
-        config.aml_config.subscription_id,
-        config.aml_config.resource_group_name,
-        config.aml_config.workspace_name
+        config.aml_config["subscription_id"],
+        config.aml_config["resource_group_name"],
+        config.aml_config["workspace_name"]
     )
 
     flow_config = config.get_flow_config("pipeline_london")
 
     compute = get_compute(
-        config.aml_config.subscription_id,
-        config.aml_config.resource_group_name,
-        config.aml_config.workspace_name,
-        flow_config.cluster_name,
-        flow_config.cluster_size,
-        flow_config.cluster_region,
+        config.aml_config["subscription_id"],
+        config.aml_config["resource_group_name"],
+        config.aml_config["workspace_name"],
+        flow_config["cluster_name"],
+        flow_config["cluster_size"],
+        flow_config["cluster_region"],
     )
 
     environment = get_environment(
-        config.aml_config.subscription_id,
-        config.aml_config.resource_group_name,
-        config.aml_config.workspace_name,
-        config.environment_configuration.env_base_image,
-        flow_config.conda_path,
-        flow_config.aml_env_name,
+        config.aml_config["subscription_id"],
+        config.aml_config["resource_group_name"],
+        config.aml_config["workspace_name"],
+        config.environment_configuration["env_base_image"],
+        flow_config["conda_path"],
+        flow_config["aml_env_name"],
     )
 
     print(f"Environment: {environment.name}, version: {environment.version}")
 
     pipeline_job = construct_pipeline(
-        compute.name,
+        flow_config["cluster_name"],
         f"azureml:{environment.name}:{environment.version}",
-        flow_config.display_base_name,
+        flow_config["display_base_name"],
         build_environment,
-        config.environment_configuration.build_reference,
-        flow_config.model_base_name,
-        flow_config.dataset_name,
+        config.environment_configuration["build_reference"],
+        flow_config["model_base_name"],
+        flow_config["dataset_name"],
         ml_client
     )
 
     execute_pipeline(
-        config.aml_config.subscription_id,
-        config.aml_config.resource_group_name,
-        config.aml_config.workspace_name,
-        flow_config.experiment_base_name,
+        config.aml_config["subscription_id"],
+        config.aml_config["resource_group_name"],
+        config.aml_config["workspace_name"],
+        flow_config["experiment_base_name"],
         pipeline_job,
         wait_for_completion,
         output_file,
