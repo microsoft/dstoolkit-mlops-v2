@@ -38,9 +38,6 @@ stages:
               echo "##vso[task.setvariable variable=RUN_NAME;isOutput=true;]$run_name"
 
               python -m mlops.common.get_run_metadata \
-                --subscription_id $(SUBSCRIPTION_ID) \
-                --resource_group_name $(RESOURCE_GROUP_NAME) \
-                --workspace_name $(WORKSPACE_NAME) \
                 --run_id $run_name \
                 --output_file_name metadata.txt
               
