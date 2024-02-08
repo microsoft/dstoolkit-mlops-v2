@@ -7,8 +7,6 @@ interact with Azure resources. It is designed to be run as a standalone script w
 arguments for specifying the details of the Azure Machine Learning compute target.
 """
 
-import argparse
-
 from azure.identity import DefaultAzureCredential
 from azure.ai.ml import MLClient
 from azure.ai.ml.entities import AmlCompute
