@@ -23,5 +23,5 @@ stages:
         parameters:
           script_parameter: |
             python -m mlops.${{ parameters.model_type }}.src.mlops_pipeline \
-              --build_environment ${{parameters.exec_environment}}
+              --build_environment ${{parameters.exec_environment}} \
               --wait_for_completion True
