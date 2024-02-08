@@ -38,15 +38,13 @@ def get_run_metadata(
     )
     my_run = client.jobs.get(run_id)
 
-    metadata = {}
-    metadata["job_url"] = my_run.studio_url
-    metadata["aml_display_name"] = my_run.display_name
-    metadata["aml_run_name"] = my_run.experiment_name
-    metadata["aml_run_id"] = my_run.id
-    metadata["aml_name"] = my_run.name
-    metadata["job_url"] = my_run.studio_url
-    metadata["job_url"] = my_run.studio_url
-    metadata["job_url"] = my_run.studio_url
+    metadata = {
+        "job_url": my_run.studio_url,
+        "aml_display_name": my_run.display_name,
+        "aml_run_name": my_run.experiment_name,
+        "aml_run_id": my_run.id,
+        "aml_name": my_run.name,
+    }
 
     if output_file_name is not None:
         with open(output_file_name, "w") as out_file:
