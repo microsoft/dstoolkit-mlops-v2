@@ -282,7 +282,7 @@ def prepare_and_execute(
     print(f"Environment: {environment.name}, version: {environment.version}")
 
     pipeline_job = construct_pipeline(
-        flow_config["cluster_name"],
+        compute.name,
         f"azureml:{environment.name}:{environment.version}",
         flow_config["display_base_name"],
         build_environment,
