@@ -31,7 +31,7 @@ steps:
   parameters:
     step_name: "test azureml batch endpoint"
     script_parameter: |
-      python -m mlops.common.deployment.test_batch_deployment \
+      python -m mlops.common.deployment.run_test_batch_deployment \
         --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
         --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
         --workspace_name ${{ parameters.WORKSPACE_NAME }} \

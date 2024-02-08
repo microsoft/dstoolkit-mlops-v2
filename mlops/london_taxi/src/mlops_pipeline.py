@@ -17,7 +17,6 @@ from azure.ai.ml import MLClient, Input
 from azure.ai.ml import load_component
 import time
 import os
-import json
 from mlops.common.get_compute import get_compute
 from mlops.common.get_environment import get_environment
 from mlops.common.config_utils import MLOpsConfig
@@ -99,7 +98,6 @@ def construct_pipeline(
     Returns:
         pipeline_job: The constructed pipeline job.
     """
-
     registered_data_asset = ml_client.data.get(name=dataset_name, label='latest')
 
     parent_dir = os.path.join(os.getcwd(), "mlops/london_taxi/components")
@@ -255,9 +253,9 @@ def prepare_and_execute(
     config = MLOpsConfig(environment=build_environment)
 
     ml_client = MLClient(
-        DefaultAzureCredential(), 
+        DefaultAzureCredential(),
         config.aml_config.subscription_id,
-        config.aml_config.resource_group_name, 
+        config.aml_config.resource_group_name,
         config.aml_config.workspace_name
     )
 
