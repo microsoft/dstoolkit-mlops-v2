@@ -21,7 +21,18 @@ pipeline_configs:
     experiment_base_name: london
     model_base_name: london
     data_config_path: mlops/london_taxi/configs/data_config.json
-  
+
+  pipeline_nyc_pr: 
+    ml_model_config_name: nyc_taxi
+    env_name: pr
+    cluster_region: eastus
+    cluster_size: STANDARD_DS3_v2
+    conda_path: mlops/nyc_taxi/environment/conda.yml
+    display_base_name: nyc
+    aml_env_name: nyc_env
+    experiment_base_name: nyc
+    model_base_name: nyc
+    data_config_path: mlops/nyc_taxi/configs/data_config.json
 
   deployment_configs:
     batch_deployment_config_london_dev: 
@@ -55,5 +66,33 @@ pipeline_configs:
       score_dir: model/london_taxi/scoring
       deployment_instance_count: 1
       
-
-      
+    batch_deployment_config_nyc_dev: 
+      ml_model_config_name: nyc_taxi
+      env_name: dev
+      batch_cluster_name: batchcluster
+      endpoint_name: nyc-taxi-be-005
+      deployment_name: nyc-taxi-bd-005
+      cluster_instance_count: 2
+      max_concurrency_per_instance: 
+      mini_batch_size: 10
+      output_file_name: predictions.csv
+      max_retries: 3
+      retry_timeout: 300
+      deployment_base_image_name: 
+      deployment_conda_path: model/nyc_taxi/environment/conda.yml
+    
+    realtime_deployment_config_nyc_dev:
+      ml_model_config_name: nyc_taxi
+      env_name: dev
+      score_file_name: score.py
+      test_file_path: model/nyc_taxi/sample-request.json
+      endpoint_name: nyc-taxi-rte-005
+      endpoint_desc: An online endpoint serving an MLflow model for online taxi
+      deployment_desc: 
+      deployment_name: nyc-taxi-rtd-005
+      deployment_traffic_allocation: 100
+      deployment_vm_size: Standard_F4s_v2
+      deployment_base_image_name: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04
+      deployment_conda_path: model/nyc_taxi/environment/conda.yml
+      score_dir: model/nyc_taxi/scoring
+      deployment_instance_count: 1

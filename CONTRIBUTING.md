@@ -9,7 +9,9 @@ To get started, fork the dstoolkit-mlops-v2 main repository to your own GitHub a
 ## Clone the Repository
 Next, clone the forked repository to your local machine using the following command:
 
+```
 git clone https://github.com/[your-github-username]/[your-repository-name].git
+```
 
 Make sure to replace [your-github-username] with your actual GitHub username and [your-repository-name] with the name of your forked repository.
 
@@ -21,8 +23,9 @@ Before making changes, ensure that you have installed all the dependencies requi
 
 ## Create a Branch
 Create a new branch for your contribution. It's important to create a new branch for each contribution to keep the main branch clean and stable. You can create a new branch using the following command:
-
+```
 git checkout -b [branch-name]
+```
 
 Replace [branch-name] with a descriptive name for your branch that indicates the purpose of your contribution.
 
@@ -35,9 +38,11 @@ Before submitting your contribution, it's crucial to validate your changes by bu
 ## Commit and Push Changes
 Once you're confident with your changes, commit your changes and push them to your forked repository using the following commands:
 
+```
 git add .
 git commit -m "Your commit message here"
 git push origin [branch-name]
+```
 Replace [branch-name] with the name of your branch.
 
 ## Create a Pull Request
