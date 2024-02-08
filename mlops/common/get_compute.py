@@ -20,9 +20,9 @@ def get_compute(
     cluster_name: str,
     cluster_size: str,
     cluster_region: str,
-    min_instances: int,
-    max_instances: int,
-    idle_time_before_scale_down: int,
+    min_instances: int = 0,
+    max_instances: int = 4,
+    idle_time_before_scale_down: int = 600,
 ):
     """Get an existing compute or create a new one."""
     compute_object = None

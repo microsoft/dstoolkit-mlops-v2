@@ -1,5 +1,3 @@
-
-
 # Azure ML configuration.
 aml_config:
   subscription_id: ${SUBSCRIPTION_ID}
@@ -8,31 +6,34 @@ aml_config:
 
 environment_configuration:
   env_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+  build_reference: ${BUILD.BUILDID}
 
-pipeline_configs:
+flow_configs:
   pipeline_london_pr: 
     ml_model_config_name: london_taxi
     env_name: pr
     cluster_region: eastus
     cluster_size: STANDARD_DS3_v2
+    cluster_name: cpucluster
     conda_path: mlops/london_taxi/environment/conda.yml
     display_base_name: london
     aml_env_name: london_env
     experiment_base_name: london
     model_base_name: london
-    data_config_path: mlops/london_taxi/configs/data_config.json
+    dataset_name: london_taxi_pr_data       
 
   pipeline_nyc_pr: 
     ml_model_config_name: nyc_taxi
     env_name: pr
     cluster_region: eastus
     cluster_size: STANDARD_DS3_v2
+    cluster_name: cpucluster
     conda_path: mlops/nyc_taxi/environment/conda.yml
     display_base_name: nyc
     aml_env_name: nyc_env
     experiment_base_name: nyc
     model_base_name: nyc
-    data_config_path: mlops/nyc_taxi/configs/data_config.json
+    dataset_name: london_taxi_pr_data
 
   deployment_configs:
     batch_deployment_config_london_dev: 

@@ -20,6 +20,7 @@ import os
 import json
 from mlops.common.get_compute import get_compute
 from mlops.common.get_environment import get_environment
+from mlops.common.config_utils import MLOpsConfig
 
 
 gl_pipeline_components = []
@@ -76,10 +77,10 @@ def construct_pipeline(
     cluster_name: str,
     environment_name: str,
     display_name: str,
-    deploy_environment: str,
+    build_environment: str,
     build_reference: str,
     model_name: str,
-    data_config_path: str,
+    dataset_name: str,
     ml_client
 ):
     """
@@ -89,22 +90,15 @@ def construct_pipeline(
         cluster_name (str): The name of the cluster to use for pipeline execution.
         environment_name (str): The name of the environment to use for pipeline execution.
         display_name (str): The display name of the pipeline job.
-        deploy_environment (str): The environment to deploy the pipeline job.
+        build_environment (str): The environment to deploy the pipeline job.
         build_reference (str): The build reference for the pipeline job.
         model_name (str): The name of the model.
-        data_config_path (str): The path to the data configuration file.
+        dataset_name (str): The name of the dataset.
         ml_client: The machine learning client.
 
     Returns:
         pipeline_job: The constructed pipeline job.
     """
-    dataset_name = None
-    config_file = open(data_config_path)
-    data_config = json.load(config_file)
-    for elem in data_config['datasets']:
-        if 'DATA_PURPOSE' in elem and 'ENV_NAME' in elem:
-            if deploy_environment == elem['ENV_NAME']:
-                dataset_name = elem["DATASET_NAME"]
 
     registered_data_asset = ml_client.data.get(name=dataset_name, label='latest')
 
@@ -138,7 +132,7 @@ def construct_pipeline(
 
     pipeline_job.display_name = display_name
     pipeline_job.tags = {
-        "environment": deploy_environment,
+        "environment": build_environment,
         "build_reference": build_reference,
     }
 
@@ -172,7 +166,7 @@ def execute_pipeline(
         workspace_name (str): The name of the Azure Machine Learning workspace.
         experiment_name (str): The name of the experiment.
         pipeline_job (pipeline): The pipeline job to be executed.
-        wait_for_completion (str): "True" or "False" indicates whether to wait for the job to complete.
+        wait_for_completion (str): "True" or "False" - indicates whether to wait for the job to complete.
         output_file (str): The path to the output file where the job name will be written.
 
     Raises:
@@ -198,7 +192,7 @@ def execute_pipeline(
             with open(output_file, "w") as out_file:
                 out_file.write(pipeline_job.name)
 
-        if wait_for_completion == "True":
+        if wait_for_completion:
             total_wait_time = 3600
             current_wait_time = 0
             job_status = [
@@ -246,78 +240,45 @@ def execute_pipeline(
 
 
 def prepare_and_execute(
-    subscription_id: str,
-    resource_group_name: str,
-    workspace_name: str,
-    cluster_name: str,
-    cluster_size: str,
-    cluster_region: str,
-    min_instances: int,
-    max_instances: int,
-    idle_time_before_scale_down: int,
-    env_base_image_name: str,
-    conda_path: str,
-    environment_name: str,
-    env_description: str,
+    build_environment: str,
     wait_for_completion: str,
-    display_name: str,
-    experiment_name: str,
-    deploy_environment: str,
-    build_reference: str,
-    model_name: str,
     output_file: str,
-    data_config_path: str
 ):
     """
     Prepare and execute the MLOps pipeline.
 
     Args:
-        subscription_id (str): Azure subscription ID.
-        resource_group_name (str): Name of the resource group.
-        workspace_name (str): Name of the Azure Machine Learning workspace.
-        cluster_name (str): Name of the compute cluster.
-        cluster_size (str): Size of the compute cluster.
-        cluster_region (str): Region of the compute cluster.
-        min_instances (int): Minimum number of instances in the compute cluster.
-        max_instances (int): Maximum number of instances in the compute cluster.
-        idle_time_before_scale_down (int): Idle time in seconds before scaling down the compute cluster.
-        env_base_image_name (str): Name of the base environment image.
-        conda_path (str): Path to the conda environment.
-        environment_name (str): Name of the environment.
-        env_description (str): Description of the environment.
-        wait_for_completion (str): Whether to wait for the pipeline execution to complete.
-        display_name (str): Display name of the pipeline.
-        experiment_name (str): Name of the experiment.
-        deploy_environment (str): Environment to deploy the model.
-        build_reference (str): Reference for building the model.
-        model_name (str): Name of the model.
-        output_file (str): Path to the output file.
-        data_config_path (str): Path to the data configuration file.
+        build_environment (str): environment name to execute.
+        wait_for_completion (str): "True" or "False" - indicates whether to wait for the job to complete.
+        output_file (str): The path to the output file where the job name will be written.
     """
+    config = MLOpsConfig(environment=build_environment)
+
     ml_client = MLClient(
-        DefaultAzureCredential(), subscription_id, resource_group_name, workspace_name
+        DefaultAzureCredential(), 
+        config.aml_config.subscription_id,
+        config.aml_config.resource_group_name, 
+        config.aml_config.workspace_name
     )
 
+    flow_config = config.get_flow_config("pipeline_london")
+
     compute = get_compute(
-        subscription_id,
-        resource_group_name,
-        workspace_name,
-        cluster_name,
-        cluster_size,
-        cluster_region,
-        min_instances,
-        max_instances,
-        idle_time_before_scale_down,
+        config.aml_config.subscription_id,
+        config.aml_config.resource_group_name,
+        config.aml_config.workspace_name,
+        flow_config.cluster_name,
+        flow_config.cluster_size,
+        flow_config.cluster_region,
     )
 
     environment = get_environment(
-        subscription_id,
-        resource_group_name,
-        workspace_name,
-        env_base_image_name,
-        conda_path,
-        environment_name,
-        env_description,
+        config.aml_config.subscription_id,
+        config.aml_config.resource_group_name,
+        config.aml_config.workspace_name,
+        config.environment_configuration.env_base_image,
+        flow_config.conda_path,
+        flow_config.aml_env_name,
     )
 
     print(f"Environment: {environment.name}, version: {environment.version}")
@@ -325,19 +286,19 @@ def prepare_and_execute(
     pipeline_job = construct_pipeline(
         compute.name,
         f"azureml:{environment.name}:{environment.version}",
-        display_name,
-        deploy_environment,
-        build_reference,
-        model_name,
-        data_config_path,
+        flow_config.display_base_name,
+        build_environment,
+        config.environment_configuration.build_reference,
+        flow_config.model_base_name,
+        flow_config.dataset_name,
         ml_client
     )
 
     execute_pipeline(
-        subscription_id,
-        resource_group_name,
-        workspace_name,
-        experiment_name,
+        config.aml_config.subscription_id,
+        config.aml_config.resource_group_name,
+        config.aml_config.workspace_name,
+        flow_config.experiment_base_name,
         pipeline_job,
         wait_for_completion,
         output_file,
@@ -347,90 +308,21 @@ def prepare_and_execute(
 def main():
     """Parse the command line arguments and call the `prepare_and_execute` function."""
     parser = argparse.ArgumentParser("build_environment")
-    parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
-    parser.add_argument(
-        "--resource_group_name", type=str, help="Azure Machine learning resource group"
-    )
-    parser.add_argument(
-        "--workspace_name", type=str, help="Azure Machine learning Workspace name"
-    )
-    parser.add_argument(
-        "--cluster_name", type=str, help="Azure Machine learning cluster name"
-    )
-    parser.add_argument(
-        "--cluster_size", type=str, help="Azure Machine learning cluster size"
-    )
-    parser.add_argument(
-        "--cluster_region", type=str, help="Azure Machine learning cluster region"
-    )
-    parser.add_argument("--min_instances", type=int, default=0)
-    parser.add_argument("--max_instances", type=int, default=4)
-    parser.add_argument("--idle_time_before_scale_down", type=int, default=1800)
-    parser.add_argument(
-        "--build_reference",
-        type=str,
-        help="Unique identifier for Azure DevOps pipeline run",
-    )
-    parser.add_argument(
-        "--deploy_environment",
-        type=str,
-        help="execution and deployment environment. e.g. dev, prod, test",
-    )
-    parser.add_argument(
-        "--experiment_name", type=str, help="Job execution experiment name"
-    )
-    parser.add_argument("--display_name", type=str, help="Job execution run name")
     parser.add_argument(
         "--wait_for_completion",
         type=str,
         help="determine if pipeline to wait for job completion",
-    )
-    parser.add_argument(
-        "--environment_name",
-        type=str,
-        help="Azure Machine Learning Environment name for job execution",
-    )
-    parser.add_argument(
-        "--env_base_image_name", type=str, help="Environment custom base image name"
-    )
-    parser.add_argument(
-        "--conda_path", type=str, help="path to conda requirements file"
-    )
-    parser.add_argument(
-        "--env_description", type=str, default="Environment created using Conda."
-    )
-    parser.add_argument(
-        "--model_name", type=str, default="Name used for registration of model"
+        default="True"
     )
     parser.add_argument(
         "--output_file", type=str, required=False, help="A file to save run id"
     )
-    parser.add_argument("--data_config_path", type=str, required=True, help="data config path")
-
     args = parser.parse_args()
 
     prepare_and_execute(
-        args.subscription_id,
-        args.resource_group_name,
-        args.workspace_name,
-        args.cluster_name,
-        args.cluster_size,
-        args.cluster_region,
-        args.min_instances,
-        args.max_instances,
-        args.idle_time_before_scale_down,
-        args.env_base_image_name,
-        args.conda_path,
-        args.environment_name,
-        args.env_description,
+        args.build_environment,
         args.wait_for_completion,
-        args.display_name,
-        args.experiment_name,
-        args.deploy_environment,
-        args.build_reference,
-        args.model_name,
-        args.output_file,
-        args.data_config_path
+        args.output_file
     )
 
 
