@@ -307,6 +307,11 @@ def main():
     """Parse the command line arguments and call the `prepare_and_execute` function."""
     parser = argparse.ArgumentParser("build_environment")
     parser.add_argument(
+        "--build_environment",
+        type=str,
+        help="configuration environment for the pipeline"
+    )
+    parser.add_argument(
         "--wait_for_completion",
         type=str,
         help="determine if pipeline to wait for job completion",
