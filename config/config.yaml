@@ -6,7 +6,7 @@ aml_config:
 
 environment_configuration:
   env_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
-  build_reference: ${BUILD.BUILDID}
+  build_reference: ${BUILD_BUILDID}
 
 flow_configs:
   pipeline_london_pr: 
