@@ -11,7 +11,7 @@ class MLOpsConfig():
 
     _raw_config: Any
 
-    def __init__(self, environment: str = 'pr', config_path: Path = '../../config/config.yaml'):
+    def __init__(self, environment: str = 'pr', config_path: Path = 'config/config.yaml'):
         """Intialize MLConfig with yaml config data."""
         self.config_path = config_path
         self._environment = environment
