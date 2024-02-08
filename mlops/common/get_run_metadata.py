@@ -59,7 +59,7 @@ def main():
 
     This is an entry point to invoke get_run_metadata from the command line interface.
     """
-    parser = argparse.ArgumentParser("get_run_metadata")    
+    parser = argparse.ArgumentParser("get_run_metadata")
     parser.add_argument(
         "--run_id", type=str, help="get metadata for the run_id"
     )
@@ -68,7 +68,7 @@ def main():
     )
 
     args = parser.parse_args()
-    
+
     config = MLOpsConfig()
 
     get_run_metadata(
