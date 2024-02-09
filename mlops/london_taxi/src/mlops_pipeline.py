@@ -190,7 +190,7 @@ def execute_pipeline(
             with open(output_file, "w") as out_file:
                 out_file.write(pipeline_job.name)
 
-        if wait_for_completion:
+        if wait_for_completion == "True":
             total_wait_time = 3600
             current_wait_time = 0
             job_status = [

@@ -164,7 +164,7 @@ def execute_pipeline(
         workspace_name (str): The name of the Azure Machine Learning workspace.
         experiment_name (str): The name of the experiment.
         pipeline_job (pipeline): The pipeline job to be executed.
-        wait_for_completion (str): "True" or "False" - indicates whether to wait for the job to complete.
+        wait_for_completion (str): "True" or "False" indicates whether to wait for the job to complete.
         output_file (str): The path to the output file where the job name will be written.
 
     Raises:
@@ -190,7 +190,7 @@ def execute_pipeline(
             with open(output_file, "w") as out_file:
                 out_file.write(pipeline_job.name)
 
-        if wait_for_completion:
+        if wait_for_completion == "True":
             total_wait_time = 3600
             current_wait_time = 0
             job_status = [
@@ -247,7 +247,7 @@ def prepare_and_execute(
 
     Args:
         build_environment (str): environment name to execute.
-        wait_for_completion (str): "True" or "False" - indicates whether to wait for the job to complete.
+        wait_for_completion (str): "True" or "False" indicates whether to wait for the job to complete.
         output_file (str): The path to the output file where the job name will be written.
     """
     config = MLOpsConfig(environment=build_environment)
