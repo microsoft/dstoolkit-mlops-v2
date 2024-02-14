@@ -23,11 +23,11 @@ class MLOpsConfig():
         """Get values for top level keys in configuration."""
         return self._raw_config[__name]
 
-    def get_flow_config(self, flow_name: str) -> Dict:
-        """Get the pipeline configuration for given flow name and environment."""
-        flowconfig_name = f'{flow_name}_{self._environment}'
-        if flowconfig_name in self.flow_configs:
-            return self.flow_configs[flowconfig_name]
+    def get_pipeline_config(self, pipeline_name: str) -> Dict:
+        """Get the pipeline configuration for given pipeline name and environment."""
+        pipelineconfig_name = f'{pipeline_name}_{self._environment}'
+        if pipelineconfig_name in self.pipeline_configs:
+            return self.pipeline_configs[pipelineconfig_name]
 
 
 if __name__ == "__main__":

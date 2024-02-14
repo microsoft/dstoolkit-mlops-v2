@@ -259,15 +259,15 @@ def prepare_and_execute(
         config.aml_config["workspace_name"]
     )
 
-    flow_config = config.get_flow_config("pipeline_nyc")
+    pipeline_config = config.get_pipeline_config("pipeline_nyc")
 
     compute = get_compute(
         config.aml_config["subscription_id"],
         config.aml_config["resource_group_name"],
         config.aml_config["workspace_name"],
-        flow_config["cluster_name"],
-        flow_config["cluster_size"],
-        flow_config["cluster_region"],
+        pipeline_config["cluster_name"],
+        pipeline_config["cluster_size"],
+        pipeline_config["cluster_region"],
     )
 
     environment = get_environment(
@@ -275,8 +275,8 @@ def prepare_and_execute(
         config.aml_config["resource_group_name"],
         config.aml_config["workspace_name"],
         config.environment_configuration["env_base_image"],
-        flow_config["conda_path"],
-        flow_config["aml_env_name"],
+        pipeline_config["conda_path"],
+        pipeline_config["aml_env_name"],
     )
 
     print(f"Environment: {environment.name}, version: {environment.version}")
@@ -284,11 +284,11 @@ def prepare_and_execute(
     pipeline_job = construct_pipeline(
         compute.name,
         f"azureml:{environment.name}:{environment.version}",
-        flow_config["display_base_name"],
+        pipeline_config["display_base_name"],
         build_environment,
         config.environment_configuration["build_reference"],
-        flow_config["model_base_name"],
-        flow_config["dataset_name"],
+        pipeline_config["model_base_name"],
+        pipeline_config["dataset_name"],
         ml_client
     )
 
@@ -296,7 +296,7 @@ def prepare_and_execute(
         config.aml_config["subscription_id"],
         config.aml_config["resource_group_name"],
         config.aml_config["workspace_name"],
-        flow_config["experiment_base_name"],
+        pipeline_config["experiment_base_name"],
         pipeline_job,
         wait_for_completion,
         output_file,

@@ -8,7 +8,7 @@ environment_configuration:
   env_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
   build_reference: ${BUILD_BUILDID}
 
-flow_configs:
+pipeline_configs:
   pipeline_london_pr: 
     ml_model_config_name: london_taxi
     env_name: pr
@@ -61,7 +61,7 @@ flow_configs:
     model_base_name: nyc
     dataset_name: london_taxi_pr_data
 
-  deployment_configs:
+deployment_configs:
     batch_deployment_config_london_dev: 
       ml_model_config_name: london_taxi
       env_name: dev
