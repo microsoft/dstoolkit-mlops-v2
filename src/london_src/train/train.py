@@ -60,8 +60,8 @@ def main(training_data, test_data, model_output, model_metadata):
     # train the model
     train_model(train_x, trainy)
     model = pickle.load(open((Path(model_output) / "model.sav"), "rb"))
-    # log the model
-    mlflow_log_model(model)
+    # # log the model
+    # mlflow_log_model(model)
 
 
 def split(train_data):
@@ -125,8 +125,8 @@ def train_model(train_x, trainy):
     Returns:
     None
     """
-    # mlflow.autolog()
-    mlflow.autolog(log_models=False)
+    mlflow.autolog()
+    # mlflow.autolog(log_models=False)
 
     # Train a Linear Regression Model with the train set
     with mlflow.start_run() as run:
