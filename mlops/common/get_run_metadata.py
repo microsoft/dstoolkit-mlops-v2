@@ -10,6 +10,8 @@ from azure.identity import DefaultAzureCredential
 import argparse
 import json
 
+from mlops.common.config_utils import MLOpsConfig
+
 
 def get_run_metadata(
     subscription_id: str,
@@ -38,15 +40,13 @@ def get_run_metadata(
     )
     my_run = client.jobs.get(run_id)
 
-    metadata = {}
-    metadata["job_url"] = my_run.studio_url
-    metadata["aml_display_name"] = my_run.display_name
-    metadata["aml_run_name"] = my_run.experiment_name
-    metadata["aml_run_id"] = my_run.id
-    metadata["aml_name"] = my_run.name
-    metadata["job_url"] = my_run.studio_url
-    metadata["job_url"] = my_run.studio_url
-    metadata["job_url"] = my_run.studio_url
+    metadata = {
+        "job_url": my_run.studio_url,
+        "aml_display_name": my_run.display_name,
+        "aml_run_name": my_run.experiment_name,
+        "aml_run_id": my_run.id,
+        "aml_name": my_run.name,
+    }
 
     if output_file_name is not None:
         with open(output_file_name, "w") as out_file:
@@ -60,13 +60,6 @@ def main():
     This is an entry point to invoke get_run_metadata from the command line interface.
     """
     parser = argparse.ArgumentParser("get_run_metadata")
-    parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
-    parser.add_argument(
-        "--resource_group_name", type=str, help="Azure Machine learning resource group"
-    )
-    parser.add_argument(
-        "--workspace_name", type=str, help="Azure Machine learning Workspace name"
-    )
     parser.add_argument(
         "--run_id", type=str, help="get metadata for the run_id"
     )
@@ -76,10 +69,12 @@ def main():
 
     args = parser.parse_args()
 
+    config = MLOpsConfig()
+
     get_run_metadata(
-        args.subscription_id,
-        args.resource_group_name,
-        args.workspace_name,
+        config.aml_config["subscription_id"],
+        config.aml_config["resource_group_name"],
+        config.aml_config["workspace_name"],
         args.run_id,
         args.output_file_name,
     )

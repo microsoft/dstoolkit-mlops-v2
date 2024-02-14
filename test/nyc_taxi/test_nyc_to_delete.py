@@ -1,4 +1,4 @@
-def test_print():
+def test_nyc_print():
     try:
         print("Hello") is None
     except:

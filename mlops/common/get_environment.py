@@ -18,7 +18,7 @@ def get_environment(
     env_base_image_name: str,
     conda_path: str,
     environment_name: str,
-    description: str,
+    description: str = "Azure ML environment",
 ):
     """
     Create or update Azure ML environment and return a reference to it.

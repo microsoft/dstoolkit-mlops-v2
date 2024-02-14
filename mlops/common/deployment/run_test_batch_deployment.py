@@ -9,14 +9,23 @@ the specified dataset, and invokes a batch endpoint for model testing.
 
 import argparse
 import json
+
+from azure.identity import DefaultAzureCredential
 from azure.ai.ml import MLClient, Input
 from azure.ai.ml.constants import AssetTypes
-from azure.identity import DefaultAzureCredential
+
+from mlops.common.config_utils import MLOpsConfig
+
+config = MLOpsConfig()
+
+ml_client = MLClient(
+    DefaultAzureCredential(),
+    config.aml_config["subscription_id"],
+    config.aml_config["resource_group_name"],
+    config.aml_config["workspace_name"]
+)
 
 parser = argparse.ArgumentParser("test_model")
-parser.add_argument("--subscription_id", type=str, help="Azure subscription id", required=True)
-parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group", required=True)
-parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name", required=True)
 parser.add_argument("--data_purpose", type=str, help="type of data to be registered e.g. training, test", required=True)
 parser.add_argument("--data_config_path", type=str, help="data config path", required=True)
 parser.add_argument("--environment_name", type=str, help="env name (dev, test, prod) for deployment", required=True)
@@ -24,9 +33,6 @@ parser.add_argument("--batch_config", type=str, help="file path of batch config"
 
 args = parser.parse_args()
 
-ml_client = MLClient(
-    DefaultAzureCredential(), args.subscription_id, args.resource_group_name, args.workspace_name
-)
 data_purpose = args.data_purpose
 data_config_path = args.data_config_path
 environment_name = args.environment_name

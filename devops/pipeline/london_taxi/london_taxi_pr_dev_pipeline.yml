@@ -15,7 +15,6 @@ pr:
 pool:
   vmImage: ubuntu-latest
 
-
 variables:
 - group: mlops_platform_dev_vg
 
@@ -28,10 +27,6 @@ parameters:
    default: "london_taxi"
 
 stages:
-  - template: ../templates/variables_template.yml
-    parameters:
-      env_name: ${{parameters.env_name}}
-      model_type: ${{parameters.model_type}}
   - template: ../platform_pr_dev_pipeline.yml
     parameters:
       exec_environment: ${{ parameters.env_name }}

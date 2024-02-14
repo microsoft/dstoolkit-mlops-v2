@@ -1,10 +1,4 @@
 parameters:
-- name: SUBSCRIPTION_ID
-  type: string
-- name: RESOURCE_GROUP_NAME
-  type: string
-- name: WORKSPACE_NAME
-  type: string
 - name: DATA_CONFIG_PATH
   type: string
 - name: DATA_PURPOSE
@@ -20,9 +14,6 @@ steps:
     step_name: "register batch test data"
     script_parameter: |
       python -m mlops.common.register_data_asset \
-        --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
-        --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
-        --workspace_name ${{ parameters.WORKSPACE_NAME }} \
         --data_purpose ${{ parameters.DATA_PURPOSE }} \
         --data_config_path ${{ parameters.DATA_CONFIG_PATH }} \
         --environment_name ${{ parameters.ENVIRONMENT_NAME }}
@@ -31,10 +22,7 @@ steps:
   parameters:
     step_name: "test azureml batch endpoint"
     script_parameter: |
-      python -m mlops.common.deployment.test_batch_deployment \
-        --subscription_id ${{ parameters.SUBSCRIPTION_ID }} \
-        --resource_group_name ${{ parameters.RESOURCE_GROUP_NAME }} \
-        --workspace_name ${{ parameters.WORKSPACE_NAME }} \
+      python -m mlops.common.deployment.run_test_batch_deployment \
         --data_purpose ${{ parameters.DATA_PURPOSE }} \
         --data_config_path ${{ parameters.DATA_CONFIG_PATH }} \
         --environment_name ${{ parameters.ENVIRONMENT_NAME }} \

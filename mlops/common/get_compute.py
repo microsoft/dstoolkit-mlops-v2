@@ -7,9 +7,8 @@ interact with Azure resources. It is designed to be run as a standalone script w
 arguments for specifying the details of the Azure Machine Learning compute target.
 """
 
-from azure.ai.ml import MLClient
 from azure.identity import DefaultAzureCredential
-import argparse
+from azure.ai.ml import MLClient
 from azure.ai.ml.entities import AmlCompute
 
 
@@ -20,9 +19,9 @@ def get_compute(
     cluster_name: str,
     cluster_size: str,
     cluster_region: str,
-    min_instances: int,
-    max_instances: int,
-    idle_time_before_scale_down: int,
+    min_instances: int = 0,
+    max_instances: int = 4,
+    idle_time_before_scale_down: int = 600,
 ):
     """Get an existing compute or create a new one."""
     compute_object = None
@@ -55,44 +54,3 @@ def get_compute(
         print("Oops!  invalid credentials.. Try again...", ex)
         raise
     return compute_object
-
-
-def main():
-    """Take command line parameters and returns a reference to the compute."""
-    parser = argparse.ArgumentParser("get_compute")
-    parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
-    parser.add_argument(
-        "--resource_group_name", type=str, help="Azure Machine learning resource group"
-    )
-    parser.add_argument(
-        "--workspace_name", type=str, help="Azure Machine learning Workspace name"
-    )
-    parser.add_argument(
-        "--cluster_name", type=str, help="Azure Machine learning cluster name"
-    )
-    parser.add_argument(
-        "--cluster_size", type=str, help="Azure Machine learning cluster size"
-    )
-    parser.add_argument(
-        "--cluster_region", type=str, help="Azure Machine learning cluster region"
-    )
-    parser.add_argument("--min_instances", type=int, default=0)
-    parser.add_argument("--max_instances", type=int, default=4)
-    parser.add_argument("--idle_time_before_scale_down", type=int, default=1800)
-
-    args = parser.parse_args()
-    get_compute(
-        args.subscription_id,
-        args.resource_group_name,
-        args.workspace_name,
-        args.cluster_name,
-        args.cluster_size,
-        args.cluster_region,
-        args.min_instances,
-        args.max_instances,
-        args.idle_time_before_scale_down,
-    )
-
-
-if __name__ == "__main__":
-    main()

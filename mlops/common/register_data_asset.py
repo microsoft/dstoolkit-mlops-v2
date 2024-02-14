@@ -9,17 +9,28 @@ The script reads a configuration file to identify and register datasets in Azure
 and the specified environment (development, test, production, etc.). It supports operations like creating or updating
 data assets and retrieving the latest version of these assets.
 """
-from azure.ai.ml import MLClient
-from azure.identity import DefaultAzureCredential
+
 import argparse
-from azure.ai.ml.entities import Data
-from azure.ai.ml.constants import AssetTypes
 import json
 
+from azure.identity import DefaultAzureCredential
+from azure.ai.ml import MLClient
+from azure.ai.ml.entities import Data
+from azure.ai.ml.constants import AssetTypes
+
+from mlops.common.config_utils import MLOpsConfig
+
+config = MLOpsConfig()
+
+ml_client = MLClient(
+    DefaultAzureCredential(),
+    config.aml_config["subscription_id"],
+    config.aml_config["resource_group_name"],
+    config.aml_config["workspace_name"]
+)
+
 parser = argparse.ArgumentParser("register data assets")
-parser.add_argument("--subscription_id", type=str, help="Azure subscription id", required=True)
-parser.add_argument("--resource_group_name", type=str, help="Azure Machine learning resource group", required=True)
-parser.add_argument("--workspace_name", type=str, help="Azure Machine learning Workspace name", required=True)
+
 parser.add_argument("--data_purpose", type=str, help="data to be registered identified by purpose", required=True)
 parser.add_argument("--data_config_path", type=str, help="data config file path", required=True)
 parser.add_argument("--environment_name", type=str, help="environment name (e.g. dev, test, prod)", required=True)
@@ -29,10 +40,6 @@ args = parser.parse_args()
 data_purpose = args.data_purpose
 data_config_path = args.data_config_path
 environment_name = args.environment_name
-
-ml_client = MLClient(
-    DefaultAzureCredential(), args.subscription_id, args.resource_group_name, args.workspace_name
-)
 
 config_file = open(data_config_path)
 data_config = json.load(config_file)
