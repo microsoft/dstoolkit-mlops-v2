@@ -1,11 +1,11 @@
-pr: none
-trigger:
+trigger: none
+pr:
   branches:
    include:
      - development
   paths:
     include:
-      - devops/*
+      - .azure-pipelines/*
       - mlops/common/*
       - mlops/nyc_taxi/*
       - src/nyc_src/*
@@ -22,16 +22,13 @@ variables:
 parameters:
  - name: env_name
    displayName: "Execution Environment"
-   default: "dev"
+   default: "pr"
  - name: model_type
    displayName: "model type"
    default: "nyc_taxi"
- - name: is_batch_deployment
-   displayName: "True for batch endpoint and False for real-time endpoint"
 
 stages:
-  - template: ../platform_ci_dev_pipeline.yml
+  - template: platform_pr_dev_pipeline.yml
     parameters:
       exec_environment: ${{ parameters.env_name }}
       model_type: ${{ parameters.model_type }}
-      is_batch_deployment: ${{ parameters.is_batch_deployment }}

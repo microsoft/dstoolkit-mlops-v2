@@ -11,8 +11,6 @@ outputs:
     type: uri_folder
 code: ./../../../
 environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu@latest
-# environment_variables:
-#   ritesh: modi
 command: >-
   python -m src.nyc_src.prep.prep 
   --raw_data ${{inputs.raw_data}} 

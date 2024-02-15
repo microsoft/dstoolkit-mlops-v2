@@ -5,11 +5,11 @@ trigger:
      - development
   paths:
     include:
-      - devops/*
+      - .azure-pipelines/*
       - mlops/common/*
-      - mlops/london_taxi/*
-      - src/london_src/*
-      - model/london_taxi/*
+      - mlops/nyc_taxi/*
+      - src/nyc_src/*
+      - model/nyc_taxi/*
       - src/shared/*
 
 pool:
@@ -25,12 +25,12 @@ parameters:
    default: "dev"
  - name: model_type
    displayName: "model type"
-   default: "london_taxi"
+   default: "nyc_taxi"
  - name: is_batch_deployment
    displayName: "True for batch endpoint and False for real-time endpoint"
 
 stages:
-  - template: ../platform_ci_dev_pipeline.yml
+  - template: platform_ci_dev_pipeline.yml
     parameters:
       exec_environment: ${{ parameters.env_name }}
       model_type: ${{ parameters.model_type }}

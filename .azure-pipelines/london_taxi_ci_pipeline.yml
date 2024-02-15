@@ -1,11 +1,11 @@
-trigger: none
-pr:
+pr: none
+trigger:
   branches:
    include:
      - development
   paths:
     include:
-      - devops/*
+      - .azure-pipelines/*
       - mlops/common/*
       - mlops/london_taxi/*
       - src/london_src/*
@@ -15,19 +15,23 @@ pr:
 pool:
   vmImage: ubuntu-latest
 
+
 variables:
 - group: mlops_platform_dev_vg
 
 parameters:
  - name: env_name
    displayName: "Execution Environment"
-   default: "pr"
+   default: "dev"
  - name: model_type
    displayName: "model type"
    default: "london_taxi"
+ - name: is_batch_deployment
+   displayName: "True for batch endpoint and False for real-time endpoint"
 
 stages:
-  - template: ../platform_pr_dev_pipeline.yml
+  - template: platform_ci_dev_pipeline.yml
     parameters:
       exec_environment: ${{ parameters.env_name }}
       model_type: ${{ parameters.model_type }}
+      is_batch_deployment: ${{ parameters.is_batch_deployment }}

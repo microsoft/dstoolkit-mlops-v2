@@ -95,7 +95,7 @@ Information about variable groups in Azure DevOps can be found in [Add & use var
 - **DISPLAY_BASE_NAME:** The run base name (see EXPERIMENT_BASE_NAME for details).
 - **ENV_BASE_IMAGE_NAME:** The base image for the environment (ex.: mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04).
 - **ENVIRONMENT_NAME:** A name for the Azure ML environment.
-- **EXPERIMENT_BASE_NAME:** An experiment base name. This parameter as well as two more parameters below are used to form unique names for experiments, runs and models. You can find a rule for the names implemented as powershell code in [here](../devops/pipeline/templates/variables_template.yml). By default we are using the branch name as well as build id to form the names that helps us to differentiate experiments, runs and models when working on a large team of data scientists and software engineers. The EXPERIMENT_TYPE variable from the template is hard coded in *_dev_pipeline.yml files.
+- **EXPERIMENT_BASE_NAME:** An experiment base name. This parameter as well as two more parameters below are used to form unique names for experiments, runs and models. You can find a rule for the names implemented as powershell code in [here](../.azure-pipelines/templates/variables_template.yml). By default we are using the branch name as well as build id to form the names that helps us to differentiate experiments, runs and models when working on a large team of data scientists and software engineers. The EXPERIMENT_TYPE variable from the template is hard coded in *_dev_pipeline.yml files.
 - **MODEL_BASE_NAME:** A model base name (see EXPERIMENT_BASE_NAME for details).
 - **BATCH_DEPLOYMENT_CONFIG:** A relative path to the *batch_config.json* file.
 - **REALTIME_DEPLOYMENT_CONFIG:** A relative path to the *realtime_config.json* file.
@@ -109,7 +109,7 @@ Information about variable groups in Azure DevOps can be found in [Add & use var
 ### Create Azure Pipelines to deploy the infrastructure, and operate model builds and continuous integration.
 Details about how to create a basic Azure Pipeline can be found in [Create your first pipeline](https://learn.microsoft.com/en-us/azure/devops/pipelines/create-first-pipeline?view=azure-devops&tabs).
 
-**Step 7.** Using the instructions above, if needed, create an azure pipeline to deploy the infrastructure using either the bicep (*devops/pipeline/infra/bicep/infra_provision_bicep_pipeline.yml*) or terraform (*devops/pipeline/infra/terraform/infra_provision_terraform_pipeline.yml*) yaml files. 
+**Step 7.** Using the instructions above, if needed, create an azure pipeline to deploy the infrastructure using either the bicep (*.azure-pipelines/infra/bicep/infra_provision_bicep_pipeline.yml*) or terraform (*.azure-pipelines/infra/terraform/infra_provision_terraform_pipeline.yml*) yaml files. 
 
 **Step 8.** Using the instructions above, if needed, create one or more Azure Pipelines to setup build validation for either or both of the use cases listed below:
 - nyc_taxi_pr_dev_pipeline.yml

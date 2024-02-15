@@ -7,7 +7,7 @@ The idea of this template is to provide a minimum number of scripts to implement
 The template contains the following folders/files:
 
 - .github: the folder contains Github Workflow related files(yaml files to define the Builds).
-- devops: the folder contains Azure DevOps related files (yaml files to define Builds).
+- .azure-pipelines: the folder contains Azure DevOps related files (yaml files to define Builds).
 - docs: documentation.
 - src: source code that is not related to Azure ML directly. Usually, there is data science related code.
 - mlops: scripts that are related to Azure ML.
