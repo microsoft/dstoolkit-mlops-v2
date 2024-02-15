@@ -5,15 +5,16 @@ pr:
      - development
   paths:
     include:
-      - devops/*
+      - .azure-pipelines/*
       - mlops/common/*
-      - mlops/london_taxi/*
-      - src/london_src/*
-      - model/london_taxi/*
+      - mlops/nyc_taxi/*
+      - src/nyc_src/*
+      - model/nyc_taxi/*
       - src/shared/*
 
 pool:
   vmImage: ubuntu-latest
+
 
 variables:
 - group: mlops_platform_dev_vg
@@ -24,7 +25,7 @@ parameters:
    default: "pr"
  - name: model_type
    displayName: "model type"
-   default: "london_taxi"
+   default: "nyc_taxi"
 
 stages:
   - template: ../platform_pr_dev_pipeline.yml

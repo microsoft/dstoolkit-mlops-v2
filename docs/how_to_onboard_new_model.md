@@ -63,8 +63,8 @@ There are multiple sub-folders in this folder. The following modifications shoul
 
 
 
-## devops/pipeline folder  
-The devops/pipeline folder contains one top level folder for each model. The name of the folder should match the value of the "ML_MODEL_CONFIG_NAME" element in model_config.json file. You can start by copying one of an existing folder in this folder and modify the files within the new folder. Rename the new folder and files within with "ML_MODEL_CONFIG_NAME" element value in model_config.json file. 
+## .azure-pipelines folder  
+The .azure-pipelines folder contains one top level folder for each model. The name of the folder should match the value of the "ML_MODEL_CONFIG_NAME" element in model_config.json file. You can start by copying one of an existing folder in this folder and modify the files within the new folder. Rename the new folder and files within with "ML_MODEL_CONFIG_NAME" element value in model_config.json file. 
 
 There are two yaml pipelines in this folder - pr and ci. Both should be modified to reflect using the new ML Model.
 The modification in these files include:

@@ -5,7 +5,7 @@ trigger:
      - development
   paths:
     include:
-      - devops/*
+      - .azure-pipelines/*
       - mlops/common/*
       - mlops/nyc_taxi/*
       - src/nyc_src/*
