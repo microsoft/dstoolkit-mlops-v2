@@ -28,7 +28,7 @@ parameters:
    default: "nyc_taxi"
 
 stages:
-  - template: ../platform_pr_dev_pipeline.yml
+  - template: platform_pr_dev_pipeline.yml
     parameters:
       exec_environment: ${{ parameters.env_name }}
       model_type: ${{ parameters.model_type }}
