@@ -1,0 +1,40 @@
+name: Nyc Taxi PR Workflow
+
+on:
+  push:
+    branches:
+      - "agromova/pr_fix"
+  workflow_call:
+    inputs:
+      exec_environment:
+        type: string
+        description: "The environment to run the workflow in"
+        required: true
+        default: "pr"
+      model_type:
+        type: string
+        description: "The type of model to run the workflow for"
+        required: true
+        default: "nyc_taxi"
+#   pull_request:
+#     branches:
+#       - "development"
+#     paths:
+#       - .github/*
+#       - mlops/common/*
+#       - mlops/*
+#       - mlops/nyc_taxi/*
+#       - src/nyc_src/*
+#       - model/nyc_taxi/*
+#       - src/shared/*
+#       - tests
+
+jobs:
+  run-pr-workflow:
+    uses: ./.github/workflows/platform_pr_dev_workflow.yml
+    with:
+      exec_environment: ${{ inputs.exec_environment || 'pr' }}
+      model_type: ${{ inputs.model_type || 'nyc_taxi' }}
+    secrets:
+      subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
