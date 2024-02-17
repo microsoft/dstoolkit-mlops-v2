@@ -17,12 +17,12 @@
             "CLUSTER_SIZE": "STANDARD_DS3_v2"
         },
         {
-            "NAMESPACE": "cit",
-            "PROJECTCODE": "postrev",
-            "VERSION": "005",
+            "NAMESPACE": "infra",
+            "PROJECTCODE": "ib",
+            "VERSION": "007",
             "ENVIRONMENT": "infra",
             "LOCATION": "eastus",
-            "RESOURCE_GROUP_NAME": "rg-bicep-005",
+            "RESOURCE_GROUP_NAME": "rg-bicep-007",
             "AMLWORKSPACE": "mlw-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)",
             "STORAGEACCOUNT":"staccaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
             "KEYVAULT":"akvaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
