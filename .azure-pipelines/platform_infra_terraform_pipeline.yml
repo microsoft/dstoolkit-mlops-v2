@@ -186,4 +186,4 @@ stages:
             az --version
             $id = (az ad sp show --id $env:servicePrincipalId --query id)
             az keyvault set-policy --name ${{parameters.keyVaultName}} --object-id $id --secret-permissions get list
-        enabled: true  
+        enabled: false  
