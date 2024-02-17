@@ -35,7 +35,7 @@ variable "project_code" {
 
 variable "version_num" {
   type    = string
-  default = "008"
+  default = "100"
 }
 
 variable "location" {

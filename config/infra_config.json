@@ -18,9 +18,26 @@
         },
         {
             "NAMESPACE": "infra",
+            "PROJECTCODE": "it",
+            "VERSION": "100",
+            "ENVIRONMENT": "infra-tf",
+            "LOCATION": "eastus",
+            "RESOURCE_GROUP_NAME": "rg-tf-100",
+            "AMLWORKSPACE": "mlw-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)",
+            "STORAGEACCOUNT":"staccaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
+            "KEYVAULT":"akvaml$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
+            "APPINSIGHTS":"aml-ai-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)",
+            "CONTAINERREGISTRY": "cr$(NAMESPACE)$(PROJECTCODE)$(VERSION)",
+            "CLUSTER_NAME": "cluster$(VERSION)",
+            "BATCH_CLUSTER_NAME": "batchcluster",
+            "CLUSTER_SIZE": "STANDARD_DS3_v2"
+
+        },
+        {
+            "NAMESPACE": "infra",
             "PROJECTCODE": "ib",
             "VERSION": "007",
-            "ENVIRONMENT": "infra",
+            "ENVIRONMENT": "infra-bicep",
             "LOCATION": "eastus",
             "RESOURCE_GROUP_NAME": "rg-bicep-007",
             "AMLWORKSPACE": "mlw-$(NAMESPACE)-$(PROJECTCODE)-$(VERSION)",
