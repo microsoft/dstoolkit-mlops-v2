@@ -80,9 +80,9 @@ stages:
           useGlobalConfig: false
           inlineScript: |
             az --version
-            az deployment sub create --location='${{parameters.location}}' `
+            az deployment sub create --location='$(LOCATION)' `
             --template-file '$(Pipeline.Workspace)/infratemplates/infra/bicep/public_workspace/main.bicep' `
-            --parameters resourceGroupName='$(BICEP_RESOURCE_GROUP_NAME)' location='${{variables.location}}' `
+            --parameters resourceGroupName='$(BICEP_RESOURCE_GROUP_NAME)' location='$(LOCATION)' `
             storageAccount='$(BICEP_STORAGE_ACCT)' `
             keyVaultName='$(BICEP_KEYVAULT_NAME)' `
             appInsightsName='$(BICEP_APPINSIGHTS_NAME)' `
