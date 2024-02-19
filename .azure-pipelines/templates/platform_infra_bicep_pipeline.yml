@@ -45,7 +45,7 @@ stages:
       - task: AzureCLI@2
         displayName: Provision AzureML Infrastructure
         inputs:
-          azureSubscription: '${{parameters.azureMgrConnection}}'
+          azureSubscription: '$(AZURE_RM_SVC_CONNECTION)'
           scriptType: pscore
           scriptLocation: inlineScript
           useGlobalConfig: false
