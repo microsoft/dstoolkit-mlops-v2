@@ -2,7 +2,7 @@ stages:
   - stage: deploy_mlops_infrastructure
     displayName: Deploy MLOps Infrastructure
     variables:
-      - group: 'mlops_platform_infra_dev_vg'
+      - group: 'mlops_platform_dev_vg'
     jobs:
     - job: Deploy_MLOps_v2_Infrastructure  
       steps:
