@@ -50,8 +50,6 @@ stages:
       - publish_IaC_templates
     variables:
       - group: 'mlops_platform_infra_dev_vg'
-      - name: 'location'
-      - value: 'eastus'
     jobs:
     - job: Deploy_MLOps_v2_Infrastructure  
       steps:
