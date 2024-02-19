@@ -50,7 +50,8 @@ stages:
       - publish_IaC_templates
     variables:
       - group: 'mlops_platform_infra_dev_vg'
-      - location: 'eastus'
+      - name: 'location'
+      - value: 'eastus'
     jobs:
     - job: Deploy_MLOps_v2_Infrastructure  
       steps:
@@ -62,7 +63,7 @@ stages:
           echo 'See the contents of parameters passed in'
           echo '$(AZURE_RM_SVC_CONNECTION)'
           echo '$(BICEP_RESOURCE_GROUP_NAME)'
-          echo '${{variables.location}}'
+          echo '$(LOCATION)'
           echo '$(BICEP_STORAGE_ACCT)'
           echo '$(BICEP_KEYVAULT_NAME)'
           echo '$(BICEP_APPINSIGHTS_NAME)'
