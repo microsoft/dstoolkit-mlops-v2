@@ -13,7 +13,7 @@ variables:
 #    default: "infra"
 
 stages:
-  - template: ../../../templates/platform_infra_bicep_pipeline.yml
+  - template: ../../templates/platform_infra_bicep_pipeline.yml
   # - template: ../../templates/variables_template_infra.yml
     # parameters:
       # env_name: ${{parameters.env_name}}
