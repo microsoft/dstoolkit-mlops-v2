@@ -1,0 +1,90 @@
+
+parameters:
+- name: environmentName
+  type: string
+- name: azureMgrConnection
+  type: string
+- name: resourceGroup
+  type: string
+- name: location
+  type: string     
+- name: storageAccount
+  type: string
+- name: keyVaultName
+  type: string
+- name: appInsightsName  
+  type: string
+- name: containerRegistryName  
+  type: string
+- name: amlWorkspaceName  
+  type: string   
+- name: clusterName  
+  type: string
+- name: clusterSize  
+  type: string
+- name: batchClusterName  
+  type: string  
+  
+stages:
+  - stage: publish_IaC_templates
+    displayName: Publish IaC Templates
+    jobs:
+    - job: Publish_IaC_Templates
+      steps:
+          - checkout: self
+            clean: true
+          - task: CopyFiles@2
+            displayName: 'Copy templates'
+            inputs:
+              sourceFolder: '$(Pipeline.Workspace)/s'
+              targetFolder: '$(Build.ArtifactStagingDirectory)'
+            enabled: true
+
+          - publish: '$(Build.ArtifactStagingDirectory)'
+            artifact: infratemplates 
+            enabled: true
+
+  - stage: deploy_mlops_infrastructure
+    displayName: Deploy MLOps Infrastructure
+    dependsOn:
+      - publish_IaC_templates
+    variables:
+      - group: 'mlops_platform_infra_dev_vg'
+      - location: 'eastus'
+    jobs:
+    - job: Deploy_MLOps_v2_Infrastructure  
+      steps:
+      - download: current
+        artifact: infratemplates
+        displayName: Download IaC Templates
+
+      - script: |
+          echo 'See the contents of parameters passed in'
+          echo '$(AZURE_RM_SVC_CONNECTION)'
+          echo '$(BICEP_RESOURCE_GROUP_NAME)'
+          echo '${{variables.location}}'
+          echo '$(BICEP_STORAGE_ACCT)'
+          echo '$(BICEP_KEYVAULT_NAME)'
+          echo '$(BICEP_APPINSIGHTS_NAME)'
+          echo '$(BICEP_CONTAINER_REGISTRY_NAME)'
+          echo '$(BICEP_WORKSPACE_NAME)'
+        enabled: true
+
+      - task: AzureCLI@2
+        displayName: Provision AzureML Infrastructure
+        inputs:
+          azureSubscription: '${{parameters.azureMgrConnection}}'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          useGlobalConfig: false
+          inlineScript: |
+            az --version
+            az deployment sub create --location='${{parameters.location}}' `
+            --template-file '$(Pipeline.Workspace)/infratemplates/infra/bicep/public_workspace/main.bicep' `
+            --parameters resourceGroupName='$(BICEP_RESOURCE_GROUP_NAME)' location='${{variables.location}}' `
+            storageAccount='$(BICEP_STORAGE_ACCT)' `
+            keyVaultName='$(BICEP_KEYVAULT_NAME)' `
+            appInsightsName='$(BICEP_APPINSIGHTS_NAME)' `
+            containerRegistryName='$(BICEP_CONTAINER_REGISTRY_NAME)' `
+            amlWorkspaceName='$(BICEP_WORKSPACE_NAME)'
+        enabled: true              
