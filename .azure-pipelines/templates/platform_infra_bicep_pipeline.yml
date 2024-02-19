@@ -35,11 +35,11 @@ stages:
           echo '$(AZURE_RM_SVC_CONNECTION)'
           echo '$(BICEP_RESOURCE_GROUP_NAME)'
           echo '$(LOCATION)'
-          echo '$(BICEP_STORAGE_ACCT)'
-          echo '$(BICEP_KEYVAULT_NAME)'
-          echo '$(BICEP_APPINSIGHTS_NAME)'
-          echo '$(BICEP_CONTAINER_REGISTRY_NAME)'
-          echo '$(BICEP_WORKSPACE_NAME)'
+          echo '$(STORAGE_ACCT_NAME)'
+          echo '$(KEYVAULT_NAME)'
+          echo '$(APPINSIGHTS_NAME)'
+          echo '$(CONTAINER_REGISTRY_NAME)'
+          echo '$(WORKSPACE_NAME)'
         enabled: true
 
       - task: AzureCLI@2
@@ -53,10 +53,10 @@ stages:
             az --version
             az deployment sub create --location='$(LOCATION)' `
             --template-file '$(Pipeline.Workspace)/infratemplates/infra/bicep/public_workspace/main.bicep' `
-            --parameters resourceGroupName='$(BICEP_RESOURCE_GROUP_NAME)' location='$(LOCATION)' `
-            storageAccount='$(BICEP_STORAGE_ACCT)' `
-            keyVaultName='$(BICEP_KEYVAULT_NAME)' `
-            appInsightsName='$(BICEP_APPINSIGHTS_NAME)' `
-            containerRegistryName='$(BICEP_CONTAINER_REGISTRY_NAME)' `
-            amlWorkspaceName='$(BICEP_WORKSPACE_NAME)'
+            --parameters resourceGroupName='$(RESOURCE_GROUP_NAME)' location='$(LOCATION)' `
+            storageAccount='$(STORAGE_ACCT_NAME)' `
+            keyVaultName='$(KEYVAULT_NAME)' `
+            appInsightsName='$(APPINSIGHTS_NAME)' `
+            containerRegistryName='$(CONTAINER_REGISTRY_NAME)' `
+            amlWorkspaceName='$(WORKSPACE_NAME)'
         enabled: true              

@@ -69,7 +69,20 @@ Launch the Service Connection Wizard ![image](https://github.com/microsoft/dstoo
 ![image](https://github.com/microsoft/dstoolkit-mlops-v2/assets/15255737/4dbb36fa-6511-442f-9e6e-bb805a68f827)<br>**Choose the Service principal (manual) radio button, enter the required subscription, name, etc details making sure to use the service principal created above in the ensuing dialog.**</br> 
     
 
-**Step 2.** Create a new variable group named **"mlops_platform_dev_vg"**, add "AZURE_RM_SVC_CONNECTION" variable with the name of the service connection created above. 
+**Step 2.** Create a new variable group named **"mlops_platform_dev_vg"**, add the following variables: 
+
+- "APPINSIGHTS_NAME": Set to a value of your choosing.  Note the value must be unique.
+- "AZURE_RM_SVC_CONNECTION":  Set to the name of the service connection created above. 
+- "CONTAINER_REGISTRY_NAME": Set to a value of your choosing.  Note the value must be unique.
+- "KEYVAULT_NAME": Set to a value of your choosing.  Note the value must be unique.
+- "LOCATION": Set to valid value for the "Name" property for Azure Region.
+- "RESOURCE_GROUP_NAME": Set to a value of your choosing.  Note the value must be unique.
+- "STORAGE_ACCT_NAME": Set to an unique alphanumeric value of your choosing.
+- "WORKSPACE_NAME": Set to a value of your choosing.  Note the value must be unique.
+
+If you intend to deploy the infrastructure using the terraform deployment, add the following variables to the variable group.
+- "TF_STATE_RESOURCE_GROUP_NAME": Set to an unique value of your choosing.
+- "TF_STATE_STORAGE_ACCT_NAME": Set to an unique alphanumeric value of your choosing.
 Information about variable groups in Azure DevOps can be found in [Add & use variable groups](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops&tabs=classic).
 
 **Step 3.** Clone the repository, create a *development* branch, and make it the default branch so that all PRs merge to it. This guide assumes that the team works with a *development* branch as the primary source for coding and improving model quality. Later, you can implement an Azure Pipeline to move code from the *development* branch to qa/main or that executes a release process with each check-in. However, release management is not in scope of this guide.
