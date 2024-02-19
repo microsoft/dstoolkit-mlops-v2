@@ -7,10 +7,10 @@ pool:
 variables:
 - group: mlops_platform_infra_dev_vg
 
-parameters:
- - name: env_name
-   displayName: "Execution Environment"
-   default: "infra"
+# parameters:
+#  - name: env_name
+#    displayName: "Execution Environment"
+#    default: "infra"
 
 stages:
   - template: ../../../templates/platform_infra_bicep_pipeline.yml
