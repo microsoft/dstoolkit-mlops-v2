@@ -1,9 +1,6 @@
 stages:
-
   - stage: deploy_mlops_infrastructure
     displayName: Deploy MLOps Infrastructure
-    dependsOn:
-      - publish_IaC_templates
     variables:
       - group: 'mlops_platform_infra_dev_vg'
     jobs:
