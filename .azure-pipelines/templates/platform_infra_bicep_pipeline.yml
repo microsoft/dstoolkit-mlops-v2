@@ -59,4 +59,4 @@ stages:
             appInsightsName='$(BICEP_APPINSIGHTS_NAME)' `
             containerRegistryName='$(BICEP_CONTAINER_REGISTRY_NAME)' `
             amlWorkspaceName='$(BICEP_WORKSPACE_NAME)'
-        enabled: false              
+        enabled: true              
