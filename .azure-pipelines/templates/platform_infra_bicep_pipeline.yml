@@ -1,30 +1,3 @@
-
-parameters:
-- name: environmentName
-  type: string
-- name: azureMgrConnection
-  type: string
-- name: resourceGroup
-  type: string
-- name: location
-  type: string     
-- name: storageAccount
-  type: string
-- name: keyVaultName
-  type: string
-- name: appInsightsName  
-  type: string
-- name: containerRegistryName  
-  type: string
-- name: amlWorkspaceName  
-  type: string   
-- name: clusterName  
-  type: string
-- name: clusterSize  
-  type: string
-- name: batchClusterName  
-  type: string  
-  
 stages:
   - stage: publish_IaC_templates
     displayName: Publish IaC Templates
@@ -86,4 +59,4 @@ stages:
             appInsightsName='$(BICEP_APPINSIGHTS_NAME)' `
             containerRegistryName='$(BICEP_CONTAINER_REGISTRY_NAME)' `
             amlWorkspaceName='$(BICEP_WORKSPACE_NAME)'
-        enabled: true              
+        enabled: false              
