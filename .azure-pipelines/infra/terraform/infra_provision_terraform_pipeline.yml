@@ -7,22 +7,5 @@ pool:
 variables:
 - group: mlops_platform_infra_dev_vg
 
-parameters:
- - name: env_name
-   displayName: "Execution Environment"
-   default: "infra"
-
 stages:
-  - template: ../../templates/variables_template_infra.yml
-    parameters:
-      env_name: ${{parameters.env_name}}
-  - template: ../../platform_infra_terraform_pipeline.yml
-    parameters:
-      azureMgrConnection: $(AZURE_RM_SVC_CONNECTION)
-      resourceGroup: $(RESOURCE_GROUP_NAME)
-      keyVaultName: $(KEYVAULT_NAME)
-      amlWorkspaceName: $(WORKSPACE_NAME)
-      clusterName: $(CLUSTER_NAME)
-      batchClusterName: $(BATCH_CLUSTER_NAME)
-      version: $(VERSION)
-      location: $(LOCATION)
+  - template: ../../templates/platform_infra_terraform_pipeline.yml
