@@ -1,48 +1,28 @@
-parameters:
-- name: azureMgrConnection
-  type: string
-- name: resourceGroup
-  type: string
-- name: keyVaultName
-  type: string
-- name: amlWorkspaceName  
-  type: string   
-- name: clusterName  
-  type: string
-- name: clusterSize  
-  type: string
-  default: 'STANDARD_DS3_v2'
-- name: batchClusterName  
-  type: string
-- name: version  
-  type: string
-- name: location  
-  type: string    
-  
 stages:
 
   - stage: deploy_mlops_infrastructure
     displayName: Deploy MLOps Infrastructure
     dependsOn:
-      - infra_variable_generation
+      - publish_IaC_templates
     variables:
-      - template: templates/infra_bicep_variables.yml
-   
+      - group: 'mlops_platform_infra_dev_vg'
     jobs:
     - job: Deploy_MLOps_v2_Infrastructure  
       steps:
       - script: |
           echo 'See the contents of parameters passed in'
-          echo '${{parameters.azureMgrConnection}}'
-          echo '${{parameters.resourceGroup}}'
-          echo '${{parameters.keyVaultName}}'
-          echo '${{parameters.amlWorkspaceName}}'
-          echo '${{parameters.clusterName}}'
-          echo '${{parameters.clusterSize}}'
-          echo '${{parameters.version}}'
-          echo '${{parameters.location}}'
+          echo '$(AZURE_RM_SVC_CONNECTION)'
+          echo '$(TF_RESOURCE_GROUP_NAME)'
+          echo '$(TF_TFSTATE_RESOURCE_GROUP_NAME)'          
+          echo '$(TF_TFSTATE_STORAGE_ACCT)' 
+          echo '$(TF_STORAGE_ACCT)'
+          echo '$(TF_KEYVAULT_NAME)'
+          echo '$(TF_APPINSIGHTS_NAME)'
+          echo '$(TF_CONTAINER_REGISTRY_NAME)'          
+          echo '$(TF_WORKSPACE_NAME)'
+          echo '$(LOCATION)'
 
-        enabled: false
+        enabled: true
 
       - task: qetza.replacetokens.replacetokens-task.replacetokens@5
         inputs:
@@ -65,37 +45,37 @@ stages:
       - task: AzureCLI@2
         displayName: Add tfstate resource group
         inputs:
-          azureSubscription: '${{parameters.azureMgrConnection}}'
+          azureSubscription: '$(AZURE_RM_SVC_CONNECTION)'
           scriptType: pscore
           scriptLocation: inlineScript
           useGlobalConfig: false
           inlineScript: |
             az --version
-            az group create --location ${{parameters.location}} --name 'rg-stacctfstate${{parameters.version}}'
+            az group create --location '$(LOCATION)' --name '$(TF_TFSTATE_RESOURCE_GROUP_NAME)'
         enabled: true
 
       - task: AzureCLI@2
         displayName: Add tfstate account
         inputs:
-          azureSubscription: '${{parameters.azureMgrConnection}}'
+          azureSubscription: '$(AZURE_RM_SVC_CONNECTION)'
           scriptType: pscore
           scriptLocation: inlineScript
           useGlobalConfig: false
           inlineScript: |
             az --version
-            az storage account create --name 'stacctfstate${{parameters.version}}' --resource-group 'rg-stacctfstate${{parameters.version}}' --sku Standard_LRS
+            az storage account create --name '$(TF_TFSTATE_STORAGE_ACCT)' --resource-group '$(TF_TFSTATE_RESOURCE_GROUP_NAME)' --sku Standard_LRS
         enabled: true
 
       - task: AzureCLI@2
         displayName: Add terraform container
         inputs:
-          azureSubscription: '${{parameters.azureMgrConnection}}'
+          azureSubscription: '$(AZURE_RM_SVC_CONNECTION)'
           scriptType: pscore
           scriptLocation: inlineScript
           useGlobalConfig: false
           inlineScript: |
             az --version
-            az storage container create --name terraform --account-name 'stacctfstate${{parameters.version}}'
+            az storage container create --name terraform --account-name '$(TF_TFSTATE_STORAGE_ACCT)'
         enabled: true
 
       - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@1
@@ -110,10 +90,10 @@ stages:
         inputs:
           command: 'init'
           workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
-          backendServiceArm: '${{parameters.azureMgrConnection}}'
+          backendServiceArm: '$(AZURE_RM_SVC_CONNECTION)'
           ensureBackend: true
-          backendAzureRmResourceGroupName: 'rg-stacctfstate${{parameters.version}}'
-          backendAzureRmStorageAccountName: 'stacctfstate${{parameters.version}}' 
+          backendAzureRmResourceGroupName: '$(TF_TFSTATE_RESOURCE_GROUP_NAME)'
+          backendAzureRmStorageAccountName: '$(TF_TFSTATE_STORAGE_ACCT)' 
           backendAzureRmContainerName: terraform
           backendAzureRmKey: mlops.tfstate
         enabled: true
@@ -131,7 +111,7 @@ stages:
           command: 'plan'
           workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
           allowTelemetryCollection: true
-          environmentServiceNameAzureRM: '${{parameters.azureMgrConnection}}'
+          environmentServiceNameAzureRM: '$(AZURE_RM_SVC_CONNECTION)'
           commandOptions: '-out=tfplan'
         enabled: true
 
@@ -141,49 +121,6 @@ stages:
           provider: 'azurerm'
           command: 'apply'
           workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/public_workspace'
-          environmentServiceNameAzureRM: '${{parameters.azureMgrConnection}}'
+          environmentServiceNameAzureRM: '$(AZURE_RM_SVC_CONNECTION)'
           commandOptions: '-auto-approve -input=false  tfplan'
         enabled: true
-
-      - task: AzureCLI@2
-        displayName: Add Compute Cluster
-        inputs:
-          azureSubscription: '${{parameters.azureMgrConnection}}'
-          scriptType: pscore
-          scriptLocation: inlineScript
-          useGlobalConfig: false
-          inlineScript: |
-            az --version
-            az extension add -n ml -y
-            az ml compute create --name '${{parameters.clusterName}}' --size '${{parameters.clusterSize}}' `
-            --type AmlCompute --resource-group '${{parameters.resourceGroup}}' --workspace-name '${{parameters.amlWorkspaceName}}'
-        enabled: true
-
-      - task: AzureCLI@2
-        displayName: Add Batch Cluster
-        inputs:
-          azureSubscription: '${{parameters.azureMgrConnection}}'
-          scriptType: pscore
-          scriptLocation: inlineScript
-          useGlobalConfig: false
-          inlineScript: |
-            Write-Host "cluster is ${{parameters.clusterName}} and cluster-size is ${{parameters.clusterSize}}"
-            az --version
-            az extension add -n ml -y
-            az ml compute create --name '${{parameters.batchclusterName}}' --size '${{parameters.clusterSize}}' `
-            --type AmlCompute --resource-group '${{parameters.resourceGroup}}' --workspace-name '${{parameters.amlWorkspaceName}}'
-        enabled: true
-
-      - task: AzureCLI@2
-        displayName: Add Key Vault access policy to service principal backing service connection
-        inputs:
-          azureSubscription: '${{parameters.azureMgrConnection}}'
-          scriptType: pscore
-          addSpnToEnvironment: true
-          scriptLocation: inlineScript
-          useGlobalConfig: false
-          inlineScript: |
-            az --version
-            $id = (az ad sp show --id $env:servicePrincipalId --query id)
-            az keyvault set-policy --name ${{parameters.keyVaultName}} --object-id $id --secret-permissions get list
-        enabled: false  

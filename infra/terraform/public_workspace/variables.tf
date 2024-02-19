@@ -17,26 +17,43 @@
 ##############################
 variable "rg_name" {
   type    = string
-    validation {
-        condition = (length(var.rg_name) <= 90 && length(var.rg_name) > 2 && can(regex("[-\\w\\._\\(\\)]+", var.rg_name)) )
-        error_message = "Resource group name may only contain alphanumeric characters, dash, underscores, parentheses and periods."
-    }
-    default = "mlops-test-v2"
+  default = "rg-terraform"
 }
-variable "basename" {
+variable "tfstate_rg_name" {
   type    = string
-  default = "mlops"
+  default = "rg-tfstate-terraform"
 }
 
-variable "project_code" {
+variable "storage_acct" {
   type    = string
-  default = "v2"
+  default = "stterraform"
 }
 
-variable "version_num" {
+variable "tfstate_storage_acct" {
   type    = string
-  default = "100"
+  default = "sttfstateterraform"
 }
+
+variable "keyvault_name" {
+  type    = string
+  default = "kvterraform"
+}
+
+variable "appinsights_name" {
+  type    = string
+  default = "appiterraform"
+}
+
+variable "container_registry_name" {
+  type    = string
+  default = "crterraform"
+}
+
+variable "workspace_name" {
+  type    = string
+  default = "amlterraform"
+}
+
 
 variable "location" {
   type    = string
