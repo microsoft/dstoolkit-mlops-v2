@@ -60,7 +60,7 @@ stages:
           useGlobalConfig: false
           inlineScript: |
             az --version
-            az storage account create --name '$(TFSTATE_STORAGE_ACCT)' --resource-group '$(TFSTATE_RESOURCE_GROUP_NAME)' --sku Standard_LRS
+            az storage account create --name '$(TFSTATE_STORAGE_ACCT_NAME)' --resource-group '$(TFSTATE_RESOURCE_GROUP_NAME)' --sku Standard_LRS
         enabled: true
 
       - task: AzureCLI@2
@@ -72,7 +72,7 @@ stages:
           useGlobalConfig: false
           inlineScript: |
             az --version
-            az storage container create --name terraform --account-name '$(TFSTATE_STORAGE_ACCT)'
+            az storage container create --name terraform --account-name '$(TFSTATE_STORAGE_ACCT_NAME)'
         enabled: true
 
       - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@1
@@ -90,7 +90,7 @@ stages:
           backendServiceArm: '$(AZURE_RM_SVC_CONNECTION)'
           ensureBackend: true
           backendAzureRmResourceGroupName: '$(TFSTATE_RESOURCE_GROUP_NAME)'
-          backendAzureRmStorageAccountName: '$(TFSTATE_STORAGE_ACCT)' 
+          backendAzureRmStorageAccountName: '$(TFSTATE_STORAGE_ACCT_NAME)' 
           backendAzureRmContainerName: terraform
           backendAzureRmKey: mlops.tfstate
         enabled: true
