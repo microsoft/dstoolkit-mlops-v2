@@ -13,15 +13,17 @@ pool:
 #    default: "infra"
 
 stages:
-  - stage: Dev-InfraProvision
+  - stage: DevInfraProvision
     displayName: 'Dev-Infra Provision'
     variables:
       - group: mlops_platform_infra_dev_vg
     jobs:
       - template: ../../templates/platform_infra_bicep_pipeline.yml
-  - stage: Test-InfraProvision
+  - stage: TestInfraProvision
     displayName: 'Test-Infra Provision'
     variables:
       - group: mlops_platform_infra_test_vg
     jobs:
       - template: ../../templates/platform_infra_bicep_pipeline.yml
+        parameters:
+          variableGroup: '${{variables.group}}'

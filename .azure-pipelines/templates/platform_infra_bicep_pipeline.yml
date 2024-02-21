@@ -1,3 +1,10 @@
+parameters:
+   - name: variableGroup
+     type: string
+
+variables:
+  - group: ${{ parameters.variableGroup }}
+     
 jobs:
   - job: Publish_IaC_Templates
     steps:
