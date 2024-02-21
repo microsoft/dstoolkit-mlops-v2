@@ -18,7 +18,7 @@ stages:
         - job: InfraProvision
           displayName: 'Dev-Infra Provision'
           variables:
-            - group: mlops_platform_dev_vg
+            - group: mlops_platform_infra_dev_vg
           steps:
             - template: ../../templates/platform_infra_bicep_pipeline.yml
 
