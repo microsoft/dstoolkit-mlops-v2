@@ -4,8 +4,8 @@ pool:
   vmImage: ubuntu-latest
 
 
-variables:
-- group: mlops_platform_dev_vg
+# variables:
+# - group: mlops_platform_dev_vg
 
 # parameters:
 #  - name: env_name
@@ -13,9 +13,11 @@ variables:
 #    default: "infra"
 
 stages:
+
   - template: ../../templates/platform_infra_bicep_pipeline.yml
-  # - template: ../../templates/variables_template_infra.yml
-    # parameters:
+  - group: mlops_platform_infra_dev_vg
+  - stage: Dev-InfraProvision 
+
       # env_name: ${{parameters.env_name}}
 
     # parameters:
