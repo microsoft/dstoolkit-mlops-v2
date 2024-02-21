@@ -19,6 +19,9 @@ stages:
       - group: mlops_platform_infra_dev_vg
     jobs:
       - template: ../../templates/platform_infra_bicep_pipeline.yml
+        parameters:
+          variableGroup: '${{variables.group}}'
+          
   - stage: TestInfraProvision
     displayName: 'Test-Infra Provision'
     variables:
