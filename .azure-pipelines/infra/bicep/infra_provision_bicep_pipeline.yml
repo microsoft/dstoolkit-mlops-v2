@@ -15,18 +15,14 @@ pool:
 stages:
   - stage: DevInfraProvision
     displayName: 'Dev-Infra Provision'
-    variables:
-      - group: mlops_platform_infra_dev_vg
     jobs:
       - template: ../../templates/platform_infra_bicep_pipeline.yml
         parameters:
-          variableGroup: '${{variables.group}}'
-          
+          variableGroup: 'mlops_platform_infra_dev_vg'
+
   - stage: TestInfraProvision
     displayName: 'Test-Infra Provision'
-    variables:
-      - group: mlops_platform_infra_test_vg
     jobs:
       - template: ../../templates/platform_infra_bicep_pipeline.yml
         parameters:
-          variableGroup: '${{variables.group}}'
+          variableGroup: 'mlops_platform_infra_test_vg'

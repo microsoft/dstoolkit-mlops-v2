@@ -20,7 +20,7 @@ jobs:
 
     - job: Deploy_MLOps_v2_Infrastructure
       variables:
-      - group: ${{parameters.variableGroup}}  
+      - group: '${{parameters.variableGroup}}'  
       steps:
       - download: current
         artifact: infratemplates
