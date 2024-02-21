@@ -13,10 +13,14 @@ pool:
 #    default: "infra"
 
 stages:
-
-  - template: ../../templates/platform_infra_bicep_pipeline.yml
-  - group: mlops_platform_infra_dev_vg
-  - stage: Dev-InfraProvision 
+    - stage: Dev-InfraProvision
+      jobs:
+        - job: InfraProvision
+          displayName: 'Dev-Infra Provision'
+          variables:
+            - group: mlops_platform_dev_vg
+          steps:
+            - template: ../../templates/platform_infra_bicep_pipeline.yml
 
       # env_name: ${{parameters.env_name}}
 
