@@ -31,6 +31,18 @@ jobs:
     steps:
       - name: Checkout Actions
         uses: actions/checkout@v1
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Retrieve Azure Service Connection
+        uses: azure/CLI@v1
+        with:
+          azcliversion: latest
+          inlineScript: |
+            export subscriptionId=$(az account show --query id -o tsv)
+            echo "##vso[task.setvariable variable=SUBSCRIPTION_ID]$subscriptionId"
+            echo "##vso[task.setvariable variable=TENANT_ID]$tenantId"
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
       - name: Execute ML Job Pipeline
