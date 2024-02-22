@@ -1,4 +1,4 @@
-name: CI Workflow
+name: Nyc Taxi CI Workflow
 on:
   push:
     branches:
@@ -30,7 +30,7 @@ on:
 
 jobs:
   run-ci-workflow:
-    uses: ./.github/workflows/platform_ci_dev_pipeline.yml
+    uses: ./.github/workflows/platform_ci_pipeline.yml
     with:
       exec_environment: ${{ inputs.exec_environment || 'dev' }}
       model_type: ${{ inputs.model_type || 'nyc_taxi' }}
