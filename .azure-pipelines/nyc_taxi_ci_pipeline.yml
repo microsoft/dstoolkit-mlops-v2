@@ -30,7 +30,7 @@ parameters:
    displayName: "True for batch endpoint and False for real-time endpoint"
 
 stages:
-  - template: platform_ci_dev_pipeline.yml
+  - template: templates/platform_ci_pipeline.yml
     parameters:
       exec_environment: ${{ parameters.env_name }}
       model_type: ${{ parameters.model_type }}
