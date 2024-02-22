@@ -14,9 +14,9 @@ stages:
       jobs:
       - job: Execute_ml_Job_Pipeline
         steps:
-        - template: templates/get_connection_details.yml
-        - template: templates/configure_azureml_agent.yml
-        - template: templates/execute_mlops_pipeline.yml
+        - template: get_connection_details.yml
+        - template: configure_azureml_agent.yml
+        - template: execute_mlops_pipeline.yml
           parameters:
             script_parameter: |
               python -m mlops.${{ parameters.model_type }}.src.mlops_pipeline \
@@ -69,7 +69,7 @@ stages:
             instructions: "$(run_metadata_from_submit_job)"
             onTimeout: 'reject'
 
-      - template: templates/aml_real_deployment.yml  # Template reference
+      - template: aml_real_deployment.yml  # Template reference
         parameters:
           SUBSCRIPTION_ID: $(SUBSCRIPTION_ID)
           RESOURCE_GROUP_NAME: $(RESOURCE_GROUP_NAME)
