@@ -12,7 +12,7 @@ variables:
 #    displayName: "Execution Environment"
 #    default: "infra"
 
-stages:
+# stages:
   # - stage: DevInfraProvision
   #   displayName: 'Dev-Infra Provision'
   #   jobs:
