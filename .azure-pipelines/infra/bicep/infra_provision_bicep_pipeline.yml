@@ -7,27 +7,36 @@ pool:
 variables:
 - group: mlops_platform_infra_dev_vg
 
-parameters:
- - name: env_name
-   displayName: "Execution Environment"
-   default: "infra"
+jobs:
+- job: Deploy_MLOps_v2_Infrastructure  
+  steps:
+      - script: |
+          echo 'See the contents of parameters passed in'
+          echo '$(AZURE_RM_SVC_CONNECTION)'
+          echo '$(BICEP_RESOURCE_GROUP_NAME)'
+          echo '$(LOCATION)'
+          echo '$(STORAGE_ACCT_NAME)'
+          echo '$(KEYVAULT_NAME)'
+          echo '$(APPINSIGHTS_NAME)'
+          echo '$(CONTAINER_REGISTRY_NAME)'
+          echo '$(WORKSPACE_NAME)'
+        enabled: true
 
-stages:
-  - template: ../../templates/variables_template_infra.yml
-    parameters:
-      env_name: ${{parameters.env_name}}
-  - template: ../../platform_infra_bicep_pipeline.yml
-    parameters:
-      environmentName: $(ENVIRONMENT)
-      azureMgrConnection: $(AZURE_RM_SVC_CONNECTION)
-      resourceGroup: $(RESOURCE_GROUP_NAME)
-      location: $(LOCATION)
-      storageAccount: $(STORAGEACCOUNT)
-      keyVaultName: $(KEYVAULT_NAME)
-      appInsightsName: $(APPINSIGHTS)
-      containerRegistryName: $(REGISTRY_NAME)
-      amlWorkspaceName: $(WORKSPACE_NAME)
-      clusterName: $(CLUSTER_NAME)
-      clusterSize: $(CLUSTER_SIZE)
-      batchClusterName: $(BATCH_CLUSTER_NAME)
-
+      - task: AzureCLI@2
+        displayName: Provision AzureML Infrastructure
+        inputs:
+          azureSubscription: '$(AZURE_RM_SVC_CONNECTION)'
+          scriptType: pscore
+          scriptLocation: inlineScript
+          useGlobalConfig: false
+          inlineScript: |
+            az --version
+            az deployment sub create --location='$(LOCATION)' `
+            --template-file '$(System.DefaultWorkingDirectory)/infra/bicep/public_workspace/main.bicep' `
+            --parameters resourceGroupName='$(RESOURCE_GROUP_NAME)' location='$(LOCATION)' `
+            storageAccount='$(STORAGE_ACCT_NAME)' `
+            keyVaultName='$(KEYVAULT_NAME)' `
+            appInsightsName='$(APPINSIGHTS_NAME)' `
+            containerRegistryName='$(CONTAINER_REGISTRY_NAME)' `
+            amlWorkspaceName='$(WORKSPACE_NAME)'
+        enabled: true                
