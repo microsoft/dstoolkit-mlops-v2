@@ -36,3 +36,9 @@ jobs:
         uses: actions/checkout@v1
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
+      - name: Execute ML Job Pipeline
+        run: |
+          echo "Executing ML Job Pipeline"
+          python -m mlops.${{ github.event.inputs.model_type }}.src.mlops_pipeline \
+            --build_environment ${{ github.event.inputs.exec_environment }} \
+            --wait_for_completion
