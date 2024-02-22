@@ -21,7 +21,7 @@ jobs:
 
           - publish: '$(Build.ArtifactStagingDirectory)'
             artifact: infratemplates 
-            enabled: true
+            enabled: false
 
     - job: Deploy_MLOps_v2_Infrastructure 
       steps:
