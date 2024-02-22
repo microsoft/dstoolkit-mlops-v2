@@ -17,7 +17,7 @@ jobs:
             inputs:
               sourceFolder: '$(Pipeline.Workspace)/s'
               targetFolder: '$(Build.ArtifactStagingDirectory)'
-            enabled: true
+            enabled: false
 
           - publish: '$(Build.ArtifactStagingDirectory)'
             artifact: infratemplates 
