@@ -1,18 +1,21 @@
 name: Nyc Taxi PR Workflow
 
 on:
-  pull_request:
+  push:
     branches:
-      - "development"
-    paths:
-      - .github/*
-      - mlops/common/*
-      - mlops/*
-      - mlops/nyc_taxi/*
-      - src/nyc_src/*
-      - model/nyc_taxi/*
-      - src/shared/*
-      - tests
+      - "agromova/pr_fix"
+  # pull_request:
+  #   branches:
+  #     - "development"
+  #   paths:
+  #     - .github/*
+  #     - mlops/common/*
+  #     - mlops/*
+  #     - mlops/nyc_taxi/*
+  #     - src/nyc_src/*
+  #     - model/nyc_taxi/*
+  #     - src/shared/*
+  #     - test
   workflow_call:
     inputs:
       exec_environment:
