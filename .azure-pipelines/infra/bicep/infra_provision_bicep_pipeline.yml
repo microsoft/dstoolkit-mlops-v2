@@ -7,16 +7,6 @@ pool:
 variables:
 - group: mlops_platform_infra_dev_vg
 
-# parameters:
-#  - name: env_name
-#    displayName: "Execution Environment"
-#    default: "infra"
-
-# stages:
-  # - stage: DevInfraProvision
-  #   displayName: 'Dev-Infra Provision'
-  #   jobs:
-  #     - template: ../../templates/platform_infra_bicep_pipeline.yml
 jobs:
     - job: Publish_IaC_Templates
       steps:
