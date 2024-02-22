@@ -37,4 +37,6 @@ jobs:
       model_type: ${{ inputs.model_type || 'nyc_taxi' }}
     secrets:
       subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
+      resource_group_name: ${{ secrets.RESOURCE_GROUP_NAME }}
+      workspace_name: ${{ secrets.WORKSPACE_NAME }}
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}

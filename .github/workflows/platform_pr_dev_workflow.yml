@@ -16,6 +16,12 @@ on:
       subscription_id:
         description: "the subscription ID hosting the AML instance."
         required: true
+      resource_group_name:
+        description: "the resource group name hosting the AML instance."
+        required: true
+      workspace_name:
+        description: "the workspace name hosting the AML instance."
+        required: true
       azure_credentials:
         description: "the credentials to use to authenticate with Azure."
         required: true
@@ -37,6 +43,8 @@ jobs:
         uses: ./.github/actions/execute_shell_code
         env: 
             SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
+            RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
+            WORKSPACE_NAME: ${{ secrets.workspace_name }}
         with:
             azure_credentials: ${{ secrets.azure_credentials }}
             script_parameter: |
