@@ -17,9 +17,9 @@ stages:
     jobs:
     - job: Execute_ml_Job_Pipeline
       steps:
-      - template: templates/get_connection_details.yml
-      - template: templates/configure_azureml_agent.yml
-      - template: templates/execute_mlops_pipeline.yml
+      - template: get_connection_details.yml
+      - template: configure_azureml_agent.yml
+      - template: execute_mlops_pipeline.yml
         parameters:
           script_parameter: |
             python -m mlops.${{ parameters.model_type }}.src.mlops_pipeline \
