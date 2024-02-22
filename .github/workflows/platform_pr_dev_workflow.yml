@@ -35,11 +35,11 @@ jobs:
     
       - name: Execute AzureML Pipeline
         uses: ./.github/actions/execute_shell_code
-        with:
-          azure_credentials: ${{ secrets.azure_credentials }}
         env: 
             SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
-        script_parameter: |
-            python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
-                --build_environment ${{ inputs.exec_environment }} \
-                --wait_for_completion True
+        with:
+            azure_credentials: ${{ secrets.azure_credentials }}
+            script_parameter: |
+                python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
+                    --build_environment ${{ inputs.exec_environment }} \
+                    --wait_for_completion True
