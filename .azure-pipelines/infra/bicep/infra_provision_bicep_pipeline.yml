@@ -33,9 +33,7 @@ jobs:
             artifact: infratemplates 
             enabled: true
 
-    - job: Deploy_MLOps_v2_Infrastructure
-      variables:
-      - group: '${{parameters.variableGroup}}'  
+    - job: Deploy_MLOps_v2_Infrastructure 
       steps:
       - download: current
         artifact: infratemplates
