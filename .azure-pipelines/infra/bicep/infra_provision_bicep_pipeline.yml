@@ -29,6 +29,7 @@ jobs:
       - download: current
         artifact: infratemplates
         displayName: Download IaC Templates
+        enabled: false
 
       - script: |
           echo 'See the contents of parameters passed in'
