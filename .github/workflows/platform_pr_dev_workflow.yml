@@ -12,7 +12,6 @@ on:
         type: string
         description: "type of model to execute"
         required: true
-        default: "nyc_taxi"
     secrets:
       subscription_id:
         description: "the subscription ID hosting the AML instance."
@@ -33,10 +32,14 @@ jobs:
         uses: actions/checkout@v1
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
-      - name: Execute ML Job Pipeline step
-        run: |
-          echo "Current working dir: $(pwd)"
-          echo "Executing ML Job Pipeline"
-          python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
-            --build_environment ${{ inputs.exec_environment }} \
-            --wait_for_completion True
+    
+      - name: Execute AzureML Pipeline
+        uses: ./.github/actions/execute_shell_code
+        with:
+          azure_credentials: ${{ secrets.azure_credentials }}
+        env: 
+            SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
+        script_parameter: |
+            python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
+                --build_environment ${{ inputs.exec_environment }} \
+                --wait_for_completion True
