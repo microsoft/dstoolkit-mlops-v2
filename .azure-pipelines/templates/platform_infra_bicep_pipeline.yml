@@ -1,7 +1,3 @@
-parameters:
-   - name: variableGroup
-     type: string
-
 jobs:
     - job: Publish_IaC_Templates
       steps:
