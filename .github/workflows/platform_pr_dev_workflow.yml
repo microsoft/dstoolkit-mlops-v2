@@ -38,7 +38,8 @@ jobs:
         uses: ./.github/actions/configure_azureml_agent
       - name: Execute ML Job Pipeline
         run: |
+          echo "Current working dir: $(pwd)"
           echo "Executing ML Job Pipeline"
-          python -m mlops.${{ github.event.inputs.model_type }}.src.mlops_pipeline \
-            --build_environment ${{ github.event.inputs.exec_environment }} \
+          python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
+            --build_environment ${{ inputs.exec_environment }} \
             --wait_for_completion
