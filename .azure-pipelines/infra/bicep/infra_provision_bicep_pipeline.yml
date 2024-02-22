@@ -8,29 +8,8 @@ variables:
 - group: mlops_platform_infra_dev_vg
 
 jobs:
-    - job: Publish_IaC_Templates
-      condition: false
-      steps:
-          - checkout: self
-            clean: true
-          - task: CopyFiles@2
-            displayName: 'Copy templates'
-            inputs:
-              sourceFolder: '$(Pipeline.Workspace)/s'
-              targetFolder: '$(Build.ArtifactStagingDirectory)'
-            enabled: false
-
-          - publish: '$(Build.ArtifactStagingDirectory)'
-            artifact: infratemplates 
-            enabled: false
-
-    - job: Deploy_MLOps_v2_Infrastructure 
-      steps:
-      - download: current
-        artifact: infratemplates
-        displayName: Download IaC Templates
-        enabled: false
-
+- job: Deploy_MLOps_v2_Infrastructure  
+  steps:
       - script: |
           echo 'See the contents of parameters passed in'
           echo '$(AZURE_RM_SVC_CONNECTION)'
