@@ -51,7 +51,7 @@ jobs:
           inlineScript: |
             az --version
             az deployment sub create --location='$(LOCATION)' `
-            --template-file '$(Pipeline.Workspace)/infratemplates/infra/bicep/public_workspace/main.bicep' `
+            --template-file '$(System.DefaultWorkingDirectory)/infra/bicep/public_workspace/main.bicep' `
             --parameters resourceGroupName='$(RESOURCE_GROUP_NAME)' location='$(LOCATION)' `
             storageAccount='$(STORAGE_ACCT_NAME)' `
             keyVaultName='$(KEYVAULT_NAME)' `
