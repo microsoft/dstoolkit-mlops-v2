@@ -28,7 +28,7 @@ on:
 jobs:
   build-validation:
     name: Build Validation
-    uses: ./.github/actions/build_validation_workflow
+    uses: ./.github/workflows/build_validation_workflow.yml
   execute-ml-job-pipeline:
     name: Execute ML Job Pipeline
     runs-on: ubuntu-latest
