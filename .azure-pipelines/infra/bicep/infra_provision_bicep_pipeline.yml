@@ -9,6 +9,7 @@ variables:
 
 jobs:
     - job: Publish_IaC_Templates
+      condition: false
       steps:
           - checkout: self
             clean: true
