@@ -1,4 +1,4 @@
-name: Platform CI Dev Workflow
+name: Platform CI Workflow
 
 on:
   workflow_call:
@@ -19,7 +19,9 @@ on:
       azure_credentials:
         description: "the credentials to use to authenticate with Azure."
         required: true
-
+      is_batch_deployment: 
+        description: "the flag for batch deployment."
+        required: true
 
 jobs:
   execute-training-job:
