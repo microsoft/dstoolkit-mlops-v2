@@ -5,8 +5,6 @@ parameters:
    default: "dev"
  - name: model_type
    displayName: "type of model to execute"
- - name: is_batch_deployment
-   displayName: "determine real or batch deployment"
 
 stages:
     - stage: execute_training_job
@@ -14,10 +12,10 @@ stages:
       jobs:
       - job: Execute_ml_Job_Pipeline
         steps:
-        - template: get_connection_details.yml
         - template: configure_azureml_agent.yml
-        - template: execute_mlops_pipeline.yml
+        - template: execute_python_code.yml
           parameters:
+            step_name: "Execute Azure ML pipeline job"
             script_parameter: |
               python -m mlops.${{ parameters.model_type }}.src.mlops_pipeline \
                 --build_environment ${{parameters.exec_environment}} \
@@ -46,8 +44,6 @@ stages:
               echo $metadata
               echo "##vso[task.setvariable variable=RUN_METADATA;isOutput=true;]$metadata"
 
-
-
     - stage: deploy
       displayName: Execute_local_deployment
       dependsOn: 
@@ -58,6 +54,15 @@ stages:
       - name: run_metadata_from_submit_job
         value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_METADATA'] ]
       jobs:
+      # Deployment into Dev environment should be done automatically
+      # We are asking approval after that to decide if we need to publish
+      # artifacts and models for CD pipeline
+      - template: model_deployment.yml  # Template reference
+        parameters:
+          MODEL_TYPE: ${{ parameters.model_type }}
+          DEPLOY_ENVIRONMENT: ${{parameters.exec_environment}} 
+          RUN_ID: $(run_id_from_submit_job)
+
       - job: ApproveDeployment
         displayName: Approve for Model Deployment  
         pool: server    
@@ -69,16 +74,4 @@ stages:
             instructions: "$(run_metadata_from_submit_job)"
             onTimeout: 'reject'
 
-      - template: aml_real_deployment.yml  # Template reference
-        parameters:
-          SUBSCRIPTION_ID: $(SUBSCRIPTION_ID)
-          RESOURCE_GROUP_NAME: $(RESOURCE_GROUP_NAME)
-          WORKSPACE_NAME: $(WORKSPACE_NAME)
-          MODEL_TYPE: ${{ parameters.model_type }}
-          MODEL_NAME: $(MODEL_NAME)
-          RUN_ID: $(run_id_from_submit_job)
-          IS_BATCH_DEPLOYMENT: ${{parameters.is_batch_deployment}} 
-          BATCH_DEPLOYMENT_CONFIG: $(BATCH_DEPLOYMENT_CONFIG)
-          DEPLOY_ENVIRONMENT: ${{parameters.exec_environment}} 
-          DATA_CONFIG_PATH:  $(DATA_CONFIG_PATH)
-          REALTIME_DEPLOYMENT_CONFIG:  $(REALTIME_DEPLOYMENT_CONFIG)
+# TODO: Add a "production ready" tag to the model in te case of approval.
