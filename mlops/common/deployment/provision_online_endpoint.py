@@ -11,6 +11,7 @@ from azure.ai.ml.entities import (
     ManagedOnlineEndpoint
 )
 from azure.identity import DefaultAzureCredential
+from mlops.common.config_utils import MLOpsConfig
 
 
 parser = argparse.ArgumentParser("provision_deployment")
@@ -23,15 +24,25 @@ model_type = args.model_type
 run_id = args.run_id
 env_type = args.env_type
 
+config = MLOpsConfig(environment=env_type)
+
 ml_client = MLClient(
-    DefaultAzureCredential(), args.subscription_id, args.resource_group_name, args.workspace_name
+    DefaultAzureCredential(),
+    config.aml_config["subscription_id"],
+    config.aml_config["resource_group_name"],
+    config.aml_config["workspace_name"]
 )
 
+deployment_config = config.get_deployment_config(deployment_name=f"{model_type}_online")
+
 endpoint = ManagedOnlineEndpoint(
-    name=endpoint_name,
-    description=endpoint_desc,
+    name=deployment_config["endpoint_name"],
+    description=deployment_config["endpoint_desc"],
     auth_mode="key",
-    tags={"build_id": build_id, "run_id": run_id},
+    tags={
+        "build_id": config.environment_configuration["build_reference"],
+        "run_id": run_id
+    },
 )
 
 ml_client.online_endpoints.begin_create_or_update(endpoint=endpoint).result()

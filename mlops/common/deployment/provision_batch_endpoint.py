@@ -5,8 +5,6 @@ It utilizes the Azure ML SDK (MLClient) to create or update managed online and b
 The script is intended to be run as a command-line utility and requires several arguments to specify Azure subscription,
 resource group, workspace, and details related to the endpoint configuration.
 """
-
-import json
 import argparse
 from azure.ai.ml import MLClient
 
@@ -14,6 +12,8 @@ from azure.identity import DefaultAzureCredential
 from azure.ai.ml.entities import (
     BatchEndpoint
 )
+from mlops.common.config_utils import MLOpsConfig
+
 
 parser = argparse.ArgumentParser("provision_endpoint")
 parser.add_argument("--model_type", type=str, help="registered model type to be deployed", required=True)
@@ -25,16 +25,24 @@ model_type = args.model_type
 run_id = args.run_id
 env_type = args.env_type
 
+config = MLOpsConfig(environment=env_type)
+
 ml_client = MLClient(
-    DefaultAzureCredential(), args.subscription_id, args.resource_group_name, args.workspace_name
+    DefaultAzureCredential(),
+    config.aml_config["subscription_id"],
+    config.aml_config["resource_group_name"],
+    config.aml_config["workspace_name"]
 )
 
-config_file = open(batch_config)
-endpoint_config = json.load(config_file)
+deployment_config = config.get_deployment_config(deployment_name=f"{model_type}_batch")
+
 endpoint = BatchEndpoint(
-    name=endpoint_name,
-    description="model with batch endpoint",
-    tags={"build_id": build_id, "run_id": run_id},
+    name=deployment_config["endpoint_name"],
+    description=deployment_config["endpoint_desc"],
+    tags={
+        "build_id": config.environment_configuration["build_reference"],
+        "run_id": run_id
+    },
 )
 
 ml_client.batch_endpoints.begin_create_or_update(endpoint).result()
