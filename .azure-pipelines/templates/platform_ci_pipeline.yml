@@ -50,8 +50,6 @@ stages:
       variables:
       - name: run_id_from_submit_job
         value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ]
-      - name: run_metadata_from_submit_job
-        value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_METADATA'] ]
       displayName: 'Deploy as Online Endpoint'
       condition: variables['IS_ONLINE_DEPLOYMENT']
       jobs:
@@ -63,7 +61,7 @@ stages:
             step_name: "provision azureml online endpoint"
             script_parameter: |
                 python -m mlops.common.deployment.provision_online_endpoint \
-                    --run_id ${{ parameters.RUN_ID }} \
+                    --run_id ${{ variables.run_id_from_submit_job }} \
                     --environment_name ${{ parameters.exec_environment }} \
                     --model_type ${{ parameters.model_type }}
 
@@ -72,7 +70,7 @@ stages:
             step_name: "provision azureml deployment"
             script_parameter: |
                 python -m mlops.common.deployment.provision_online_deployment \
-                    --run_id ${{ parameters.RUN_ID }} \
+                    --run_id ${{ variables.run_id_from_submit_job  }} \
                     --environment_name ${{ parameters.exec_environment }} \
                     --model_type ${{ parameters.model_type }}
 
@@ -90,39 +88,37 @@ stages:
       variables:
       - name: run_id_from_submit_job
         value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ]
-      - name: run_metadata_from_submit_job
-        value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_METADATA'] ]
-        displayName: 'Deploy as Batch Endpoint'
-        condition: variables['IS_BATCH_DEPLOYMENT']
-        jobs:
-        - job: Execute_Deployment_Job
-          steps:
-          - template: configure_azureml_agent.yml
-          - template: execute_python_code.yml
+      displayName: 'Deploy as Batch Endpoint'
+      condition: variables['IS_BATCH_DEPLOYMENT']
+      jobs:
+      - job: Execute_Deployment_Job
+        steps:
+        - template: configure_azureml_agent.yml
+        - template: execute_python_code.yml
           parameters:
             step_name: "provision azureml online endpoint"
             script_parameter: |
-                python -m mlops.common.deployment.provision_batch_endpoint \
-                    --run_id ${{ parameters.RUN_ID }} \
-                    --environment_name ${{ parameters.exec_environment }} \
-                    --model_type ${{ parameters.model_type }}
+              python -m mlops.common.deployment.provision_batch_endpoint \
+                --run_id ${{ variables.run_id_from_submit_job }} \
+                --environment_name ${{ parameters.exec_environment }} \
+                --model_type ${{ parameters.model_type }}
 
-          - template: execute_python_code.yml
+        - template: execute_python_code.yml
           parameters:
             step_name: "provision azureml deployment"
             script_parameter: |
-                python -m mlops.common.deployment.provision_batch_deployment \
-                    --run_id ${{ parameters.RUN_ID }} \
-                    --environment_name ${{ parameters.exec_environment }} \
-                    --model_type ${{ parameters.model_type }}
+              python -m mlops.common.deployment.provision_batch_deployment \
+                --run_id ${{ variables.run_id_from_submit_job  }} \
+                --environment_name ${{ parameters.exec_environment }} \
+                --model_type ${{ parameters.model_type }}
 
-          - template: execute_python_code.yml
+        - template: execute_python_code.yml
           parameters:
             step_name: "test azureml batch endpoint"
             script_parameter: |
-                python -m mlops.common.deployment.run_test_batch_deployment \
-                    --environment_name ${{ parameters.exec_environment }} \
-                    --model_type ${{ parameters.model_type }}
+              python -m mlops.common.deployment.run_test_batch_deployment \
+                --environment_name ${{ parameters.exec_environment }} \
+                --model_type ${{ parameters.model_type }}
 
     - stage: 'Approve Model'
         dependsOn: 
