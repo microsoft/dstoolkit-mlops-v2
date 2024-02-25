@@ -121,22 +121,22 @@ stages:
                 --model_type ${{ parameters.model_type }}
 
     - stage: 'Approve Model'
-        dependsOn: 
-        - execute_training_job
-        variables:
-        - name: run_metadata_from_submit_job
-          value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_METADATA'] ]
-        displayName: 'Approval Stage'
-        jobs:
-        - job: ApproveDeployment
-          displayName: Approve for Model Deployment  
-          pool: server    
-          timeoutInMinutes: 60 # job times out in 60 minutes
-          steps:   
-          - task: ManualValidation@0
-            timeoutInMinutes: 60 # task times out in 60 minutes
-            inputs:
-              instructions: "$(run_metadata_from_submit_job)"
-              onTimeout: 'reject'
+      dependsOn: 
+      - execute_training_job
+      variables:
+      - name: run_metadata_from_submit_job
+        value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_METADATA'] ]
+      displayName: 'Approval Stage'
+      jobs:
+      - job: ApproveDeployment
+        displayName: Approve for Model Deployment  
+        pool: server    
+        timeoutInMinutes: 60 # job times out in 60 minutes
+        steps:   
+        - task: ManualValidation@0
+          timeoutInMinutes: 60 # task times out in 60 minutes
+          inputs:
+            instructions: "$(run_metadata_from_submit_job)"
+            onTimeout: 'reject'
 
 # TODO: Add a "production ready" tag to the model in te case of approval.
