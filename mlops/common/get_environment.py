@@ -55,6 +55,7 @@ def get_environment(
 
     except Exception as ex:
         print(
-            "Oops! invalid credentials or error while creating ML environment.. Try again...", ex
+            "Oops! invalid credentials or error while creating ML environment.. Try again...",
+            ex,
         )
         raise

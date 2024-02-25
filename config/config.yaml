@@ -48,13 +48,14 @@ deployment_configs:
       endpoint_desc: An online endpoint serving an MLflow model for online taxi
       deployment_name: london-taxi-bd-005
       cluster_instance_count: 2
-      max_concurrency_per_instance: 
+      max_concurrency_per_instance: 1
       mini_batch_size: 10
       output_file_name: predictions.csv
       max_retries: 3
       retry_timeout: 300
-      deployment_base_image_name: 
+      deployment_base_image_name: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_conda_path: model/london_taxi/environment/conda.yml
+      test_dataset_name: london_taxi_batch_test
     
     london_taxi_online_dev:
       score_file_name: score.py
@@ -65,7 +66,7 @@ deployment_configs:
       deployment_name: london-taxi-rtd-005
       deployment_traffic_allocation: 100
       deployment_vm_size: Standard_F4s_v2
-      deployment_base_image_name: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04
+      deployment_base_image_name: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_conda_path: model/london_taxi/environment/conda.yml
       score_dir: model/london_taxi/scoring
       deployment_instance_count: 1
@@ -75,13 +76,14 @@ deployment_configs:
       endpoint_name: nyc-taxi-be-005
       deployment_name: nyc-taxi-bd-005
       cluster_instance_count: 2
-      max_concurrency_per_instance: 
+      max_concurrency_per_instance: 1
       mini_batch_size: 10
       output_file_name: predictions.csv
       max_retries: 3
       retry_timeout: 300
-      deployment_base_image_name: 
+      deployment_base_image_name: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_conda_path: model/nyc_taxi/environment/conda.yml
+      test_dataset_name: london_taxi_batch_test
     
     nyc_taxi_online_dev:
       score_file_name: score.py
@@ -92,7 +94,7 @@ deployment_configs:
       deployment_name: nyc-taxi-rtd-005
       deployment_traffic_allocation: 100
       deployment_vm_size: Standard_F4s_v2
-      deployment_base_image_name: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04
+      deployment_base_image_name: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_conda_path: model/nyc_taxi/environment/conda.yml
       score_dir: model/nyc_taxi/scoring
       deployment_instance_count: 1

@@ -20,7 +20,11 @@ import os
 from mlops.common.get_compute import get_compute
 from mlops.common.get_environment import get_environment
 from mlops.common.config_utils import MLOpsConfig
-from mlops.common.naming_utils import generate_experiment_name, generate_model_name, generate_run_name
+from mlops.common.naming_utils import (
+    generate_experiment_name,
+    generate_model_name,
+    generate_run_name,
+)
 
 
 gl_pipeline_components = []
@@ -81,7 +85,7 @@ def construct_pipeline(
     build_reference: str,
     model_name: str,
     dataset_name: str,
-    ml_client
+    ml_client,
 ):
     """
     Construct a pipeline job for NYC taxi data regression.
@@ -99,7 +103,7 @@ def construct_pipeline(
     Returns:
         pipeline_job: The constructed pipeline job.
     """
-    registered_data_asset = ml_client.data.get(name=dataset_name, label='latest')
+    registered_data_asset = ml_client.data.get(name=dataset_name, label="latest")
 
     parent_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/components")
 
@@ -126,7 +130,9 @@ def construct_pipeline(
     gl_pipeline_components.append(register_model)
 
     pipeline_job = nyc_taxi_data_regression(
-        Input(type="uri_folder", path=registered_data_asset.id), model_name, build_reference
+        Input(type="uri_folder", path=registered_data_asset.id),
+        model_name,
+        build_reference,
     )
 
     pipeline_job.display_name = display_name
@@ -233,7 +239,8 @@ def execute_pipeline(
                 raise Exception("Sorry, exiting job with failure..")
     except Exception as ex:
         print(
-            "Oops! invalid credentials or error while creating ML environment.. Try again...", ex
+            "Oops! invalid credentials or error while creating ML environment.. Try again...",
+            ex,
         )
         raise
 
@@ -259,7 +266,7 @@ def prepare_and_execute(
         DefaultAzureCredential(),
         config.aml_config["subscription_id"],
         config.aml_config["resource_group_name"],
-        config.aml_config["workspace_name"]
+        config.aml_config["workspace_name"],
     )
 
     pipeline_config = config.get_pipeline_config(model_name)
@@ -286,7 +293,9 @@ def prepare_and_execute(
 
     published_model_name = generate_model_name(model_name)
     published_experiment_name = generate_experiment_name(model_name)
-    published_run_name = generate_run_name(config.environment_configuration["build_reference"])
+    published_run_name = generate_run_name(
+        config.environment_configuration["build_reference"]
+    )
 
     pipeline_job = construct_pipeline(
         compute.name,
@@ -296,7 +305,7 @@ def prepare_and_execute(
         config.environment_configuration["build_reference"],
         published_model_name,
         pipeline_config["dataset_name"],
-        ml_client
+        ml_client,
     )
 
     execute_pipeline(
@@ -316,13 +325,13 @@ def main():
     parser.add_argument(
         "--build_environment",
         type=str,
-        help="configuration environment for the pipeline"
+        help="configuration environment for the pipeline",
     )
     parser.add_argument(
         "--wait_for_completion",
         type=str,
         help="determine if pipeline to wait for job completion",
-        default="True"
+        default="True",
     )
     parser.add_argument(
         "--output_file", type=str, required=False, help="A file to save run id"
@@ -330,9 +339,7 @@ def main():
     args = parser.parse_args()
 
     prepare_and_execute(
-        args.build_environment,
-        args.wait_for_completion,
-        args.output_file
+        args.build_environment, args.wait_for_completion, args.output_file
     )
 
 

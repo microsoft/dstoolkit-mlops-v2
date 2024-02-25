@@ -26,14 +26,26 @@ ml_client = MLClient(
     DefaultAzureCredential(),
     config.aml_config["subscription_id"],
     config.aml_config["resource_group_name"],
-    config.aml_config["workspace_name"]
+    config.aml_config["workspace_name"],
 )
 
 parser = argparse.ArgumentParser("register data assets")
 
-parser.add_argument("--data_purpose", type=str, help="data to be registered identified by purpose", required=True)
-parser.add_argument("--data_config_path", type=str, help="data config file path", required=True)
-parser.add_argument("--environment_name", type=str, help="environment name (e.g. dev, test, prod)", required=True)
+parser.add_argument(
+    "--data_purpose",
+    type=str,
+    help="data to be registered identified by purpose",
+    required=True,
+)
+parser.add_argument(
+    "--data_config_path", type=str, help="data config file path", required=True
+)
+parser.add_argument(
+    "--environment_name",
+    type=str,
+    help="environment name (e.g. dev, test, prod)",
+    required=True,
+)
 
 args = parser.parse_args()
 
@@ -44,9 +56,12 @@ environment_name = args.environment_name
 config_file = open(data_config_path)
 data_config = json.load(config_file)
 
-for elem in data_config['datasets']:
-    if 'DATA_PURPOSE' in elem and 'ENV_NAME' in elem:
-        if data_purpose == elem["DATA_PURPOSE"] and environment_name == elem['ENV_NAME']:
+for elem in data_config["datasets"]:
+    if "DATA_PURPOSE" in elem and "ENV_NAME" in elem:
+        if (
+            data_purpose == elem["DATA_PURPOSE"]
+            and environment_name == elem["ENV_NAME"]
+        ):
             data_path = elem["DATA_PATH"]
             dataset_desc = elem["DATASET_DESC"]
             dataset_name = elem["DATASET_NAME"]
@@ -60,7 +75,9 @@ for elem in data_config['datasets']:
 
             ml_client.data.create_or_update(aml_dataset)
 
-            aml_dataset_unlabeled = ml_client.data.get(name=dataset_name, label="latest")
+            aml_dataset_unlabeled = ml_client.data.get(
+                name=dataset_name, label="latest"
+            )
 
             print(aml_dataset_unlabeled.latest_version)
             print(aml_dataset_unlabeled.id)
