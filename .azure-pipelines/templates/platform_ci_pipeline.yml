@@ -44,8 +44,7 @@ stages:
               echo $metadata
               echo "##vso[task.setvariable variable=RUN_METADATA;isOutput=true;]$metadata"
 
-    - stage: deploy
-      displayName: Execute_local_deployment
+    - stage: 'Deploy_Online'
       dependsOn: 
       - execute_training_job
       variables:
@@ -53,25 +52,95 @@ stages:
         value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ]
       - name: run_metadata_from_submit_job
         value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_METADATA'] ]
+      displayName: 'Deploy as Online Endpoint'
+      condition: variables['IS_ONLINE_DEPLOYMENT']
       jobs:
-      # Deployment into Dev environment should be done automatically
-      # We are asking approval after that to decide if we need to publish
-      # artifacts and models for CD pipeline
-      - template: model_deployment.yml  # Template reference
-        parameters:
-          MODEL_TYPE: ${{ parameters.model_type }}
-          DEPLOY_ENVIRONMENT: ${{parameters.exec_environment}} 
-          RUN_ID: $(run_id_from_submit_job)
+      - job: Execute_Deployment_Job
+        steps:
+        - template: configure_azureml_agent.yml
+        - template: execute_python_code.yml
+          parameters:
+            step_name: "provision azureml online endpoint"
+            script_parameter: |
+                python -m mlops.common.deployment.provision_online_endpoint \
+                    --run_id ${{ parameters.RUN_ID }} \
+                    --environment_name ${{ parameters.exec_environment }} \
+                    --model_type ${{ parameters.model_type }}
 
-      - job: ApproveDeployment
-        displayName: Approve for Model Deployment  
-        pool: server    
-        timeoutInMinutes: 60 # job times out in 60 minutes
-        steps:   
-        - task: ManualValidation@0
-          timeoutInMinutes: 60 # task times out in 60 minutes
-          inputs:
-            instructions: "$(run_metadata_from_submit_job)"
-            onTimeout: 'reject'
+        - template: execute_python_code.yml
+          parameters:
+            step_name: "provision azureml deployment"
+            script_parameter: |
+                python -m mlops.common.deployment.provision_online_deployment \
+                    --run_id ${{ parameters.RUN_ID }} \
+                    --environment_name ${{ parameters.exec_environment }} \
+                    --model_type ${{ parameters.model_type }}
+
+        - template: execute_python_code.yml
+          parameters:
+            step_name: "test azureml real endpoint"
+            script_parameter: |
+                python -m mlops.common.deployment.run_test_model_on_aml \
+                    --environment_name ${{ parameters.exec_environment }} \
+                    --model_type ${{ parameters.model_type }}
+
+    - stage: 'Deploy_Batch'
+      dependsOn: 
+      - execute_training_job
+      variables:
+      - name: run_id_from_submit_job
+        value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ]
+      - name: run_metadata_from_submit_job
+        value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_METADATA'] ]
+        displayName: 'Deploy as Batch Endpoint'
+        condition: variables['IS_BATCH_DEPLOYMENT']
+        jobs:
+        - job: Execute_Deployment_Job
+          steps:
+          - template: configure_azureml_agent.yml
+          - template: execute_python_code.yml
+          parameters:
+            step_name: "provision azureml online endpoint"
+            script_parameter: |
+                python -m mlops.common.deployment.provision_batch_endpoint \
+                    --run_id ${{ parameters.RUN_ID }} \
+                    --environment_name ${{ parameters.exec_environment }} \
+                    --model_type ${{ parameters.model_type }}
+
+          - template: execute_python_code.yml
+          parameters:
+            step_name: "provision azureml deployment"
+            script_parameter: |
+                python -m mlops.common.deployment.provision_batch_deployment \
+                    --run_id ${{ parameters.RUN_ID }} \
+                    --environment_name ${{ parameters.exec_environment }} \
+                    --model_type ${{ parameters.model_type }}
+
+          - template: execute_python_code.yml
+          parameters:
+            step_name: "test azureml batch endpoint"
+            script_parameter: |
+                python -m mlops.common.deployment.run_test_batch_deployment \
+                    --environment_name ${{ parameters.exec_environment }} \
+                    --model_type ${{ parameters.model_type }}
+
+    - stage: 'Approve Model'
+        dependsOn: 
+        - execute_training_job
+        variables:
+        - name: run_metadata_from_submit_job
+          value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_METADATA'] ]
+        displayName: 'Approval Stage'
+        jobs:
+        - job: ApproveDeployment
+          displayName: Approve for Model Deployment  
+          pool: server    
+          timeoutInMinutes: 60 # job times out in 60 minutes
+          steps:   
+          - task: ManualValidation@0
+            timeoutInMinutes: 60 # task times out in 60 minutes
+            inputs:
+              instructions: "$(run_metadata_from_submit_job)"
+              onTimeout: 'reject'
 
 # TODO: Add a "production ready" tag to the model in te case of approval.
