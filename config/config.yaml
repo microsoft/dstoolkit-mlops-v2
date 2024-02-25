@@ -9,8 +9,7 @@ environment_configuration:
   build_reference: ${BUILD_BUILDID}
 
 pipeline_configs:
-  pipeline_london_pr: 
-    ml_model_config_name: london_taxi
+  london_taxi_pr: 
     env_name: pr
     cluster_region: eastus
     cluster_size: STANDARD_DS3_v2
@@ -22,9 +21,7 @@ pipeline_configs:
     model_base_name: london
     dataset_name: london_taxi_pr_data       
 
-  pipeline_nyc_pr: 
-    ml_model_config_name: nyc_taxi
-    env_name: pr
+  nyc_taxi_pr: 
     cluster_region: eastus
     cluster_size: STANDARD_DS3_v2
     cluster_name: cpucluster
@@ -35,9 +32,7 @@ pipeline_configs:
     model_base_name: nyc
     dataset_name: london_taxi_pr_data
 
-  pipeline_london_dev: 
-    ml_model_config_name: london_taxi
-    env_name: dev
+  london_taxi_dev: 
     cluster_region: eastus
     cluster_size: STANDARD_DS3_v2
     cluster_name: cpucluster
@@ -48,9 +43,7 @@ pipeline_configs:
     model_base_name: london
     dataset_name: london_taxi_pr_data       
 
-  pipeline_nyc_dev: 
-    ml_model_config_name: nyc_taxi
-    env_name: dev
+  nyc_taxi_dev: 
     cluster_region: eastus
     cluster_size: STANDARD_DS3_v2
     cluster_name: cpucluster
@@ -62,9 +55,7 @@ pipeline_configs:
     dataset_name: london_taxi_pr_data
 
 deployment_configs:
-    batch_deployment_config_london_dev: 
-      ml_model_config_name: london_taxi
-      env_name: dev
+    london_taxi_batch_dev: 
       batch_cluster_name: batchcluster
       endpoint_name: london-taxi-be-005
       deployment_name: london-taxi-bd-005
@@ -77,9 +68,7 @@ deployment_configs:
       deployment_base_image_name: 
       deployment_conda_path: model/london_taxi/environment/conda.yml
     
-    realtime_deployment_config_london_dev:
-      ml_model_config_name: london_taxi
-      env_name: dev
+    london_taxi_online_dev:
       score_file_name: score.py
       test_file_path: model/london_taxi/sample-request.json
       endpoint_name: london-taxi-rte-005
@@ -93,9 +82,7 @@ deployment_configs:
       score_dir: model/london_taxi/scoring
       deployment_instance_count: 1
       
-    batch_deployment_config_nyc_dev: 
-      ml_model_config_name: nyc_taxi
-      env_name: dev
+    nyc_taxi_batch_dev: 
       batch_cluster_name: batchcluster
       endpoint_name: nyc-taxi-be-005
       deployment_name: nyc-taxi-bd-005
@@ -108,9 +95,7 @@ deployment_configs:
       deployment_base_image_name: 
       deployment_conda_path: model/nyc_taxi/environment/conda.yml
     
-    realtime_deployment_config_nyc_dev:
-      ml_model_config_name: nyc_taxi
-      env_name: dev
+    nyc_taxi_online_dev:
       score_file_name: score.py
       test_file_path: model/nyc_taxi/sample-request.json
       endpoint_name: nyc-taxi-rte-005

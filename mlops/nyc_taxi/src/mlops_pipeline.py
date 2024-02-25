@@ -259,7 +259,7 @@ def prepare_and_execute(
         config.aml_config["workspace_name"]
     )
 
-    pipeline_config = config.get_pipeline_config("pipeline_nyc")
+    pipeline_config = config.get_pipeline_config("nyc_taxi")
 
     compute = get_compute(
         config.aml_config["subscription_id"],
