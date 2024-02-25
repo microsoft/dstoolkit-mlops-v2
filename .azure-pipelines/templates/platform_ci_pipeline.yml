@@ -120,13 +120,13 @@ stages:
                 --environment_name ${{ parameters.exec_environment }} \
                 --model_type ${{ parameters.model_type }}
 
-    - stage: 'Approve Model'
+    - stage: 'Approve_Model'
       dependsOn: 
       - execute_training_job
       variables:
       - name: run_metadata_from_submit_job
         value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_METADATA'] ]
-      displayName: 'Approval Stage'
+      displayName: 'Approval_Stage'
       jobs:
       - job: ApproveDeployment
         displayName: Approve for Model Deployment  
