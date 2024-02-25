@@ -17,7 +17,7 @@ parser.add_argument(
     "--model_type", type=str, help="registered model type to be deployed", required=True
 )
 parser.add_argument(
-    "--env_type",
+    "--environment_name",
     type=str,
     help="env name (dev, test, prod) for deployment",
     required=True,
@@ -29,7 +29,7 @@ args = parser.parse_args()
 
 model_type = args.model_type
 run_id = args.run_id
-env_type = args.env_type
+env_type = args.environment_name
 
 config = MLOpsConfig(environment=env_type)
 
