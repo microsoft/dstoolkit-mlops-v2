@@ -10,15 +10,11 @@ environment_configuration:
 
 pipeline_configs:
   london_taxi_pr: 
-    env_name: pr
     cluster_region: eastus
     cluster_size: STANDARD_DS3_v2
     cluster_name: cpucluster
     conda_path: mlops/london_taxi/environment/conda.yml
-    display_base_name: london
     aml_env_name: london_env
-    experiment_base_name: london
-    model_base_name: london
     dataset_name: london_taxi_pr_data       
 
   nyc_taxi_pr: 
@@ -26,10 +22,7 @@ pipeline_configs:
     cluster_size: STANDARD_DS3_v2
     cluster_name: cpucluster
     conda_path: mlops/nyc_taxi/environment/conda.yml
-    display_base_name: nyc
     aml_env_name: nyc_env
-    experiment_base_name: nyc
-    model_base_name: nyc
     dataset_name: london_taxi_pr_data
 
   london_taxi_dev: 
@@ -37,10 +30,7 @@ pipeline_configs:
     cluster_size: STANDARD_DS3_v2
     cluster_name: cpucluster
     conda_path: mlops/london_taxi/environment/conda.yml
-    display_base_name: london
     aml_env_name: london_env
-    experiment_base_name: london
-    model_base_name: london
     dataset_name: london_taxi_pr_data       
 
   nyc_taxi_dev: 
@@ -48,10 +38,7 @@ pipeline_configs:
     cluster_size: STANDARD_DS3_v2
     cluster_name: cpucluster
     conda_path: mlops/nyc_taxi/environment/conda.yml
-    display_base_name: nyc
     aml_env_name: nyc_env
-    experiment_base_name: nyc
-    model_base_name: nyc
     dataset_name: london_taxi_pr_data
 
 deployment_configs:

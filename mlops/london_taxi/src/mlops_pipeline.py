@@ -20,6 +20,7 @@ import os
 from mlops.common.get_compute import get_compute
 from mlops.common.get_environment import get_environment
 from mlops.common.config_utils import MLOpsConfig
+from mlops.common.naming_utils import generate_experiment_name, generate_model_name, generate_run_name
 
 
 gl_pipeline_components = []
@@ -250,6 +251,8 @@ def prepare_and_execute(
         wait_for_completion (str): "True" or "False" - indicates whether to wait for the job to complete.
         output_file (str): The path to the output file where the job name will be written.
     """
+    model_name = "london_taxi"
+
     config = MLOpsConfig(environment=build_environment)
 
     ml_client = MLClient(
@@ -259,7 +262,7 @@ def prepare_and_execute(
         config.aml_config["workspace_name"]
     )
 
-    pipeline_config = config.get_pipeline_config("london_taxi")
+    pipeline_config = config.get_pipeline_config(model_name)
 
     compute = get_compute(
         config.aml_config["subscription_id"],
@@ -281,13 +284,17 @@ def prepare_and_execute(
 
     print(f"Environment: {environment.name}, version: {environment.version}")
 
+    published_model_name = generate_model_name(model_name)
+    published_experiment_name = generate_experiment_name(model_name)
+    published_run_name = generate_run_name(config.environment_configuration["build_reference"])
+
     pipeline_job = construct_pipeline(
         compute.name,
         f"azureml:{environment.name}:{environment.version}",
-        pipeline_config["display_base_name"],
+        published_run_name,
         build_environment,
         config.environment_configuration["build_reference"],
-        pipeline_config["model_base_name"],
+        published_model_name,
         pipeline_config["dataset_name"],
         ml_client
     )
@@ -296,7 +303,7 @@ def prepare_and_execute(
         config.aml_config["subscription_id"],
         config.aml_config["resource_group_name"],
         config.aml_config["workspace_name"],
-        pipeline_config["experiment_base_name"],
+        published_experiment_name,
         pipeline_job,
         wait_for_completion,
         output_file,
