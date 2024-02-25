@@ -61,7 +61,7 @@ stages:
             step_name: "provision azureml online endpoint"
             script_parameter: |
                 python -m mlops.common.deployment.provision_online_endpoint \
-                    --run_id ${{ variables.run_id_from_submit_job }} \
+                    --run_id "$(run_id_from_submit_job)" \
                     --environment_name ${{ parameters.exec_environment }} \
                     --model_type ${{ parameters.model_type }}
 
@@ -70,7 +70,7 @@ stages:
             step_name: "provision azureml deployment"
             script_parameter: |
                 python -m mlops.common.deployment.provision_online_deployment \
-                    --run_id ${{ variables.run_id_from_submit_job  }} \
+                    --run_id "$(run_id_from_submit_job)" \
                     --environment_name ${{ parameters.exec_environment }} \
                     --model_type ${{ parameters.model_type }}
 
@@ -99,7 +99,7 @@ stages:
             step_name: "provision azureml online endpoint"
             script_parameter: |
               python -m mlops.common.deployment.provision_batch_endpoint \
-                --run_id ${{ variables.run_id_from_submit_job }} \
+                --run_id "$(run_id_from_submit_job)" \
                 --environment_name ${{ parameters.exec_environment }} \
                 --model_type ${{ parameters.model_type }}
 
@@ -108,7 +108,7 @@ stages:
             step_name: "provision azureml deployment"
             script_parameter: |
               python -m mlops.common.deployment.provision_batch_deployment \
-                --run_id ${{ variables.run_id_from_submit_job  }} \
+                --run_id "$(run_id_from_submit_job)" \
                 --environment_name ${{ parameters.exec_environment }} \
                 --model_type ${{ parameters.model_type }}
 
