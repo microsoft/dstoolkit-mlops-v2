@@ -12,4 +12,5 @@ dependencies:
     - azure-ai-ml>=1.10.0
     - azure-identity>=1.15.0
     - azure-keyvault-secrets>=4.7.0  
-    - azureml-inference-server-http  
+    - azureml-inference-server-http 
+    - Werkzeug==2.2.2 
