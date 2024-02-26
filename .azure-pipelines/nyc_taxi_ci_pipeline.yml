@@ -26,12 +26,9 @@ parameters:
  - name: model_type
    displayName: "model type"
    default: "nyc_taxi"
- - name: is_batch_deployment
-   displayName: "True for batch endpoint and False for real-time endpoint"
 
 stages:
   - template: templates/platform_ci_pipeline.yml
     parameters:
       exec_environment: ${{ parameters.env_name }}
       model_type: ${{ parameters.model_type }}
-      is_batch_deployment: ${{ parameters.is_batch_deployment }}

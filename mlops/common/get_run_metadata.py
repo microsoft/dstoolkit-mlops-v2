@@ -60,9 +60,7 @@ def main():
     This is an entry point to invoke get_run_metadata from the command line interface.
     """
     parser = argparse.ArgumentParser("get_run_metadata")
-    parser.add_argument(
-        "--run_id", type=str, help="get metadata for the run_id"
-    )
+    parser.add_argument("--run_id", type=str, help="get metadata for the run_id")
     parser.add_argument(
         "--output_file_name", type=str, help="output file containing run metadata"
     )
