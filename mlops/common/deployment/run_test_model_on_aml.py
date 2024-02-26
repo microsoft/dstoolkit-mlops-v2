@@ -23,13 +23,9 @@ parser.add_argument(
     help="env name (dev, test, prod) for deployment",
     required=True,
 )
-parser.add_argument(
-    "--run_id", type=str, help="AML run id for model generation", required=True
-)
 args = parser.parse_args()
 
 model_type = args.model_type
-run_id = args.run_id
 env_type = args.environment_name
 
 config = MLOpsConfig(environment=env_type)
