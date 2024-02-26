@@ -1,0 +1,53 @@
+trigger: none
+pr:
+  branches:
+   include:
+     - development
+  paths:
+    include:
+      - .azure-pipelines/*
+      - mlops/common/*
+      - mlops/nyc_taxi/*
+      - src/nyc_src/*
+      - model/nyc_taxi/*
+      - src/shared/*
+
+pool:
+  vmImage: ubuntu-latest
+
+
+variables:
+- group: mlops_platform_dev_vg
+- name: DATA_CONFIG_PATH
+  value: 'mlops/nyc_taxi/configs/data_config.json' 
+
+parameters:
+ - name: env_name
+   displayName: "Execution Environment"
+   default: "dev"
+ - name: model_type
+   displayName: "model type"
+   default: "nyc_taxi"
+
+stages:
+    - stage: register_data
+      displayName: register_data
+      variables:
+      - template: templates/experiment_variables.yml
+      jobs:
+      - job: Execute_data_registration_Pipeline
+        steps:         
+        - template: templates/get_connection_details.yml
+        - template: templates/configure_azureml_agent.yml
+        - template: templates/register_data_asset.yml
+          parameters:
+            step_name: "register training data"
+            script_parameter: |
+              python -m mlops.common.register_data_asset \
+                --subscription_id "$(SUBSCRIPTION_ID)" \
+                --resource_group_name  "$(RESOURCE_GROUP_NAME)" \
+                --workspace_name "$(WORKSPACE_NAME)" \
+                --data_purpose "training_data" \
+                --data_config_path "$(DATA_CONFIG_PATH)" \
+                --environment_name "${{ parameters.env_name }}" \
+                --api_version "2024-03-01"  
