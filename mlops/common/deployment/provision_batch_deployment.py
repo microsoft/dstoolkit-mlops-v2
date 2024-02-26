@@ -62,7 +62,7 @@ model = ml_client.models.get(published_model_name, latest_version)
 environment = Environment(
     name="prs-env",
     conda_file=deployment_config["conda_file"],
-    image=deployment_config["deployment_base_image_name"],
+    image=deployment_config["deployment_base_image"],
 )
 
 deployment = ModelBatchDeployment(

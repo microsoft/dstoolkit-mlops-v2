@@ -53,7 +53,7 @@ deployment_configs:
       output_file_name: predictions.csv
       max_retries: 3
       retry_timeout: 300
-      deployment_base_image_name: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+      deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_conda_path: model/london_taxi/environment/conda.yml
       test_dataset_name: london_taxi_batch_test
     
@@ -66,7 +66,7 @@ deployment_configs:
       deployment_name: london-taxi-rtd-005
       deployment_traffic_allocation: 100
       deployment_vm_size: Standard_F4s_v2
-      deployment_base_image_name: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+      deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_conda_path: model/london_taxi/environment/conda.yml
       score_dir: model/london_taxi/scoring
       deployment_instance_count: 1
@@ -81,7 +81,7 @@ deployment_configs:
       output_file_name: predictions.csv
       max_retries: 3
       retry_timeout: 300
-      deployment_base_image_name: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+      deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_conda_path: model/nyc_taxi/environment/conda.yml
       test_dataset_name: london_taxi_batch_test
     
@@ -94,7 +94,7 @@ deployment_configs:
       deployment_name: nyc-taxi-rtd-005
       deployment_traffic_allocation: 100
       deployment_vm_size: Standard_F4s_v2
-      deployment_base_image_name: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+      deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_conda_path: model/nyc_taxi/environment/conda.yml
       score_dir: model/nyc_taxi/scoring
       deployment_instance_count: 1
