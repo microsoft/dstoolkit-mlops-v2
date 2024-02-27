@@ -57,7 +57,7 @@ def main():
     latest_version = max(model.version for model in model_refs)
     model = ml_client.models.get(published_model_name, latest_version)
 
-    compute = get_compute(
+    get_compute(
         config.aml_config["subscription_id"],
         config.aml_config["resource_group_name"],
         config.aml_config["workspace_name"],
