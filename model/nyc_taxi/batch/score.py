@@ -35,11 +35,12 @@ def run(mini_batch: List[str]) -> pd.DataFrame:
         print(f"File name: {raw_data}")
         data = pd.read_csv(raw_data)
 
-        for _, row in data.iterrows():
-            result = model.predict(row.to_numpy())
-            print(f"predicted result: {result}")
+        result = model.predict(data.to_numpy())
+        print(f"predicted results: {result}")
 
         print("Item has been proccessed")
+
+        # You need to implement a better way to combine results from the model depends on your desired output
         results.append("Item has been processed")
 
     return pd.DataFrame(results)
