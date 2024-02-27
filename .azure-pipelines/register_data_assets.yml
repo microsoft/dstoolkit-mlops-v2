@@ -1,3 +1,4 @@
+# TODO: Recreate as a standalone pipeline
 parameters:
   - name: script_parameter
     type: string

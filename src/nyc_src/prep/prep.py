@@ -120,12 +120,8 @@ def data_prep(green_data, yellow_data, prep_data):
     combined_df = pd.concat([green_data_clean, yellow_data_clean], ignore_index=True)
     combined_df.reset_index(inplace=True, drop=True)
 
-    green_data_clean.to_csv(
-        os.path.join(prep_data, "green_prep_data.csv")
-    )
-    yellow_data_clean.to_csv(
-        os.path.join(prep_data, "yellow_prep_data.csv")
-    )
+    green_data_clean.to_csv(os.path.join(prep_data, "green_prep_data.csv"))
+    yellow_data_clean.to_csv(os.path.join(prep_data, "yellow_prep_data.csv"))
     combined_df.to_csv(os.path.join(prep_data, "merged_data.csv"))
 
     print("Finish")
