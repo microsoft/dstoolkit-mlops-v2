@@ -43,8 +43,7 @@ jobs:
           convert: upper
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
-    
-      - name: Execute AzureML Pipeline
+      - name: Execute MLOps Standard Pipeline
         uses: ./.github/actions/execute_shell_code
         env: 
             SUBSCRIPTION_ID: ${{ secrets.subscription_id }}

@@ -40,12 +40,15 @@ jobs:
       - name: Execute MLOps Standard Pipeline
         uses: ./.github/actions/execute_shell_code
         env:
-          BUILD_BUILDID: "${{ github.run_id }}" # Match the expected name from Azure DevOps pipelines
+            SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
+            RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
+            WORKSPACE_NAME: ${{ secrets.workspace_name }}
+            BUILD_BUILDID: ${{ github.run_id }}
         with:
           azure_credentials: ${{ secrets.azure_credentials }}
           script_parameter: |
             python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
-              --environment_name ${{ inputs.exec_environment }} \
+              --build_environment ${{ inputs.exec_environment }} \
               --wait_for_completion True \
               --output_file run_id.txt
       - name: Read Run ID
