@@ -12,7 +12,7 @@
             "ML_MODEL_CONFIG_NAME": "nyc_taxi",
             "ENV_NAME": "dev",
             "DATA_PURPOSE": "batch_test_data",
-            "DATA_PATH":"mlops/nyc_taxi/batch_test_data",
+            "DATA_PATH":"model/nyc_taxi/batch_test_data",
             "DATASET_NAME":"nyc_taxi_batch_test",
             "DATASET_DESC":"this dataset is for testing batch deployments"
         },
@@ -36,7 +36,7 @@
             "ML_MODEL_CONFIG_NAME": "london_taxi",
             "ENV_NAME": "dev",
             "DATA_PURPOSE": "batch_test_data",
-            "DATA_PATH":"mlops/london_taxi/batch_test_data",
+            "DATA_PATH":"model/london_taxi/batch_test_data",
             "DATASET_NAME":"london_taxi_batch_test",
             "DATASET_DESC":"this dataset is for testing batch deployments"
         },

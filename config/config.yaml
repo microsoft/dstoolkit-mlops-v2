@@ -64,7 +64,7 @@ deployment_configs:
     
     london_taxi_online_dev:
       score_file_name: score.py
-      test_file_path: model/london_taxi/sample-request.json
+      test_file_path: model/london_taxi/online_test_data/sample-request.json
       endpoint_name: london-taxi-rte-005
       endpoint_desc: An online endpoint serving an MLflow model for online taxi
       deployment_desc: 
@@ -98,7 +98,7 @@ deployment_configs:
     
     nyc_taxi_online_dev:
       score_file_name: score.py
-      test_file_path: model/nyc_taxi/sample-request.json
+      test_file_path: model/nyc_taxi/online_test_data/sample-request.json
       endpoint_name: nyc-taxi-rte-005
       endpoint_desc: An online endpoint serving an MLflow model for online taxi
       deployment_desc: 
