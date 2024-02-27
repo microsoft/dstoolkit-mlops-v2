@@ -70,34 +70,36 @@ Launch the Service Connection Wizard ![image](https://github.com/microsoft/dstoo
     
 
 **Step 2.** Create a new variable group named **"mlops_platform_dev_vg"**, add the following variables: 
-
-- "APPINSIGHTS_NAME": Set to a value of your choosing.  Note the value must be unique.
-- "AZURE_RM_SVC_CONNECTION":  Set to the name of the service connection created above. 
-- "CONTAINER_REGISTRY_NAME": Set to a value of your choosing.  Note the value must be unique.
-- "KEYVAULT_NAME": Set to a value of your choosing.  Note the value must be unique.
-- "LOCATION": Set to valid value for the "Name" property for Azure Region.
-- "RESOURCE_GROUP_NAME": Set to a value of your choosing.  Note the value must be unique.
-- "STORAGE_ACCT_NAME": Set to an unique alphanumeric value of your choosing.
-- "WORKSPACE_NAME": Set to a value of your choosing.  Note the value must be unique.
-
-If you intend to deploy the infrastructure using the terraform deployment, add the following variables to the variable group.
-- "TFSTATE_RESOURCE_GROUP_NAME": Set to an unique value of your choosing.
-- "TFSTATE_STORAGE_ACCT_NAME": Set to an unique alphanumeric value of your choosing.
 Information about variable groups in Azure DevOps can be found in [Add & use variable groups](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops&tabs=classic).
-
 **Note To provision test or production infrastructure create a new variable group, add the required variables, and modify the reference to the variable group in either infra_provision_bicep_pipeline.yml or infra_provision_terraform_pipeline.yml files.**
+
+**Mandatory Infrastructure variables for bicep and terraform provisioning.** 
+
+  - "APPINSIGHTS_NAME": Set to a value of your choosing.  Note the value must be unique.
+  - "AZURE_RM_SVC_CONNECTION":  Set to the name of the service connection created above. 
+  - "CONTAINER_REGISTRY_NAME": Set to a value of your choosing.  Note the value must be unique.
+  - "KEYVAULT_NAME": Set to a value of your choosing.  Note the value must be unique.
+  - "LOCATION": Set to valid value for the "Name" property for Azure Region.
+  - "RESOURCE_GROUP_NAME": Set to a value of your choosing.  Note the value must be unique.
+  - "STORAGE_ACCT_NAME": Set to an unique alphanumeric value of your choosing.
+  - "WORKSPACE_NAME": Set to a value of your choosing.  Note the value must be unique.
+
+**Terraform only variables ** 
+  - "TFSTATE_RESOURCE_GROUP_NAME": Set to an unique value of your choosing.
+  - "TFSTATE_STORAGE_ACCT_NAME": Set to an unique alphanumeric value of your choosing.
+
+**Model Deployment Variables**
+  - "IS_BATCH_DEPLOYMENT" - Set to True to deploy models to a batch endpoint.
+  - "IS_ONLINE_DEPLOYMENT" - Set to True to deploy models to an online Endpoint.
 
 **Step 3.** Clone the repository, create a *development* branch, and make it the default branch so that all PRs merge to it. This guide assumes that the team works with a *development* branch as the primary source for coding and improving model quality. Later, you can implement an Azure Pipeline to move code from the *development* branch to qa/main or that executes a release process with each check-in. However, release management is not in scope of this guide.
 
+**Step 4.** In the development branch, supply an explicit value or accept the defaults in the file, config.yaml*. The pipelines uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi). The config.yaml file is split into the following sections:
 
-**Step 4.** In the development branch, for the properties below, supply a value or accept the defaults in the file, config.yaml*. The pipeline uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi)
-
-- **AZURE_RM_SVC_CONNECTION:** The name of the service connection used to execute the Azure pipelines.
-- **IS_BATCH_DEPLOYMENT:** Boolean value indicating whether to deploy the model under development to the batch endpoint (True or False).
-- **IS_ONLINE_DEPLOYMENT:** Boolean value indicating whether to deploy the model under development to the real-time endpoint (True or False).
-- **RESOURCE_GROUP_NAME:** The resource group hosting the azure resources for executing the models.
-- **SUBSCRIPTION_ID:** The subscription within which the resource group and its resources are contained.
-- **WORKSPACE_NAME:** The Azure Machine Learning workspace to which models are deployed.  Ensure this value matches the workspace referenced in variable group, mlops_platform_infra_dev_vg, WORKSPACE_NAME variable. 
+  - aml_config - Stores the configuration of azure resources hosting the Azure Machine Learning workspace.
+  - environment_config - Stores the base image and dynamic properties set at runtime.
+  - pipeline_configs: - Stores the configuration for pr and dev pipelines for each model supported by the solution.
+  - deploy_configs: - Stores online and batch configuration for deployments for each model.  
 
 
 ### Create Azure Pipelines to deploy the infrastructure, and operate model builds and continuous integration.
@@ -106,20 +108,20 @@ Details about how to create a basic Azure Pipeline can be found in [Create your 
 **Step 5.** Using the instructions above, if needed, create an azure pipeline to deploy the infrastructure using either the bicep (*.azure-pipelines/infra/bicep/infra_provision_bicep_pipeline.yml*) or terraform (*.azure-pipelines/infra/terraform/infra_provision_terraform_pipeline.yml*) yaml files. 
 
 **Step 6.** Using the instructions above, if needed, create one or more Azure Pipelines to setup build validation for either or both of the use cases listed below:
-- nyc_taxi_pr_dev_pipeline.yml
-- london_taxi_pr_dev_pipeline.yml
+- nyc_taxi
+- london_taxi
 
 **Step 7.** Using the instructions above, if needed, create one or more Azure Pipelines to setup continuous integration for either or both of the use cases listed below:
-- nyc_taxi_ci_dev_pipeline.yml
-- london_taxi_ci_dev_pipeline.yml
+- nyc_taxi
+- london_taxi
 
 **Step 8.** Setup a branch policy for the *development* branch. At this stage we have one or more Azure Pipeline(s) that should be executed on every PR to the *development* branch. At the same time successful completion of the build is not a requirement when files not affecting operation of the model are changed. Set up the the *Path filter* field in the policy to respond to changes in same set of paths specified in the *_pr_dev_pipeline.yml files.
 More details about how to create a policy can be found [Branch policies and settings](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser).
 
-## Execute Pipelines
+## Execute the pipelines as needed
 
 **Step 9.** *Provision Infrastructure* - Execute the infrastructure provision pipeline (infra_provision_bicep_pipeline.yml OR infra_provision_terraform_pipeline.yml).
 
-**Step 10.** *Run PR pipeline* - Execute any of the Azure Pipelines created above for build validation
+**Step 10.** *Run PR pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for build validation
 
-**Step 11.** *Run CI pipeline* - Execute any of the Azure Pipelines created above for continuous integration
+**Step 11.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
