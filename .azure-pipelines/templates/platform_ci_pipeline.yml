@@ -142,7 +142,7 @@ stages:
     - stage: 'Change_Model_Tag'
       dependsOn: 
       - Approve_Model
-      displayName: 'Approve trained Azure ML model for Production'
+      displayName: 'Apply Production Tag'
       jobs:
       - job: ChangeModelTag
         steps:
