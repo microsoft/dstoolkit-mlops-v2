@@ -19,7 +19,6 @@ def init():
     # deserialize the model file back into a sklearn model
     model = joblib.load(model_path)
     logging.info("Init complete")
-    logging.info(os.environ["key2"])
 
 
 def run(raw_data):
