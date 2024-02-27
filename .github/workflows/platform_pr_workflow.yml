@@ -36,6 +36,11 @@ jobs:
     steps:
       - name: Checkout Actions
         uses: actions/checkout@v1
+      - name: Export Secrets 
+        uses: oNaiPs/secrets-to-env-action@v1
+        with:
+          secrets: ${{ toJSON(secrets) }}
+          convert: upper
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
     
