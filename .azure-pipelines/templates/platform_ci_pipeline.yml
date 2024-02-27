@@ -139,12 +139,12 @@ stages:
             instructions: "$(run_metadata_from_submit_job)"
             onTimeout: 'reject'
 
-    - stage: 'Approve_Model'
+    - stage: 'Change_Model_Tag'
       dependsOn: 
       - Approval_Stage
       displayName: 'Approve trained Azure ML model for Production'
       jobs:
-      - job: Change Model Tag
+      - job: ChangeModelTag
         steps:
         - template: execute_python_code.yml
           parameters:
