@@ -100,7 +100,7 @@ def main():
         },
     )
 
-    ml_client.batch_deployments.begin_create_or_update(deployment).result()
+    ml_client.begin_create_or_update(deployment).result()
 
     endpoint = ml_client.batch_endpoints.get(deployment_config["endpoint_name"])
     endpoint.defaults.deployment_name = deployment.name
