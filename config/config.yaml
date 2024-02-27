@@ -59,7 +59,6 @@ deployment_configs:
       max_retries: 3
       retry_timeout: 300
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
-      deployment_conda_path: model/london_taxi/environment/conda.yml
       deployment_desc: A batch deployment
       test_dataset_name: london_taxi_batch_test
     
@@ -94,7 +93,6 @@ deployment_configs:
       max_retries: 3
       retry_timeout: 300
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
-      deployment_conda_path: model/nyc_taxi/environment/conda.yml
       deployment_desc: A batch deployment
       test_dataset_name: london_taxi_batch_test
     
