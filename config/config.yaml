@@ -73,7 +73,7 @@ deployment_configs:
       deployment_vm_size: Standard_F4s_v2
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_conda_path: model/london_taxi/environment/conda.yml
-      score_dir: model/london_taxi/scoring
+      score_dir: model/london_taxi/online
       deployment_instance_count: 1
       
     nyc_taxi_batch_dev:
@@ -106,5 +106,5 @@ deployment_configs:
       deployment_vm_size: Standard_F4s_v2
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_conda_path: model/nyc_taxi/environment/conda.yml
-      score_dir: model/nyc_taxi/scoring
+      score_dir: model/nyc_taxi/online
       deployment_instance_count: 1
