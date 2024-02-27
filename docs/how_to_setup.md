@@ -90,46 +90,36 @@ Information about variable groups in Azure DevOps can be found in [Add & use var
 **Step 3.** Clone the repository, create a *development* branch, and make it the default branch so that all PRs merge to it. This guide assumes that the team works with a *development* branch as the primary source for coding and improving model quality. Later, you can implement an Azure Pipeline to move code from the *development* branch to qa/main or that executes a release process with each check-in. However, release management is not in scope of this guide.
 
 
-**Step 4.** In the development branch, for the properties below, supply a value or accept the defaults in the file, *model_config.json*. The pipeline uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi)
+**Step 4.** In the development branch, for the properties below, supply a value or accept the defaults in the file, config.yaml*. The pipeline uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi)
 
-- **ML_MODEL_CONFIG_NAME:** The unique model name used internally by the pipelines.
-- **ENV_NAME:** The name of the environment. e.g pr, dev, test, prod.
-- **CLUSTER_REGION:** The Azure location/region where the cluster should be created.
-- **CONDA_PATH:** The location of the conda file (mlops/nyc_taxi/environment/conda.yml).
-- **DISPLAY_BASE_NAME:** The run base name (see EXPERIMENT_BASE_NAME for details).
-- **ENV_BASE_IMAGE_NAME:** The base image for the environment (ex.: mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04).
-- **ENVIRONMENT_NAME:** A name for the Azure ML environment.
-- **EXPERIMENT_BASE_NAME:** An experiment base name. This parameter as well as two more parameters below are used to form unique names for experiments, runs and models. You can find a rule for the names implemented as powershell code in [here](../.azure-pipelines/templates/variables_template.yml). By default we are using the branch name as well as build id to form the names that helps us to differentiate experiments, runs and models when working on a large team of data scientists and software engineers. The EXPERIMENT_TYPE variable from the template is hard coded in *_dev_pipeline.yml files.
-- **MODEL_BASE_NAME:** A model base name (see EXPERIMENT_BASE_NAME for details).
-- **BATCH_DEPLOYMENT_CONFIG:** A relative path to the *batch_config.json* file.
-- **REALTIME_DEPLOYMENT_CONFIG:** A relative path to the *realtime_config.json* file.
-- **DATA_CONFIG_PATH:** relative path to the *data_config.json*.
+- **AZURE_RM_SVC_CONNECTION:** The name of the service connection used to execute the Azure pipelines.
+- **IS_BATCH_DEPLOYMENT:** Boolean value indicating whether to deploy the model under development to the batch endpoint (True or False).
+- **IS_ONLINE_DEPLOYMENT:** Boolean value indicating whether to deploy the model under development to the real-time endpoint (True or False).
+- **RESOURCE_GROUP_NAME:** The resource group hosting the azure resources for executing the models.
+- **SUBSCRIPTION_ID:** The subscription within which the resource group and its resources are contained.
+- **WORKSPACE_NAME:** The Azure Machine Learning workspace to which models are deployed.  Ensure this value matches the workspace referenced in variable group, mlops_platform_infra_dev_vg, WORKSPACE_NAME variable. 
 
-**Step 5.**  In all *batch_config.json* and *realtime_config.json* files for each model, provide a unique name for the following properties:
-- **BATCH_CLUSTER_NAME:** The unique name for a cluster to be used for batch inferencing. **Note: Since this cluster is created by the Infrastructure deployment, the name must match the value for BATCH_CLUSTER_NAME in */config/infra_config.yml***
-- **ENDPOINT_NAME:** The unique name for a batch or real-time endpoint.
-- **DEPLOYMENT_NAME** The unique name for a batch or real-time deployment.
 
 ### Create Azure Pipelines to deploy the infrastructure, and operate model builds and continuous integration.
 Details about how to create a basic Azure Pipeline can be found in [Create your first pipeline](https://learn.microsoft.com/en-us/azure/devops/pipelines/create-first-pipeline?view=azure-devops&tabs).
 
-**Step 6.** Using the instructions above, if needed, create an azure pipeline to deploy the infrastructure using either the bicep (*.azure-pipelines/infra/bicep/infra_provision_bicep_pipeline.yml*) or terraform (*.azure-pipelines/infra/terraform/infra_provision_terraform_pipeline.yml*) yaml files. 
+**Step 5.** Using the instructions above, if needed, create an azure pipeline to deploy the infrastructure using either the bicep (*.azure-pipelines/infra/bicep/infra_provision_bicep_pipeline.yml*) or terraform (*.azure-pipelines/infra/terraform/infra_provision_terraform_pipeline.yml*) yaml files. 
 
-**Step 7.** Using the instructions above, if needed, create one or more Azure Pipelines to setup build validation for either or both of the use cases listed below:
+**Step 6.** Using the instructions above, if needed, create one or more Azure Pipelines to setup build validation for either or both of the use cases listed below:
 - nyc_taxi_pr_dev_pipeline.yml
 - london_taxi_pr_dev_pipeline.yml
 
-**Step 8.** Using the instructions above, if needed, create one or more Azure Pipelines to setup continuous integration for either or both of the use cases listed below:
+**Step 7.** Using the instructions above, if needed, create one or more Azure Pipelines to setup continuous integration for either or both of the use cases listed below:
 - nyc_taxi_ci_dev_pipeline.yml
 - london_taxi_ci_dev_pipeline.yml
 
-**Step 9.** Setup a branch policy for the *development* branch. At this stage we have one or more Azure Pipeline(s) that should be executed on every PR to the *development* branch. At the same time successful completion of the build is not a requirement when files not affecting operation of the model are changed. Set up the the *Path filter* field in the policy to respond to changes in same set of paths specified in the *_pr_dev_pipeline.yml files.
+**Step 8.** Setup a branch policy for the *development* branch. At this stage we have one or more Azure Pipeline(s) that should be executed on every PR to the *development* branch. At the same time successful completion of the build is not a requirement when files not affecting operation of the model are changed. Set up the the *Path filter* field in the policy to respond to changes in same set of paths specified in the *_pr_dev_pipeline.yml files.
 More details about how to create a policy can be found [Branch policies and settings](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser).
 
 ## Execute Pipelines
 
-**Step 10.** *Provision Infrastructure* - Execute the infrastructure provision pipeline (infra_provision_bicep_pipeline.yml OR infra_provision_terraform_pipeline.yml).
+**Step 9.** *Provision Infrastructure* - Execute the infrastructure provision pipeline (infra_provision_bicep_pipeline.yml OR infra_provision_terraform_pipeline.yml).
 
-**Step 11.** *Run PR pipeline* - Execute any of the Azure Pipelines created above for build validation
+**Step 10.** *Run PR pipeline* - Execute any of the Azure Pipelines created above for build validation
 
-**Step 12.** *Run CI pipeline* - Execute any of the Azure Pipelines created above for continuous integration
+**Step 11.** *Run CI pipeline* - Execute any of the Azure Pipelines created above for continuous integration
