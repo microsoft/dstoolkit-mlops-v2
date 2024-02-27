@@ -138,5 +138,9 @@ stages:
           inputs:
             instructions: "$(run_metadata_from_submit_job)"
             onTimeout: 'reject'
-
-# TODO: Add a "production ready" tag to the model in te case of approval.
+        - template: execute_python_code.yml
+          parameters:
+            step_name: "change_model_tag"
+            script_parameter: |
+              python -m mlops.common.deployment.approve_model \
+                --model_type ${{ parameters.model_type }}
