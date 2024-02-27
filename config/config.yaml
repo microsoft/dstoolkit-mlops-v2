@@ -50,7 +50,7 @@ deployment_configs:
       batch_cluster_size: STANDARD_DS3_v2
       deployment_conda_path: model/london_taxi/environment/conda.yml
       endpoint_name: london-taxi-be-005
-      endpoint_desc: An online endpoint serving an MLflow model for online taxi
+      endpoint_desc: A batch endpoint serving an MLflow model for online taxi
       deployment_name: london-taxi-bd-005
       cluster_instance_count: 1
       max_concurrency_per_instance: 1
@@ -60,6 +60,7 @@ deployment_configs:
       retry_timeout: 300
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_conda_path: model/london_taxi/environment/conda.yml
+      deployment_desc: A batch deployment
       test_dataset_name: london_taxi_batch_test
     
     london_taxi_online_dev:
@@ -84,6 +85,7 @@ deployment_configs:
       batch_cluster_size: STANDARD_DS3_v2
       deployment_conda_path: model/nyc_taxi/environment/conda.yml
       endpoint_name: nyc-taxi-be-005
+      endpoint_desc: A batch endpoint serving an MLflow model for online taxi
       deployment_name: nyc-taxi-bd-005
       cluster_instance_count: 1
       max_concurrency_per_instance: 1
@@ -93,6 +95,7 @@ deployment_configs:
       retry_timeout: 300
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_conda_path: model/nyc_taxi/environment/conda.yml
+      deployment_desc: A batch deployment
       test_dataset_name: london_taxi_batch_test
     
     nyc_taxi_online_dev:
