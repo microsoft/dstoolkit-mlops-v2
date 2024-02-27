@@ -19,6 +19,12 @@ on:
       subscription_id:
         description: "the subscription ID hosting the AML instance."
         required: true
+      resource_group_name:
+        description: "the resource group name hosting the AML instance."
+        required: true
+      workspace_name:
+        description: "the workspace name hosting the AML instance."
+        required: true
       azure_credentials:
         description: "the credentials to use to authenticate with Azure."
         required: true
