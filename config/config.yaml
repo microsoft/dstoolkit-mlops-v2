@@ -48,7 +48,7 @@ deployment_configs:
       batch_cluster_name: batchcluster
       batch_cluster_region: eastus
       batch_cluster_size: STANDARD_DS3_v2
-      deployment_conda_path: model/london_taxi/environment/conda.yml
+      deployment_conda_path: model/london_taxi/batch_environment/conda.yml
       endpoint_name: london-taxi-be-005
       endpoint_desc: A batch endpoint serving an MLflow model for online taxi
       deployment_name: london-taxi-bd-005
@@ -72,7 +72,7 @@ deployment_configs:
       deployment_traffic_allocation: 100
       deployment_vm_size: Standard_F4s_v2
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
-      deployment_conda_path: model/london_taxi/environment/conda.yml
+      deployment_conda_path: model/london_taxi/online_environment/conda.yml
       score_dir: model/london_taxi/online
       deployment_instance_count: 1
       
@@ -82,7 +82,7 @@ deployment_configs:
       batch_cluster_name: batchcluster
       batch_cluster_region: eastus
       batch_cluster_size: STANDARD_DS3_v2
-      deployment_conda_path: model/nyc_taxi/environment/conda.yml
+      deployment_conda_path: model/nyc_taxi/batch_environment/conda.yml
       endpoint_name: nyc-taxi-be-005
       endpoint_desc: A batch endpoint serving an MLflow model for online taxi
       deployment_name: nyc-taxi-bd-005
@@ -106,6 +106,6 @@ deployment_configs:
       deployment_traffic_allocation: 100
       deployment_vm_size: Standard_F4s_v2
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
-      deployment_conda_path: model/nyc_taxi/environment/conda.yml
+      deployment_conda_path: model/nyc_taxi/online_environment/conda.yml
       score_dir: model/nyc_taxi/online
       deployment_instance_count: 1
