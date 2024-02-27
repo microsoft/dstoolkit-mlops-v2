@@ -35,12 +35,15 @@ def run(mini_batch: List[str]) -> pd.DataFrame:
     logging.info("model 1: request received")
 
     for raw_data in mini_batch:
-        data = json.loads(raw_data)["data"]
-        data = numpy.array(data)
+        #data = json.loads(raw_data)["data"]
+        #data = numpy.array(data)
 
-        result = model.predict(data)
+        #result = model.predict(data)
 
-        results.append(result.tolist())
+        #results.append(result.tolist())
+
+        results.append("Item has been processed")
+        logging.info(raw_data)
 
         logging.info("Item has been proccessed")
 
