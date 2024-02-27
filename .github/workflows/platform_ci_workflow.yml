@@ -39,18 +39,18 @@ jobs:
         uses: ./.github/actions/configure_azureml_agent
       - name: Execute MLOps Standard Pipeline
         uses: ./.github/actions/execute_shell_code
-        env:
+        env: 
             SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
             RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
             WORKSPACE_NAME: ${{ secrets.workspace_name }}
             BUILD_BUILDID: ${{ github.run_id }}
         with:
-          azure_credentials: ${{ secrets.azure_credentials }}
-          script_parameter: |
-            python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
-              --build_environment ${{ inputs.exec_environment }} \
-              --wait_for_completion True \
-              --output_file run_id.txt
+            azure_credentials: ${{ secrets.azure_credentials }}
+            script_parameter: |
+                python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
+                    --build_environment ${{ inputs.exec_environment }} \
+                    --wait_for_completion True \
+                    --output_file run_id.txt
       - name: Read Run ID
         shell: bash
         run: |
