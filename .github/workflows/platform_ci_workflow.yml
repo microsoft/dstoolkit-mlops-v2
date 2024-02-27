@@ -11,6 +11,10 @@ on:
         type: string
         description: "type of model to execute"
         required: true
+      is_batch_deployment:
+        type: string 
+        description: "the flag for batch deployment"
+        required: true
     secrets:
       subscription_id:
         description: "the subscription ID hosting the AML instance."
@@ -18,9 +22,7 @@ on:
       azure_credentials:
         description: "the credentials to use to authenticate with Azure."
         required: true
-      is_batch_deployment: 
-        description: "the flag for batch deployment."
-        required: true
+
 jobs:
   execute-training-job:
     name: Execute training job
@@ -52,14 +54,14 @@ jobs:
               --environment_name ${{ inputs.exec_environment }} \
               --wait_for_completion True \
               --output_file run_id.txt
-      - name: Read PromptFlow Runs
+      - name: Read Run ID
         shell: bash
         run: |
           readarray arr <"run_id.txt"
           run_name=${arr[0]}
           echo $run_name
           echo "RUN_NAME=${run_name}"  >> "$GITHUB_ENV"
-          echo $PWD
+
 #   deploy:
 #     name: Deploy_Online
 #     runs-on: ubuntu-latest
