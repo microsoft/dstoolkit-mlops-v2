@@ -43,11 +43,16 @@ pipeline_configs:
 
 deployment_configs:
     london_taxi_batch_dev: 
+      score_file_name: score.py
+      score_dir: model/london_taxi/batch
       batch_cluster_name: batchcluster
+      batch_cluster_region: eastus
+      batch_cluster_size: STANDARD_DS3_v2
+      deployment_conda_path: model/london_taxi/environment/conda.yml
       endpoint_name: london-taxi-be-005
       endpoint_desc: An online endpoint serving an MLflow model for online taxi
       deployment_name: london-taxi-bd-005
-      cluster_instance_count: 2
+      cluster_instance_count: 1
       max_concurrency_per_instance: 1
       mini_batch_size: 10
       output_file_name: predictions.csv
@@ -71,11 +76,16 @@ deployment_configs:
       score_dir: model/london_taxi/scoring
       deployment_instance_count: 1
       
-    nyc_taxi_batch_dev: 
+    nyc_taxi_batch_dev:
+      score_file_name: score.py
+      score_dir: model/nyc_taxi/batch
       batch_cluster_name: batchcluster
+      batch_cluster_region: eastus
+      batch_cluster_size: STANDARD_DS3_v2
+      deployment_conda_path: model/nyc_taxi/environment/conda.yml
       endpoint_name: nyc-taxi-be-005
       deployment_name: nyc-taxi-bd-005
-      cluster_instance_count: 2
+      cluster_instance_count: 1
       max_concurrency_per_instance: 1
       mini_batch_size: 10
       output_file_name: predictions.csv
