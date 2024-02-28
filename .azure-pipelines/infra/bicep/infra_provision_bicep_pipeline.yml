@@ -5,20 +5,20 @@ pool:
 
 
 variables:
-- group: mlops_platform_infra_dev_vg
+- group: mlops_platform_dev_vg
 
 jobs:
 - job: Deploy_MLOps_v2_Infrastructure  
   steps:
       - script: |
           echo 'See the contents of parameters passed in'
-          echo '$(AZURE_RM_SVC_CONNECTION)'
-          echo '$(BICEP_RESOURCE_GROUP_NAME)'
-          echo '$(LOCATION)'
-          echo '$(STORAGE_ACCT_NAME)'
-          echo '$(KEYVAULT_NAME)'
           echo '$(APPINSIGHTS_NAME)'
+          echo '$(AZURE_RM_SVC_CONNECTION)'
           echo '$(CONTAINER_REGISTRY_NAME)'
+          echo '$(KEYVAULT_NAME)'
+          echo '$(LOCATION)' 
+          echo '$(RESOURCE_GROUP_NAME)' 
+          echo '$(STORAGE_ACCT_NAME)'
           echo '$(WORKSPACE_NAME)'
         enabled: true
 
