@@ -10,6 +10,7 @@ RUN apt-get update \
     && apt-get -y install docker.io
 
 RUN pip install ipython ipykernel
+RUN ipython kernel install --user --name dstoolkit
 
 COPY requirements.txt .
 
