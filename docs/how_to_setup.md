@@ -81,7 +81,7 @@ Information about variable groups in Azure DevOps can be found in [Add & use var
   - "KEYVAULT_NAME": Set to a value of your choosing.  Note the value must be unique.
   - "LOCATION": Set to valid value for the "Name" property for Azure Region.
   - "RESOURCE_GROUP_NAME": Set to a value of your choosing.  Note the value must be unique.
-    - "STORAGE_ACCT_NAME": Set to an unique alphanumeric value of your choosing.
+  - "STORAGE_ACCT_NAME": Set to an unique alphanumeric value of your choosing.
   - "SUBSCRIPTION_ID": Set to the subscription id for the subscription hosting the Azure Machine Learning workspace.    
   - "WORKSPACE_NAME": Set to a value of your choosing.  Note the value must be unique.
 
