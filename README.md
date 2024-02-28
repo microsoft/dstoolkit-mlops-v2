@@ -23,22 +23,28 @@ The template contains the following documents:
 Information about how to setup the repo is in [the following document](./docs/how_to_setup.md).
 
 ## Local Execution
-- rename .env.sample to .env and update .env fil e with AML workspace details 
-- install az cli , az ml extensions
-- Create local environment using one of the following ways
-      - vscode devcontainer
-            - run the docker desktop daemon
-            - open repo in devcontainer dstoolkit in vscode
-            - open vscode terminal after the repo is opened in dev container
-      - conda environment
-            -  open the terminal 
-            -  run the following commands to create conda environment
-                  - conda env create -name dstoolkit --file mlops/nyc_taxi/environment/conda.yml
-                  - conda activate dstoolkit
-- Sign in with Azure CLI : run az login -t 
-- run the pipeline with python -m mlops.nyc_taxi.start_local_pipeline \
-      --build_environment <environment> \
-      --wait_for_completion True
+You can start training pipelines from a local computer creating an environment based on the following instructions:
+
+- Rename .env.sample to .env and update .env file with parameters from your Azure subscription
+- Check all parameters in [config.yaml](config/config.yaml)
+- Install [Azure Cli and Azure ML extensions](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-configure-cli?view=azureml-api-2&tabs=public#installation)
+- Create the local environment using one of the following options below.
+- (Option 1). VSCode dev container
+
+    - Run the docker desktop daemon
+    - Open repo in the [provided dev container](.devcontainer/devcontainer.json) in VSCode
+    - Open VSCode terminal after the repo is opened in the dev container
+
+- (Option 2). Create a local conda environment
+
+    -  Open the terminal and run the following commands to create conda environment (we assume that anaconda has been installed on the local computer):
+
+        - conda env create -name dstoolkit Python=3.9
+        - conda activate dstoolkit
+        - pip install -r .devcontainer/requirements.txt
+
+- Sign in with Azure CLI : run `az login -t <your tenant>`
+- Run a desired training pipeline using the module notation (for example, `python -m mlops.nyc_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`)
 
 
 ## Contributing
