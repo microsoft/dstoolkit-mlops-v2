@@ -25,15 +25,16 @@ Information about how to setup the repo is in [the following document](./docs/ho
 ## Local Execution
 - rename .env.sample to .env and update .env fil e with AML workspace details 
 - install az cli , az ml extensions
-- with vscode devcontainer
-      - run the docker desktop daemon
-      - open repo in devcontainer dstoolkit in vscode
-      - open vscode terminal after the repo is opened in dev container
-- conda environment
-      -  open the terminal 
-      -  run the following commands to create conda environment
-            - conda env create -name dstoolkit --file mlops/nyc_taxi/environment/conda.yml
-            - conda activate dstoolkit
+- Create local environment using one of the following ways
+      - vscode devcontainer
+            - run the docker desktop daemon
+            - open repo in devcontainer dstoolkit in vscode
+            - open vscode terminal after the repo is opened in dev container
+      - conda environment
+            -  open the terminal 
+            -  run the following commands to create conda environment
+                  - conda env create -name dstoolkit --file mlops/nyc_taxi/environment/conda.yml
+                  - conda activate dstoolkit
 - Sign in with Azure CLI : run az login -t 
 - run the pipeline with python -m mlops.nyc_taxi.start_local_pipeline \
       --build_environment <environment> \
