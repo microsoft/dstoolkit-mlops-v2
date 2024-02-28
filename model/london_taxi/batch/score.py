@@ -1,9 +1,8 @@
 """This module provides the functionality for initializing and running a machine learning model."""
 import os
-import logging
-import json
-import numpy
 import joblib
+import pandas as pd
+from typing import List
 
 
 def init():
@@ -18,22 +17,30 @@ def init():
 
     # deserialize the model file back into a sklearn model
     model = joblib.load(model_path)
-    logging.info("Init complete")
-    logging.info(os.environ["key2"])
+    print("Init complete")
 
 
-def run(raw_data):
+def run(mini_batch: List[str]) -> pd.DataFrame:
     """
     Execure inferencing logic on a request.
 
     In the example we extract the data from the json input and call the scikit-learn model's predict()
     method and return the result back.
     """
-    logging.info("model 1: request received")
-    data = json.loads(raw_data)["data"]
-    data = numpy.array(data)
+    results = []
 
-    result = model.predict(data)
+    print("Request received")
 
-    logging.info("Request processed")
-    return result.tolist()
+    for raw_data in mini_batch:
+        print(f"File name: {raw_data}")
+        data = pd.read_csv(raw_data)
+
+        result = model.predict(data.to_numpy())
+        print(f"predicted results: {result}")
+
+        print("Item has been proccessed")
+
+        # You need to implement a better way to combine results from the model depends on your desired output
+        results.append("Item has been processed")
+
+    return pd.DataFrame(results)
