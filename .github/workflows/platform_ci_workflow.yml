@@ -92,7 +92,7 @@ jobs:
                 python -m mlops.common.deployment.provision_online_endpoint \
                   --model_type ${{ inputs.model_type }} \
                   --environment_name ${{ inputs.exec_environment }} \
-                  -- run_id ${{ github.run_id }} 
+                  --run_id ${{ github.run_id }} 
 
       - name: Provision Azure ML Deployment
         uses: ./.github/actions/execute_shell_code
