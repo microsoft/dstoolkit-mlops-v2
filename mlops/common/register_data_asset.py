@@ -58,7 +58,6 @@ def main():
             name=dataset_name, label="latest"
         )
 
-        print(aml_dataset_unlabeled.latest_version)
         print(aml_dataset_unlabeled.id)
 
 
