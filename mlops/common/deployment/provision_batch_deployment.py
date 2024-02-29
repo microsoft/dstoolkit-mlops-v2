@@ -57,7 +57,7 @@ def main():
 
     environment = Environment(
         name="prs-env",
-        conda_file=deployment_config["conda_file"],
+        conda_file=deployment_config["deployment_conda_path"],
         image=deployment_config["deployment_base_image"],
     )
 
