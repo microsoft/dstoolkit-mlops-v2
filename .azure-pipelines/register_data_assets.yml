@@ -19,5 +19,5 @@ stages:
       parameters:
         step_name: "Register Dataset"
         script_parameter: |
-          python -m mlops.common.register_data_asset.py \
+          python -m mlops.common.register_data_asset \
             --data_config_path config/data_config.json
