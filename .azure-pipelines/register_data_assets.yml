@@ -9,9 +9,12 @@ variables:
 - group: mlops_platform_dev_vg
 
 stages:
-  - template: templates/execute_python_code.yml
-    parameters:
-      step_name: "Register Dataset"
-      script_parameter: |
-        python -m mlops.common.register_data_asset.py \
-          --data_config_path config/data_config.json
+  jobs:
+  - job: Execute_dataset_registration
+    steps:
+    - template: templates/execute_python_code.yml
+      parameters:
+        step_name: "Register Dataset"
+        script_parameter: |
+          python -m mlops.common.register_data_asset.py \
+            --data_config_path config/data_config.json
