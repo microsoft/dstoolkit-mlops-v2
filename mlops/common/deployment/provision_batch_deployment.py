@@ -11,10 +11,12 @@ from azure.ai.ml.entities import (
     ModelBatchDeployment,
     ModelBatchDeploymentSettings,
     BatchRetrySettings,
+    CodeConfiguration,
 )
 from azure.ai.ml.constants import BatchDeploymentOutputAction
 from mlops.common.config_utils import MLOpsConfig
 from mlops.common.naming_utils import generate_model_name
+from mlops.common.get_compute import get_compute
 
 
 def main():
@@ -55,9 +57,18 @@ def main():
     latest_version = max(model.version for model in model_refs)
     model = ml_client.models.get(published_model_name, latest_version)
 
+    get_compute(
+        config.aml_config["subscription_id"],
+        config.aml_config["resource_group_name"],
+        config.aml_config["workspace_name"],
+        deployment_config["batch_cluster_name"],
+        deployment_config["batch_cluster_size"],
+        deployment_config["batch_cluster_region"],
+    )
+
     environment = Environment(
         name="prs-env",
-        conda_file=deployment_config["conda_file"],
+        conda_file=deployment_config["deployment_conda_path"],
         image=deployment_config["deployment_base_image"],
     )
 
@@ -67,6 +78,9 @@ def main():
         endpoint_name=deployment_config["endpoint_name"],
         model=model,
         environment=environment,
+        code_configuration=CodeConfiguration(
+            code=deployment_config["score_dir"], scoring_script=deployment_config["score_file_name"]
+        ),
         compute=deployment_config["batch_cluster_name"],
         settings=ModelBatchDeploymentSettings(
             instance_count=deployment_config["cluster_instance_count"],
@@ -86,7 +100,7 @@ def main():
         },
     )
 
-    ml_client.batch_deployments.begin_create_or_update(deployment).result()
+    ml_client.begin_create_or_update(deployment).result()
 
     endpoint = ml_client.batch_endpoints.get(deployment_config["endpoint_name"])
     endpoint.defaults.deployment_name = deployment.name
