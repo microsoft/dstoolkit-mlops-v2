@@ -3,19 +3,18 @@ This module is designed to register data assets in an Azure Machine Learning env
 
 It utilizes the Azure AI MLClient from the Azure Machine Learning SDK to interact with Azure resources.
 
-The script reads a configuration file to identify and register datasets in Azure Machine Learning. It supports operations like creating or updating
+The script reads a configuration file to identify and register datasets in Azure Machine Learning.
+It supports operations like creating or updating
 data assets and retrieving the latest version of these assets.
 """
-
 import argparse
 import json
-
 from azure.identity import DefaultAzureCredential
 from azure.ai.ml import MLClient
 from azure.ai.ml.entities import Data
 from azure.ai.ml.constants import AssetTypes
-
 from mlops.common.config_utils import MLOpsConfig
+
 
 def main():
     """Register all datasets from the config file."""
@@ -61,6 +60,7 @@ def main():
 
         print(aml_dataset_unlabeled.latest_version)
         print(aml_dataset_unlabeled.id)
+
 
 if __name__ == "__main__":
     main()
