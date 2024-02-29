@@ -1,18 +1,17 @@
-# TODO: Recreate as a standalone pipeline
-parameters:
-  - name: script_parameter
-    type: string
-  - name: step_name
-    type: string
+trigger: none
+pr: none
+  
+pool:
+  vmImage: ubuntu-latest
 
-steps:
-  - task: AzureCLI@2
-    displayName: ${{parameters.step_name}}
-    continueOnError: false
-    inputs: 
-      azureSubscription: $(AZURE_RM_SVC_CONNECTION)
-      scriptType: bash
-      workingDirectory: $(System.DefaultWorkingDirectory)
-      scriptLocation: inlineScript
-      inlineScript: |
-        ${{parameters.script_parameter}}
+
+variables:
+- group: mlops_platform_dev_vg
+
+stages:
+  - template: templates/execute_python_code.yml
+    parameters:
+      step_name: "Register Dataset"
+      script_parameter: |
+        python -m mlops.common.register_data_asset.py \
+          --data_config_path config/data_config.json
