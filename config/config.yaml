@@ -74,6 +74,7 @@ deployment_configs:
     nyc_taxi_batch_dev: 
       batch_cluster_name: batchcluster
       endpoint_name: nyc-taxi-be-005
+      endpoint_desc: An online endpoint serving an MLflow model for online taxi
       deployment_name: nyc-taxi-bd-005
       cluster_instance_count: 2
       max_concurrency_per_instance: 1

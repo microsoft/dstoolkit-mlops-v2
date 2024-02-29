@@ -134,7 +134,7 @@ jobs:
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
 
-      - name: Provision azureml online endpoint
+      - name: Provision azureml batch endpoint
         uses: ./.github/actions/execute_shell_code
         with: 
             azure_credentials: ${{ secrets.azure_credentials }}
