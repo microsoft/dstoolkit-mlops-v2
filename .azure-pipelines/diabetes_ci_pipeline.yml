@@ -1,0 +1,34 @@
+trigger: none
+pr:
+  branches:
+   include:
+     - development
+  paths:
+    include:
+      - .azure-pipelines/*
+      - mlops/common/*
+      - mlops/nyc_taxi/*
+      - src/nyc_src/*
+      - model/nyc_taxi/*
+      - src/shared/*
+
+pool:
+  vmImage: ubuntu-latest
+
+
+variables:
+- group: mlops_platform_dev_vg
+
+parameters:
+ - name: env_name
+   displayName: "Execution Environment"
+   default: "pr"
+ - name: model_type
+   displayName: "model type"
+   default: "nyc_taxi"
+
+stages:
+  - template: templates/platform_pr_pipeline.yml
+    parameters:
+      exec_environment: ${{ parameters.env_name }}
+      model_type: ${{ parameters.model_type }}
