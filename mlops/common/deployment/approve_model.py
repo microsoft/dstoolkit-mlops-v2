@@ -36,15 +36,17 @@ def main():
         ml_client.workspace_name
     ).mlflow_tracking_uri
     mlflow.set_tracking_uri(azureml_tracking_uri)
+    print("Current MLflow Tracking URI:", mlflow.get_tracking_uri())
 
     client = mlflow.tracking.MlflowClient()
 
     # TODO: In general we should not rely on the latest version, and it should be passed to this step
     last_version = client.search_model_versions(filter_string=f"name='{published_model_name}'")[0].version
-
+    print("Latest Model Version", last_version)
     client.set_model_version_tag(
         name=published_model_name, version=last_version, key="stage", value="ready_for_production"
     )
+    print(f"Model tagging successful for '{published_model_name}' version {last_version}.")
 
 
 if __name__ == "__main__":
