@@ -41,6 +41,22 @@ pipeline_configs:
     aml_env_name: nyc_env
     dataset_name: london_taxi_pr_data
 
+  diabetes_pr: 
+    cluster_region: eastus
+    cluster_size: STANDARD_DS3_v2
+    cluster_name: cpucluster
+    conda_path: mlops/diabetes/environment/conda.yml
+    aml_env_name: diabetes_env
+    dataset_name: diabetes_pr_data
+
+  diabetes_dev: 
+    cluster_region: eastus
+    cluster_size: STANDARD_DS3_v2
+    cluster_name: cpucluster
+    conda_path: mlops/diabetes/environment/conda.yml
+    aml_env_name: diabetes_env
+    dataset_name: diabetes_pr_data 
+
 deployment_configs:
     london_taxi_batch_dev: 
       score_file_name: score.py
