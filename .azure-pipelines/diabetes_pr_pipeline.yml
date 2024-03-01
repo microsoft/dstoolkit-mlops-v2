@@ -7,9 +7,9 @@ pr:
     include:
       - .azure-pipelines/*
       - mlops/common/*
-      - mlops/nyc_taxi/*
-      - src/nyc_src/*
-      - model/nyc_taxi/*
+      - mlops/diabetes/*
+      - src/diabetes/*
+      - model/diabetes/*
       - src/shared/*
 
 pool:
@@ -25,7 +25,7 @@ parameters:
    default: "pr"
  - name: model_type
    displayName: "model type"
-   default: "nyc_taxi"
+   default: "diabetes"
 
 stages:
   - template: templates/platform_pr_pipeline.yml
