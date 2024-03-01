@@ -9,7 +9,10 @@ from azure.ai.ml import MLClient
 from azure.identity import DefaultAzureCredential
 from mlops.common.config_utils import MLOpsConfig
 from mlops.common.naming_utils import generate_model_name
+import sys
 
+print("MLflow Version:", mlflow.__version__)
+sys.stdout.flush()
 
 def main():
     """Take the latest version of the model and add  ready_for_production tag."""
@@ -37,16 +40,20 @@ def main():
     ).mlflow_tracking_uri
     mlflow.set_tracking_uri(azureml_tracking_uri)
     print("Current MLflow Tracking URI:", mlflow.get_tracking_uri())
+    sys.stdout.flush()
 
     client = mlflow.tracking.MlflowClient()
 
     # TODO: In general we should not rely on the latest version, and it should be passed to this step
     last_version = client.search_model_versions(filter_string=f"name='{published_model_name}'")[0].version
     print("Latest Model Version", last_version)
+    sys.stdout.flush()
+
     client.set_model_version_tag(
         name=published_model_name, version=last_version, key="stage", value="ready_for_production"
     )
     print(f"Model tagging successful for '{published_model_name}' version {last_version}.")
+    sys.stdout.flush()
 
 
 if __name__ == "__main__":
