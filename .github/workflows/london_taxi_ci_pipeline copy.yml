@@ -1,4 +1,4 @@
-name: Nyc Taxi CI Workflow
+name: London Taxi CI Workflow
 on:
   push:
     branches:
@@ -7,10 +7,10 @@ on:
       - .github/*
       - mlops/common/*
       - mlops/*
-      - mlops/nyc_taxi/*
-      - model/nyc_taxi/*
-      - src/nyc_src/*
-      - test/nyc_taxi/*
+      - mlops/london_taxi/*
+      - model/london_taxi/*
+      - src/london_src/*
+      - test/london_taxi/*
   workflow_call:
     inputs:
       exec_environment:
@@ -22,7 +22,7 @@ on:
         type: string
         description: "The type of model to run the workflow for"
         required: true
-        default: "nyc_taxi"
+        default: "london_taxi"
       is_batch_deployment:
         type: boolean
         description: "True for batch endpoint and False for real-time endpoint"
@@ -33,7 +33,7 @@ jobs:
     uses: ./.github/workflows/platform_ci_workflow.yml
     with:
       exec_environment: ${{ inputs.exec_environment || 'dev' }}
-      model_type: ${{ inputs.model_type || 'nyc_taxi' }}
+      model_type: ${{ inputs.model_type || 'london_taxi' }}
       is_batch_deployment: ${{ inputs.is_batch_deployment || false }}
     secrets:
       subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
