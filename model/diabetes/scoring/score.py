@@ -3,8 +3,7 @@ import logging
 import json
 import numpy
 import joblib
-import csv
-import datetime
+
 
 def init():
     """
@@ -27,16 +26,16 @@ def run(raw_data):
     In the example we extract the data from the json input and call the scikit-learn model's predict()
     method and return the result back
     """
-    #current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    #folder_path = f"{os.environ['MODEL_LOG_PATH']}{os.environ['MODEL_NAME']}/{current_time}"
-    #if not os.path.exists(folder_path):
+    # current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    # folder_path = f"{os.environ['MODEL_LOG_PATH']}{os.environ['MODEL_NAME']}/{current_time}"
+    # if not os.path.exists(folder_path):
     #    os.makedirs(folder_path)
-    #csv_input_path = f"{folder_path}/input.csv"
-    #csv_output_path = f"{folder_path}/output.csv"
+    # csv_input_path = f"{folder_path}/input.csv"
+    # csv_output_path = f"{folder_path}/output.csv"
     logging.info("model 1: request received")
     data = json.loads(raw_data)["data"]
     data = numpy.array(data)
-    #numpy.savetxt(csv_input_path, data, delimiter=",")
+    # numpy.savetxt(csv_input_path, data, delimiter=",")
 
     result = model.predict(data)
 

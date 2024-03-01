@@ -1,15 +1,7 @@
 import argparse
 from pathlib import Path
-from typing_extensions import Concatenate
-from uuid import uuid4
-from datetime import datetime
 import os
 import pandas as pd
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
-import pickle
-
-
 
 def main(raw_data, prep_data):
     print("hello training world...")
@@ -29,7 +21,7 @@ def main(raw_data, prep_data):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(raw_data, filename), "r") as handle:
+        with open(os.path.join(raw_data, filename), "r"):
             input_df = pd.read_csv((Path(raw_data) / filename))
             df_list.append(input_df)
 
@@ -44,7 +36,6 @@ def main(raw_data, prep_data):
 def data_prep(data):
     # Define useful columns needed for the Azure Machine Learning NYC Taxi tutorial
     # Pregnancies	Glucose	BloodPressure	SkinThickness	Insulin	BMI	DiabetesPedigreeFunction	Age	Outcome
-
 
     useful_columns = str(
         [
@@ -77,13 +68,9 @@ def data_prep(data):
         }
     ).replace(",", ";")
 
-
-
     print("data_columns: " + data_columns)
    
-
     data_clean = cleanseData(data, data_columns, useful_columns)
-
 
     # # Append yellow data to green data
     # combined_df = pd.concat([green_data_clean, yellow_data_clean], ignore_index=True)
@@ -100,10 +87,7 @@ def data_prep(data):
     # )
     merged_data = combined_df.to_csv(os.path.join(prep_data, "merged_data.csv"))
 
-
-
     print("Finish")
-
 
 # These functions ensure that null data is removed from the dataset,
 # which will help increase machine learning model accuracy.
