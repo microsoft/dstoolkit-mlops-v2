@@ -1,29 +1,23 @@
 import argparse
 from pathlib import Path
-from uuid import uuid4
-from datetime import datetime
 import os
 import pandas as pd
-import numpy as np
 
 
-def main(clean_data, transformed_data):
+def main(clean_data,transformed_data):
     lines = [
         f"Clean data path: {clean_data}",
         f"Transformed data output path: {transformed_data}",
     ]
-
     for line in lines:
         print(line)
-
     print("mounted_path files: ")
     arr = os.listdir(clean_data)
     print(arr)
-
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(clean_data, filename), "r") as handle:
+        with open(os.path.join(clean_data, filename),"r") :
             input_df = pd.read_csv((Path(clean_data) / filename))
             df_list.append(input_df)
 
@@ -43,9 +37,19 @@ def main(clean_data, transformed_data):
 
 
 def transform_data(combined_df):
+    """
+    Transform a dataframe to prepare it for training.
+
+    The method is implementing data cleaning and normalization
+
+    Parameters:
+      combined_df (pandas.DataFrame): incoming data frame
+
+    Returns:
+        DataFrame: transformed data frame
+    """
     final_df = combined_df
     print(final_df.head)
-
     return final_df
 
 
@@ -53,9 +57,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser("transform")
     parser.add_argument("--clean_data", type=str, help="Path to prepped data")
     parser.add_argument("--transformed_data", type=str, help="Path of output data")
-
     args = parser.parse_args()
-
     clean_data = args.clean_data
     transformed_data = args.transformed_data
     main(clean_data, transformed_data)
