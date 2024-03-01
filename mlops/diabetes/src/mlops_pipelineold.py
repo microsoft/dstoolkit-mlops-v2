@@ -1,15 +1,3 @@
-"""
-This module defines a machine learning pipeline for processing, training, and evaluating data.
-
-The pipeline executes the following steps in order:
-1. Prepare Sample Data: Preprocesses raw data to make it suitable for further processing and analysis.
-2. Transform Sample Data: Performs advanced data transformations such as feature engineering.
-3. Train with Sample Data: Trains a machine learning model using the transformed data.
-4. Predict with Sample Data: Uses the trained model to make predictions on new data.
-5. Score with Sample Data: Evaluates the model's performance based on its predictions.
-6. Finalize and Persist Model: Handles tasks like persisting model metadata, registering the model,
-and generating reports.
-"""
 from azure.identity import DefaultAzureCredential
 import argparse
 from azure.ai.ml.dsl import pipeline
@@ -17,14 +5,9 @@ from azure.ai.ml import MLClient, Input
 from azure.ai.ml import load_component
 import time
 import os
+import json
 from mlops.common.get_compute import get_compute
 from mlops.common.get_environment import get_environment
-from mlops.common.config_utils import MLOpsConfig
-from mlops.common.naming_utils import (
-    generate_experiment_name,
-    generate_model_name,
-    generate_run_name,
-)
 
 
 gl_pipeline_components = []
@@ -32,17 +15,6 @@ gl_pipeline_components = []
 
 @pipeline()
 def diabetes_data_regression(pipeline_job_input, model_name, build_reference):
-    """
-    Run a pipeline for regression analysis on NYC taxi data.
-
-    Parameters:
-    pipeline_job_input (str): Path to the input data.
-    model_name (str): Name of the model.
-    build_reference (str): Reference for the build.
-
-    Returns:
-    dict: A dictionary containing paths to various data, the model, predictions, and score report.
-    """
     prepare_sample_data = gl_pipeline_components[0](
         raw_data=pipeline_job_input,
     )
@@ -60,7 +32,7 @@ def diabetes_data_regression(pipeline_job_input, model_name, build_reference):
         predictions=predict_with_sample_data.outputs.predictions,
         model=train_with_sample_data.outputs.model_output,
     )
-    gl_pipeline_components[5](
+    register_model_with_sample_data = gl_pipeline_components[5](
         model_metadata=train_with_sample_data.outputs.model_metadata,
         model_name=model_name,
         score_report=score_with_sample_data.outputs.score_report,
@@ -81,31 +53,23 @@ def construct_pipeline(
     cluster_name: str,
     environment_name: str,
     display_name: str,
-    build_environment: str,
+    deploy_environment: str,
     build_reference: str,
     model_name: str,
-    dataset_name: str,
-    ml_client,
+    data_config_path: str,
+    ml_client
 ):
-    """
-    Construct a pipeline job for NYC taxi data regression.
+    dataset_name = None
+    config_file = open(data_config_path)
+    data_config = json.load(config_file)
+    for elem in data_config['datasets']:
+        if 'DATA_PURPOSE' in elem and 'ENV_NAME' in elem:
+            if deploy_environment == elem['ENV_NAME']:
+                dataset_name = elem["DATASET_NAME"]
 
-    Args:
-        cluster_name (str): The name of the cluster to use for pipeline execution.
-        environment_name (str): The name of the environment to use for pipeline execution.
-        display_name (str): The display name of the pipeline job.
-        build_environment (str): The environment to deploy the pipeline job.
-        build_reference (str): The build reference for the pipeline job.
-        model_name (str): The name of the model.
-        dataset_name (str): The name of the dataset.
-        ml_client: The machine learning client.
-
-    Returns:
-        pipeline_job: The constructed pipeline job.
-    """
-    registered_data_asset = ml_client.data.get(name=dataset_name, label="latest")
-
+    registered_data_asset = ml_client.data.get(name=dataset_name,label='latest')
     parent_dir = os.path.join(os.getcwd(), "mlops/diabetes/components")
+    #data_dir = os.path.join(os.getcwd(), "mlops/nyc_taxi/data/")
 
     prepare_data = load_component(source=parent_dir + "/prep.yml")
     transform_data = load_component(source=parent_dir + "/transform.yml")
@@ -121,6 +85,7 @@ def construct_pipeline(
     predict_result.environment = environment_name
     score_data.environment = environment_name
     register_model.environment = environment_name
+    
 
     gl_pipeline_components.append(prepare_data)
     gl_pipeline_components.append(transform_data)
@@ -130,14 +95,11 @@ def construct_pipeline(
     gl_pipeline_components.append(register_model)
 
     pipeline_job = diabetes_data_regression(
-        Input(type="uri_folder", path=registered_data_asset.id),
-        model_name,
-        build_reference,
+        Input(type="uri_folder", path=registered_data_asset.id), model_name, build_reference
     )
-
     pipeline_job.display_name = display_name
     pipeline_job.tags = {
-        "environment": build_environment,
+        "environment": deploy_environment,
         "build_reference": build_reference,
     }
 
@@ -162,24 +124,6 @@ def execute_pipeline(
     wait_for_completion: str,
     output_file: str,
 ):
-    """
-    Execute a pipeline job in Azure Machine Learning service.
-
-    Args:
-        subscription_id (str): The Azure subscription ID.
-        resource_group_name (str): The name of the resource group.
-        workspace_name (str): The name of the Azure Machine Learning workspace.
-        experiment_name (str): The name of the experiment.
-        pipeline_job (pipeline): The pipeline job to be executed.
-        wait_for_completion (str): "True" or "False" indicates whether to wait for the job to complete.
-        output_file (str): The path to the output file where the job name will be written.
-
-    Raises:
-        Exception: If the job fails to complete.
-
-    Returns:
-        None
-    """
     try:
         client = MLClient(
             DefaultAzureCredential(),
@@ -239,80 +183,78 @@ def execute_pipeline(
                 raise Exception("Sorry, exiting job with failure..")
     except Exception as ex:
         print(
-            "Oops! invalid credentials or error while creating ML environment.. Try again...",
-            ex,
+            "Oops! invalid credentials or error while creating ML environment.. Try again..."
         )
         raise
 
 
 def prepare_and_execute(
-    build_environment: str,
+    subscription_id: str,
+    resource_group_name: str,
+    workspace_name: str,
+    cluster_name: str,
+    cluster_size: str,
+    cluster_region: str,
+    min_instances: int,
+    max_instances: int,
+    idle_time_before_scale_down: int,
+    env_base_image_name: str,
+    conda_path: str,
+    environment_name: str,
+    env_description: str,
     wait_for_completion: str,
+    display_name: str,
+    experiment_name: str,
+    deploy_environment: str,
+    build_reference: str,
+    model_name: str,
     output_file: str,
+    data_config_path: str
 ):
-    """
-    Prepare and execute the MLOps pipeline.
-
-    Args:
-        build_environment (str): environment name to execute.
-        wait_for_completion (str): "True" or "False" indicates whether to wait for the job to complete.
-        output_file (str): The path to the output file where the job name will be written.
-    """
-    model_name = "diabetes"
-
-    config = MLOpsConfig(environment=build_environment)
-
     ml_client = MLClient(
-        DefaultAzureCredential(),
-        config.aml_config["subscription_id"],
-        config.aml_config["resource_group_name"],
-        config.aml_config["workspace_name"],
+        DefaultAzureCredential(), subscription_id,  resource_group_name,  workspace_name
     )
-
-    pipeline_config = config.get_pipeline_config(model_name)
-
+    
     compute = get_compute(
-        config.aml_config["subscription_id"],
-        config.aml_config["resource_group_name"],
-        config.aml_config["workspace_name"],
-        pipeline_config["cluster_name"],
-        pipeline_config["cluster_size"],
-        pipeline_config["cluster_region"],
+        subscription_id,
+        resource_group_name,
+        workspace_name,
+        cluster_name,
+        cluster_size,
+        cluster_region,
+        min_instances,
+        max_instances,
+        idle_time_before_scale_down,
     )
 
     environment = get_environment(
-        config.aml_config["subscription_id"],
-        config.aml_config["resource_group_name"],
-        config.aml_config["workspace_name"],
-        config.environment_configuration["env_base_image"],
-        pipeline_config["conda_path"],
-        pipeline_config["aml_env_name"],
+        subscription_id,
+        resource_group_name,
+        workspace_name,
+        env_base_image_name,
+        conda_path,
+        environment_name,
+        env_description,
     )
 
     print(f"Environment: {environment.name}, version: {environment.version}")
 
-    published_model_name = generate_model_name(model_name)
-    published_experiment_name = generate_experiment_name(model_name)
-    published_run_name = generate_run_name(
-        config.environment_configuration["build_reference"]
-    )
-
     pipeline_job = construct_pipeline(
         compute.name,
         f"azureml:{environment.name}:{environment.version}",
-        published_run_name,
-        build_environment,
-        config.environment_configuration["build_reference"],
-        published_model_name,
-        pipeline_config["dataset_name"],
-        ml_client,
+        display_name,
+        deploy_environment,
+        build_reference,
+        model_name,
+        data_config_path,
+        ml_client
     )
 
     execute_pipeline(
-        config.aml_config["subscription_id"],
-        config.aml_config["resource_group_name"],
-        config.aml_config["workspace_name"],
-        published_experiment_name,
+        subscription_id,
+        resource_group_name,
+        workspace_name,
+        experiment_name,
         pipeline_job,
         wait_for_completion,
         output_file,
@@ -320,26 +262,91 @@ def prepare_and_execute(
 
 
 def main():
-    """Parse the command line arguments and call the `prepare_and_execute` function."""
     parser = argparse.ArgumentParser("build_environment")
+    parser.add_argument("--subscription_id", type=str, help="Azure subscription id")
     parser.add_argument(
-        "--build_environment",
-        type=str,
-        help="configuration environment for the pipeline",
+        "--resource_group_name", type=str, help="Azure Machine learning resource group"
     )
+    parser.add_argument(
+        "--workspace_name", type=str, help="Azure Machine learning Workspace name"
+    )
+    parser.add_argument(
+        "--cluster_name", type=str, help="Azure Machine learning cluster name"
+    )
+    parser.add_argument(
+        "--cluster_size", type=str, help="Azure Machine learning cluster size"
+    )
+    parser.add_argument(
+        "--cluster_region", type=str, help="Azure Machine learning cluster region"
+    )
+    parser.add_argument("--min_instances", type=int, default=0)
+    parser.add_argument("--max_instances", type=int, default=4)
+    parser.add_argument("--idle_time_before_scale_down", type=int, default=120)
+    parser.add_argument(
+        "--build_reference",
+        type=str,
+        help="Unique identifier for Azure DevOps pipeline run",
+    )
+    parser.add_argument(
+        "--deploy_environment",
+        type=str,
+        help="execution and deployment environment. e.g. dev, prod, test",
+    )
+    parser.add_argument(
+        "--experiment_name", type=str, help="Job execution experiment name"
+    )
+    parser.add_argument("--display_name", type=str, help="Job execution run name")
     parser.add_argument(
         "--wait_for_completion",
         type=str,
         help="determine if pipeline to wait for job completion",
-        default="True",
+    )
+    parser.add_argument(
+        "--environment_name",
+        type=str,
+        help="Azure Machine Learning Environment name for job execution",
+    )
+    parser.add_argument(
+        "--env_base_image_name", type=str, help="Environment custom base image name"
+    )
+    parser.add_argument(
+        "--conda_path", type=str, help="path to conda requirements file"
+    )
+    parser.add_argument(
+        "--env_description", type=str, default="Environment created using Conda."
+    )
+    parser.add_argument(
+        "--model_name", type=str, default="Name used for registration of model"
     )
     parser.add_argument(
         "--output_file", type=str, required=False, help="A file to save run id"
     )
+    parser.add_argument("--data_config_path", type=str, required=True, help="data config path")
+
     args = parser.parse_args()
 
     prepare_and_execute(
-        args.build_environment, args.wait_for_completion, args.output_file
+        args.subscription_id,
+        args.resource_group_name,
+        args.workspace_name,
+        args.cluster_name,
+        args.cluster_size,
+        args.cluster_region,
+        args.min_instances,
+        args.max_instances,
+        args.idle_time_before_scale_down,
+        args.env_base_image_name,
+        args.conda_path,
+        args.environment_name,
+        args.env_description,
+        args.wait_for_completion,
+        args.display_name,
+        args.experiment_name,
+        args.deploy_environment,
+        args.build_reference,
+        args.model_name,
+        args.output_file,
+        args.data_config_path
     )
 
 
