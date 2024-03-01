@@ -12,8 +12,8 @@ def init():
     """
     global model
 
-    model_path = os.path.join(os.getenv("AZUREML_MODEL_DIR"),"model", "model.pkl")
-    
+    model_path = os.path.join(os.getenv("AZUREML_MODEL_DIR"), "model", "model.pkl")
+
     # deserialize the model file back into a sklearn model
     model = joblib.load(model_path)
     logging.info("Init complete")
@@ -39,6 +39,6 @@ def run(raw_data):
 
     result = model.predict(data)
 
-    #numpy.savetxt(csv_output_path, result, delimiter=",")
+    # numpy.savetxt(csv_output_path, result, delimiter=",")
     logging.info("Request processed")
     return result.tolist()

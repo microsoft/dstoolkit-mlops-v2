@@ -11,6 +11,7 @@ import json
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.metrics import classification_report
 
+
 def main(training_data, test_data, model_output, model_metadata):
     print("Hello training world...")
 
@@ -31,7 +32,7 @@ def main(training_data, test_data, model_output, model_metadata):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(training_data, filename), "r") as handle:
+        with open(os.path.join(training_data, filename), "r"):
             input_df = pd.read_csv((Path(training_data) / filename))
             df_list.append(input_df)
 
@@ -84,11 +85,10 @@ def train_model(trainX, trainy):
 
         y_pred = model.predict(trainX)
 
-        print (y_pred)
+        print(y_pred)
         print(classification_report(trainy, y_pred))
         # cm = confusion_matrix(trainX, y_pred)
         # print(cm)
-
 
         # Output the model, metadata and test data
         run_id = mlflow.active_run().info.run_id

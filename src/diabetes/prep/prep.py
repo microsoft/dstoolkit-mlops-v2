@@ -3,6 +3,7 @@ from pathlib import Path
 import os
 import pandas as pd
 
+
 def main(raw_data, prep_data):
     print("hello training world...")
 
@@ -64,28 +65,27 @@ def data_prep(data):
             "DiabetesPedigreeFunction": "diabetespedigreefunction",
             "Age": "age",
             "Outcome": "outcome",
-           
-        }
+            }
     ).replace(",", ";")
 
     print("data_columns: " + data_columns)
-   
+
     data_clean = cleanseData(data, data_columns, useful_columns)
 
     # # Append yellow data to green data
     # combined_df = pd.concat([green_data_clean, yellow_data_clean], ignore_index=True)
     # #combined_df = green_data_clean.append(yellow_data_clean, ignore_index=True)
-    
+
     combined_df = data_clean
     combined_df.reset_index(inplace=True, drop=True)
 
-    output_green = data_clean.to_csv(
-        os.path.join(prep_data, "clean_data.csv")
-    )
+    # output_green = data_clean.to_csv(
+    #     os.path.join(prep_data, "clean_data.csv")
+    # )
     # output_yellow = yellow_data_clean.to_csv(
     #     os.path.join(prep_data, "yellow_prep_data.csv")
     # )
-    merged_data = combined_df.to_csv(os.path.join(prep_data, "merged_data.csv"))
+    # merged_data = combined_df.to_csv(os.path.join(prep_data, "merged_data.csv"))
 
     print("Finish")
 
