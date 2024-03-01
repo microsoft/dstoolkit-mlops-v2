@@ -2,7 +2,6 @@ import argparse
 import pandas as pd
 import os
 from pathlib import Path
-#from sklearn.linear_model import LinearRegression
 import pickle
 
 
@@ -33,7 +32,7 @@ def load_test_data(test_data):
             input_df = pd.read_csv((Path(test_data) / filename))
             df_list.append(input_df)
 
-    test_data = df_list[0]  
+    test_data = df_list[0]
     # print(test_data.head)
     # print(test_data.columns)
     testy = test_data["outcome"]

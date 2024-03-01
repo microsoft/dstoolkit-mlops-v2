@@ -9,6 +9,7 @@ import json
 
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
+
 def main(predictions, model, score_report):
     print("hello scoring world...")
 
@@ -30,7 +31,7 @@ def main(predictions, model, score_report):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(predictions, filename), "r") as handle:
+        with open(os.path.join(predictions, filename), "r") :
             input_df = pd.read_csv((Path(predictions) / filename))
             df_list.append(input_df)
 
@@ -41,6 +42,7 @@ def main(predictions, model, score_report):
     write_results(model, predictions, test_data, score_report)
 
 # Print the results of scoring the predictions against actual values in the test data
+
 
 def write_results(model, predictions, test_data, score_report):
     # The coefficients
@@ -60,8 +62,7 @@ def write_results(model, predictions, test_data, score_report):
     mlflow.log_metric("precision", precision)
 
     mlflow.log_metric("recall", recall)
-    mlflow.log_metric("f1", f1)
-                      
+    mlflow.log_metric("f1", f1)  
     # The mean squared error
     # print("Mean squared error: %.2f" % mse)
     # # The coefficient of determination: 1 is perfect prediction
@@ -71,8 +72,8 @@ def write_results(model, predictions, test_data, score_report):
     # Print score report to a text file
     model_score = {
         "accuracy": accuracy,
-        "precision": precision ,
-        "recall": recall ,
+        "precision": precision,
+        "recall": recall,
         "f1": f1
     }
     with open((Path(score_report) / "score.txt"), "w") as json_file:
