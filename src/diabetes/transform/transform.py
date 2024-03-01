@@ -4,7 +4,7 @@ import os
 import pandas as pd
 
 
-def main(clean_data,transformed_data):
+def main(clean_data, transformed_data):
     lines = [
         f"Clean data path: {clean_data}",
         f"Transformed data output path: {transformed_data}",
@@ -17,7 +17,7 @@ def main(clean_data,transformed_data):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(clean_data, filename),"r") :
+        with open(os.path.join(clean_data, filename), "r"):
             input_df = pd.read_csv((Path(clean_data) / filename))
             df_list.append(input_df)
 
