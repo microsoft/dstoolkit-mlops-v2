@@ -53,9 +53,9 @@ jobs:
             azure_credentials: ${{ secrets.azure_credentials }}
             script_parameter: |
                 python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
-                    --build_environment ${{ inputs.exec_environment }} \
-                    --wait_for_completion True \
-                    --output_file run_id.txt
+                  --build_environment ${{ inputs.exec_environment }} \
+                  --wait_for_completion True \
+                  --output_file run_id.txt
       - name: Read Run ID
         shell: bash
         run: |
@@ -63,6 +63,7 @@ jobs:
           run_name=${arr[0]}
           echo $run_name
           echo "RUN_NAME=${run_name}"  >> "$GITHUB_ENV"
+
   deploy-online:
     name: Deploy_Online
     runs-on: ubuntu-latest
@@ -96,9 +97,9 @@ jobs:
             azure_credentials: ${{ secrets.azure_credentials }}
             script_parameter: |
                 python -m mlops.common.deployment.provision_online_deployment \
-                --model_type ${{ inputs.model_type }} \
-                --environment_name ${{ inputs.exec_environment }} \
-                --run_id ${{ github.run_id }}
+                  --model_type ${{ inputs.model_type }} \
+                  --environment_name ${{ inputs.exec_environment }} \
+                  --run_id ${{ github.run_id }}
       - name: Test azureml real endpoint
         uses: ./.github/actions/execute_shell_code
         with: 
@@ -131,39 +132,43 @@ jobs:
             azure_credentials: ${{ secrets.azure_credentials }}
             script_parameter: |
                 python -m mlops.common.deployment.provision_batch_endpoint \
-                --run_id ${{ github.run_id }} \
-                --environment_name ${{ inputs.exec_environment }} \
-                --model_type ${{ inputs.model_type }}
-
+                  --run_id ${{ github.run_id }} \
+                  --environment_name ${{ inputs.exec_environment }} \
+                  --model_type ${{ inputs.model_type }}
       - name: Provision azureml deployment
         uses: ./.github/actions/execute_shell_code
         with: 
             azure_credentials: ${{ secrets.azure_credentials }}
             script_parameter: |
                 python -m mlops.common.deployment.provision_batch_deployment \
-                --run_id ${{ github.run_id }} \
-                --environment_name ${{ inputs.exec_environment }} \
-                --model_type ${{ inputs.model_type }}
-
+                  --run_id ${{ github.run_id }} \
+                  --environment_name ${{ inputs.exec_environment }} \
+                  --model_type ${{ inputs.model_type }}
       - name: Test azureml batch endpoint
         uses: ./.github/actions/execute_shell_code
         with: 
             azure_credentials: ${{ secrets.azure_credentials }}
             script_parameter: |
                 python -m mlops.common.deployment.run_test_batch_deployment \
-                    --environment_name ${{ inputs.exec_environment }} \
-                    --model_type ${{ inputs.model_type }}
+                  --environment_name ${{ inputs.exec_environment }} \
+                  --model_type ${{ inputs.model_type }}
 
-  approve_model:
-    name: ApproveDeployment
+  change_model_tag:
+    name: Apply Production Tag
     runs-on: ubuntu-latest
-    timeout-minutes: 60 # job times out in 60 minutes
+    needs: [execute-training-job]
+    env:
+      SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
+      RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
+      WORKSPACE_NAME: ${{ secrets.workspace_name }}
+      BUILD_BUILDID: ${{ github.run_id }}
     steps:
-      - uses: trstringer/manual-approval@v1
-        with:
-          azure_credentials: ${{ secrets.azure_credentials }}
-          approvers: sbaidachni
-          timeout-minutes: 60 # task times out in 60 minutes
-          onTimeout: 'reject'
-      - name: Approve for Model Deployment
-        run: echo deploying with approval
+        - name: Configure Azure ML Agent
+          uses: ./.github/actions/configure_azureml_agent
+        - name: Provision azureml online endpoint
+          uses: ./.github/actions/execute_shell_code
+          with:
+            azure_credentials: ${{ secrets.azure_credentials }}
+            script_parameter: |
+                python -m mlops.common.deployment.approve_model \
+                  --model_type ${{ inputs.model_type }}
