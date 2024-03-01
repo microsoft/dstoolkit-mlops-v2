@@ -35,9 +35,15 @@ def main():
 
     published_model_name = generate_model_name(model_type)
 
-    azureml_tracking_uri = ml_client.workspaces.get(
-        ml_client.workspace_name
-    ).mlflow_tracking_uri
+    # azureml_tracking_uri = ml_client.workspaces.get(
+    #     ml_client.workspace_name
+    # ).mlflow_tracking_uri
+    region = "eastus2"
+    subscription_id = config.aml_config["subscription_id"]
+    resource_group = config.aml_config["resource_group_name"]
+    workspace_name = config.aml_config["workspace_name"]
+    azureml_tracking_uri = f"https://{region}.api.azureml.ms/mlflow/v1.0/subscriptions/{subscription_id}/resourceGroups/{resource_group}/providers/Microsoft.MachineLearningServices/workspaces/{workspace_name}"
+
     mlflow.set_tracking_uri(azureml_tracking_uri)
     print("Current MLflow Tracking URI:", mlflow.get_tracking_uri())
     sys.stdout.flush()
