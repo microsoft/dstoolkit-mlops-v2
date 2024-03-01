@@ -29,12 +29,11 @@ def load_test_data(test_data):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(test_data, filename), "r") :
+        with open(os.path.join(test_data, filename), "r"):
             input_df = pd.read_csv((Path(test_data) / filename))
             df_list.append(input_df)
 
-    test_data = df_list[0]
-    
+    test_data = df_list[0]  
     # print(test_data.head)
     # print(test_data.columns)
     testy = test_data["outcome"]
@@ -53,6 +52,7 @@ def load_test_data(test_data):
     print(testX.shape)
     print(testX.columns)
     return testX, testy
+
 
 def predict(testX, testy, model_input, prediction_path):
     # Load the model from input port
