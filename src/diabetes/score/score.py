@@ -31,7 +31,7 @@ def main(predictions, model, score_report):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(predictions, filename), "r") :
+        with open(os.path.join(predictions, filename), "r"):
             input_df = pd.read_csv((Path(predictions) / filename))
             df_list.append(input_df)
 
@@ -62,7 +62,7 @@ def write_results(model, predictions, test_data, score_report):
     mlflow.log_metric("precision", precision)
 
     mlflow.log_metric("recall", recall)
-    mlflow.log_metric("f1", f1)  
+    mlflow.log_metric("f1", f1)
     # The mean squared error
     # print("Mean squared error: %.2f" % mse)
     # # The coefficient of determination: 1 is perfect prediction
