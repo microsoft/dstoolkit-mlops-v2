@@ -10,6 +10,7 @@ from azure.identity import DefaultAzureCredential
 from mlops.common.config_utils import MLOpsConfig
 from mlops.common.naming_utils import generate_model_name
 
+
 def main():
     """Take the latest version of the model and add  ready_for_production tag."""
     parser = argparse.ArgumentParser("provision_deployment")
