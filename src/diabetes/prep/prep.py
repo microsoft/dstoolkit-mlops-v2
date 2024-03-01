@@ -65,7 +65,7 @@ def data_prep(data):
             "DiabetesPedigreeFunction": "diabetespedigreefunction",
             "Age": "age",
             "Outcome": "outcome",
-            }
+        }
     ).replace(",", ";")
 
     print("data_columns: " + data_columns)
