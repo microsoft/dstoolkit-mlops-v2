@@ -1,3 +1,12 @@
+"""
+This module is designed to preprocess taxi data for the Azure Machine Learning NYC Taxi tutorial.
+
+It includes functions for reading raw taxi data (both green and yellow taxi data),
+cleaning it, and transforming it into a format suitable for machine learning modeling.
+The module focuses on selecting useful columns, renaming them as per tutorial specifications,
+and concatenating the green and yellow taxi data into a single dataset.
+"""
+
 import argparse
 from pathlib import Path
 import os
@@ -5,6 +14,13 @@ import pandas as pd
 
 
 def main(raw_data, prep_data):
+    """
+    Read existing csv files and invoke preprocessing step.
+
+    Parameters:
+      raw_data (str): a folder to read csv files
+      prep_data (str): a folder for preprocessed data
+    """
     print("hello training world...")
 
     lines = [
@@ -35,9 +51,14 @@ def main(raw_data, prep_data):
 
 
 def data_prep(data):
-    # Define useful columns needed for the Azure Machine Learning NYC Taxi tutorial
-    # Pregnancies	Glucose	BloodPressure	SkinThickness	Insulin	BMI	DiabetesPedigreeFunction	Age	Outcome
+    """
+    Define useful columns needed for the Azure Machine Learning NYC Taxi tutorial.
 
+    Output columns are Pregnancies	Glucose	BloodPressure	SkinThickness	Insulin	BMI	DiabetesPedigreeFunction	Age	Outcome
+
+    Parameters:
+      data (pandas.DataFrame): raw data
+    """
     useful_columns = str(
         [
             "pregnancies",
@@ -70,7 +91,7 @@ def data_prep(data):
 
     print("data_columns: " + data_columns)
 
-    data_clean = cleanseData(data, data_columns, useful_columns)
+    data_clean = cleansedata(data, data_columns, useful_columns)
 
     # # Append yellow data to green data
     # combined_df = pd.concat([green_data_clean, yellow_data_clean], ignore_index=True)
@@ -94,6 +115,15 @@ def data_prep(data):
 
 
 def get_dict(dict_str):
+    """
+    Ensure that null data is removed from the dataset to increase machine learning model accuracy.
+
+    Parameters:
+      dict_str (Dictionary): a string with separated elements
+
+    Returns:
+      Dictionary: an updated dictionary
+    """
     pairs = dict_str.strip("{}").split(";")
     new_dict = {}
     for pair in pairs:
@@ -103,7 +133,18 @@ def get_dict(dict_str):
     return new_dict
 
 
-def cleanseData(data, columns, useful_columns):
+def cleansedata(data, columns, useful_columns):
+    """
+    Clean dataset removing NA values.
+
+    Parameters:
+      data (pandas.DataFrame): initial data
+      columns (str): a list of columns in initial dataset
+      useful_columns (str): columns to retain
+
+    Returns:
+      DataFrame: an updated data set
+    """
     useful_columns = [
         s.strip().strip("'") for s in useful_columns.strip("[]").split(";")
     ]

@@ -1,3 +1,12 @@
+"""
+This module is responsible for transforming pre-processed data for the London Taxi dataset.
+
+The module includes a main function that orchestrates the reading of cleaned data,
+performs further transformations, and outputs the transformed data for model training.
+The transformations involve filtering out geographical coordinates outside the city borders,
+normalizing data types, splitting datetime fields into more granular components, and
+filtering out outliers in the dataset.
+"""
 import argparse
 from pathlib import Path
 import os
@@ -5,6 +14,13 @@ import pandas as pd
 
 
 def main(clean_data, transformed_data):
+    """
+    Initiate transformation and save results into csv file.
+
+    Parameters:
+      clean_data (str): a folder to store results
+      transformed_data (DataFrame): an initial data frame for transformation
+    """
     lines = [
         f"Clean data path: {clean_data}",
         f"Transformed data output path: {transformed_data}",

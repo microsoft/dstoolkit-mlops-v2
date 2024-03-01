@@ -1,3 +1,4 @@
+"""This module is designed for registering machine learning models in MLflow."""
 import mlflow
 import argparse
 import json
@@ -5,6 +6,15 @@ from pathlib import Path
 
 
 def main(model_metadata, model_name, score_report, build_reference):
+    """
+    Register the model and assign tags to it.
+
+    Parameters:
+      model_metadata (str): model information from previous steps
+      model_name (str): model name
+      score_report (str): a report from te validation (score) step
+      build_reference (str): a build id
+    """
     try:
         run_file = open(args.model_metadata)
         model_metadata = json.load(run_file)
