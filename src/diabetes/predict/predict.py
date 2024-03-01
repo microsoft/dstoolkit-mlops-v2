@@ -2,7 +2,7 @@ import argparse
 import pandas as pd
 import os
 from pathlib import Path
-from sklearn.linear_model import LinearRegression
+#from sklearn.linear_model import LinearRegression
 import pickle
 
 
@@ -29,7 +29,7 @@ def load_test_data(test_data):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(test_data, filename), "r") as handle:
+        with open(os.path.join(test_data, filename), "r") :
             input_df = pd.read_csv((Path(test_data) / filename))
             df_list.append(input_df)
 
@@ -54,7 +54,6 @@ def load_test_data(test_data):
     print(testX.columns)
     return testX, testy
 
-
 def predict(testX, testy, model_input, prediction_path):
     # Load the model from input port
     model = pickle.load(open((Path(model_input) / "model.sav"), "rb"))
@@ -71,7 +70,9 @@ def predict(testX, testy, model_input, prediction_path):
     # Save the output data with feature columns, predicted cost, and actual cost in csv file
     output_data = output_data.to_csv((Path(prediction_path) / "predictions.csv"))
 
+
 if __name__ == "__main__":
+
     parser = argparse.ArgumentParser("predict")
     parser.add_argument("--model_input", type=str, help="Path of input model")
     parser.add_argument("--test_data", type=str, help="Path to test data")
