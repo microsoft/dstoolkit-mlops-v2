@@ -3,7 +3,7 @@ name: Nyc Taxi PR Workflow
 on:
   pull_request:
     branches:
-      - "development"
+      - "lff-githubactions-test"
     paths:
       - .github/*
       - mlops/common/*
