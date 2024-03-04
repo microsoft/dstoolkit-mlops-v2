@@ -2,7 +2,7 @@ name: London Taxi CI Workflow
 on:
   push:
     branches:
-      - ci_fix_v3
+      - agromova/ci_fix_v3
       # - development
     # paths:
     #   - .github/*
