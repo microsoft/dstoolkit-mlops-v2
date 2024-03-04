@@ -19,7 +19,7 @@ stages:
             script_parameter: |
               python -m mlops.${{ parameters.model_type }}.src.mlops_pipeline \
                 --build_environment ${{parameters.exec_environment}} \
-                --wait_for_completion True \
+                --wait_for_completion False \
                 --output_file run_id.txt
         - task: AzureCLI@2
           displayName: Read Run ID
@@ -44,6 +44,22 @@ stages:
               echo $metadata
               echo "##vso[task.setvariable variable=RUN_METADATA;isOutput=true;]$metadata"
 
+      - job: WaitForAzureMLJobCompletion
+        displayName: Wait for AzureML Job Completion
+        pool: server
+        timeoutInMinutes: 0
+        dependsOn: Execute_ml_Job_Pipeline
+        variables: 
+          # We are saving the name of azureMl job submitted in previous step to a variable and it will be used as an inut to the AzureML Job Wait task
+          azureml_job_name_from_submit_job: $[ dependencies.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ] 
+        steps:
+        - task: AzureMLJobWaitTask@1
+          inputs:
+            serviceConnection: $(AZURE_RM_SVC_CONNECTION)
+            resourceGroupName: $(RESOURCE_GROUP_NAME)
+            azureMLWorkspaceName: $(WORKSPACE_NAME)
+            azureMLJobName: $(azureml_job_name_from_submit_job)
+      
     - stage: 'Deploy_Online'
       dependsOn: 
       - execute_training_job
