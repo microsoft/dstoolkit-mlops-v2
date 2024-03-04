@@ -103,26 +103,32 @@ Information about variable groups in Azure DevOps can be found in [Add & use var
   - deploy_configs: - Stores online and batch configuration for deployments for each model.  
 
 
-### Create Azure Pipelines to deploy the infrastructure, and operate model builds and continuous integration.
+### Create Azure Pipelines to deploy the infrastructure, register data, and operate model builds and continuous integration.
 Details about how to create a basic Azure Pipeline can be found in [Create your first pipeline](https://learn.microsoft.com/en-us/azure/devops/pipelines/create-first-pipeline?view=azure-devops&tabs).
 
-**Step 5.** Using the instructions above, if needed, create an azure pipeline to deploy the infrastructure using either the bicep (*.azure-pipelines/infra/bicep/infra_provision_bicep_pipeline.yml*) or terraform (*.azure-pipelines/infra/terraform/infra_provision_terraform_pipeline.yml*) yaml files. 
+**Step 5.** Using the instructions above, if needed, create an azure pipeline to deploy the infrastructure using either the bicep (*.azure-pipelines/infra/bicep/infra_provision_bicep_pipeline.yml*) or terraform (*.azure-pipelines/infra/terraform/infra_provision_terraform_pipeline.yml*) yaml files. If electing to use terraform, you may need to add the following marketplace extensions in your Azure DevOps project: 
+- Azure Pipelines Terraform Tasks by Jason Johnson
+- Replace Tokens by Guillaume Rouchon
 
-**Step 6.** Using the instructions above, if needed, create one or more Azure Pipelines to setup build validation for either or both of the use cases listed below:
+**Step 6.** Using the instructions above, if needed, create an Azure Pipeline to register one or more datasets. The solution includes data for the sample models by default, but if additional models are added then those datasets should be made available in the mlops/{model}/data for pr builds and training, and model/{model}/batch_test_data for batch testing.
+
+**Step 7.** Using the instructions above, if needed, create one or more Azure Pipelines to setup build validation for either or both of the use cases listed below:
 - nyc_taxi
 - london_taxi
 
-**Step 7.** Using the instructions above, if needed, create one or more Azure Pipelines to setup continuous integration for either or both of the use cases listed below:
+**Step 8.** Using the instructions above, if needed, create one or more Azure Pipelines to setup continuous integration for either or both of the use cases listed below:
 - nyc_taxi
 - london_taxi
 
-**Step 8.** Setup a branch policy for the *development* branch. At this stage we have one or more Azure Pipeline(s) that should be executed on every PR to the *development* branch. At the same time successful completion of the build is not a requirement when files not affecting operation of the model are changed. Set up the the *Path filter* field in the policy to respond to changes in same set of paths specified in the *_pr_dev_pipeline.yml files.
+**Step 9. (Optional)** Setup a branch policy for the *development* branch. At this stage we have one or more Azure Pipeline(s) that should be executed on every PR to the *development* branch. At the same time successful completion of the build is not a requirement when files not affecting operation of the model are changed. Set up the the *Path filter* field in the policy to respond to changes in same set of paths specified in the *_pr_dev_pipeline.yml files.
 More details about how to create a policy can be found [Branch policies and settings](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser).
 
 ## Execute the pipelines as needed
 
-**Step 9.** *Provision Infrastructure* - Execute the infrastructure provision pipeline (infra_provision_bicep_pipeline.yml OR infra_provision_terraform_pipeline.yml).
+**Step 10.** *Provision Infrastructure* - Execute the infrastructure provision pipeline (infra_provision_bicep_pipeline.yml OR infra_provision_terraform_pipeline.yml).
 
-**Step 10.** *Run PR pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for build validation
+**Step 11.** *Run Register Dataset pipeline* - Execute the register data Azure Pipeline created above to upload the base datasets needed to test the pr and ci pipelines end-to-end.
 
-**Step 11.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
+**Step 12.** *Run PR pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for build validation
+
+**Step 13.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
