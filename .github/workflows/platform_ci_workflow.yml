@@ -55,15 +55,6 @@ jobs:
           echo $run_name
           echo "RUN_NAME=${run_name}"  >> "$GITHUB_ENV"
 
-          python -m mlops.common.get_run_metadata \
-            --run_id $run_name \
-            --output_file_name metadata.txt
-          
-          readarray arr <"metadata.txt"
-          metadata=${arr[0]}
-          echo $metadata
-          echo "RUN_METADATA=${metadata}"  >> "$GITHUB_ENV"
-
   deploy-online:
     name: Deploy_Online
     runs-on: ubuntu-latest
