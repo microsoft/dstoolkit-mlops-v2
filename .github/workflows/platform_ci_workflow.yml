@@ -31,11 +31,6 @@ jobs:
     steps:
       - name: Checkout Actions
         uses: actions/checkout@v1
-      - name: Export Secrets 
-        uses: oNaiPs/secrets-to-env-action@v1
-        with:
-          secrets: ${{ toJSON(secrets) }}
-          convert: upper
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
       - name: Execute MLOps Standard Pipeline
@@ -60,6 +55,15 @@ jobs:
           echo $run_name
           echo "RUN_NAME=${run_name}"  >> "$GITHUB_ENV"
 
+          python -m mlops.common.get_run_metadata \
+            --run_id $run_name \
+            --output_file_name metadata.txt
+          
+          readarray arr <"metadata.txt"
+          metadata=${arr[0]}
+          echo $metadata
+          echo "RUN_METADATA=${metadata}"  >> "$GITHUB_ENV"
+
   deploy-online:
     name: Deploy_Online
     runs-on: ubuntu-latest
@@ -72,10 +76,6 @@ jobs:
     steps:
       - name: Checkout Actions
         uses: actions/checkout@v1
-        with:
-          azure_credentials: ${{ secrets.azure_credentials }}
-          env_name: ${{ inputs.exec_environment }}
-          model_type: ${{ inputs.model_type }}
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
       - name: Provision azureml online endpoint
@@ -104,6 +104,7 @@ jobs:
                 python -m mlops.common.deployment.run_test_model_on_aml \
                     --environment_name ${{ inputs.exec_environment }} \
                     --model_type ${{ inputs.model_type }}
+
   deploy-batch:
     name: Deploy_Batch
     runs-on: ubuntu-latest
@@ -116,10 +117,6 @@ jobs:
     steps:
       - name: Checkout Actions
         uses: actions/checkout@v1
-        with:
-            azure_credentials: ${{ secrets.azure_credentials }}
-            env_name: ${{ inputs.exec_environment }}
-            model_type: ${{ inputs.model_type }}
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
       - name: Provision azureml online endpoint
@@ -149,6 +146,30 @@ jobs:
                   --environment_name ${{ inputs.exec_environment }} \
                   --model_type ${{ inputs.model_type }}
 
+  approve_model:
+    name: Approve Model
+    runs-on: ubuntu-latest
+    needs: [execute-training-job]
+    environment:
+        name: dev
+    env:
+        SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
+        RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
+        WORKSPACE_NAME: ${{ secrets.workspace_name }}
+        BUILD_BUILDID: ${{ github.run_id }}
+    steps:
+        - name: Checkout Actions
+          uses: actions/checkout@v1
+        - name: Configure Azure ML Agent
+          uses: ./.github/actions/configure_azureml_agent
+        - name: run_metadata_from_submit_job
+          shell: bash
+          run: |
+            readarray arr <"run_id.txt"
+            run_name=${arr[0]}
+            echo $run_name
+            echo "RUN_NAME=${run_name}"  >> "$GITHUB_ENV"
+
   change_model_tag:
     name: Apply Production Tag
     runs-on: ubuntu-latest
@@ -161,10 +182,6 @@ jobs:
     steps:
         - name: Checkout Actions
           uses: actions/checkout@v1
-          with:
-            azure_credentials: ${{ secrets.azure_credentials }}
-            env_name: ${{ inputs.exec_environment }}
-            model_type: ${{ inputs.model_type }}
         - name: Configure Azure ML Agent
           uses: ./.github/actions/configure_azureml_agent
         - name: Provision azureml online endpoint
