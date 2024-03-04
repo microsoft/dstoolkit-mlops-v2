@@ -11,10 +11,6 @@ on:
         type: string
         description: "type of model to execute"
         required: true
-      is_batch_deployment:
-        type: string 
-        description: "the flag for batch deployment"
-        required: true
     secrets:
       subscription_id:
         description: "the subscription ID hosting the AML instance."
