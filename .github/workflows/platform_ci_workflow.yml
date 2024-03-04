@@ -80,6 +80,8 @@ jobs:
     name: Deploy_Online
     runs-on: ubuntu-latest
     needs: [execute-training-job]
+    environment:
+        name: dev
     env:
       SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
       RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
@@ -121,6 +123,8 @@ jobs:
     name: Deploy_Batch
     runs-on: ubuntu-latest
     needs: [execute-training-job]
+    environment:
+        name: dev
     env:
         SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
         RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
@@ -158,10 +162,33 @@ jobs:
                   --environment_name ${{ inputs.exec_environment }} \
                   --model_type ${{ inputs.model_type }}
 
+  approve_model:
+    name: Approve Model
+    runs-on: ubuntu-latest
+    needs: [execute-training-job]
+    environment:
+        name: dev
+    env:
+        SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
+        RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
+        WORKSPACE_NAME: ${{ secrets.workspace_name }}
+        BUILD_BUILDID: ${{ github.run_id }}
+        RUN_METADATA: ${{ github.metadata }}
+    steps:
+      - name: Checkout Actions
+        uses: actions/checkout@v1
+      - name: Configure Azure ML Agent
+        uses: ./.github/actions/configure_azureml_agent
+      - name: Run Metadata from Submit Job
+        run: |
+          echo "Value from Submit Job: $RUN_METADATA"
+
   change_model_tag:
     name: Apply Production Tag
     runs-on: ubuntu-latest
     needs: [execute-training-job]
+    environment:
+        name: dev
     env:
       SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
       RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
