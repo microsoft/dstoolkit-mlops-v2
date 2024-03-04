@@ -50,7 +50,7 @@ stages:
         timeoutInMinutes: 0
         dependsOn: Execute_ml_Job_Pipeline
         variables: 
-          # We are saving the name of azureMl job submitted in previous step to a variable and it will be used as an inut to the AzureML Job Wait task
+          # We are saving the name of Azure ML job submitted in previous step to a variable and it will be used as an input to the AzureML Job Wait task
           azureml_job_name_from_submit_job: $[ dependencies.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ] 
         steps:
         - task: AzureMLJobWaitTask@1
