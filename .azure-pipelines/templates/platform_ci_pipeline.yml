@@ -105,7 +105,6 @@ stages:
       - name: run_id_from_submit_job
         value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ]
       displayName: 'Deploy as Batch Endpoint'
-      condition: variables['IS_BATCH_DEPLOYMENT']
       jobs:
       - job: Execute_Deployment_Job
         steps:
