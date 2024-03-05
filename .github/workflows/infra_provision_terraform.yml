@@ -1,0 +1,143 @@
+name: ModelFactory-Terraform-Deployment
+on: [workflow_dispatch]
+
+env:
+  APPINSIGHTS_NAME: ${{ vars.APPINSIGHTS_NAME }}
+  AZURE_RM_SVC_CONNECTION: ${{ vars.AZURE_RM_SVC_CONNECTION }}
+  CONTAINER_REGISTRY_NAME: ${{ vars.CONTAINER_REGISTRY_NAME }}
+  KEYVAULT_NAME: ${{ vars.KEYVAULT_NAME }}
+  LOCATION: ${{ vars.LOCATION }}
+  RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
+  STORAGE_ACCT_NAME: ${{ vars.STORAGE_ACCT_NAME }}
+  TFSTATE_RESOURCE_GROUP_NAME: ${{ vars.TFSTATE_RESOURCE_GROUP_NAME }}
+  TFSTATE_STORAGE_ACCT_NAME: ${{ vars.TFSTATE_STORAGE_ACCT_NAME }}
+  WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
+  ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+  SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
+
+jobs:
+  run-infra-provision:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: See the contents of parameters passed in
+        run: |
+          echo 'See the contents of parameters passed in'
+          echo '${{ env.APPINSIGHTS_NAME }}'
+          echo '${{ env.AZURE_RM_SVC_CONNECTION }}'
+          echo '${{ env.CONTAINER_REGISTRY_NAME }}'
+          echo '${{ env.KEYVAULT_NAME }}'
+          echo '${{ env.LOCATION }}' 
+          echo '${{ env.RESOURCE_GROUP_NAME }}' 
+          echo '${{ env.STORAGE_ACCT_NAME }}'
+          echo '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}'          
+          echo '${{ env.TFSTATE_STORAGE_ACCT_NAME }}'
+          echo '${{ env.WORKSPACE_NAME }}'
+          echo '${{ github.workspace }}'
+          echo '${{ env.SUBSCRIPTION_ID }}'
+
+      - uses: cschleiden/replace-tokens@v1
+        with:
+          tokenPrefix: '#{'
+          tokenSuffix: '}#'
+          files: '["**/*.tfvars"]'
+        env:
+          APPINSIGHTS_NAME: '${{ env.APPINSIGHTS_NAME }}'
+          CONTAINER_REGISTRY_NAME: '${{ env.CONTAINER_REGISTRY_NAME }}'
+          KEYVAULT_NAME: '${{ env.KEYVAULT_NAME }}'
+          RESOURCE_GROUP_NAME: '${{ env.RESOURCE_GROUP_NAME }}'
+          STORAGE_ACCT_NAME: '${{ env.STORAGE_ACCT_NAME }}'
+          TFSTATE_RESOURCE_GROUP_NAME: '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}'
+          TFSTATE_STORAGE_ACCT_NAME: '${{ env.TFSTATE_STORAGE_ACCT_NAME }}'
+          WORKSPACE_NAME: '${{ env.WORKSPACE_NAME }}'
+          
+      - name: Add tfstate resource group
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - run: |
+          az --version
+          az group create --location '${{ env.LOCATION }}' --name '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}'
+
+      - name: Add tfstate account
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - run: |
+          az --version
+          az storage account create --name '${{ env.TFSTATE_STORAGE_ACCT_NAME }}' --resource-group '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}' --sku Standard_LRS
+
+      - name: Add terraform container
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - run: |
+          az --version
+          az storage container create --name terraform --account-name '${{ env.TFSTATE_STORAGE_ACCT_NAME }}'
+
+      - name: Terraform Install
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: latest
+      
+      - name: List current directory contents
+        run: ls ${{ github.workspace }}
+
+      - name: Azure Login
+        if: true
+        run: |
+          echo '${{ env.ARM_CLIENT_ID }}'
+          echo '${{ env.ARM_CLIENT_SECRET }}'
+          echo '${{ env.ARM_TENANT_ID }}'
+          echo '${{ env.SUBSCRIPTION_ID }}'
+          az login --service-principal -u ${{ env.ARM_CLIENT_ID }} -p ${{ env.ARM_CLIENT_SECRET }} -t ${{ env.ARM_TENANT_ID }}
+          az account set --subscription "${{ env.SUBSCRIPTION_ID }}" 
+        working-directory: ${{ github.workspace }}/infra/terraform/public_workspace          
+         
+      - name: Terraform Init
+        env:
+          ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
+          ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}          
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        if: true
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=${{ env.TFSTATE_RESOURCE_GROUP_NAME }}" \
+            -backend-config="storage_account_name=${{ env.TFSTATE_STORAGE_ACCT_NAME }}" \
+            -backend-config="container_name=terraform" \
+            -backend-config="key=mlops.tfstate"
+        working-directory: ${{ github.workspace }}/infra/terraform/public_workspace
+
+      - name: Terraform Validate
+        env:
+          ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
+          ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}          
+          ARM_CLIENT_SECRET: ${{ vars.ARM_CLIENT_SECRET }}
+        if: true
+        run: terraform validate
+        working-directory: ${{ github.workspace }}/infra/terraform/public_workspace
+
+      - name: Terraform Plan
+        env:
+          ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
+          ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}          
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        if: true
+        run: terraform plan -out=tfplan
+        working-directory: ${{ github.workspace }}/infra/terraform/public_workspace
+
+      - name: Terraform Apply
+        env:
+          ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
+          ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}          
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        if: true
+        run: terraform apply -auto-approve -input=false tfplan
+        working-directory: ${{ github.workspace }}/infra/terraform/public_workspace

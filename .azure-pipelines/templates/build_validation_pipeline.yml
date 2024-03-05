@@ -5,6 +5,7 @@ jobs:
     displayName: 'Use Python 3.9'
     inputs:
       versionSpec: '3.9'
+      disableDownloadFromRegistry: true
 
   - script: |
       python -m pip install --upgrade pip
