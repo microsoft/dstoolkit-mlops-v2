@@ -38,7 +38,7 @@ def main(clean_data, transformed_data):
             df_list.append(input_df)
 
     # Transform the data
-    combined_df = df_list[1]
+    combined_df = df_list[0]
     final_df = transform_data(combined_df)
 
     # Output data
