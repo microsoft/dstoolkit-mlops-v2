@@ -9,12 +9,12 @@ This solution supports Azure Machine Learning (ML) as a platform for ML, and Azu
 # Assumptions: 
 - The user of this guide understands basic operations on github.com, visual studio code, or an ide of their choice. Use the following guide to familiarize yourself with github [Getting started with your GitHub account](https://docs.github.com/en/get-started/onboarding/getting-started-with-your-github-account). Use the following guide to familiarize yourself with visual studio code [Visual Studio Code documentation](https://code.visualstudio.com/docs)
 - An Azure Subscription. If you don't have an Azure subscription, create a free account before you begin.
-- Create an app registration to create the infrastructure, and operate the pipelines.  Grant the service principal, at least Contributor, and User Access Administrator on the target subscription in Azure.
+- You have created an app registration to create the infrastructure, and operate the pipelines.  Grant the service principal, at least Contributor, and User Access Administrator on the target subscription in Azure.
 **Use this document as a reference to create an app registration: [Create a Microsoft Entra application and service principal that can access resources](https://learn.microsoft.com/en-us/entra/identity-platform/howto-create-service-principal-portal)
 
 To get started with Model Factory, complete the steps below. 
 
-# Setup your source control environment. See how_to_setup.md
+# Setup your source control environment.
 **Step 1.** Clone the repository, create a *development* branch, and make it the default branch so that all PRs merge to it. This guide assumes that the team works with a *development* branch as the primary source for coding and improving model quality. Later, you can implement an Azure Pipeline to move code from the *development* branch to qa/main or that executes a release process with each check-in. However, release management is not in scope of this guide. 
 
 # Azure DevOps Setup:
