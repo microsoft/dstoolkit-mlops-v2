@@ -2,16 +2,15 @@ name: Nyc Taxi CI Workflow
 on:
   push:
     branches:
-      - ci_fix_v2
-      # - development
-    # paths:
-    #   - .github/*
-    #   - mlops/common/*
-    #   - mlops/*
-    #   - mlops/nyc_taxi/*
-    #   - model/nyc_taxi/*
-    #   - src/nyc_src/*
-    #   - test/nyc_taxi/*
+      - development
+    paths:
+      - .github/*
+      - mlops/common/*
+      - mlops/*
+      - mlops/nyc_taxi/*
+      - model/nyc_taxi/*
+      - src/nyc_src/*
+      - test/nyc_taxi/*
   workflow_call:
     inputs:
       exec_environment:
