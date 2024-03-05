@@ -11,6 +11,7 @@ import argparse
 from pathlib import Path
 import os
 import pandas as pd
+import logging
 
 
 def main(clean_data, transformed_data):
@@ -25,20 +26,22 @@ def main(clean_data, transformed_data):
         f"Clean data path: {clean_data}",
         f"Transformed data output path: {transformed_data}",
     ]
+
+    logging.info("In Transform  main")
     for line in lines:
-        print(line)
-    print("mounted_path files: ")
+        logging.info(line)
+    logging.info("mounted_path files: ")
     arr = os.listdir(clean_data)
-    print(arr)
+    logging.info(arr)
     df_list = []
     for filename in arr:
-        print("reading file: %s ..." % filename)
+        logging.info("reading file: %s ..." % filename)
         with open(os.path.join(clean_data, filename), "r"):
             input_df = pd.read_csv((Path(clean_data) / filename))
             df_list.append(input_df)
 
     # Transform the data
-    combined_df = df_list[0]
+    combined_df = df_list[1]
     final_df = transform_data(combined_df)
 
     # Output data
