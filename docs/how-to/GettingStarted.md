@@ -1,89 +1,92 @@
-# Getting Started
+# Getting started with Model Factory
 
-## Clone it & Create Connection to AML
+This solution supports Azure Machine Learning (ML) as a platform for ML, and Azure DevOps or github as a platform for operationalization. MLOps with Model Factory provides automation of the following:
 
-1. Clone the repo on your local machine
+* Infrastructure provisioning using either Azure Pipelines or github workflows.
+* A PR build triggered upon changes to one or more models.
+* A CI build and deployment of one or more models to batch and online endpoints.
 
-2. To be able to use the scripts on your local machine, add the azure ml workspace credentials in a **config.json** file in the root directory and, if it is not present already, **very important (!)** add it to the gitignore file.\
-   ![aml-config](./../media/azureml_config.png)
+# Assumptions: 
+- The user of this guide understands basic operations on github.com, visual studio code, or an ide of their choice. Use the following guide to familiarize yourself with github [Getting started with your GitHub account](https://docs.github.com/en/get-started/onboarding/getting-started-with-your-github-account). Use the following guide to familiarize yourself with visual studio code [Visual Studio Code documentation](https://code.visualstudio.com/docs)
+- An Azure Subscription. If you don't have an Azure subscription, create a free account before you begin.
+- You have created an app registration to create the infrastructure, and operate the pipelines.  Grant the service principal, at least Contributor, and User Access Administrator on the target subscription in Azure.
+**Use this document as a reference to create an app registration: [Create a Microsoft Entra application and service principal that can access resources](https://learn.microsoft.com/en-us/entra/identity-platform/howto-create-service-principal-portal)
 
-## Setup The Infrastructure
+To get started with Model Factory, complete the steps below. 
 
-1. Navigate to [Azure DevOps](http://dev.azure.com/) and create a new organization and project. You can also re-use an existing organization and/or project.
+# Setup your source control environment.
+**Step 1.** Clone the repository, create a *development* branch, and make it the default branch so that all PRs merge to it. This guide assumes that the team works with a *development* branch as the primary source for coding and improving model quality. Later, you can implement an Azure Pipeline to move code from the *development* branch to qa/main or that executes a release process with each check-in. However, release management is not in scope of this guide. 
 
-2. Create a new [service connection](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) in Azure DevOps using **Azure Resource Manager**. 
-   - For "Service connection" use the variable *SERVICECONNECTION_RG*
-   - For the "Subscription", select the one where you want to deploy your infrastructure
-   - Resource Group **leave empty**.
-   ![SetupConnection](../media/create_service_connection.png) ![AddConnection](../media/new_connection.png)
-   
-   Azure DevOps will authenticate using this connection to make deployments to your Azure Subscription. For more information about security and parameters, click on the prior link.
+# Azure DevOps Setup:
+**Step 1.** Delete the .github directory.
 
-> ⚠️ Some infastructure component names (resource groups, etc) have to be unique in your Azure org. Before running the pipelines, make sure that the names given to the components in [configuration for DEV](../../configuration/configuration-infra-DEV.variables.yml) and [configuration for PROD](../../configuration/configuration-infra-PRD.variables.yml) are unique your Azure org, or simply go ahead and update the files with your own prefered names. If the infastructure pipeline fails, it might be due to the fact that the names are already taken.
+**Step 2.** Create an Azure DevOps organization and project. Follow the instructions here: [Create a project in Azure DevOps](https://learn.microsoft.com/en-us/azure/devops/organizations/projects/create-project?view=azure-devops&tabs=browser) 
 
-## Run the pipeline
+**Step 3.** Create a new variable group named **"mlops_platform_dev_vg"**, add the variables and their values listed below: 
+Information about variable groups in Azure DevOps can be found in [Add & use variable groups](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops&tabs=classic).
+**Note To provision test or production infrastructure create a new variable group, add the required variables, and modify the reference to the variable group in either infra_provision_bicep_pipeline.yml or infra_provision_terraform_pipeline.yml files.**
 
-If you want to run the pipeline from your ADO repository, follow the steps bellow. If you want to import them directly from the github repo, have a look at the [contribution guide](../../CONTRIBUTING.md)
+**Mandatory Infrastructure variables for bicep and terraform provisioning.** 
+- "APPINSIGHTS_NAME": Set to a value of your choosing.  Note the value must be unique.
+- "AZURE_RM_SVC_CONNECTION":  Set to the name of the service connection created above. 
+- "CONTAINER_REGISTRY_NAME": Set to a value of your choosing.  Note the value must be unique.
+- "KEYVAULT_NAME": Set to a value of your choosing.  Note the value must be unique.
+- "LOCATION": Set to valid value for the "Name" property for Azure Region.
+- "RESOURCE_GROUP_NAME": Set to a value of your choosing.  Note the value must be unique.
+- "STORAGE_ACCT_NAME": Set to an unique alphanumeric value of your choosing.
+- "SUBSCRIPTION_ID": Set to the subscription id for the subscription hosting the Azure Machine Learning workspace.    
+- "WORKSPACE_NAME": Set to a value of your choosing.  Note the value must be unique.
 
-1. Add the pipeline in ADO and run it. For that go to _pipelines_ and click on _new pipeline_ at the top right. You should see the following screen ![IaCpipeline](../media/build-connect.png)
+**Terraform only variables** 
+- "TFSTATE_RESOURCE_GROUP_NAME": Set to an unique value of your choosing.
+- "TFSTATE_STORAGE_ACCT_NAME": Set to an unique alphanumeric value of your choosing.
 
-Select: **Azure Repos Git**, the name repo where you clone this repo, **Existing Azure Pipelines YAML file** option and set the path to _dstoolkit-mlops-base/infra/PIPELINE-0-setup.yml_ and click on _continue_ ![SelectIaCPipe](../media/select-iac-pipeline.png) In the _review_ section, click on _run_.
+**Model Deployment Variables**
+- "IS_BATCH_DEPLOYMENT" - Set to True to deploy models to a batch endpoint.
+- "IS_ONLINE_DEPLOYMENT" - Set to True to deploy models to an online Endpoint.
 
-2. If everything worked well, you should see your new resource groups in the Azure portal with the AML resources.
+**Step 4.** Create Azure Pipelines to deploy the infrastructure, and operate model builds and continuous integration.
+Details about how to create a basic Azure Pipeline can be found in [Create your first pipeline](https://learn.microsoft.com/en-us/azure/devops/pipelines/create-first-pipeline?view=azure-devops&tabs).
 
-## Set Service Connection for Azure ML Workspace
+**Step 5.** Using the instructions above, if needed, create an azure pipeline to deploy the infrastructure using either the bicep (*.azure-pipelines/infra/bicep/infra_provision_bicep_pipeline.yml*) or terraform (*.azure-pipelines/infra/terraform/infra_provision_terraform_pipeline.yml*) yaml files. 
 
-Now that you have your infrastructure, you only need to setup two extra service connections so that the devops pipeline can connect to AML DEV and AML PROD.
+**Step 6.** Using the instructions above, if needed, create one or more Azure Pipelines to setup build validation for either or both of the use cases listed below:
+- nyc_taxi
+- london_taxi
 
-For the infrastructure, create a new service connection with Azure Resource manager, but this time select "Machine Learning Workspace" as Scope level.
+**Step 7.** Using the instructions above, if needed, create one or more Azure Pipelines to setup continuous integration for either or both of the use cases listed below:
+- nyc_taxi
+- london_taxi
 
-![AddConnectionAML](../../docs/media/create_service_connection_aml.png)
+# GitHub Workflows Setup:
+**Step 1.** Delete the .azurepipelines directory
 
-## (Optional) Set your own variable names
+**Step 2.** Add the following variables in Settings > Secrets and Variables > Variables:
+  - APPINSIGHTS_NAME: A string compliant with the naming convention for an azure application insights resource.
+  - ARM_CLIENT_ID: The application id corresponding to the service principal backing the service connection created above.
+  - ARM_TENANT_ID: The tenant id corresponding to the service principal backing the service connection created above.
+  - AZURE_RM_SVC_CONNECTION: The service connection name.
+  - CONTAINER_REGISTRY_NAME: A string compliant with the naming convention for an azure container registry resource.
+  - IS_BATCH_DEPLOYMENT: A boolean indicating whether to create a batch deployment when executing a given model's ci pipeline.
+  - IS_ONLINE_DEPLOYMENT: A boolean indicating whether to create on online deployment when executing a given model's ci pipeline.
+  - KEYVAULT_NAME: A string compliant with the naming convention for an azure key vault resource.
+  - LOCATION: A string compliant with the naming convention for an azure region short name.
+  - RESOURCE_GROUP_NAME: A string compliant with the naming convention for an azure resource group resource.
+  - STORAGE_ACCT_NAME: A string compliant with the naming convention for an azure storage account resource.
+  - SUBSCRIPTION_ID: A guid for the azure subscription hosting the azure machine learning workspace. 
+  - TFSTATE_RESOURCE_GROUP_NAME: A string compliant with the naming convention for an azure resource group resource. The tfstate resource group hosts a storage account for storing the tfstate file produced when using terraform infrastructure provisioning.
+  - TFSTATE_STORAGE_ACCT_NAME: A string compliant with the naming convention for an azure storage account resource. The tfstate storage account for storing the tfstate file produced when using terraform infrastructure provisioning.
+  - WORKSPACE_NAME: A string compliant with the naming convention for an azure machine learning workspace resource. 
 
-You might want to use your own variables when setting up the infrastructure, service connection, and AML components (dataset name, model name, etc). To run the pipeline with the correct variable name, you need to update the following configuration files:
+**Step 3.** Add the following secrets in Settings > Secrets and Variables > Secrets:
+- ARM_CLIENT_SECRET: The is the client secret for the service principal backing the service connection created above.
+- AZURE_CREDENTIALS: This secret is in the form below:
 
-- **infra-related variables**: contains the definition of infra-related variables in DEV. By default, the template provides 2 environments: **[DEV](../../configuration/configuration-infra-DEV.variables.yml)** (configuration-infra-DEV.variables.yml) and **[PRD](../../configuration/configuration-infra-PRD.variables.yml)** (configuration-infra-PRD.variables.yml)
-
-```
-ENVIRONMENT: Name of environment. We use uppercase DEV, TEST, PRD to refer to environments
-RESOURCE_GROUP: Name of the resourceGroup to create in this environment
-LOCATION: Location for the resourceGroup in this environment
-NAMESPACE: Namespace in this environment (use to identify and refer to the name of resources used in this environment).
-AMLWORKSPACE: Name of the azure machine learning workspace in this environment. Default name is aml$(NAMESPACE)
-STORAGEACCOUNT: Name of the storage account. Default name is sa$(NAMESPACE)
-KEYVAULT: Name of the key vault. Default name is kv$(NAMESPACE)
-APPINSIGHTS: Name of the app insight. Default name is ai$(NAMESPACE)
-CONTAINERREGISTRY: Name of the container registry. Default name is cr$(NAMESPACE)
-SERVICECONNECTION_RG: Name of the Service Connection in Azure DevOps in subscription scope level
-SERVICECONNECTION_WS: Name of the Service Connection in Azure DevOps in machine learning workspace scope level for this environment
-```
-
-- **[AML-related variables](../../configuration/configuration-aml.variables.yml)**: contains the definition of AML-related environment variables
-
-```
-PYTHON_VERSION: the version of python. Default value is 3.8
-SDK_VERSION: the version of Azure ML SDK. Default value is 1.53
-VM_VERSION: the version for the agent in Azure DevOps. Default value is ubuntu-20.04
-
-AML_DATASET: training dataset name.
-AML_MODEL_NAME: model name used in model registry
-
-# Training
-TRAINING_EXPERIMENT: training experiment name
-TRAINING_PIPELINE: training pipeline name
-TRAINING_COMPUTE: training computes name
-
-# Batch inference
-BATCHINFERENCE_EXPERIMENT: batch inference experiment name
-BATCHINFERENCE_PIPELINE: batch inference pipeline name
-BATCHINFERENCE_COMPUTE: batch inference compute name. Default name is $(TRAINING_COMPUTE)
-
-# Real-time inference
-AKS_COMPUTE: inference target name
-AML_WEBSERVICE: webservice name
-```
-
-## Further Reading
-
-If you want to have setup a branching strategy, you can read [branchingstrat](./BranchingStrategy.md) and if you want to investigate further the infrastructure have a look at [infradesign](./InfrastructureDesign.md)
+    ```
+    {
+    "clientId": "<GUID>",
+    "clientSecret": "<PrincipalSecret>",
+    "subscriptionId": "<GUID>",
+    "tenantId": "<GUID>"
+    }
+    ```
