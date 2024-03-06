@@ -1,6 +1,6 @@
 $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
 name: prepare_diabetes_data
-display_name: PrepDiabetesData
+display_name: PrepDiabetes
 version: 1
 type: command
 inputs:
@@ -10,7 +10,9 @@ outputs:
   prep_data:
     type: uri_folder
 code: ./../../../
-environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu@latest
+environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
+environment_variables:
+  ritesh: modi
 command: >-
   python -m src.diabetes.prep.prep 
   --raw_data ${{inputs.raw_data}} 

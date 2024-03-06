@@ -31,9 +31,9 @@ gl_pipeline_components = []
 
 
 @pipeline()
-def diabetes_data_classification(pipeline_job_input, model_name, build_reference):
+def diabetes_data_regression(pipeline_job_input, model_name, build_reference):
     """
-    Run a pipeline for regression analysis on Diabetes data.
+    Run a pipeline for regression analysis on NYC taxi data.
 
     Parameters:
     pipeline_job_input (str): Path to the input data.
@@ -88,7 +88,7 @@ def construct_pipeline(
     ml_client,
 ):
     """
-    Construct a pipeline job for Diabetes taxi data regression.
+    Construct a pipeline job for NYC taxi data regression.
 
     Args:
         cluster_name (str): The name of the cluster to use for pipeline execution.
@@ -129,7 +129,7 @@ def construct_pipeline(
     gl_pipeline_components.append(score_data)
     gl_pipeline_components.append(register_model)
 
-    pipeline_job = diabetes_data_classification(
+    pipeline_job = diabetes_data_regression(
         Input(type="uri_folder", path=registered_data_asset.id),
         model_name,
         build_reference,
