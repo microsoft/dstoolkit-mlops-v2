@@ -6,40 +6,85 @@ Welcome to the process of onboarding a new AI model to your Model Factory! The c
 
 Before you begin the onboarding process, ensure you have the following prerequisites in place:
 
-**Model Factory Environment:** Your Model Factory environment should be set up and operational. This includes having the necessary infrastructure, libraries, and dependencies ready. Refer to setup document for setting up the model factory in the environment
+- **Model Factory Environment:** Your Model Factory environment should be set up and operational. This includes having the necessary infrastructure, libraries, and dependencies ready. Refer to setup document for setting up the model factory in your environment
 
-**New Model:** You should have the ML model you want to onboard. This is the custom model that you've developed.
+- **New Model:** You should have the ML model you want to onboard. This is the custom model that you've developed.
 
 ## Steps to Onboard a New ML Model
 
 Follow these steps to onboard a new ML model to your Model Factory:
 
-## config folder
-The model_config.json file in config folder contains a section for each environment and model in the repository. The "ML_MODEL_CONFIG_NAME" element is used internally to semantically refer to the model through-out. The "ENV_NAME" element refers to the environment for the ML Model. e.g. pr, dev, test and prod.
+## Set model execution properties in config.yaml file
+The /config/config.yaml file contains a node for the following:
 
-You can start by copying an existing model section and modify it with relevant values. Provide valid values for all the configuration elements for your model.  Please make sure your CONDA_PATH and ENV_BASE_IMAGE_NAME has the dependencies for your new usecase. 
-Example : 
-{
-            "ML_MODEL_CONFIG_NAME": "nyc_taxi",
-            "ENV_NAME": "pr",
-            "CLUSTER_REGION": "eastus",
-            "CLUSTER_SIZE": "STANDARD_DS3_v2",
-            "CONDA_PATH": "mlops/nyc_taxi/environment/conda.yml",
-            "DISPLAY_BASE_NAME": "mlops",
-            "ENV_BASE_IMAGE_NAME": "mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04",
-            "ENVIRONMENT_NAME": "sklearn-python3",
-            "EXPERIMENT_BASE_NAME": "nyctaxi",
-            "MODEL_BASE_NAME": "cls",
-            "REALTIME_DEPLOYMENT_CONFIG": "mlops/nyc_taxi/configs/deployment/realtime_config.json",
-            "BATCH_DEPLOYMENT_CONFIG": "mlops/nyc_taxi/configs/deployment/batch_config.json",
-            "DATA_CONFIG_PATH": "mlops/nyc_taxi/configs/data_config.json"          
-        },
-## src folder
-The src folder contains one top level folder for each model. The name of the folder should match the value of the "ML_MODEL_CONFIG_NAME" element in model_config.json file. You can start by copying one of an existing model folder in this folder and modify the files within the new folder. Rename the new model folder with "ML_MODEL_CONFIG_NAME" element value in model_config.json file. The python code related to AzureML pipeline for the new model should be stored in this folder. 
+**Note: Unless you have modified variable names in either variable groups or github variables, leave all $(variables) unchanged.** 
 
-The sample usecase has steps for prep, transform, train, predict, score and register the model.  You can use the same steps or add or remove some steps based on your usecase. 
+  - aml_config: Stores the configuration of azure resources hosting the Azure Machine Learning workspace.
+  - environment_config: Stores the base image and dynamic properties set at runtime.
+  - pipeline_configs: Stores the configuration for pr and dev pipelines for each model supported by the solution.
+  - deploy_configs: Stores online and batch configuration for deployments for each model.
 
-Common Steps : 
+### aml_config
+Set the properties for this component in Azure Pipelines variable group of your Azure DevOps project or within Variables in your github repository: 
+- subscription_id: The subscription id in Azure hosting the Azure Machine Learning workspace.
+- resource_group_name: The name of the resource group hosting the Azure Machine Learning workspace. 
+- workspace_name: The name of the Azure Machine Learning workspace in which the models will be trained and served.
+
+### environment config
+Set the properties for the environment when executing build validation or continuous integration pipelines.
+- env_base_image: Base image to be used for training and model execution
+
+### pipeline configs:
+Start by copying an existing pipeline config and accepting the defaults or modifying the properties with values relevant for each model and environment:
+- cluster_region: Azure region in which the AML compute cluster should be hosted.
+- cluster_size: Set to an Azure VM Size according to the naming convention here: [Azure VM Sizes](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes).
+- cluster_name: A string representing the name of the compute cluster.
+- conda_path: The path within the solution to the conda file used to establish the dependencies needed by a given model.
+- aml_env_name: A string denoting the name of a given environment for a given model.
+- dataset_name: The name of the dataset used when training the model.
+
+### deployment configs:
+Start by copying an existing deployment config and accepting the defaults or modifying the properties with values relevant for each model and serving method to be added (Follow the naming 
+convention {_model name_}_{execution context "batch" or "online"}_{environment}"):
+#### Batch cluster deployment configs:
+- score_file_name: Name of the scoring file for the given model.
+- score_dir: Directory within which the scoring file is stored.
+- batch_cluster_name: The name of the compute cluster.
+- batch_cluster_region: The name of the compute cluster.
+- batch_cluster_size: Set to an Azure VM Size according to the naming convention here: [Azure VM Sizes](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes).
+- deployment_conda_path: Path to the conda file to be used when serving the given model.
+- endpoint_name: The name of the endpoint on which to serve the model. This has to be unique within region.
+- endpoint_desc: A description of the endpoint serving the model.
+- deployment_name:  A name for the deployment serving the model.
+- cluster_instance_count: number of nodes in the cluster serving the model.
+- max_concurrency_per_instance: Max concurrency setting for the cluster instances serving the model.
+- mini_batch_size: An integer representing the batch size when serving the model.
+- output_file_name: Name of the file in which the model output will be stored.
+- max_retries: Number of retries in the event of failure while executing the model.
+- deployment_base_image: Reference to the base image used in serving the model.
+- deployment_desc: A description for the deployment serving the model.
+- test_dataset_name: The name of a dataset to use when testing deployments of the model.
+
+#### Online cluster deployment configs:
+- score_file_name: Name of the scoring file for the given model.
+- test_file_path: Path to a json file containing a sample request to the online endpoint serving the model.
+- endpoint_name: The name of the endpoint on which to serve the model. This has to be unique within region.
+- endpoint_desc: A description of the endpoint serving the model.
+- deployment_desc: A description for the deployment serving the model.
+- deployment_name:  A name for the deployment serving the model.
+- deployment_traffic_allocation: A number setting the traffic attribute for an online endpoint.
+- deployment_vm_size: Set to an Azure VM Size according to the naming convention here: [Azure VM Sizes](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes).
+- deployment_base_image: Reference to the base image used in serving the model.  
+- deployment_conda_path: Path to the conda file to be used when serving the given model.
+- score_dir: Directory within which the scoring file is stored.
+- deployment_instance_count: number of nodes in the cluster serving the model.  
+
+## Extend the src folder
+The src folder contains one top level folder for each model. The name of the folder corresponds to the pipeline config and deployment config nodes in the /config/config.yaml file. For instance, the pipeline config node in the config.yaml file contains a node for "london_taxi_pr". Accordingly, there is a folder in /src called "london_taxi" that corresponds to the model name.  You can start by copying one of the existing model folders and pasting it in this folder.  Once copied, rename it to the model name of the new model, and modify the folders and files within the new folder according the steps required by the new model. 
+
+Each sample usecase has steps for prep, transform, train, predict, score and register the model.  You can use the same steps or add or remove steps based on your specific usecase. 
+
+Common Steps to include: 
 Data preparation :   Noise Reduction, Missing Value Imputation, Inconsistencies Elimination
 Data Transform :  Data Normalization, Data Formatting, Data Aggregation.
 Training :  Train a machine learning model with the preprocessed data
@@ -47,32 +92,34 @@ Prediction :  Use the trained machine learning model to make predictions
 Scoring : Evaluate the performance of the trained machine learning model on a test dataset
 Register : Save the trained machine learning model in a central repository
 
-## mlops folder
-The mlops folder contains one top level folder for each model. The name of the folder should match the value of the "ML_MODEL_CONFIG_NAME" element in model_config.json file. You can start by copying one of an existing model folder in this folder and modify the files within the new folder. Rename the new model folder with value for "ML_MODEL_CONFIG_NAME" property in model_config.json file. 
+## Extend the mlops folder
+The mlops folder contains one top level folder for each model. The name of the folder corresponds to the pipeline config and deployment config nodes in the /config/config.yaml file. For instance, the pipeline config node in the config.yaml file contains a node for "london_taxi_pr". Accordingly, there is a folder in /mlops called "london_taxi" that corresponds to the model name. You can start by copying one of the existing model folders and pasting it in this folder.  Once copied, rename it to the model name of the new model, and modify the files within the new folder.  
 
-There are multiple sub-folders in this folder. The following modifications should be executed:
-- Remove the batch_test_data folder if batch endpoints are not required for the new model. If the new model is related to batch inferencing, add a relevant dataset to enable testing the batch endpoint.
+There are multiple sub-folders in this folder. The following modifications should be made:
+### mlops/{model}/components folder
+- The components folder contains one yaml file for each step in the AzureML pipeline. Add additional yaml files for additional steps needed by the model generation process or remove any step not required. Modify each of the files for changes in inputs and outputs for the step.  Each of these yaml files refers to python code in src folder in the repo.  Update the inputs , outputs and function name in python command based on the function in the src folder. Remove, update or add files depending on the changes in the scripts in the src folder in the solution root.
 
-  
-- The components folder contains one yaml file for each step in AzureML pipeline. Add additional yaml files for additional steps needed by the model generation process or remove any step not required. Modify each of the files for changes in inputs and outputs for the step.  Each of these yaml files refers to python code in src folder in the repo.  Update the inputs , outsputs and function name in python command based on the function in the src folder. Remove, update or add files depending on the changes in the scrips in the src folder.
-  
-- The configs folder contains the deployment and data configuration for the Model. The data_config.json file contains one element for each type of dataset required. For example, london_taxi model has 3 datasets - "pr_data", "batch_test_data" and "training_data" represented by the "data_purpose" element. Remove batch_test_data if it is not required however, both pr_data and training_data are important for the Model generation. The deployment sub-folder contains two files - batch_config.json and realtime_config.json. These contain deployment related configuration. Modify the values in these configuration files to reflect your Model deployment. Any values set for "BATCH_CLUSTER_NAME" IN batch_config.json, must match the value for "BATCH_CLUSTER_NAME" in the infra_config.json file. Remove batch_config.json file if the new Model does not require batch inferencing.
-- The data folder contains data that would be uploaded as AzureML data assets at runtime.
+### mlops/{model}/data
+- If the new model requires batch inferencing, add a relevant dataset to the "data" folder to enable testing of the batch endpoint. 
+
+### mlops/{model}/environment folder
 - The environment folder contains the conda.yml file needed by the Model related to any python package dependencies. 
-- The src folder contains the mlops_pipeline.py file. This contains the main AzureML pipeline code and should be modified if there is any changes in the components folder with regard to number of yaml files, the inputs and outputs for those yaml files.
 
+### mlops/{model}/src folder
+- The src folder contains the mlops_pipeline.py file. This file contains the main AzureML pipeline code and should be modified if there are any changes in the components folder with regard to number of yaml files, or the inputs and outputs for those yaml files.
+- Modify the model name referenced on line 1 of start_local_pipeline.py to correspond to the new model.
 
+## Extend the model folder
+The model folder contains one top level folder for each model. The name of the folder corresponds to the pipeline config and deployment config nodes in the /config/config.yaml file. For instance, the pipeline config node in the config.yaml file contains a node for "london_taxi_pr". Accordingly, there is a folder in /model called "london_taxi" that corresponds to the model name. You can start by copying one of the existing model folders and pasting it in this folder.  Once copied, rename it to the model name of the new model, and modify the files within the new folder. Depending on the serving model, remove either of the batch or online.
+- Modify the conda.yml file in the batch_environment and/or online_environment folders as needed.
+- Add test data for the new model to the batch_test_data and/or online_test_data folders as needed.
+
+## test folder
+The test folder contains one top level folder for each model. The name of the folder corresponds to the pipeline config and deployment config nodes in the /config/config.yaml file. For instance, the pipeline config node in the config.yaml file contains a node for "london_taxi_pr". Accordingly, there is a folder in /model called "london_taxi" that corresponds to the model name. You can start by copying one of the existing model folders and pasting it in this folder.  Once copied, rename it to the model name of the new model, and modify the files within the new folder. Depending on the serving model, remove either of the batch or online. Add any unit tests for the new ML Model should be stored in new folder.
 
 ## .azure-pipelines folder  
-The .azure-pipelines folder contains one top level folder for each model. The name of the folder should match the value of the "ML_MODEL_CONFIG_NAME" element in model_config.json file. You can start by copying one of an existing folder in this folder and modify the files within the new folder. Rename the new folder and files within with "ML_MODEL_CONFIG_NAME" element value in model_config.json file. 
-
-There are two yaml pipelines in this folder - pr and ci. Both should be modified to reflect using the new ML Model.
-The modification in these files include:
+The .azure-pipelines folder contains a pr and a ci file for each model. There are two yaml pipelines per model in this folder. Add a new pair of files for the new model and make the following changes: 
 - The include paths in trigger and pr section with values related to new ML Model.
 - The default value for model_type parameter in parameters section.
 
-## model folder
-The model folder contains one top level folder for each model. The name of the folder should match the value of the "ML_MODEL_CONFIG_NAME" element in model_config.json file. You can start by copying one of an existing model folder in this folder and modify the files within the new folder. Rename the new model folder with "ML_MODEL_CONFIG_NAME" element value in model_config.json file. Provide a new sample-request.json file with data that can test the Model after deployment on AzureML.
-
-## test folder
-The test folder contains one top level folder for each model. The name of the folder should match the value of the "ML_MODEL_CONFIG_NAME" element in model_config.json file. You can start by copying one of an existing model folder in this folder and modify the files within the new folder. Rename the new model folder with "ML_MODEL_CONFIG_NAME" element value in model_config.json file. The unit tests for the ML Model should be stored in this folder.
+Having completed the steps above, you should now be able to run a test of the pr and ci builds for the new model.  Find/Fix bugs as needed until the pr and ci execute successfully.
