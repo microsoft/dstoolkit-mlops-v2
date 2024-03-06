@@ -149,3 +149,8 @@ The .azure-pipelines folder contains a pr and a ci file for each model. There ar
 ## Test the new model
 
 Having completed the steps above, you should now be able to run a test of the pr and ci builds for the new model.  Find/Fix bugs as needed until the pr and ci execute successfully.
+
+- If using Azure pipelines, run the pipeline, register_data_assets.yml to upload data for the new model.
+- If using github workflows, run the workflow , register_data_assets.yml to upload data for the new model.
+- Upon check-in, the pr model should be triggered automatically.  If it is not triggered automatically, run the pipeline manually.
+- Once the pr pipeline completes, execute the ci pipeline for the new model.
