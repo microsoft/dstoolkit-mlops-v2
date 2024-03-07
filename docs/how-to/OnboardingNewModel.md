@@ -146,6 +146,35 @@ The .azure-pipelines folder contains a pr and a ci file for each model. There ar
 - The include paths in trigger and pr section with values related to new ML Model.
 - The default value for model_type parameter in parameters section.
 
+## /config/data_config.json
+The /config/data_config.json files contains a json snippet for each dataset needed to operation pr builds, training runs, and batch deployments. Add three new json snippets separated by commas for the new model in the form: 
+
+```
+{
+"DATA_PURPOSE": "pr_data",
+"DATA_PATH": "{path to data in /mlops/{model}/data",
+"DATASET_NAME": "any string to denote the name of the dataset",
+"DATASET_DESC": "any sentence describing the dataset"
+}
+```
+```
+{
+"DATA_PURPOSE": "batch_test_data",
+"DATA_PATH": "{path to data in /model/{model}/batch_test_data",
+"DATASET_NAME": "any string to denote the name of the dataset",
+"DATASET_DESC": "any sentence describing the datasett"
+}
+```
+```
+{
+"DATA_PURPOSE": "training_data",
+"DATA_PATH": "{path to data in /mlops/{model}/data",
+"DATASET_NAME": "any string to denote the name of the dataset",
+"DATASET_DESC": "any sentence describing the dataset"
+}
+```
+
+
 ## Test the new model
 
 Having completed the steps above, you should now be able to run a test of the pr and ci builds for the new model.  Find/Fix bugs as needed until the pr and ci execute successfully.
