@@ -70,6 +70,9 @@ Details about how to create a basic Azure Pipeline can be found in [Create your 
 * nyc_taxi
 * london_taxi
 
+**Step 8.** At the Organization Level within Azure Devops, add the Machine Learninig extension. 
+![Azure Machine Learning Extension](../media/machinelearningextension.png)
+
 ## GitHub Workflows Setup
 
 **Step 1.** Delete the .azure-pipelines directory
