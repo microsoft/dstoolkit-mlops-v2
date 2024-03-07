@@ -108,3 +108,4 @@ Details about how to create a basic Azure Pipeline can be found in [Create your 
 "tenantId": "<GUID>"
 }
 ```
+Once you have completed this setup, it is a good idea to test out your setup by running an end-to-end test that includes all the steps detailed in [Testing the Intial Setup](./TestInitialSetup.md)

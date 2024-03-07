@@ -1,4 +1,4 @@
-# How to test the initial setup your Model Factory with 
+# Testing the initial setup 
 
 **Step 1.** In the development branch, supply an explicit value or accept the defaults in the file, config/config.yaml. The pipelines uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi). The config.yaml file is split into the following sections, set the values in each section:
 
@@ -43,4 +43,4 @@
 
 ## Extending the solution
 
-- See [Onboarding a New Model](./OnboardingNewModel.md)
+Once you can confidently build the infrastructure and run a pr and ci build for a model, you are ready to add your own use cases to the Model Factory. See [Onboarding a New Model](./OnboardingNewModel.md)
