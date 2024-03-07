@@ -49,9 +49,9 @@ deployment_configs:
       batch_cluster_region: eastus
       batch_cluster_size: STANDARD_DS3_v2
       deployment_conda_path: model/london_taxi/batch_environment/conda.yml
-      endpoint_name: london-taxi-be-0031
+      endpoint_name: london-taxi-be-003
       endpoint_desc: A batch endpoint serving an MLflow model for online taxi
-      deployment_name: london-taxi-bd-0031
+      deployment_name: london-taxi-bd-003
       cluster_instance_count: 1
       max_concurrency_per_instance: 1
       mini_batch_size: 10
@@ -65,10 +65,10 @@ deployment_configs:
     london_taxi_online_dev:
       score_file_name: score.py
       test_file_path: model/london_taxi/online_test_data/sample-request.json
-      endpoint_name: london-taxi-rte-0031
+      endpoint_name: london-taxi-rte-003
       endpoint_desc: An online endpoint serving an MLflow model for online taxi
       deployment_desc: 
-      deployment_name: london-taxi-rtd-0031
+      deployment_name: london-taxi-rtd-003
       deployment_traffic_allocation: 100
       deployment_vm_size: Standard_F4s_v2
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
@@ -83,9 +83,9 @@ deployment_configs:
       batch_cluster_region: eastus
       batch_cluster_size: STANDARD_DS3_v2
       deployment_conda_path: model/nyc_taxi/batch_environment/conda.yml
-      endpoint_name: nyc-taxi-be-0031
+      endpoint_name: nyc-taxi-be-003
       endpoint_desc: A batch endpoint serving an MLflow model for online taxi
-      deployment_name: nyc-taxi-bd-0031
+      deployment_name: nyc-taxi-bd-003
       cluster_instance_count: 1
       max_concurrency_per_instance: 1
       mini_batch_size: 10
@@ -99,10 +99,10 @@ deployment_configs:
     nyc_taxi_online_dev:
       score_file_name: score.py
       test_file_path: model/nyc_taxi/online_test_data/sample-request.json
-      endpoint_name: nyc-taxi-rte-0031
+      endpoint_name: nyc-taxi-rte-003
       endpoint_desc: An online endpoint serving an MLflow model for online taxi
       deployment_desc: 
-      deployment_name: nyc-taxi-rtd-0031
+      deployment_name: nyc-taxi-rtd-003
       deployment_traffic_allocation: 100
       deployment_vm_size: Standard_F4s_v2
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
