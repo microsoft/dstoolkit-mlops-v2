@@ -106,7 +106,8 @@ def data_prep(data):
     # output_yellow = yellow_data_clean.to_csv(
     #     os.path.join(prep_data, "yellow_prep_data.csv")
     # )
-    # merged_data = combined_df.to_csv(os.path.join(prep_data, "merged_data.csv"))
+    # merged_data =
+    combined_df.to_csv(os.path.join(prep_data, "merged_data.csv"))
 
     print("Finish")
 
