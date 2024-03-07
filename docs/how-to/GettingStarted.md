@@ -10,12 +10,12 @@ This solution supports Azure Machine Learning (ML) as a platform for ML, and Azu
 
 * The user of this guide understands basic operations on Azure DevOps, github.com, visual studio code, or an IDE of their choice. Use the following guide to familiarize yourself with github [Getting started with your GitHub account](https://docs.github.com/en/get-started/onboarding/getting-started-with-your-github-account). Use the following guide to familiarize yourself with visual studio code [Visual Studio Code documentation](https://code.visualstudio.com/docs)
 
-* An Azure Subscription. If you don't have an Azure subscription, create a free account before you begin. [Free Azure Subscription](https://azure.microsoft.com/en-us/free/search/?ef_id=_k_67e7bdd2a501151df8d8d83b02edc75b_k_&OCID=AIDcmm5edswduu_SEM__k_67e7bdd2a501151df8d8d83b02edc75b_k_&msclkid=67e7bdd2a501151df8d8d83b02edc75b)
+* Your team has an Azure Subscription within which to host Model Factory. If you don't have an Azure subscription, create a free account  by following this link. [Free Azure Subscription](https://azure.microsoft.com/en-us/free/search/?ef_id=_k_67e7bdd2a501151df8d8d83b02edc75b_k_&OCID=AIDcmm5edswduu_SEM__k_67e7bdd2a501151df8d8d83b02edc75b_k_&msclkid=67e7bdd2a501151df8d8d83b02edc75b)
 
-* You have created an app registration needed to create the infrastructure, and operate the AML pipelines.  
+* You have created an app registration to be used to operate the infrastructure, and AML build and ci pipelines.  
 
-* You have granted the service principal, at least Contributor, and User Access Administrator on the target subscription in Azure.
-**Use this document as a reference to create an app registration: [Create a Microsoft Entra application and service principal that can access resources](https://learn.microsoft.com/en-us/entra/identity-platform/howto-create-service-principal-portal)
+* You have granted the service principal above, at least Contributor, and User Access Administrator on the target subscription in Azure.
+**Use this document as a reference when creating an app registration: [Create a Microsoft Entra application and service principal that can access resources](https://learn.microsoft.com/en-us/entra/identity-platform/howto-create-service-principal-portal)
 
 ## Setup your source control environment
 
@@ -28,6 +28,7 @@ This solution supports Azure Machine Learning (ML) as a platform for ML, and Azu
 **Step 2.** Create an Azure DevOps organization and project. Follow the instructions here: [Create a project in Azure DevOps](https://learn.microsoft.com/en-us/azure/devops/organizations/projects/create-project?view=azure-devops&tabs=browser)
 
 **Step 3.** In Azure Pipelines > Library, create a new variable group named **"mlops_platform_dev_vg"**, add the variables and their values listed below: (Information about variable groups in Azure DevOps can be found in [Add & use variable groups](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops&tabs=classic).
+
 **Note To provision test or production infrastructure create a new variable group, add the required variables, and modify the reference to the variable group in either infra_provision_bicep_pipeline.yml or infra_provision_terraform_pipeline.yml files.**)
 
 > ⚠️ Some azure resource names have to be unique within your Azure subscription or region. Please make sure to use unique names.  One strategy is to append a three-part version to the names defined in the variables below (ie. For AML workspace, you might use "aml-mlw-001").
