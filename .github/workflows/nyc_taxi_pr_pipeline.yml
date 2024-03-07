@@ -13,6 +13,7 @@ on:
       - model/nyc_taxi/*
       - src/nyc_src/*
       - test/nyc_taxi/*
+      - config/*
   workflow_call:
     inputs:
       exec_environment:
