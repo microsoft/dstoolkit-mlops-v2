@@ -1,6 +1,6 @@
 # Branching Strategy
 
-This document explains how to handle setup your code repository to create your CI/CD pipeline. In this document, we use uppercase DEV, TEST, PROD to refer to environments and lowercase when talking about branches (dev, main)
+This document explains how to handle setup of your code repository to support a CI/CD process. In this document, we use uppercase DEV, TEST, PROD to refer to environments and lowercase when talking about branches (dev, main)
 
 ## Design
 

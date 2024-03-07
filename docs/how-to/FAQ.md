@@ -1,12 +1,9 @@
 # Frequently Asked Question
 
-## When running the ADO training pipeline, the pipeline fails at the _invoke_ step. What's the error ?
+## Azure DevOps or github?
 
-If you see the error below. You have to ensure that the service connection is created at the Azure Machine Learning Workspace level and not Subscription level
+The choice is there for each team to make individually.  Both platforms produce the same outcomes in terms of the pipelines each platform runs.
 
-![faq-error-invoke](../media/FAQ-invoke.error.png)
+## Bicep or Terraform?
 
-## I would like to adjust the Docker Image. How can I change the Dockerfile?
-
-Documentation can be found here: 
-**[Custom Dockerfile](AdjustingDockerfile.md)**
+The choice is there for each team to make individually.  If your team is more comfortable using one or the other, then that should be the basis for the choice.  The pipelines backing each IaC language produce the same base set of resources in Azure needed to support training and inference of one or more machine learning models. 
