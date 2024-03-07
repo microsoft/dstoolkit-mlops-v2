@@ -43,4 +43,4 @@
 
 ## Extending the solution
 
-Once you can confidently build the infrastructure, run a pr and ci builds, you are ready to add your own uses to the Model Factory. See [Onboarding a New Model](./OnboardingNewModel.md)
+Once you can confidently build the infrastructure and run a pr and ci build for a model, you are ready to add your own use cases to the Model Factory. See [Onboarding a New Model](./OnboardingNewModel.md)
