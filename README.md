@@ -1,4 +1,4 @@
-# DSToolkit MLOps V2 Refresh
+# DSToolkit MLOps v1 Refresh - Model Factory
 
 ## About this repo
 
@@ -16,13 +16,23 @@ The template contains the following folders/files:
 
 The template contains the following documents:
 
-- docs/how_to_setup.md: explain how to configure the template.
+- docs/BranchingStrategy.md: Explains a recommended branching strategy.
+- docs/FAQ.md: Contains a list of one or more frequently asked questions.
+- docs/GeneralDocumentation.md: Provides guidance and recommended practices on MLOps in general.
+- docs/GettingStarted.md: Explains the process for setting up your implementation of Model Factory.
+- docs/InfrastructureDesign.md: Contains high-level visual representation of the infrastructure used in the solution.
+- docs/OnboardingNewModel.md: Explains the procedure for adding a new model to the solution.
+- docs/TestInitialSetup.md: Explains the procedure to follow to test the ability to deploy an infrastructure, run pr and ci builds.
+- CONTRIBUTING.md: Explains the process for contributing to the project
+- LICENSE.md: A standard License terms document.
+- SECURITY.md: Explains procedure for raising security issues and vulnerabilities in this solution.
 
 ## How to use the repo
 
-Information about how to setup the repo is in [the following document](./docs/how_to_setup.md).
+Information about how to setup the repo is in [the following document](./docs/GettingStarted.md).
 
 ## Local Execution
+
 You can start training pipelines from a local computer creating an environment based on the following instructions:
 
 - Rename .env.sample to .env and update .env file with parameters from your Azure subscription
@@ -30,22 +40,20 @@ You can start training pipelines from a local computer creating an environment b
 - Install [Azure Cli and Azure ML extensions](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-configure-cli?view=azureml-api-2&tabs=public#installation)
 - Create the local environment using one of the following options below.
 - (Option 1). VSCode dev container
-
-    - Run the docker desktop daemon
-    - Open repo in the [provided dev container](.devcontainer/devcontainer.json) in VSCode
+- Run the docker desktop daemon
+  - Open repo in the [provided dev container](.devcontainer/devcontainer.json) in VSCode
     - Open VSCode terminal after the repo is opened in the dev container
 
-- (Option 2). Create a local conda environment
+## (Option 2). Create a local conda environment
 
-    -  Open the terminal and run the following commands to create conda environment (we assume that anaconda has been installed on the local computer):
+- Open the terminal and run the following commands to create conda environment (we assume that anaconda has been installed on the local computer):
 
-        - conda env create -name dstoolkit Python=3.9
-        - conda activate dstoolkit
-        - pip install -r .devcontainer/requirements.txt
+  - conda env create -name dstoolkit Python=3.9
+  - conda activate dstoolkit
+  - pip install -r .devcontainer/requirements.txt
 
 - Sign in with Azure CLI : run `az login -t <your tenant>`
 - Run a desired training pipeline using the module notation (for example, `python -m mlops.nyc_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`)
-
 
 ## Contributing
 
