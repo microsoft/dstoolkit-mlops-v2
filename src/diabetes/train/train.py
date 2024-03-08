@@ -81,7 +81,7 @@ def train_model(trainX, trainy):
         n_estimators=100, learning_rate=0.1
     )
         # model = SVC(kernel='linear', C=1.0)
-        # model.fit(trainX, trainy)
+        model.fit(trainX, trainy)
 
         # print(model.score(trainX, trainy))
 
