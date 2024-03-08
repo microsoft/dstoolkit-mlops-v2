@@ -1,16 +1,8 @@
-"""
-This module is designed for scoring a machine learning model by comparing its predictions against actual values.
-
-The module accomplishes several key tasks:
-- It loads test data and a machine learning model.
-- It calculates scoring metrics such as mean squared error (MSE) and the coefficient of determination (R^2).
-- It logs these metrics using mlflow.
-- It outputs a scoring report with key model performance metrics.
-"""
 import argparse
 import pandas as pd
 import os
 from pathlib import Path
+from sklearn.linear_model import LinearRegression
 import pickle
 # from sklearn.metrics import mean_squared_error, r2_score
 import mlflow
@@ -19,18 +11,8 @@ import json
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 
+
 def main(predictions, model, score_report):
-    """
-    Load the test data and model, and write the results of the model scoring.
-
-    Parameters:
-    predictions (str): Path to the predictions.
-    model (str): Path to the model.
-    score_report (str): Path to the score report.
-
-    Returns:
-    None
-    """
     print("hello scoring world...")
 
     lines = [
@@ -51,7 +33,7 @@ def main(predictions, model, score_report):
     df_list = []
     for filename in arr:
         print("reading file: %s ..." % filename)
-        with open(os.path.join(predictions, filename), "r"):
+        with open(os.path.join(predictions, filename), "r") as handle:
             input_df = pd.read_csv((Path(predictions) / filename))
             df_list.append(input_df)
 
@@ -61,24 +43,21 @@ def main(predictions, model, score_report):
     model = pickle.load(open((Path(model) / "model.sav"), "rb"))
     write_results(model, predictions, test_data, score_report)
 
+
 # Print the results of scoring the predictions against actual values in the test data
 
 
 def write_results(model, predictions, test_data, score_report):
-    """
-    Calculate and log the model's mean squared error and coefficient of determination.
+    # The coefficients
+    #print("Coefficients: \n", model.coef_)
+    
 
-    Parameters:
-    model (sklearn model): The trained model.
-    predictions (DataFrame): The model's predictions.
-    test_data (DataFrame): The test data.
-    score_report (str): Path to the score report.
-
-    Returns:
-    None
-    """
     actuals = test_data["actual_outcome"]
     predictions = test_data["predicted_outcome"]
+    
+
+   
+
     # mse = mean_squared_error(actuals, predictions)
     # r2 = r2_score(actuals, predictions)
 
@@ -91,9 +70,12 @@ def write_results(model, predictions, test_data, score_report):
     mlflow.log_metric("accuracy", accuracy)
     mlflow.log_metric("precision", precision)
 
+
     mlflow.log_metric("recall", recall)
     mlflow.log_metric("f1", f1)
-    # The mean squared error
+                      
+
+    # # The mean squared error
     # print("Mean squared error: %.2f" % mse)
     # # The coefficient of determination: 1 is perfect prediction
     # print("Coefficient of determination: %.2f" % r2)
@@ -102,10 +84,10 @@ def write_results(model, predictions, test_data, score_report):
     # Print score report to a text file
     model_score = {
         "accuracy": accuracy,
-        "precision": precision,
-        "recall": recall,
-        "f1": f1
-    }
+        "precision": precision ,
+        "recall": recall ,
+        "f1" : f1
+     }
     with open((Path(score_report) / "score.txt"), "w") as json_file:
         json.dump(model_score, json_file, indent=4)
 
