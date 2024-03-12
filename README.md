@@ -20,7 +20,7 @@ The template contains the following documents:
 
 ## How to use the repo
 
-Information about how to setup the repo is in [the following document](./docs/how_to_setup.md).
+Information about how to setup the repo is in [the following document](./docs/getting_started.md).
 
 ## Local Execution
 You can start training pipelines from a local computer creating an environment based on the following instructions:
