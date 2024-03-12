@@ -125,3 +125,39 @@ deployment_configs:
       deployment_conda_path: model/nyc_taxi/online_environment/conda.yml
       score_dir: model/nyc_taxi/online
       deployment_instance_count: 1
+
+
+      
+    diabetes_batch_dev:
+      score_file_name: score.py
+      score_dir: model/diabetes/batch
+      batch_cluster_name: batchcluster
+      batch_cluster_region: eastus
+      batch_cluster_size: STANDARD_DS3_v2
+      deployment_conda_path: model/diabetes/batch_environment/conda.yml
+      endpoint_name: diabetes-be-005
+      endpoint_desc: A batch endpoint serving an MLflow model for online taxi
+      deployment_name: diabetes-bd-005
+      cluster_instance_count: 1
+      max_concurrency_per_instance: 1
+      mini_batch_size: 10
+      output_file_name: predictions.csv
+      max_retries: 3
+      retry_timeout: 300
+      deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+      deployment_desc: A batch deployment
+      test_dataset_name: diabetes_batch_test
+    
+    diabetes_online_dev:
+      score_file_name: score.py
+      test_file_path: model/diabetes/online_test_data/sample-request.json
+      endpoint_name: diabetes-rte-005
+      endpoint_desc: An online endpoint serving an MLflow model for online taxi
+      deployment_desc: 
+      deployment_name: diabetes-rtd-005
+      deployment_traffic_allocation: 100
+      deployment_vm_size: Standard_F4s_v2
+      deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+      deployment_conda_path: model/diabetes/online_environment/conda.yml
+      score_dir: model/diabetes/online
+      deployment_instance_count: 1
