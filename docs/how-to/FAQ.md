@@ -2,8 +2,8 @@
 
 ## Azure DevOps or github?
 
-The choice is there for each team to make individually.  Both platforms produce the same outcomes in terms of the pipelines each platform runs.
+The choice is there for each team to make individually and in compliance with any policies to which their development processes must adhere.  Both platforms produce the same outcomes in terms of the pipelines each platform runs.
 
 ## Bicep or Terraform?
 
-If your team is more comfortable using one or the other, then that should be the basis for the choice.  The pipelines backing each IaC language produce the same base set of resources in Azure needed to support training and inference of one or more machine learning models.
+If your team is more comfortable using one or the other, then that should be the basis for the choice assuming such choice remains in compliance with any policies to which their development processes must adhere..  The pipelines backing each IaC language produce the same base set of resources in Azure needed to support training and inference of one or more machine learning models.
