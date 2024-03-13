@@ -148,4 +148,4 @@ APPINSIGHTS: Name of the app insight. Default name is ai$(NAMESPACE)
 CONTAINERREGISTRY: Name of the container registry. Default name is cr$(NAMESPACE)
 ```
 
-We do not provide any concrete implementation of MLOps but only the folder structure and some examples, as the naming convention and logical flow highly depend on the use case. Nevertheless, ou may want to have a look at the utils.py modules which handle the credentials.
+This solution does not provide any concrete implementation of MLOps, but, rather, it provides a proposed folder structure and some examples to get teams started with Model Factory. Naming conventions and the logical flows adopted by teams in the field are highly dependent on the use cases and models being implemented.
