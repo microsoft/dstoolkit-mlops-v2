@@ -52,6 +52,8 @@ This solution supports Azure Machine Learning (ML) as a platform for ML, and Azu
 
 **Model Deployment Variables.**
 
+**Note Models may be deployed to either batch, online, or both endpoints by setting the properties below. When both are configured for deployment, the ci pipeline will execute to both endpoints simultaneously.**
+
 * "IS_BATCH_DEPLOYMENT" - Set to True to deploy models to a batch endpoint.
 * "IS_ONLINE_DEPLOYMENT" - Set to True to deploy models to an online Endpoint.
 
