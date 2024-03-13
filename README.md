@@ -1,4 +1,4 @@
-# DSToolkit MLOps v1 Refresh - Model Factory
+# Introducing Model Factory: DSToolkit MLOps Refresh
 
 ## About this repo
 
@@ -33,12 +33,15 @@ Information about how to setup the repo is in [the following document](./docs/ge
 
 ## Local Execution
 
-You can start training pipelines from a local computer creating an environment based on the following instructions:
+You can start training pipelines from your local computer by creating an environment based on the following instructions:
 
-- Rename .env.sample to .env and update .env file with parameters from your Azure subscription
+- Rename .env.sample to .env and update .env file with values from your Azure subscription for the following properties (Any values that are already set can be left unchanged):
+- SUBSCRIPTION_ID
+- RESOURCE_GROUP_NAME
+- WORKSPACE_NAME
 - Check all parameters in [config.yaml](config/config.yaml) for the model under test.  **Note**: In the sample code provided in this solution, the development team elected to use a single config file, but this is by no means the only way to do this. It's possible to simplify configs by extracting elements common across all models into their own file, and to create model-specific configs in their own files.  The Class MLOPsConfig supports passing config_path in its constructor enabling a modular design for configuration. 
 - Install [Azure Cli and Azure ML extensions](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-configure-cli?view=azureml-api-2&tabs=public#installation)
-- Create the local environment using one of the following options below.
+- Create the an environment on your local machine using one of the following options below.
 - (Option 1). VSCode dev container
 - Run the docker desktop daemon
   - Open repo in the [provided dev container](.devcontainer/devcontainer.json) in VSCode
@@ -46,14 +49,14 @@ You can start training pipelines from a local computer creating an environment b
 
 ## (Option 2). Create a local conda environment
 
-- Open the terminal and run the following commands to create conda environment (we assume that anaconda has been installed on the local computer):
+- Open the terminal and run the following commands to create a conda environment (we assume that anaconda has been installed on your local computer):
 
   - conda env create -name dstoolkit Python=3.9
   - conda activate dstoolkit
   - pip install -r .devcontainer/requirements.txt
 
 - Sign in with Azure CLI : run `az login -t <your tenant>`
-- Run a desired training pipeline using the module notation (for example, `python -m mlops.nyc_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`)
+- Run the training pipeline under test using the module notation (for example, `python -m mlops.nyc_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`)
 
 ## Contributing
 
