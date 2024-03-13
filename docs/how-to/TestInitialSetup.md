@@ -14,12 +14,16 @@
 - .azure-pipelines/infra/bicep/infra_provision_bicep.yml
 - .azure-pipelines/infra/bicep/infra_provision_terraform.yml
 
-**Step 2.** *Run PR pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for build validation
+**Step 2.** *Register Data Assets* - Execute the register data asset pipeline (register_data_assets.yml).
+
+- .azure-pipelines/register_data_assets.yml
+   
+**Step 3.** *Run PR pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for build validation
 
 - .azure-pipelines/nyc_taxi_pr_pipeline.yml
 - .azure-pipelines/london_taxi_pr_pipeline.yml
 
-**Step 3.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
+**Step 4.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
 
 - .azure-pipelines/nyc_taxi_ci_pipeline.yml
 - .azure-pipelines/london_taxi_ci_pipeline.yml
@@ -31,16 +35,20 @@
 - .github/workflows/ModelFactory-Bicep-Deployment.yml
 - .github/workflows/ModelFactory-Terraform-Deployment.yml
 
-**Step 2.** *Run PR pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for build validation
+**Step 2.** *Register Data Assets* - Execute the register data asset pipeline (register_data_assets.yml).
+
+- .github/workflows/register_data_assets.yml
+
+**Step 3.** *Run PR pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for build validation
 
 - .github/workflows/nyc_taxi_pr_pipeline.yml
 - .github/workflows/london_taxi_pr_pipeline.yml
 
-**Step 3.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
+**Step 4.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
 
 - .github/workflows/nyc_taxi_ci_pipeline.yml
 - .github/workflows/london_taxi_ci_pipeline.yml
 
 ## Extending the solution
 
-Once you can confidently build the infrastructure and run a pr and ci build for a model, you are ready to add your own use cases to the Model Factory. See [Onboarding a New Model](./OnboardingNewModel.md)
+Once you can confidently build the infrastructure, register data assets, and run a pr and ci build for a model, you are ready to add your own use cases to the Model Factory. See [Onboarding a New Model](./OnboardingNewModel.md)
