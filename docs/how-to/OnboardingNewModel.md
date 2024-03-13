@@ -55,7 +55,7 @@ Start by copying an existing pipeline config and accepting the defaults or modif
 Start by copying an existing deployment config and accepting the defaults or modifying the properties with values relevant for each model and serving method to be added (Follow the naming 
 convention {_model name_}_{execution context "batch" or "online"}_{environment}"):
 
-#### Batch cluster deployment configs:
+#### Config for batch deployment:
 
 - score_file_name: Name of the scoring file for the given model.
 - score_dir: Directory within which the scoring file is stored.
@@ -75,7 +75,7 @@ convention {_model name_}_{execution context "batch" or "online"}_{environment}"
 - deployment_desc: A description for the deployment serving the model.
 - test_dataset_name: The name of a dataset to use when testing deployments of the model.
 
-#### Online cluster deployment configs:
+#### config for online deployment:
 
 - score_file_name: Name of the scoring file for the given model.
 - test_file_path: Path to a json file containing a sample request to the online endpoint serving the model.
@@ -103,7 +103,7 @@ Common Steps to include:
 - Training :  Train a machine learning model with the preprocessed data
 - Prediction :  Use the trained machine learning model to make predictions
 - Scoring : Evaluate the performance of the trained machine learning model on a test dataset
-- Register : Save the trained machine learning model in a central repository
+- Register : Save the trained machine learning model in the AML Model Registry.
 
 ## Extend the mlops folder
 
