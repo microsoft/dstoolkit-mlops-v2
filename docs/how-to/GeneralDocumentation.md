@@ -81,11 +81,11 @@ All the approaches allow to either can handle the datasets by either passing the
 
 ### Data
 
-As stated before, we assume that all the datasets are stored in a single source (the approach is the same if data are in different storages). With AzureML, there are 3 different way to upload,download,load,save data :
+As stated before, we assume that all the data assets are stored in a single source. With AML, there are 3 different way to upload,download,load,save data :
 
-1. Using the Datastore/Dataset objects directly from the aml sdk
-2. Using the Datastore/Dataset objects passed as arguments to a script and extracted via the _run_ object
-3. Using azure storage sdk like [the blob library](https://pypi.org/project/azure-storage-blob/)
+1. Using Data Asset objects directly from the AML SDK
+2. Using Data Asset objects passed as arguments to a script and extracted via the _run_ object
+3. Using Azure Storage SDK as in [the blob library](https://pypi.org/project/azure-storage-blob/)
 
 **Case (1)**, the datasets are registered in the workspace and thus we need to retrieve the workspace credentials. We already described how to perform that step in the _workspace_ section. Basically, when developing on a local machine, the credentials are retrieved from the portal and stored in a config.json file. When run on a remote machine, the workspace credentials are retrieved from the _run context_.
 
