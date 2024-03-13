@@ -36,7 +36,7 @@ Information about how to setup the repo is in [the following document](./docs/ge
 You can start training pipelines from a local computer creating an environment based on the following instructions:
 
 - Rename .env.sample to .env and update .env file with parameters from your Azure subscription
-- Check all parameters in [config.yaml](config/config.yaml)
+- Check all parameters in [config.yaml](config/config.yaml) for the model under test.  **Note**: In the sample code provided in this solution, the development team elected to use a single config file, but this is by no means the only way to do this. It's possible to simplify configs by extracting elements common across all models into their own file, and to create model-specific configs in their own files.  The Class MLOPsConfig supports passing config_path in its constructor enabling a modular design for configuration. 
 - Install [Azure Cli and Azure ML extensions](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-configure-cli?view=azureml-api-2&tabs=public#installation)
 - Create the local environment using one of the following options below.
 - (Option 1). VSCode dev container
