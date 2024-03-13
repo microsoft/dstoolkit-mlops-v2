@@ -1,4 +1,4 @@
-# Introducing Model Factory: DSToolkit MLOps Refresh
+# Introducing Model Factory
 
 ## About this repo
 
