@@ -19,12 +19,21 @@
 - .azure-pipelines/register_data_assets.yml
    
 **Step 3.** *Run PR pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for build validation
-
+Pipeline Parameters:
+- exec_environment: The environment to run the workflow in. Set to "pr" by default
+- model_type: The type of model for which to run the pr workflow. Set to {model name} by default
+  
+Pipelines  
 - .azure-pipelines/nyc_taxi_pr_pipeline.yml
 - .azure-pipelines/london_taxi_pr_pipeline.yml
 
 **Step 4.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
 
+Pipeline Parameters:
+- exec_environment: The environment to run the workflow in. Set to "ci" by default
+- model_type: The type of model for which to run the pr workflow. Set to {model name} by default
+
+Pipelines
 - .azure-pipelines/nyc_taxi_ci_pipeline.yml
 - .azure-pipelines/london_taxi_ci_pipeline.yml
 
@@ -41,11 +50,20 @@
 
 **Step 3.** *Run PR pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for build validation
 
+Pipeline Parameters:
+- exec_environment: The environment to run the workflow in. Set to "pr" by default
+- model_type: The type of model for which to run the pr workflow. Set to {model name} by default
+  
+Pipelines  
 - .github/workflows/nyc_taxi_pr_pipeline.yml
 - .github/workflows/london_taxi_pr_pipeline.yml
 
 **Step 4.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
+Pipeline Parameters:
+- exec_environment: The environment to run the workflow in. Set to "ci" by default
+- model_type: The type of model for which to run the pr workflow. Set to {model name} by default
 
+Pipelines
 - .github/workflows/nyc_taxi_ci_pipeline.yml
 - .github/workflows/london_taxi_ci_pipeline.yml
 
