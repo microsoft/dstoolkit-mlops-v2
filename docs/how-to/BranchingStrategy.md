@@ -1,6 +1,6 @@
 # Branching Strategy
 
-This document explains how to handle setup of your code repository to support a CI/CD process. In this document, we use uppercase DEV, TEST, PROD to refer to environments and lowercase when talking about branches (dev, main)
+This document explains how to handle setup of your code repository to support a Continuous-Integration/Continuous Deployment (hereafter, CI/CD) process. In this document, we use uppercase DEV, TEST, PROD to refer to the Development, Test, and Production environments and lowercase when referring about branches for development and main (hereafter, dev, main).
 
 ## Design
 
@@ -12,11 +12,11 @@ The following diagram summarizes the recommended strategy and how it relates to 
 
 We provide the recommended general guidelines:
 
-1. Each DS project should have at least two resource groups with with one AML instance in each: DEV-RG and PROD-RG. We recommend however to also setup a TEST-RG.
+1. Each DS project should have at least two resource groups with with one Azure Machine Learning (hereafter, AML) instance in each: development and production resource group. We recommend, however, that developers implementing the solution also setup a test resource group.
 
 2. The code in DEV must be able to be run in TEST/PROD without applying any change to it
 
-3. Data scientists (Dev team) have no right to modify code in TEST/PROD. They should have only view access rights.
+3. Data scientists, Machine Learning Engineers, Machine Learning Operations Engineers among other members of the dev team should not have permission to modify code in TEST/PROD. They should have only Read permissions.  Modifications to TEST/PROD should be made by deployment of a Hotfix.
 
 ## Branching
 
