@@ -52,7 +52,7 @@ You can start training pipelines from your local computer by creating an environ
 - Open the terminal and run the following commands to create a conda environment (we assume that anaconda has been installed on your local computer):
 
   - conda env create -name dstoolkit Python=3.9 # this does not work for some computers, the code could be conda create --name dstoolkit python=3.9
-  - conda activate dstoolkit # you may have to do conda init before this line
+  - conda activate dstoolkit # if this doesn't work in your terminal, you can go to the Anaconda Navigator, click Environments, click dstoolkit and then hit the green play button and open terminal from there. 
   - pip install -r .devcontainer/requirements.txt
 
 - Sign in with Azure CLI : run `az login -t <your tenant>`
