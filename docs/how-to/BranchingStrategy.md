@@ -14,9 +14,7 @@ We provide the recommended general guidelines:
 
 1. Each DS project should have at least two resource groups with with one Azure Machine Learning (hereafter, AML) instance in each: development and production resource group. We recommend, however, that developers implementing the solution also setup a test resource group.
 
-2. The code in DEV must be able to be run in TEST/PROD without applying any change to it
-
-3. Data scientists, Machine Learning Engineers, Machine Learning Operations Engineers among other members of the dev team should not have permission to modify code in TEST/PROD. They should have only Read permissions.  Modifications to TEST/PROD should be made by deployment of a Hotfix.
+2. The code in DEV must be able to be run in TEST/PROD without applying any change to it. Promotion of code from DEV to TEST/PROD environments is outside the scope of this document.
 
 ## Branching
 
