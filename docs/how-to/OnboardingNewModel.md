@@ -147,7 +147,7 @@ The .azure-pipelines folder contains a pr and a ci file for each model. There ar
 - The default value for model_type parameter in parameters section.
 
 ## /config/data_config.json
-**Note** In an implementation of model factory "in the field", it is expected that developers will use data provisioning processes that place data in the right place and of the right volume to enable robust model operations. The configuration and data-handling provided herein simplifies the on-boarding process during which the development team will familiarize themselves with how to use the solution without having to concern themselves with determining how to deliver data to the models.
+**Note** When implementing model factory, use whichever method the team normally uses for making data available to models. Out-of-the-box, this solution uses data uploaded to AML according to the configuration shown below. We recommend using the built-in method only when testing the initial setup.
 
 The /config/data_config.json file contains a json snippet for each dataset needed to operate pr builds, training runs, and batch deployments. To add a new model, refactor the data provisioning pipeline or pipelines that delivery data to the model, or add three additonal json snippets separated by commas for the new model in the form shown below: 
 
