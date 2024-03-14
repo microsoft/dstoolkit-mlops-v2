@@ -35,7 +35,7 @@ Information about how to setup the repo is in [the following document](./docs/ge
 
 You can start training pipelines from your local computer by creating an environment based on the following instructions:
 
-- Rename .env.sample to .env and update .env file with values from your Azure subscription for the following properties (Any values that are already set can be left unchanged):
+- Rename .env.sample to .env and update .env file with values from your Azure subscription for the following properties (Any values that are already set can be left unchanged (BUILD_BUILDID="local"). These constants are dynamic when run in the context of Azure DevOps or Github Actions, and used for various naming/tagging purposes.):
 - SUBSCRIPTION_ID
 - RESOURCE_GROUP_NAME
 - WORKSPACE_NAME
