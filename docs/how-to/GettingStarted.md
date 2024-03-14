@@ -39,7 +39,7 @@ This solution supports Azure Machine Learning (ML) as a platform for ML, and Azu
 * "AZURE_RM_SVC_CONNECTION":  Set to the name of the service connection created above.
 * "CONTAINER_REGISTRY_NAME": Set to a value of your choosing.  Note the value must be unique.
 * "KEYVAULT_NAME": Set to a value of your choosing.  Note the value must be unique.
-* "LOCATION": Set to valid value for the "Name" property for Azure Region.
+* "LOCATION": Set to valid value for the "Name" property for Azure Region hosting the resource group and resources needed to operate the solution.
 * "RESOURCE_GROUP_NAME": Set to a value of your choosing.  Note the value must be unique.
 * "STORAGE_ACCT_NAME": Set to an unique alphanumeric value of your choosing.
 * "SUBSCRIPTION_ID": Set to the subscription id for the subscription hosting the Azure Machine Learning workspace.
