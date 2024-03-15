@@ -8,6 +8,10 @@ pool:
 variables:
 - group: mlops_platform_dev_vg
 
+parameters:
+   displayName: "model type"
+   default: "nyc_taxi"
+
 stages:
 - stage: register_datasets
   displayName: register_datasets_stage
@@ -20,4 +24,4 @@ stages:
         step_name: "Register Dataset"
         script_parameter: |
           python -m mlops.common.register_data_asset \
-            --data_config_path config/data_config.json
+            --data_config_path config/${{ parameters.model_type }}/data_config.yml

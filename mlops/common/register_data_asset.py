@@ -37,29 +37,78 @@ def main():
 
     data_config_path = args.data_config_path
 
-    config_file = open(data_config_path)
-    data_config = json.load(config_file)
+    # config_file = open(data_config_path)
+    # data_config = json.load(config_file)
 
-    for elem in data_config["datasets"]:
-        data_path = elem["DATA_PATH"]
-        dataset_desc = elem["DATASET_DESC"]
-        dataset_name = elem["DATASET_NAME"]
+    # for elem in data_config["datasets"]:
+    #     data_path = elem["DATA_PATH"]
+    #     dataset_desc = elem["DATASET_DESC"]
+    #     dataset_name = elem["DATASET_NAME"]
 
-        aml_dataset = Data(
-            path=data_path,
-            type=AssetTypes.URI_FOLDER,
-            description=dataset_desc,
-            name=dataset_name,
-        )
+    config = MLOpsConfig(data_config_path)
+    
+    # pr data config
+    
+    data_path = config.pr_data["DATA_PATH"]
+    dataset_desc = config.pr_data["DATASET_DESC"]
+    dataset_name = config.pr_data["DATASET_NAME"]
 
-        ml_client.data.create_or_update(aml_dataset)
+    aml_dataset = Data(
+        path=data_path,
+        type=AssetTypes.URI_FOLDER,
+        description=dataset_desc,
+        name=dataset_name,
+    )
 
-        aml_dataset_unlabeled = ml_client.data.get(
-            name=dataset_name, label="latest"
-        )
+    ml_client.data.create_or_update(aml_dataset)
 
-        print(aml_dataset_unlabeled.id)
+    aml_dataset_unlabeled = ml_client.data.get(
+        name=dataset_name, label="latest"
+    )
 
+    print(aml_dataset_unlabeled.id)
 
+    # training data config
+    
+    data_path = config.training_data["DATA_PATH"]
+    dataset_desc = config.training_data["DATASET_DESC"]
+    dataset_name = config.training_data["DATASET_NAME"]
+
+    aml_dataset = Data(
+        path=data_path,
+        type=AssetTypes.URI_FOLDER,
+        description=dataset_desc,
+        name=dataset_name,
+    )
+
+    ml_client.data.create_or_update(aml_dataset)
+
+    aml_dataset_unlabeled = ml_client.data.get(
+        name=dataset_name, label="latest"
+    )
+
+    print(aml_dataset_unlabeled.id)
+
+    # batch_test_data config
+    
+    data_path = config.batch_test_data["DATA_PATH"]
+    dataset_desc = config.batch_test_data["DATASET_DESC"]
+    dataset_name = config.batch_test_data["DATASET_NAME"]
+
+    aml_dataset = Data(
+        path=data_path,
+        type=AssetTypes.URI_FOLDER,
+        description=dataset_desc,
+        name=dataset_name,
+    )
+
+    ml_client.data.create_or_update(aml_dataset)
+
+    aml_dataset_unlabeled = ml_client.data.get(
+        name=dataset_name, label="latest"
+    )
+
+    print(aml_dataset_unlabeled.id)
+        
 if __name__ == "__main__":
     main()

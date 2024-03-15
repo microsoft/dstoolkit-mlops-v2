@@ -1,0 +1,17 @@
+pr_data:
+  DATA_PURPOSE: 
+  DATA_PATH: "mlops/nyc_taxi/data"
+  DATASET_NAME: "nyc_taxi_pr_data"
+  DATASET_DESC: "this dataset is for pr validation only"
+
+batch_test_data:
+  DATA_PURPOSE:  "batch_test_data"
+  DATA_PATH: "model/nyc_taxi/batch_test_data"
+  DATASET_NAME: "nyc_taxi_batch_test"
+  DATASET_DESC: "this dataset is for testing batch deployments"
+
+training_data:
+  DATA_PURPOSE: "training_data"
+  DATA_PATH: "mlops/nyc_taxi/data"
+  DATASET_NAME: "nyc_taxi_training"
+  DATASET_DESC: "this dataset is for training models"
