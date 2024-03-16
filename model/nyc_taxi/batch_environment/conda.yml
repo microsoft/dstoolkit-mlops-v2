@@ -6,6 +6,7 @@ dependencies:
   - pip
   - pip:
     - pandas
-    - scikit-learn>=1.3.0
+    - numpy==1.23.5
+    - scikit-learn==1.3.2
     - azureml-core
     - azureml-dataset-runtime[fuse]
