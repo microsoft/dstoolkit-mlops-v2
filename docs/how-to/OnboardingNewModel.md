@@ -35,11 +35,12 @@ Set the properties for this component in Azure Pipelines variable group of your 
 
 ### environment config
 
-Set the properties for the environment when executing build validation or continuous integration pipelines.
+Set the properties for the environment when executing build validation or continuous integration pipelines.  A note on base image selection. When choosing a base image for training and inferencing in Azure Machine Learning take into consideration compatibility with the libraries,  dependencies, and performance characteristics of your model. Also consider image maintainability, size, and licensing.
 
 - env_base_image: Base image to be used for training and model execution
 
-### pipeline configs:
+
+### pipeline configs
 
 Start by copying an existing pipeline config and accepting the defaults or modifying the properties with values relevant for each model and environment:
 
@@ -50,12 +51,11 @@ Start by copying an existing pipeline config and accepting the defaults or modif
 - aml_env_name: A string denoting the name of a given environment for a given model.
 - dataset_name: The name of the dataset used when training the model.
 
-### deployment configs:
+### deployment configs
 
-Start by copying an existing deployment config and accepting the defaults or modifying the properties with values relevant for each model and serving method to be added (Follow the naming 
-convention {_model name_}_{execution context "batch" or "online"}_{environment}"):
+Start by copying an existing deployment config and accepting the defaults or modifying the properties with values relevant for each model and serving method to be added (Follow the naming convention {_model name_}_{execution context "batch" or "online"}_{environment}"):
 
-#### Config for batch deployment:
+#### Config for batch deployment
 
 - score_file_name: Name of the scoring file for the given model.
 - score_dir: Directory within which the scoring file is stored.
@@ -71,11 +71,11 @@ convention {_model name_}_{execution context "batch" or "online"}_{environment}"
 - mini_batch_size: An integer representing the batch size when serving the model.
 - output_file_name: Name of the file in which the model output will be stored.
 - max_retries: Number of retries in the event of failure while executing the model.
-- deployment_base_image: Reference to the base image used in serving the model.
+- deployment_base_image: Reference to the base image used in serving the model. A note on base image selection. When choosing the base image for inferencing take into consideration compatibility with the libraries, dependencies, and performance characteristics of your model. Also consider image maintainability, size, and licensing.
 - deployment_desc: A description for the deployment serving the model.
 - test_dataset_name: The name of a dataset to use when testing deployments of the model.
 
-#### config for online deployment:
+#### config for online deployment
 
 - score_file_name: Name of the scoring file for the given model.
 - test_file_path: Path to a json file containing a sample request to the online endpoint serving the model.
@@ -85,7 +85,7 @@ convention {_model name_}_{execution context "batch" or "online"}_{environment}"
 - deployment_name:  A name for the deployment serving the model.
 - deployment_traffic_allocation: A number setting the traffic attribute for an online endpoint.
 - deployment_vm_size: Set to an Azure VM Size according to the naming convention here: [Azure VM Sizes](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes).
-- deployment_base_image: Reference to the base image used in serving the model.  
+- deployment_base_image: Reference to the base image used in serving the model. A note on base image selection. When choosing the base image for inferencing take into consideration compatibility with the libraries, dependencies, and performance characteristics of your model. Also consider image maintainability, size, and licensing.  
 - deployment_conda_path: Path to the conda file to be used when serving the given model.
 - score_dir: Directory within which the scoring file is stored.
 - deployment_instance_count: number of nodes in the cluster serving the model.  
@@ -94,9 +94,8 @@ convention {_model name_}_{execution context "batch" or "online"}_{environment}"
 
 The src folder contains one top level folder for each model. The name of the folder corresponds to the pipeline config and deployment config nodes in the /config/config.yaml file. For instance, the pipeline config node in the config.yaml file contains a node for "london_taxi_pr". Accordingly, there is a folder in /src called "london_taxi" that corresponds to the model name.  You can start by copying one of the existing {root}/src/model folders and pasting it in this folder.  Once copied, rename it to the model name of the new model, and modify the folders and files within the new folder according the steps required by the new model. 
 
-Each sample usecase has steps for prep, transform, train, predict, score and register the model.  You can use the same steps or add or remove steps based on your specific usecase. 
-
-Common Steps to include: 
+Each sample usecase has steps for prep, transform, train, predict, score and register the model.  You can use the same steps or add or remove steps based on your specific usecase.
+Common Steps to include:
 
 - Data preparation : Noise Reduction, Missing Value Imputation, Inconsistencies Elimination
 - Data Transform :  Data Normalization, Data Formatting, Data Aggregation.
@@ -146,36 +145,9 @@ The .azure-pipelines folder contains a pr and a ci file for each model. There ar
 - The include paths in trigger and pr section with values related to new ML Model.
 - The default value for model_type parameter in parameters section.
 
-## /config/data_config.json
-**Note** When implementing model factory, use whichever method the team normally uses for making data available to models. Out-of-the-box, this solution uses data uploaded to AML according to the configuration shown below. We recommend using the built-in method only when testing the initial setup.
+## Implement a robust and scalable solution for data provisioning
 
-The /config/data_config.json file contains a json snippet for each dataset needed to operate pr builds, training runs, and batch deployments. To add a new model, refactor the data provisioning pipeline or pipelines that delivery data to the model, or add three additonal json snippets separated by commas for the new model in the form shown below: 
-
-```
-{
-"DATA_PURPOSE": "pr_data",
-"DATA_PATH": "{path to data in /mlops/{model}/data",
-"DATASET_NAME": "any string to denote the name of the dataset",
-"DATASET_DESC": "any sentence describing the dataset"
-}
-```
-```
-{
-"DATA_PURPOSE": "batch_test_data",
-"DATA_PATH": "{path to data in /model/{model}/batch_test_data",
-"DATASET_NAME": "any string to denote the name of the dataset",
-"DATASET_DESC": "any sentence describing the datasett"
-}
-```
-```
-{
-"DATA_PURPOSE": "training_data",
-"DATA_PATH": "{path to data in /mlops/{model}/data",
-"DATASET_NAME": "any string to denote the name of the dataset",
-"DATASET_DESC": "any sentence describing the dataset"
-}
-```
-
+When implementing model factory, use whichever method the team normally uses for making data available to models. Out-of-the-box, this solution uses data uploaded to AML according to the configuration file, config/data_config.json. **We recommend using this file only when testing the initial setup of the solution.**
 
 ## Test the new model
 
