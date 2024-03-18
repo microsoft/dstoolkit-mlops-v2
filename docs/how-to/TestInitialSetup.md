@@ -111,6 +111,5 @@ Pipelines:
 
 ## Known Issues
 
-- Use of different formats for configuration files is an anti-pattern. We acknowledge that this solution suffers from this anti-pattern. Accordingly, there is an issue raised pertaining to this anti-pattern. [Different Config file formats](https://github.com/microsoft/dstoolkit-mlops-v2/issues/107) has been raised as a bug.
-
-- Once this solution hosts many models, there is a usability concern in regards to the use of a single configuration file, config/config.yaml, especially for the sections, pipeline_configs and deployment_configs. [Many Models Configuration Usability Issue](https://github.com/microsoft/dstoolkit-mlops-v2/issues/110) has been raised as an enhancement.
+- Currently, there are two file formats in use for configuration files. We have logged a bug against this and will make the format consistent in an upcoming release. See [Different Config file formats](https://github.com/microsoft/dstoolkit-mlops-v2/issues/107)
+- Use of a single configuration file could become a usability issue when there are many models supported by the solution, accordingly, we have raised an enhancement request to modularize the model configuration. See [Many Models Configuration Usability Issue](https://github.com/microsoft/dstoolkit-mlops-v2/issues/110).
