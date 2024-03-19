@@ -1,0 +1,25 @@
+[tool.pylic]
+safe_licenses = [
+	"3-Clause BSD License",
+	"Apache License 2.0",
+	"Apache Software License",
+	"BSD",
+	"BSD License",
+	"GNU Lesser General Public License v2 or later (LGPLv2+)",
+	"GNU Library or Lesser General Public License (LGPL)",
+	"Historical Permission Notice and Disclaimer (HPND)",
+	"MIT",
+	"MIT License",
+	"Python Software Foundation License",
+	"Zope Public License",
+]
+unsafe_packages = []
+
+ignore_packages = [
+    "azureml-inference-server-http",
+    "azureml-mlflow",
+    "certifi",
+    "inference-schema",
+    "pathspec",
+    "portalocker",
+]

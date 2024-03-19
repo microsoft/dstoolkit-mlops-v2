@@ -1,4 +1,4 @@
-# DSToolkit MLOps V2 Refresh
+# Introducing Model Factory
 
 ## About this repo
 
@@ -16,36 +16,47 @@ The template contains the following folders/files:
 
 The template contains the following documents:
 
-- docs/how_to_setup.md: explain how to configure the template.
+- docs/BranchingStrategy.md: Explains a recommended branching strategy.
+- docs/FAQ.md: Contains a list of one or more frequently asked questions.
+- docs/GeneralDocumentation.md: Provides guidance and recommended practices on MLOps in general.
+- docs/GettingStarted.md: Explains the process for setting up your implementation of Model Factory.
+- docs/InfrastructureDesign.md: Contains high-level visual representation of the infrastructure used in the solution.
+- docs/OnboardingNewModel.md: Explains the procedure for adding a new model to the solution.
+- docs/TestInitialSetup.md: Explains the procedure to follow to test the ability to deploy an infrastructure, run pr and ci builds.
+- CONTRIBUTING.md: Explains the process for contributing to the project
+- LICENSE.md: A standard License terms document.
+- SECURITY.md: Explains procedure for raising security issues and vulnerabilities in this solution.
 
 ## How to use the repo
 
-Information about how to setup the repo is in [the following document](./docs/how_to_setup.md).
+Information about how to setup the repo is in [the following document](./docs/getting_started.md).
 
 ## Local Execution
-You can start training pipelines from a local computer creating an environment based on the following instructions:
 
-- Rename .env.sample to .env and update .env file with parameters from your Azure subscription
-- Check all parameters in [config.yaml](config/config.yaml)
+You can start training pipelines from your local computer by creating an environment based on the following instructions:
+
+- Rename .env.sample to .env and update .env file with values from your Azure subscription for the following properties (Any values that are already set can be left unchanged (BUILD_BUILDID="local"). This value is dynamic when run in the context of Azure DevOps or Github Actions, and used for various naming/tagging purposes.):
+- SUBSCRIPTION_ID
+- RESOURCE_GROUP_NAME
+- WORKSPACE_NAME
+- Check all parameters in [config.yaml](config/config.yaml) for the model under test.  **Note**: In the sample code provided in this solution, the development team elected to use a single config file, but this is by no means the only way to do this. It's possible to simplify configs by extracting elements common across all models into their own file, and to create model-specific configs in their own files.  The Class MLOPsConfig supports passing config_path in its constructor enabling a modular design for configuration. 
 - Install [Azure Cli and Azure ML extensions](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-configure-cli?view=azureml-api-2&tabs=public#installation)
-- Create the local environment using one of the following options below.
+- Create the an environment on your local machine using one of the following options below.
 - (Option 1). VSCode dev container
-
-    - Run the docker desktop daemon
-    - Open repo in the [provided dev container](.devcontainer/devcontainer.json) in VSCode
+- Run the docker desktop daemon
+  - Open repo in the [provided dev container](.devcontainer/devcontainer.json) in VSCode
     - Open VSCode terminal after the repo is opened in the dev container
 
-- (Option 2). Create a local conda environment
+## (Option 2). Create a local conda environment
 
-    -  Open the terminal and run the following commands to create conda environment (we assume that anaconda has been installed on the local computer):
+- Open the terminal and run the following commands to create a conda environment (we assume that anaconda has been installed on your local computer):
 
-        - conda env create -name dstoolkit Python=3.9
-        - conda activate dstoolkit
-        - pip install -r .devcontainer/requirements.txt
+  - conda env create -name dstoolkit Python=3.9 # this does not work for some computers, the code could be conda create --name dstoolkit python=3.9
+  - conda activate dstoolkit # if this doesn't work in your terminal, you can go to the Anaconda Navigator, click Environments, click dstoolkit and then hit the green play button and open terminal from there. 
+  - pip install -r .devcontainer/requirements.txt
 
 - Sign in with Azure CLI : run `az login -t <your tenant>`
-- Run a desired training pipeline using the module notation (for example, `python -m mlops.nyc_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`)
-
+- Run the training pipeline under test using the module notation (for example, `python -m mlops.nyc_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`)
 
 ## Contributing
 

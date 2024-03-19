@@ -1,6 +1,6 @@
-# Contributing to DSTOOLKIT-MLOPS-V2 Guide
+# Contributing to Model Factory
 
-Welcome to dstoolkit-mlops-v2! We greatly appreciate your interest in contributing to our project. Please follow the guidelines below to ensure a smooth and successful contribution process.
+Welcome to Model Factory! We greatly appreciate your interest in contributing to our project. Please follow the guidelines below to ensure a smooth and successful contribution process.
 
 
 ## Fork the Repository
