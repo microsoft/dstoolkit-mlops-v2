@@ -46,6 +46,9 @@ You can start training pipelines from your local computer by creating an environ
 - Run the docker desktop daemon
   - Open repo in the [provided dev container](.devcontainer/devcontainer.json) in VSCode
     - Open VSCode terminal after the repo is opened in the dev container
+- **Note**: Before running the training pipeline locally, you will have to have the data assets registered. If not already done, you can register the data using the following command:
+  - `python -m mlops.common.register_data_asset --data_config_path config/data_config.json`
+- Run the training pipeline under test using the module notation (for example, `python -m mlops.nyc_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`)
 
 ## (Option 2). Create a local conda environment
 
