@@ -42,23 +42,24 @@ You can start training pipelines from your local computer by creating an environ
 - Check all parameters in [config.yaml](config/config.yaml) for the model under test.  **Note**: In the sample code provided in this solution, the development team elected to use a single config file, but this is by no means the only way to do this. It's possible to simplify configs by extracting elements common across all models into their own file, and to create model-specific configs in their own files.  The Class MLOPsConfig supports passing config_path in its constructor enabling a modular design for configuration. 
 - Install [Azure Cli and Azure ML extensions](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-configure-cli?view=azureml-api-2&tabs=public#installation)
 - Create the an environment on your local machine using one of the following options below.
+
 - (Option 1). VSCode dev container
-- Run the docker desktop daemon
-  - Open repo in the [provided dev container](.devcontainer/devcontainer.json) in VSCode
-    - Open VSCode terminal after the repo is opened in the dev container
-- **Note**: Before running the training pipeline locally, you will have to have the data assets registered. If not already done, you can register the data using the following command:
-  - `python -m mlops.common.register_data_asset --data_config_path config/data_config.json`
-- Run the training pipeline under test using the module notation (for example, `python -m mlops.nyc_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`)
+  - Run the docker desktop daemon
+    - Open repo in the [provided dev container](.devcontainer/devcontainer.json) in VSCode
+      - Open VSCode terminal after the repo is opened in the dev container
 
-## (Option 2). Create a local conda environment
+- (Option 2). Create a local conda environment
 
-- Open the terminal and run the following commands to create a conda environment (we assume that anaconda has been installed on your local computer):
+  - Open the terminal and run the following commands to create a conda environment (we assume that anaconda has been installed on your local computer):
 
-  - conda env create -name dstoolkit Python=3.9 # this does not work for some computers, the code could be conda create --name dstoolkit python=3.9
-  - conda activate dstoolkit # if this doesn't work in your terminal, you can go to the Anaconda Navigator, click Environments, click dstoolkit and then hit the green play button and open terminal from there. 
-  - pip install -r .devcontainer/requirements.txt
+    - conda env create -name dstoolkit Python=3.9 # this does not work for some computers, the code could be conda create --name dstoolkit python=3.9
+    - conda activate dstoolkit # if this doesn't work in your terminal, you can go to the Anaconda Navigator, click Environments, click dstoolkit and then hit the green play button and open terminal from there. 
+    - pip install -r .devcontainer/requirements.txt
 
 - Sign in with Azure CLI : run `az login -t <your tenant>`
+
+- **Note**: Before running the training pipeline locally, you will have to have the data assets registered. If not already done, you can register the data using the following command:
+  - `python -m mlops.common.register_data_asset --data_config_path config/data_config.json`
 - Run the training pipeline under test using the module notation (for example, `python -m mlops.nyc_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`)
 
 ## Contributing
