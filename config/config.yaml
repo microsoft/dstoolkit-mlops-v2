@@ -23,7 +23,7 @@ pipeline_configs:
     cluster_name: cpucluster
     conda_path: mlops/nyc_taxi/environment/conda.yml
     aml_env_name: nyc_env
-    dataset_name: london_taxi_pr_data
+    dataset_name: nyc_taxi_pr_data
 
   london_taxi_dev: 
     cluster_region: eastus
@@ -39,7 +39,7 @@ pipeline_configs:
     cluster_name: cpucluster
     conda_path: mlops/nyc_taxi/environment/conda.yml
     aml_env_name: nyc_env
-    dataset_name: london_taxi_pr_data
+    dataset_name: nyc_taxi_pr_data
 
 deployment_configs:
     london_taxi_batch_dev: 
