@@ -51,6 +51,7 @@ jobs:
             RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
             WORKSPACE_NAME: ${{ secrets.workspace_name }}
             BUILD_BUILDID: ${{ github.run_id }}
+            BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
         with:
             azure_credentials: ${{ secrets.azure_credentials }}
             script_parameter: |
