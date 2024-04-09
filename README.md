@@ -29,7 +29,7 @@ The template contains the following documents:
 
 ## How to use the repo
 
-Information about how to setup the repo is in [the following document](./docs/getting_started.md).
+Information about how to setup the repo is in [the following document](./docs/how-to/GettingStarted.md).
 
 ## Local Execution
 
