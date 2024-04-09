@@ -5,14 +5,12 @@ on:
     branches:
       - development
     paths:
-      - .github/*
-      - mlops/common/*
-      - mlops/*
-      - mlops/nyc_taxi/*
-      - src/*
-      - model/nyc_taxi/*
-      - src/nyc_src/*
-      - test/nyc_taxi/*
+      - '.github/**'
+      - 'mlops/common/**'
+      - 'mlops/nyc_taxi/**'
+      - 'model/nyc_taxi/**'
+      - 'src/nyc_src/**'
+      - 'test/nyc_taxi/**'
   workflow_call:
     inputs:
       exec_environment:
