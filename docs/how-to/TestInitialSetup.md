@@ -75,6 +75,10 @@ Pipelines:
 - .github/workflows/nyc_taxi_ci_pipeline.yml
 - .github/workflows/london_taxi_ci_pipeline.yml
 
+Below is the sample job run for the CI Pipeline.
+
+![sample_ci_job](../media/sample_ci_job.png)
+
 ## Preparing to Extend the solution
 
 **Step 1.** Cleanup unneeded directories and files.
