@@ -87,13 +87,13 @@ Details about how to create a basic Azure Pipeline can be found in [Create your 
 * ARM_TENANT_ID: The tenant id corresponding to the service principal backing the service connection created above.
 * AZURE_RM_SVC_CONNECTION: The service connection name.
 * CONTAINER_REGISTRY_NAME: A string compliant with the naming convention for an azure container registry resource.
-* IS_BATCH_DEPLOYMENT: A boolean indicating whether to create a batch deployment when executing a given model's ci pipeline.
-* IS_ONLINE_DEPLOYMENT: A boolean indicating whether to create on online deployment when executing a given model's ci pipeline.
+* IS_BATCH_DEPLOYMENT: A Boolean indicating whether to create a batch deployment when executing a given model's ci pipeline.
+* IS_ONLINE_DEPLOYMENT: A Boolean indicating whether to create on online deployment when executing a given model's ci pipeline.
 * KEYVAULT_NAME: A string compliant with the naming convention for an azure key vault resource.
 * LOCATION: A string compliant with the naming convention for an azure region short name.
 * RESOURCE_GROUP_NAME: A string compliant with the naming convention for an azure resource group resource.
 * STORAGE_ACCT_NAME: A string compliant with the naming convention for an azure storage account resource.
-* SUBSCRIPTION_ID: A guid for the azure subscription hosting the azure machine learning workspace.
+* SUBSCRIPTION_ID: A GUID for the azure subscription hosting the azure machine learning workspace.
 * TFSTATE_RESOURCE_GROUP_NAME: A string compliant with the naming convention for an azure resource group resource. The tfstate resource group hosts a storage account for storing the tfstate file produced when using terraform infrastructure provisioning.
 * TFSTATE_STORAGE_ACCT_NAME: A string compliant with the naming convention for an azure storage account resource. The tfstate storage account for storing the tfstate file produced when using terraform infrastructure provisioning.
 * WORKSPACE_NAME: A string compliant with the naming convention for an azure machine learning workspace resource.
@@ -111,5 +111,7 @@ Details about how to create a basic Azure Pipeline can be found in [Create your 
 "tenantId": "<GUID>"
 }
 ```
+
+**Note** Make sure this GitHub repository has proper [workflow and access permissions](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#about-github-actions-permissions-for-your-repository).
 
 Once you have completed this setup, it is a good idea to test out your setup by running an end-to-end test that includes all the steps detailed in [Testing the Intial Setup](./TestInitialSetup.md)
