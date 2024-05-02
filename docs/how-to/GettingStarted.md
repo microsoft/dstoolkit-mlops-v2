@@ -112,6 +112,10 @@ Details about how to create a basic Azure Pipeline can be found in [Create your 
 }
 ```
 
+* RESOURCE_GROUP_NAME: A string compliant with the naming convention for an azure resource group resource.
+* SUBSCRIPTION_ID: A GUID for the azure subscription hosting the azure machine learning workspace.
+* WORKSPACE_NAME: A string compliant with the naming convention for an azure machine learning workspace resource.
+
 **Note** Make sure this GitHub repository has proper [workflow and access permissions](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#about-github-actions-permissions-for-your-repository).
 
 Once you have completed this setup, it is a good idea to test out your setup by running an end-to-end test that includes all the steps detailed in [Testing the Intial Setup](./TestInitialSetup.md)
