@@ -8,7 +8,7 @@ azure-ai-ml>=1.10.0
 azure-identity>=1.15.0
 azure-keyvault-secrets>=4.7.0
 azureml-inference-server-http
-Werkzeug==2.3.8
+Werkzeug==3.0.3
 flake8-docstrings==1.7.0
 flake8==6.1.0
 pep8-naming==0.13.3
