@@ -1,27 +1,31 @@
-name: Run Azure Login with OpenID Connect and PowerShell
+name: Run Azure Login with OIDC
 on: [push]
 
 permissions:
   id-token: write
   contents: read
-      
-jobs: 
-  Windows-latest:
-    runs-on: windows-latest
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
     steps:
-      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
-        uses: azure/login@v1
+      - name: Azure login
+        uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.SUBSCRIPTION_ID }} 
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           enable-AzPSSession: true
 
-      - name: 'Get resource group with PowerShell action'
-        uses: azure/powershell@v1
+      - name: Azure CLI script
+        uses: azure/cli@v2
         with:
+          azcliversion: latest
           inlineScript: |
-            Get-AzResourceGroup
-          azPSVersion: "latest"
+            az account show
 
-          # Test fed cred configured to run on check-in to test-federated-credential branch
+      - name: Azure PowerShell script
+        uses: azure/powershell@v2
+        with:
+          azPSVersion: "latest"
+          inlineScript: |
+            Get-AzContext
