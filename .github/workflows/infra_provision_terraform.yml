@@ -16,6 +16,7 @@ env:
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
   SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
+  AZURE_MANAGED_IDENTITY: ${{secrets.AZURE_MANAGED_IDENTITY}}
 
 jobs:
   run-infra-provision:
@@ -53,27 +54,33 @@ jobs:
           TFSTATE_RESOURCE_GROUP_NAME: '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}'
           TFSTATE_STORAGE_ACCT_NAME: '${{ env.TFSTATE_STORAGE_ACCT_NAME }}'
           WORKSPACE_NAME: '${{ env.WORKSPACE_NAME }}'
-          
+
       - name: Add tfstate resource group
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
       - run: |
           az --version
           az group create --location '${{ env.LOCATION }}' --name '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}'
 
       - name: Add tfstate account
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
       - run: |
           az --version
           az storage account create --name '${{ env.TFSTATE_STORAGE_ACCT_NAME }}' --resource-group '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}' --sku Standard_LRS
 
       - name: Add terraform container
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
       - run: |
           az --version
           az storage container create --name terraform --account-name '${{ env.TFSTATE_STORAGE_ACCT_NAME }}'
@@ -86,23 +93,36 @@ jobs:
       - name: List current directory contents
         run: ls ${{ github.workspace }}
 
+      # - name: Azure Login
+      #   if: true
+      #   run: |
+      #     echo '${{ env.ARM_CLIENT_ID }}'
+      #     echo '${{ env.ARM_CLIENT_SECRET }}'
+      #     echo '${{ env.ARM_TENANT_ID }}'
+      #     echo '${{ env.SUBSCRIPTION_ID }}'
+      #     az login --service-principal -u ${{ env.ARM_CLIENT_ID }} -p ${{ env.ARM_CLIENT_SECRET }} -t ${{ env.ARM_TENANT_ID }}
+      #     az account set --subscription "${{ env.SUBSCRIPTION_ID }}" 
+      #   working-directory: ${{ github.workspace }}/infra/terraform/public_workspace          
+
       - name: Azure Login
         if: true
         run: |
-          echo '${{ env.ARM_CLIENT_ID }}'
-          echo '${{ env.ARM_CLIENT_SECRET }}'
-          echo '${{ env.ARM_TENANT_ID }}'
-          echo '${{ env.SUBSCRIPTION_ID }}'
-          az login --service-principal -u ${{ env.ARM_CLIENT_ID }} -p ${{ env.ARM_CLIENT_SECRET }} -t ${{ env.ARM_TENANT_ID }}
+          # echo '${{ env.ARM_CLIENT_ID }}'
+          # echo '${{ env.ARM_CLIENT_SECRET }}'
+          # echo '${{ env.ARM_TENANT_ID }}'
+          # echo '${{ env.SUBSCRIPTION_ID }}'
+          echo '${{ env.AZURE_MANAGED_IDENTITY }}' 
+          az login --identity --username "${{ env.AZURE_MANAGED_IDENTITY }}"
           az account set --subscription "${{ env.SUBSCRIPTION_ID }}" 
-        working-directory: ${{ github.workspace }}/infra/terraform/public_workspace          
-         
+        working-directory: ${{ github.workspace }}/infra/terraform/public_workspace
+
       - name: Terraform Init
         env:
-          ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
-          ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}          
-          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          # ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+          # ARM_SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
+          # ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}          
+          # ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          AZURE_MANAGED_IDENTITY: ${{ env.AZURE_MANAGED_IDENTITY }}
         if: true
         run: |
           terraform init \
@@ -114,30 +134,36 @@ jobs:
 
       - name: Terraform Validate
         env:
-          ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
-          ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}          
-          ARM_CLIENT_SECRET: ${{ vars.ARM_CLIENT_SECRET }}
+          # ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+          # ARM_SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
+          # ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}          
+          # ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          AZURE_MANAGED_IDENTITY: ${{ env.AZURE_MANAGED_IDENTITY }}
+
         if: true
         run: terraform validate
         working-directory: ${{ github.workspace }}/infra/terraform/public_workspace
 
       - name: Terraform Plan
         env:
-          ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
-          ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}          
-          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          # ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+          # ARM_SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
+          # ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}          
+          # ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          AZURE_MANAGED_IDENTITY: ${{ env.AZURE_MANAGED_IDENTITY }}
+
         if: true
         run: terraform plan -out=tfplan
         working-directory: ${{ github.workspace }}/infra/terraform/public_workspace
 
       - name: Terraform Apply
         env:
-          ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
-          ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}          
-          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          # ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+          # ARM_SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
+          # ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}          
+          # ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          AZURE_MANAGED_IDENTITY: ${{ env.AZURE_MANAGED_IDENTITY }}
+
         if: true
         run: terraform apply -auto-approve -input=false tfplan
         working-directory: ${{ github.workspace }}/infra/terraform/public_workspace

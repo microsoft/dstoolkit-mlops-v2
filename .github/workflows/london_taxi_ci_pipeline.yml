@@ -32,4 +32,5 @@ jobs:
       subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
       resource_group_name: ${{ secrets.RESOURCE_GROUP_NAME }}
       workspace_name: ${{ secrets.WORKSPACE_NAME }}
-      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+      # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+      azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}

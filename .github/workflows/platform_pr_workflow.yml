@@ -22,9 +22,12 @@ on:
       workspace_name:
         description: "the workspace name hosting the AML instance."
         required: true
-      azure_credentials:
-        description: "the credentials to use to authenticate with Azure."
-        required: true
+      # azure_credentials:
+      #   description: "the credentials to use to authenticate with Azure."
+      #   required: true
+      azure_managed_identity:
+        description: "the managed identity to use to authenticate with Azure."
+        required: true        
 jobs:
   build-validation:
     name: Build Validation
@@ -53,7 +56,8 @@ jobs:
             BUILD_BUILDID: ${{ github.run_id }}
             BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
         with:
-            azure_credentials: ${{ secrets.azure_credentials }}
+            # azure_credentials: ${{ secrets.azure_credentials }}
+            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
             script_parameter: |
                 python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
                     --build_environment ${{ inputs.exec_environment }} \

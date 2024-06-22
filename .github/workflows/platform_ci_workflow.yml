@@ -42,7 +42,8 @@ jobs:
             BUILD_BUILDID: ${{ github.run_id }}
             BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
         with:
-            azure_credentials: ${{ secrets.azure_credentials }}
+            # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
             script_parameter: |
                 python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
                   --build_environment ${{ inputs.exec_environment }} \
@@ -64,7 +65,8 @@ jobs:
             BUILD_BUILDID: ${{ github.run_id }}
             RUN_NAME: ${{ env.RUN_NAME }} # pass the run_name as env var
         with:
-            azure_credentials: ${{ secrets.azure_credentials }}
+            # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
             script_parameter: |
                 python -m mlops.common.get_run_metadata \
                   --run_id $RUN_NAME \
@@ -94,8 +96,9 @@ jobs:
         uses: ./.github/actions/configure_azureml_agent
       - name: Provision azureml online endpoint
         uses: ./.github/actions/execute_shell_code
-        with: 
-            azure_credentials: ${{ secrets.azure_credentials }}
+        with:
+            # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
             script_parameter: |
                 python -m mlops.common.deployment.provision_online_endpoint \
                   --model_type ${{ inputs.model_type }} \
@@ -112,8 +115,9 @@ jobs:
                   --run_id ${{ github.run_id }}
       - name: Test azureml real endpoint
         uses: ./.github/actions/execute_shell_code
-        with: 
-            azure_credentials: ${{ secrets.azure_credentials }}
+        with:
+            # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
             script_parameter: |
                 python -m mlops.common.deployment.run_test_model_on_aml \
                     --environment_name ${{ inputs.exec_environment }} \
@@ -136,8 +140,9 @@ jobs:
         uses: ./.github/actions/configure_azureml_agent
       - name: Provision azureml online endpoint
         uses: ./.github/actions/execute_shell_code
-        with: 
-            azure_credentials: ${{ secrets.azure_credentials }}
+        with:
+            # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
             script_parameter: |
                 python -m mlops.common.deployment.provision_batch_endpoint \
                   --run_id ${{ github.run_id }} \
@@ -145,8 +150,9 @@ jobs:
                   --model_type ${{ inputs.model_type }}
       - name: Provision azureml deployment
         uses: ./.github/actions/execute_shell_code
-        with: 
-            azure_credentials: ${{ secrets.azure_credentials }}
+        with:
+            # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
             script_parameter: |
                 python -m mlops.common.deployment.provision_batch_deployment \
                   --run_id ${{ github.run_id }} \
@@ -154,8 +160,9 @@ jobs:
                   --model_type ${{ inputs.model_type }}
       - name: Test azureml batch endpoint
         uses: ./.github/actions/execute_shell_code
-        with: 
-            azure_credentials: ${{ secrets.azure_credentials }}
+        with:
+            # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
             script_parameter: |
                 python -m mlops.common.deployment.run_test_batch_deployment \
                   --environment_name ${{ inputs.exec_environment }} \
@@ -181,7 +188,8 @@ jobs:
         - name: Provision azureml online endpoint
           uses: ./.github/actions/execute_shell_code
           with:
-            azure_credentials: ${{ secrets.azure_credentials }}
+            # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
             script_parameter: |
                 python -m mlops.common.deployment.approve_model \
                   --model_type ${{ inputs.model_type }}

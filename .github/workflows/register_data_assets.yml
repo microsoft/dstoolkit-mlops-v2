@@ -21,7 +21,8 @@ jobs:
             RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
             WORKSPACE_NAME: ${{ secrets.workspace_name }}
         with:
-            azure_credentials: ${{ secrets.azure_credentials }}
+            # azure_credentials: ${{ secrets.azure_credentials }}
+            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
             script_parameter: |
                 python -m mlops.common.register_data_asset \
                     --data_config_path config/data_config.json
