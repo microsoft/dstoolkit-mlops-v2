@@ -22,11 +22,11 @@ on:
       workspace_name:
         description: "the workspace name hosting the AML instance."
         required: true
-      # azure_credentials:
-      #   description: "the credentials to use to authenticate with Azure."
-      #   required: true
-      azure_managed_identity:
-        description: "the managed identity to use to authenticate with Azure."
+      arm_client_id:
+        description: "the clientid of the serviceprincipal used for OIDC authentication."
+        required: true
+      arm_tenant_id:
+        description: "the tenantid of the serviceprincipal used for OIDC authentication."
         required: true        
 jobs:
   build-validation:
@@ -35,6 +35,9 @@ jobs:
   execute-ml-job-pipeline:
     name: Execute ML Job Pipeline
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     needs: build-validation
     steps:
       - name: Checkout Actions
@@ -54,10 +57,13 @@ jobs:
             RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
             WORKSPACE_NAME: ${{ secrets.workspace_name }}
             BUILD_BUILDID: ${{ github.run_id }}
+            ARM_CLIENT_ID: ${{secrets.arm_client_id}}
+            ARM_TENANT_ID: ${{secrets.arm_tenant_id}}
             BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
         with:
-            # azure_credentials: ${{ secrets.azure_credentials }}
-            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
+            arm_client_id: ${{ env.ARM_CLIENT_ID }}
+            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+            subscription_id: ${{ env.SUBSCRIPTION_ID }}
             script_parameter: |
                 python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
                     --build_environment ${{ inputs.exec_environment }} \

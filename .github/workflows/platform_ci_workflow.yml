@@ -21,13 +21,19 @@ on:
       workspace_name:
         description: "the workspace name hosting the AML instance."
         required: true
-      azure_credentials:
-        description: "the credentials to use to authenticate with Azure."
+      arm_client_id:
+        description: "the clientid of the serviceprincipal used for OIDC authentication."
+        required: true
+      arm_tenant_id:
+        description: "the tenantid of the serviceprincipal used for OIDC authentication."
         required: true
 jobs:
   execute-training-job:
     name: Execute training job
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read    
     steps:
       - name: Checkout Actions
         uses: actions/checkout@v1
@@ -40,10 +46,13 @@ jobs:
             RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
             WORKSPACE_NAME: ${{ secrets.workspace_name }}
             BUILD_BUILDID: ${{ github.run_id }}
+            ARM_CLIENT_ID: ${{secrets.arm_client_id}}
+            ARM_TENANT_ID: ${{secrets.arm_tenant_id}}            
             BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
         with:
-            # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
+            arm_client_id: ${{ env.ARM_CLIENT_ID }}
+            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+            subscription_id: ${{ env.SUBSCRIPTION_ID }}
             script_parameter: |
                 python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
                   --build_environment ${{ inputs.exec_environment }} \
@@ -64,9 +73,12 @@ jobs:
             WORKSPACE_NAME: ${{ secrets.workspace_name }}
             BUILD_BUILDID: ${{ github.run_id }}
             RUN_NAME: ${{ env.RUN_NAME }} # pass the run_name as env var
+            ARM_CLIENT_ID: ${{secrets.arm_client_id}}
+            ARM_TENANT_ID: ${{secrets.arm_tenant_id}}
         with:
-            # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
+            arm_client_id: ${{ env.ARM_CLIENT_ID }}
+            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+            subscription_id: ${{ env.SUBSCRIPTION_ID }}
             script_parameter: |
                 python -m mlops.common.get_run_metadata \
                   --run_id $RUN_NAME \
@@ -82,12 +94,17 @@ jobs:
   deploy-online:
     name: Deploy_Online
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     needs: [execute-training-job]
     env:
       SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
       RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
       WORKSPACE_NAME: ${{ secrets.workspace_name }}
       BUILD_BUILDID: ${{ github.run_id }}
+      ARM_CLIENT_ID: ${{secrets.arm_client_id}}
+      ARM_TENANT_ID: ${{secrets.arm_tenant_id}}
       BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
     steps:
       - name: Checkout Actions
@@ -97,8 +114,9 @@ jobs:
       - name: Provision azureml online endpoint
         uses: ./.github/actions/execute_shell_code
         with:
-            # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
+            arm_client_id: ${{ env.ARM_CLIENT_ID }}
+            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+            subscription_id: ${{ env.SUBSCRIPTION_ID }}
             script_parameter: |
                 python -m mlops.common.deployment.provision_online_endpoint \
                   --model_type ${{ inputs.model_type }} \
@@ -107,7 +125,9 @@ jobs:
       - name: Provision azureml deployment
         uses: ./.github/actions/execute_shell_code
         with: 
-            azure_credentials: ${{ secrets.azure_credentials }}
+            arm_client_id: ${{ env.ARM_CLIENT_ID }}
+            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+            subscription_id: ${{ env.SUBSCRIPTION_ID }}
             script_parameter: |
                 python -m mlops.common.deployment.provision_online_deployment \
                   --model_type ${{ inputs.model_type }} \
@@ -116,8 +136,9 @@ jobs:
       - name: Test azureml real endpoint
         uses: ./.github/actions/execute_shell_code
         with:
-            # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
+            arm_client_id: ${{ env.ARM_CLIENT_ID }}
+            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+            subscription_id: ${{ env.SUBSCRIPTION_ID }}
             script_parameter: |
                 python -m mlops.common.deployment.run_test_model_on_aml \
                     --environment_name ${{ inputs.exec_environment }} \
@@ -126,12 +147,17 @@ jobs:
   deploy-batch:
     name: Deploy_Batch
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     needs: [execute-training-job]
     env:
         SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
         RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
         WORKSPACE_NAME: ${{ secrets.workspace_name }}
         BUILD_BUILDID: ${{ github.run_id }}
+        ARM_CLIENT_ID: ${{secrets.arm_client_id}}
+        ARM_TENANT_ID: ${{secrets.arm_tenant_id}}
         BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
     steps:
       - name: Checkout Actions
@@ -141,8 +167,9 @@ jobs:
       - name: Provision azureml online endpoint
         uses: ./.github/actions/execute_shell_code
         with:
-            # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
+            arm_client_id: ${{ env.ARM_CLIENT_ID }}
+            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+            subscription_id: ${{ env.SUBSCRIPTION_ID }}
             script_parameter: |
                 python -m mlops.common.deployment.provision_batch_endpoint \
                   --run_id ${{ github.run_id }} \
@@ -151,8 +178,9 @@ jobs:
       - name: Provision azureml deployment
         uses: ./.github/actions/execute_shell_code
         with:
-            # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
+            arm_client_id: ${{ env.ARM_CLIENT_ID }}
+            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+            subscription_id: ${{ env.SUBSCRIPTION_ID }}
             script_parameter: |
                 python -m mlops.common.deployment.provision_batch_deployment \
                   --run_id ${{ github.run_id }} \
@@ -161,8 +189,9 @@ jobs:
       - name: Test azureml batch endpoint
         uses: ./.github/actions/execute_shell_code
         with:
-            # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
+            arm_client_id: ${{ env.ARM_CLIENT_ID }}
+            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+            subscription_id: ${{ env.SUBSCRIPTION_ID }}
             script_parameter: |
                 python -m mlops.common.deployment.run_test_batch_deployment \
                   --environment_name ${{ inputs.exec_environment }} \
@@ -171,14 +200,19 @@ jobs:
   change_model_tag:
     name: Apply Production Tag
     runs-on: ubuntu-latest
-    needs: [execute-training-job]
+    permissions:
+      id-token: write
+      contents: read
+    needs: [execute-training-job,deploy-online,deploy-batch]    
     environment:
         name: dev
     env:
-      SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
-      RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
-      WORKSPACE_NAME: ${{ secrets.workspace_name }}
+      SUBSCRIPTION_ID: ${{ vars.subscription_id }}
+      RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
+      WORKSPACE_NAME: ${{ vars.workspace_name }}
       BUILD_BUILDID: ${{ github.run_id }}
+      ARM_CLIENT_ID: ${{vars.arm_client_id}}
+      ARM_TENANT_ID: ${{vars.arm_tenant_id}}
       BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
     steps:
         - name: Checkout Actions
@@ -188,8 +222,9 @@ jobs:
         - name: Provision azureml online endpoint
           uses: ./.github/actions/execute_shell_code
           with:
-            # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-            azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
+            arm_client_id: ${{ env.ARM_CLIENT_ID }}
+            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+            subscription_id: ${{ env.SUBSCRIPTION_ID }}
             script_parameter: |
                 python -m mlops.common.deployment.approve_model \
                   --model_type ${{ inputs.model_type }}

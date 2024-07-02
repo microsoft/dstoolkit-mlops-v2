@@ -31,8 +31,8 @@ jobs:
       exec_environment: ${{ inputs.exec_environment || 'pr' }}
       model_type: ${{ inputs.model_type || 'nyc_taxi' }}
     secrets:
-      subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
-      resource_group_name: ${{ secrets.RESOURCE_GROUP_NAME }}
-      workspace_name: ${{ secrets.WORKSPACE_NAME }}
-      # azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
-      azure_managed_identity: ${{ secrets.AZURE_MANAGED_IDENTITY }}
+      subscription_id: ${{ vars.SUBSCRIPTION_ID }}
+      resource_group_name: ${{ vars.RESOURCE_GROUP_NAME }}
+      workspace_name: ${{ vars.WORKSPACE_NAME }}
+      arm_client_id: ${{ vars.ARM_CLIENT_ID }}
+      arm_tenant_id: ${{ vars.ARM_TENANT_ID }}

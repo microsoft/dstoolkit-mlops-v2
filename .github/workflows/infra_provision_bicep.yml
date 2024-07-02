@@ -10,9 +10,15 @@ env:
   RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
   STORAGE_ACCT_NAME: ${{ vars.STORAGE_ACCT_NAME }}
   WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
+  ARM_CLIENT_ID: ${{vars.ARM_CLIENT_ID}}
+  ARM_TENANT_ID: ${{vars.ARM_TENANT_ID}}
+  SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
 jobs:
   run-infra-provision:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
@@ -28,18 +34,18 @@ jobs:
           echo $STORAGE_ACCT_NAME
           echo $WORKSPACE_NAME
           echo ${{ github.workspace }}
+          echo $ARM_CLIENT_ID
+          echo $ARM_TENANT_ID
+          echo $SUBSCRIPTION_ID
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      # - name: Login to Azure
-      #   uses: azure/login@v1
-      #   with:
-      #     creds: ${{ secrets.AZURE_CREDENTIALS }}   
-      
-      - name: Azure login
+      - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.SUBSCRIPTION_ID }}         
           
       - name: Provision AzureML Infrastructure
         uses: azure/CLI@v1
