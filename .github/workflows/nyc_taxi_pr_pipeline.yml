@@ -24,6 +24,17 @@ on:
         required: true
         default: "nyc_taxi"
   workflow_dispatch:
+    inputs:
+      exec_environment:
+        type: string
+        description: "The environment to run the workflow in"
+        required: true
+        default: "pr"
+      model_type:
+        type: string
+        description: "The type of model to run the workflow for"
+        required: true
+        default: "nyc_taxi"
 permissions:
   id-token: write
   contents: read    
