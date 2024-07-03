@@ -11,22 +11,6 @@ on:
         type: string
         description: "type of model to execute"
         required: true
-    secrets:
-      subscription_id:
-        description: "the subscription ID hosting the AML instance."
-        required: true
-      resource_group_name:
-        description: "the resource group name hosting the AML instance."
-        required: true
-      workspace_name:
-        description: "the workspace name hosting the AML instance."
-        required: true
-      arm_client_id:
-        description: "the clientid of the serviceprincipal used for OIDC authentication."
-        required: true
-      arm_tenant_id:
-        description: "the tenantid of the serviceprincipal used for OIDC authentication."
-        required: true
 jobs:
   execute-training-job:
     name: Execute training job
@@ -42,12 +26,12 @@ jobs:
       - name: Execute MLOps Standard Pipeline
         uses: ./.github/actions/execute_shell_code
         env: 
-            SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
-            RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
-            WORKSPACE_NAME: ${{ secrets.workspace_name }}
+            SUBSCRIPTION_ID: ${{ vars.subscription_id }}
+            RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
+            WORKSPACE_NAME: ${{ vars.workspace_name }}
             BUILD_BUILDID: ${{ github.run_id }}
-            ARM_CLIENT_ID: ${{secrets.arm_client_id}}
-            ARM_TENANT_ID: ${{secrets.arm_tenant_id}}            
+            ARM_CLIENT_ID: ${{vars.arm_client_id}}
+            ARM_TENANT_ID: ${{vars.arm_tenant_id}}            
             BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
         with:
             arm_client_id: ${{ env.ARM_CLIENT_ID }}
@@ -68,13 +52,13 @@ jobs:
       - name: Run Metadata
         uses: ./.github/actions/execute_shell_code
         env: 
-            SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
-            RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
-            WORKSPACE_NAME: ${{ secrets.workspace_name }}
+            SUBSCRIPTION_ID: ${{ vars.subscription_id }}
+            RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
+            WORKSPACE_NAME: ${{ vars.workspace_name }}
             BUILD_BUILDID: ${{ github.run_id }}
             RUN_NAME: ${{ env.RUN_NAME }} # pass the run_name as env var
-            ARM_CLIENT_ID: ${{secrets.arm_client_id}}
-            ARM_TENANT_ID: ${{secrets.arm_tenant_id}}
+            ARM_CLIENT_ID: ${{vars.arm_client_id}}
+            ARM_TENANT_ID: ${{vars.arm_tenant_id}}
         with:
             arm_client_id: ${{ env.ARM_CLIENT_ID }}
             arm_tenant_id: ${{ env.ARM_TENANT_ID }}
@@ -99,12 +83,12 @@ jobs:
       contents: read
     needs: [execute-training-job]
     env:
-      SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
-      RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
-      WORKSPACE_NAME: ${{ secrets.workspace_name }}
+      SUBSCRIPTION_ID: ${{ vars.subscription_id }}
+      RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
+      WORKSPACE_NAME: ${{ vars.workspace_name }}
       BUILD_BUILDID: ${{ github.run_id }}
-      ARM_CLIENT_ID: ${{secrets.arm_client_id}}
-      ARM_TENANT_ID: ${{secrets.arm_tenant_id}}
+      ARM_CLIENT_ID: ${{vars.arm_client_id}}
+      ARM_TENANT_ID: ${{vars.arm_tenant_id}}
       BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
     steps:
       - name: Checkout Actions
@@ -152,12 +136,12 @@ jobs:
       contents: read
     needs: [execute-training-job]
     env:
-        SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
-        RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
-        WORKSPACE_NAME: ${{ secrets.workspace_name }}
+        SUBSCRIPTION_ID: ${{ vars.subscription_id }}
+        RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
+        WORKSPACE_NAME: ${{ vars.workspace_name }}
         BUILD_BUILDID: ${{ github.run_id }}
-        ARM_CLIENT_ID: ${{secrets.arm_client_id}}
-        ARM_TENANT_ID: ${{secrets.arm_tenant_id}}
+        ARM_CLIENT_ID: ${{vars.arm_client_id}}
+        ARM_TENANT_ID: ${{vars.arm_tenant_id}}
         BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
     steps:
       - name: Checkout Actions
