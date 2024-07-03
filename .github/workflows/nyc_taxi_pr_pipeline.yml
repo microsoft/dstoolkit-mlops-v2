@@ -23,16 +23,18 @@ on:
         description: "The type of model to run the workflow for"
         required: true
         default: "nyc_taxi"
+  workflow_dispatch:
+env:
+  SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
+  RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
+  WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
+  ARM_CLIENT_ID: ${{vars.ARM_CLIENT_ID}}
+  ARM_TENANT_ID: ${{vars.ARM_TENANT_ID}}
 
+  
 jobs:
   run-pr-workflow:
     uses: ./.github/workflows/platform_pr_workflow.yml
     with:
       exec_environment: ${{ inputs.exec_environment || 'pr' }}
       model_type: ${{ inputs.model_type || 'nyc_taxi' }}
-    secrets:
-      subscription_id: ${{ vars.SUBSCRIPTION_ID }}
-      resource_group_name: ${{ vars.RESOURCE_GROUP_NAME }}
-      workspace_name: ${{ vars.WORKSPACE_NAME }}
-      arm_client_id: ${{ vars.ARM_CLIENT_ID }}
-      arm_tenant_id: ${{ vars.ARM_TENANT_ID }}
