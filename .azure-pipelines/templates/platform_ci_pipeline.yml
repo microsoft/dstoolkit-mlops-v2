@@ -138,6 +138,8 @@ stages:
     - stage: 'Approve_Model'
       dependsOn: 
       - execute_training_job
+      - Deploy_Batch
+      - Deploy_Online
       variables:
       - name: run_metadata_from_submit_job
         value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_METADATA'] ]

@@ -25,14 +25,6 @@ jobs:
         uses: ./.github/actions/configure_azureml_agent
       - name: Execute MLOps Standard Pipeline
         uses: ./.github/actions/execute_shell_code
-        # env: 
-        #     SUBSCRIPTION_ID: ${{ vars.subscription_id }}
-        #     RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
-        #     WORKSPACE_NAME: ${{ vars.workspace_name }}
-        #     BUILD_BUILDID: ${{ github.run_id }}
-        #     ARM_CLIENT_ID: ${{vars.arm_client_id}}
-        #     ARM_TENANT_ID: ${{vars.arm_tenant_id}}            
-        #     BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
         with:
             arm_client_id: ${{ env.ARM_CLIENT_ID }}
             arm_tenant_id: ${{ env.ARM_TENANT_ID }}
@@ -52,13 +44,7 @@ jobs:
       - name: Run Metadata
         uses: ./.github/actions/execute_shell_code
         env: 
-            # SUBSCRIPTION_ID: ${{ vars.subscription_id }}
-            # RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
-            # WORKSPACE_NAME: ${{ vars.workspace_name }}
-            # BUILD_BUILDID: ${{ github.run_id }}
             RUN_NAME: ${{ env.RUN_NAME }} # pass the run_name as env var
-            # ARM_CLIENT_ID: ${{vars.arm_client_id}}
-            # ARM_TENANT_ID: ${{vars.arm_tenant_id}}
         with:
             arm_client_id: ${{ env.ARM_CLIENT_ID }}
             arm_tenant_id: ${{ env.ARM_TENANT_ID }}
@@ -82,14 +68,6 @@ jobs:
       id-token: write
       contents: read
     needs: [execute-training-job]
-    # env:
-    #   SUBSCRIPTION_ID: ${{ vars.subscription_id }}
-    #   RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
-    #   WORKSPACE_NAME: ${{ vars.workspace_name }}
-    #   BUILD_BUILDID: ${{ github.run_id }}
-    #   ARM_CLIENT_ID: ${{vars.arm_client_id}}
-    #   ARM_TENANT_ID: ${{vars.arm_tenant_id}}
-    #   BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
     steps:
       - name: Checkout Actions
         uses: actions/checkout@v1
@@ -135,14 +113,6 @@ jobs:
       id-token: write
       contents: read
     needs: [execute-training-job]
-    # env:
-    #     SUBSCRIPTION_ID: ${{ vars.subscription_id }}
-    #     RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
-    #     WORKSPACE_NAME: ${{ vars.workspace_name }}
-    #     BUILD_BUILDID: ${{ github.run_id }}
-    #     ARM_CLIENT_ID: ${{vars.arm_client_id}}
-    #     ARM_TENANT_ID: ${{vars.arm_tenant_id}}
-    #     BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
     steps:
       - name: Checkout Actions
         uses: actions/checkout@v1
@@ -190,14 +160,6 @@ jobs:
     needs: [execute-training-job,deploy-online,deploy-batch]    
     environment:
         name: dev
-    # env:
-    #   SUBSCRIPTION_ID: ${{ vars.subscription_id }}
-    #   RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
-    #   WORKSPACE_NAME: ${{ vars.workspace_name }}
-    #   BUILD_BUILDID: ${{ github.run_id }}
-    #   ARM_CLIENT_ID: ${{vars.arm_client_id}}
-    #   ARM_TENANT_ID: ${{vars.arm_tenant_id}}
-    #   BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
     steps:
         - name: Checkout Actions
           uses: actions/checkout@v1
