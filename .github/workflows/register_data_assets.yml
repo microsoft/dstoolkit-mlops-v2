@@ -24,11 +24,6 @@ jobs:
       - name: Execute Dataset Registration
         uses: ./.github/actions/execute_shell_code
         with:
-        #     # azure_credentials: ${{ secrets.azure_credentials
-        #     arm_client_id: ${{ env.ARM_CLIENT_ID }}
-        #     arm_tenant_id: ${{ env.ARM_TENANT_ID }}
-        #     subscription_id: ${{ env.SUBSCRIPTION_ID }}
-            
             script_parameter: |
                 python -m mlops.common.register_data_asset \
                     --data_config_path config/data_config.json

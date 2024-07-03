@@ -5,12 +5,12 @@ pr:
      - development
   paths:
     include:
-      - .azure-pipelines/*
-      - mlops/common/*
-      - mlops/london_taxi/*
-      - src/london_src/*
-      - model/london_taxi/*
-      - src/shared/*
+      - .azure-pipelines/**
+      - mlops/common/**
+      - mlops/london_taxi/**
+      - src/london_src/**
+      - model/london_taxi/**
+      - src/shared/**
 
 pool:
   vmImage: ubuntu-latest
