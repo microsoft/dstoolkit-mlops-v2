@@ -19,9 +19,6 @@ jobs:
   execute-ml-job-pipeline:
     name: Execute ML Job Pipeline
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
     needs: build-validation
     steps:
       - name: Checkout Actions
