@@ -23,15 +23,17 @@ on:
         required: true
         default: "london_taxi"
   workflow_dispatch:
+env: 
+  SUBSCRIPTION_ID: ${{ vars.subscription_id }}
+  RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
+  WORKSPACE_NAME: ${{ vars.workspace_name }}
+  ARM_CLIENT_ID: ${{vars.arm_client_id}}
+  ARM_TENANT_ID: ${{vars.arm_tenant_id}}            
+  BUILD_BUILDID: ${{ github.run_id }}
+  BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}       
 jobs:
   run-ci-workflow:
     uses: ./.github/workflows/platform_ci_workflow.yml
     with:
       exec_environment: ${{ inputs.exec_environment || 'dev' }}
       model_type: ${{ inputs.model_type || 'london_taxi' }}
-    secrets:
-      subscription_id: ${{ vars.SUBSCRIPTION_ID }}
-      resource_group_name: ${{ vars.RESOURCE_GROUP_NAME }}
-      workspace_name: ${{ vars.WORKSPACE_NAME }}
-      arm_client_id: ${{ vars.ARM_CLIENT_ID }}
-      arm_tenant_id: ${{ vars.ARM_TENANT_ID }}
