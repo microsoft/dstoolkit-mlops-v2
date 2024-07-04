@@ -23,7 +23,9 @@ on:
         description: "The type of model to run the workflow for"
         required: true
         default: "london_taxi"
-  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: read    
 env:
   SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
   RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
