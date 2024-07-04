@@ -63,7 +63,6 @@ jobs:
       scriptLocation: inlineScript
       useGlobalConfig: false
       inlineScript: |
-        az --version
         az storage account create --name '$(TFSTATE_STORAGE_ACCT_NAME)' --resource-group '$(TFSTATE_RESOURCE_GROUP_NAME)' --sku Standard_LRS
     enabled: true
 
@@ -75,7 +74,6 @@ jobs:
       scriptLocation: inlineScript
       useGlobalConfig: false
       inlineScript: |
-        az --version
         az storage container create --name terraform --account-name '$(TFSTATE_STORAGE_ACCT_NAME)'
     enabled: true
 

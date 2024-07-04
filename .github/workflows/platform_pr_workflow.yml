@@ -12,19 +12,14 @@ on:
         type: string
         description: "type of model to execute"
         required: true
-    secrets:
-      subscription_id:
-        description: "the subscription ID hosting the AML instance."
-        required: true
-      resource_group_name:
-        description: "the resource group name hosting the AML instance."
-        required: true
-      workspace_name:
-        description: "the workspace name hosting the AML instance."
-        required: true
-      azure_credentials:
-        description: "the credentials to use to authenticate with Azure."
-        required: true
+env:
+  SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
+  RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
+  WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
+  ARM_CLIENT_ID: ${{vars.ARM_CLIENT_ID}}
+  ARM_TENANT_ID: ${{vars.ARM_TENANT_ID}}
+  BUILD_BUILDID: ${{ github.run_id }}
+  BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}          
 jobs:
   build-validation:
     name: Build Validation
@@ -36,24 +31,15 @@ jobs:
     steps:
       - name: Checkout Actions
         uses: actions/checkout@v1
-      - name: Export Secrets 
-        uses: oNaiPs/secrets-to-env-action@v1
-        with:
-          secrets: ${{ toJSON(secrets) }}
-          convert: upper
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
     
       - name: Execute AzureML Pipeline
         uses: ./.github/actions/execute_shell_code
-        env: 
-            SUBSCRIPTION_ID: ${{ secrets.subscription_id }}
-            RESOURCE_GROUP_NAME: ${{ secrets.resource_group_name }}
-            WORKSPACE_NAME: ${{ secrets.workspace_name }}
-            BUILD_BUILDID: ${{ github.run_id }}
-            BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
         with:
-            azure_credentials: ${{ secrets.azure_credentials }}
+            arm_client_id: ${{ env.ARM_CLIENT_ID }}
+            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+            subscription_id: ${{ env.SUBSCRIPTION_ID }}
             script_parameter: |
                 python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
                     --build_environment ${{ inputs.exec_environment }} \

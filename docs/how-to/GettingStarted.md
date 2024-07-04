@@ -12,10 +12,9 @@ This solution supports Azure Machine Learning (ML) as a platform for ML, and Azu
 
 * Your team has an Azure Subscription within which to host Model Factory. If you don't have an Azure subscription, create a free account  by following this link. [Free Azure Subscription](https://azure.microsoft.com/en-us/free/search/?ef_id=_k_67e7bdd2a501151df8d8d83b02edc75b_k_&OCID=AIDcmm5edswduu_SEM__k_67e7bdd2a501151df8d8d83b02edc75b_k_&msclkid=67e7bdd2a501151df8d8d83b02edc75b)
 
-* You have created an app registration to be used to operate the infrastructure, and AML build and ci pipelines.  
+* You have created a service connection using workload identity federation to be used to operate the infrastructure, and AML build and ci pipelines. [Connect to Azure by using an Azure Resource Manager service connection](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops). The above process will automatically create the federated credential needed to run Azure Pipelines, however, it will be necessary to add two more federated credentials to support github actions workflows.  Follow the instructions on this page to setup two federated credentials, [Use GitHub Actions to connect to Azure](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-portal%2Cwindows#add-federated-credentials). Create one federated credential using Pull Request as entity type, and one using Branch as entity type and specifying the root branch in your repository.
 
 * You have granted the service principal above, at least Contributor, and User Access Administrator on the target subscription in Azure.
-**Use this document as a reference when creating an app registration: [Create a Microsoft Entra application and service principal that can access resources](https://learn.microsoft.com/en-us/entra/identity-platform/howto-create-service-principal-portal)
 
 ## Setup your source control environment
 
@@ -96,24 +95,6 @@ Details about how to create a basic Azure Pipeline can be found in [Create your 
 * SUBSCRIPTION_ID: A GUID for the azure subscription hosting the azure machine learning workspace.
 * TFSTATE_RESOURCE_GROUP_NAME: A string compliant with the naming convention for an azure resource group resource. The tfstate resource group hosts a storage account for storing the tfstate file produced when using terraform infrastructure provisioning.
 * TFSTATE_STORAGE_ACCT_NAME: A string compliant with the naming convention for an azure storage account resource. The tfstate storage account for storing the tfstate file produced when using terraform infrastructure provisioning.
-* WORKSPACE_NAME: A string compliant with the naming convention for an azure machine learning workspace resource.
-
-**Step 3.** Add the following secrets in Settings > Secrets and Variables > Secrets:
-
-* ARM_CLIENT_SECRET: The is the client secret for the service principal backing the service connection created above.
-* AZURE_CREDENTIALS: This secret is in the form below:
-
-```json
-{
-"clientId": "<GUID>",
-"clientSecret": "<PrincipalSecret>",
-"subscriptionId": "<GUID>",
-"tenantId": "<GUID>"
-}
-```
-
-* RESOURCE_GROUP_NAME: A string compliant with the naming convention for an azure resource group resource.
-* SUBSCRIPTION_ID: A GUID for the azure subscription hosting the azure machine learning workspace.
 * WORKSPACE_NAME: A string compliant with the naming convention for an azure machine learning workspace resource.
 
 **Note** Make sure this GitHub repository has proper [workflow and access permissions](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#about-github-actions-permissions-for-your-repository).
