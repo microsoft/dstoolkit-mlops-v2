@@ -26,14 +26,14 @@ on:
 permissions:
   id-token: write
   contents: read    
-env:
+# env:
   # SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
   # RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
   # WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
   # ARM_CLIENT_ID: ${{vars.ARM_CLIENT_ID}}
   # ARM_TENANT_ID: ${{vars.ARM_TENANT_ID}}
-  BUILD_BUILDID: ${{ github.run_id }}
-  BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
+  # BUILD_BUILDID: ${{ github.run_id }}
+  # BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
 jobs:
   run-pr-workflow:
     uses: ./.github/workflows/platform_pr_workflow.yml
