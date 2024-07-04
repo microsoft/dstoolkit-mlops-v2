@@ -118,10 +118,8 @@ stages:
                 --environment_name ${{ parameters.exec_environment }} \
                 --model_type ${{ parameters.model_type }}
 
-        - task: Delay@1
-          inputs: 
-            delayForMinutes: '3'
-                    
+        - powershell: Start-Sleep -Seconds 180
+
         - template: execute_python_code.yml
           parameters:
             step_name: "provision azureml deployment"
