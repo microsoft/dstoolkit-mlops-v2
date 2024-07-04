@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - development
+      - test-federated-credential
     paths:
       - mlops/common/**
       - mlops/**
