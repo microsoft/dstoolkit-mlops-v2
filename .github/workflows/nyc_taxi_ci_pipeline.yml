@@ -1,29 +1,29 @@
-# Continuous integration for 
+# Continuous integration for nyc taxi model
 name: Nyc Taxi CI Workflow
 on:
-  # push:
-  #   branches:
-  #     - development
-  #   paths:
-  #     - mlops/common/**
-  #     - mlops/**
-  #     - mlops/nyc_taxi/**
-  #     - model/nyc_taxi/**
-  #     - src/nyc_src/**
-  #     - test/nyc_taxi/**
-  # workflow_call:
-  #   inputs:
-  #     exec_environment:
-  #       type: string
-  #       description: "Execution Environment"
-  #       required: true
-  #       default: "dev"
-  #     model_type:
-  #       type: string
-  #       description: "The type of model to run the workflow for"
-  #       required: true
-  #       default: "nyc_taxi"
-  workflow_dispatch:
+  push:
+    branches:
+      - development
+    paths:
+      - mlops/common/**
+      - mlops/**
+      - mlops/nyc_taxi/**
+      - model/nyc_taxi/**
+      - src/nyc_src/**
+      - test/nyc_taxi/**
+  workflow_call:
+    inputs:
+      exec_environment:
+        type: string
+        description: "Execution Environment"
+        required: true
+        default: "dev"
+      model_type:
+        type: string
+        description: "The type of model to run the workflow for"
+        required: true
+        default: "nyc_taxi"
+
 env: 
   SUBSCRIPTION_ID: ${{ vars.subscription_id }}
   RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
