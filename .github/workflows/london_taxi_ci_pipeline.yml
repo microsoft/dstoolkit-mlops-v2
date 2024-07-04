@@ -1,15 +1,15 @@
 name: London Taxi CI Workflow
 on:
   push:
-    branches:
-      - development
-    paths:
-      - mlops/common/**
-      - mlops/**
-      - mlops/london_taxi/**
-      - model/london_taxi/**
-      - src/london_src/**
-      - test/london_taxi/**
+    # branches:
+    #   - development
+    # paths:
+    #   - mlops/common/**
+    #   - mlops/**
+    #   - mlops/london_taxi/**
+    #   - model/london_taxi/**
+    #   - src/london_src/**
+    #   - test/london_taxi/**
   workflow_call:
     inputs:
       exec_environment:
@@ -22,15 +22,9 @@ on:
         description: "The type of model to run the workflow for"
         required: true
         default: "london_taxi"
-  workflow_dispatch:
-env: 
-  SUBSCRIPTION_ID: ${{ vars.subscription_id }}
-  RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
-  WORKSPACE_NAME: ${{ vars.workspace_name }}
-  ARM_CLIENT_ID: ${{vars.arm_client_id}}
-  ARM_TENANT_ID: ${{vars.arm_tenant_id}}            
-  BUILD_BUILDID: ${{ github.run_id }}
-  BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}       
+permissions:
+  id-token: write
+  contents: read         
 jobs:
   run-ci-workflow:
     uses: ./.github/workflows/platform_ci_workflow.yml
