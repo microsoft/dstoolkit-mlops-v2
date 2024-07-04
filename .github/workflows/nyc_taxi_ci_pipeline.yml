@@ -2,16 +2,15 @@
 name: Nyc Taxi CI Workflow
 on:
   push:
-    branches:
-      - development
-      - test-federated-credential
-    paths:
-      - mlops/common/**
-      - mlops/**
-      - mlops/nyc_taxi/**
-      - model/nyc_taxi/**
-      - src/nyc_src/**
-      - test/nyc_taxi/**
+    # branches:
+    #   - development
+    # paths:
+    #   - mlops/common/**
+    #   - mlops/**
+    #   - mlops/nyc_taxi/**
+    #   - model/nyc_taxi/**
+    #   - src/nyc_src/**
+    #   - test/nyc_taxi/**
   workflow_call:
     inputs:
       exec_environment:
