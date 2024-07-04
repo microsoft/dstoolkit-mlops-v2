@@ -1,4 +1,4 @@
-# Continuous integration for nyc taxi model
+# Continuous integration (CI) for nyc taxi model 
 name: Nyc Taxi CI Workflow
 on:
   push:
