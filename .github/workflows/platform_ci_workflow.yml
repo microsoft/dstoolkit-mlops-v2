@@ -134,6 +134,8 @@ jobs:
                   --run_id ${{ github.run_id }} \
                   --environment_name ${{ inputs.exec_environment }} \
                   --model_type ${{ inputs.model_type }}
+      - name: Wait for 180 seconds
+        run: sleep 180
       - name: Provision azureml deployment
         uses: ./.github/actions/execute_shell_code
         with:
