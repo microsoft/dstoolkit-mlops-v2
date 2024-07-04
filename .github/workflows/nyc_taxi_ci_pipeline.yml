@@ -24,14 +24,17 @@ on:
         required: true
         default: "nyc_taxi"
 
-env: 
-  SUBSCRIPTION_ID: ${{ vars.subscription_id }}
-  RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
-  WORKSPACE_NAME: ${{ vars.workspace_name }}
-  ARM_CLIENT_ID: ${{vars.arm_client_id}}
-  ARM_TENANT_ID: ${{vars.arm_tenant_id}}            
-  BUILD_BUILDID: ${{ github.run_id }}
-  BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}    
+# env: 
+#   SUBSCRIPTION_ID: ${{ vars.subscription_id }}
+#   RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
+#   WORKSPACE_NAME: ${{ vars.workspace_name }}
+#   ARM_CLIENT_ID: ${{vars.arm_client_id}}
+#   ARM_TENANT_ID: ${{vars.arm_tenant_id}}            
+#   BUILD_BUILDID: ${{ github.run_id }}
+#   BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
+permissions:
+  id-token: write
+  contents: read          
 jobs:
   run-ci-workflow:
     uses: ./.github/workflows/platform_ci_workflow.yml
