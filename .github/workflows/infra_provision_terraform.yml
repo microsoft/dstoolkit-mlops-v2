@@ -85,7 +85,6 @@ jobs:
           tenant-id: ${{ env.ARM_TENANT_ID }}
           subscription-id: ${{ env.SUBSCRIPTION_ID }}  
       - run: |
-          # az --version
           az storage account create --name '${{ env.TFSTATE_STORAGE_ACCT_NAME }}' --resource-group '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}' --sku Standard_LRS
 
       - name: Add terraform container
@@ -95,7 +94,6 @@ jobs:
           tenant-id: ${{ env.ARM_TENANT_ID }}
           subscription-id: ${{ env.SUBSCRIPTION_ID }}  
       - run: |
-          # az --version --auth-mode login
           az storage container create --name terraform --account-name '${{ env.TFSTATE_STORAGE_ACCT_NAME }}'
 
       - name: Terraform Install
