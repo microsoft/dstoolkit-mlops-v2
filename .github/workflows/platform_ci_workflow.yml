@@ -164,7 +164,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    needs: [execute-training-job,deploy-online,deploy-batch]    
+    needs: [execute-training-job]    
     environment:
         name: dev
     steps:
