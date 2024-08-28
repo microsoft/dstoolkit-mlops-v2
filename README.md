@@ -72,11 +72,11 @@ You can use Visual Studio Code to run and debug specific tasks related to the ML
    - **Command:** `python -m mlops.common.register_data_asset --data_config_path config/data_config.json`
    - **Description:** Registers a data asset using the provided configuration file.
    
-2. **NYC Taxi Local Pipeline**
+2. **Start NYC Taxi Local Pipeline**
    - **Command:** `python -m mlops.nyc_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`
    - **Description:** Starts the NYC Taxi pipeline in a local environment and waits for completion.
    
-3. **London Taxi Local Pipeline**
+3. **Start London Taxi Local Pipeline**
    - **Command:** `python -m mlops.london_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`
    - **Description:** Starts the London Taxi pipeline in a local environment and waits for completion.
 
