@@ -13,7 +13,7 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "NYC Taxi Local Pipeline",
+            "name": "Start NYC Taxi Local Pipeline",
             "type": "debugpy",
             "request": "launch",
             "module": "mlops.nyc_taxi.start_local_pipeline",
@@ -26,7 +26,7 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "London Taxi Local Pipeline",
+            "name": "Start London Taxi Local Pipeline",
             "type": "debugpy",
             "request": "launch",
             "module": "mlops.london_taxi.start_local_pipeline",

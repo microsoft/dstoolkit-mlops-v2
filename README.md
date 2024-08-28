@@ -62,6 +62,39 @@ You can start training pipelines from your local computer by creating an environ
   - `python -m mlops.common.register_data_asset --data_config_path config/data_config.json`
 - Run the training pipeline under test using the module notation (for example, `python -m mlops.nyc_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`)
 
+## Running Debug Tasks in VS Code
+
+You can use Visual Studio Code to run and debug specific tasks related to the MLOps pipelines. The following configurations are set up in the [launch.json](.vscode/launch.json) file, allowing you to execute various scripts with ease.
+
+### Available Debug Tasks
+
+1. **Register Data Asset**
+   - **Command:** `python -m mlops.common.register_data_asset --data_config_path config/data_config.json`
+   - **Description:** Registers a data asset using the provided configuration file.
+   
+2. **NYC Taxi Local Pipeline**
+   - **Command:** `python -m mlops.nyc_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`
+   - **Description:** Starts the NYC Taxi pipeline in a local environment and waits for completion.
+   
+3. **London Taxi Local Pipeline**
+   - **Command:** `python -m mlops.london_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`
+   - **Description:** Starts the London Taxi pipeline in a local environment and waits for completion.
+
+### How to Run
+
+1. Open the **Debug** panel in Visual Studio Code.
+2. Select the desired debug task from the dropdown list. The options are:
+   - `Register Data Asset`
+   - `Start NYC Taxi Local Pipeline`
+   - `Start London Taxi Local Pipeline`
+3. Click the green play button (`▶`) next to the dropdown to start the task.
+4. The output and any debugging information will be displayed in the **Debug Console** or **Integrated Terminal**, depending on the task configuration.
+
+### Notes
+
+- Ensure that your environment is correctly set up and all necessary dependencies are installed before running these tasks.
+- If you encounter any issues, check the `launch.json` file in the `.vscode` directory to verify the configuration.
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
