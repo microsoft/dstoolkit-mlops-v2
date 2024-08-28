@@ -1,0 +1,42 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Register Data Asset",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "mlops.common.register_data_asset",
+            "args": [
+                "--data_config_path",
+                "config/data_config.json"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "NYC Taxi Local Pipeline",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "mlops.nyc_taxi.start_local_pipeline",
+            "args": [
+                "--build_environment",
+                "pr",
+                "--wait_for_completion",
+                "True"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "London Taxi Local Pipeline",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "mlops.london_taxi.start_local_pipeline",
+            "args": [
+                "--build_environment",
+                "pr",
+                "--wait_for_completion",
+                "True"
+            ],
+            "console": "integratedTerminal"
+        }
+    ]
+}
