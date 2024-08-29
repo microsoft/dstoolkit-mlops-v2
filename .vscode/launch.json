@@ -18,10 +18,8 @@
             "request": "launch",
             "module": "mlops.nyc_taxi.start_local_pipeline",
             "args": [
-                "--build_environment",
-                "pr",
-                "--wait_for_completion",
-                "True"
+                "--build_environment=${input:build_environment}",
+                "--wait_for_completion=${input:wait_for_completion}"
             ],
             "console": "integratedTerminal"
         },
@@ -31,12 +29,32 @@
             "request": "launch",
             "module": "mlops.london_taxi.start_local_pipeline",
             "args": [
-                "--build_environment",
-                "pr",
-                "--wait_for_completion",
-                "True"
+                "--build_environment=${input:build_environment}",
+                "--wait_for_completion=${input:wait_for_completion}"
             ],
             "console": "integratedTerminal"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "build_environment",
+            "type": "pickString",
+            "options": [
+                "pr",
+                "dev"
+            ],
+            "description": "The build environment (ex: pr, dev, prod)",
+            "default": "pr",
+        },
+        {
+            "id": "wait_for_completion",
+            "type": "pickString",
+            "options": [
+                "True",
+                "False"
+            ],
+            "description": "Wait for the completion of the pipeline (True/False)",
+            "default": "False",
         }
     ]
 }

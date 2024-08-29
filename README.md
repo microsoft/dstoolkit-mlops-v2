@@ -71,14 +71,14 @@ You can use Visual Studio Code to run and debug specific tasks related to the ML
 1. **Register Data Asset**
    - **Command:** `python -m mlops.common.register_data_asset --data_config_path config/data_config.json`
    - **Description:** Registers a data asset using the provided configuration file.
-   
+
 2. **Start NYC Taxi Local Pipeline**
-   - **Command:** `python -m mlops.nyc_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`
-   - **Description:** Starts the NYC Taxi pipeline in a local environment and waits for completion.
-   
+   - **Command:** `python -m mlops.nyc_taxi.start_local_pipeline --build_environment=<environment> --wait_for_completion=<True/False>`
+   - **Description:** Starts the NYC Taxi pipeline in a local environment. You will be prompted to specify the `build_environment` and whether the pipeline should wait for completion.
+
 3. **Start London Taxi Local Pipeline**
-   - **Command:** `python -m mlops.london_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`
-   - **Description:** Starts the London Taxi pipeline in a local environment and waits for completion.
+   - **Command:** `python -m mlops.london_taxi.start_local_pipeline --build_environment=<environment> --wait_for_completion=<True/False>`
+   - **Description:** Starts the London Taxi pipeline in a local environment. You will be prompted to specify the `build_environment` and whether the pipeline should wait for completion.
 
 ### How to Run
 
@@ -88,12 +88,16 @@ You can use Visual Studio Code to run and debug specific tasks related to the ML
    - `Start NYC Taxi Local Pipeline`
    - `Start London Taxi Local Pipeline`
 3. Click the green play button (`▶`) next to the dropdown to start the task.
-4. The output and any debugging information will be displayed in the **Debug Console** or **Integrated Terminal**, depending on the task configuration.
+4. For the NYC Taxi and London Taxi pipelines, you will be prompted to enter two values:
+   - **Build Environment:** Choose from `pr`, `dev`, or any other configured environments.
+   - **Wait for Completion:** Choose `True` if you want the pipeline to wait for completion before exiting, or `False` to allow it to run asynchronously.
+5. The output and any debugging information will be displayed in the **Debug Console** or **Integrated Terminal**, depending on the task configuration.
 
 ### Notes
 
 - Ensure that your environment is correctly set up and all necessary dependencies are installed before running these tasks.
-- If you encounter any issues, check the `launch.json` file in the `.vscode` directory to verify the configuration.
+- The available options for `build_environment` and `wait_for_completion` are defined in the [launch.json](.vscode/launch.json) file and can be modified to suit your project’s needs.
+- If you encounter any issues, check the [launch.json](.vscode/launch.json) file in the `.vscode` directory to verify the configuration.
 
 ## Contributing
 
