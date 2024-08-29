@@ -4,7 +4,7 @@
 
 Data scientists perform exploratory data analysis (EDA) to understand the training data, and then perform experiments to create machine learning code that tunes a base model for the hypothesis based on the analysis of the training data. Data scientists can perform this work on their own workstation, on a Data Science Virtual Machine (DSVM), or on an Azure Machine Learning Compute instance.
 
-Data Scientists need a flexible development environment with some engineering fundamentals such as main branch protection for PR review as well as a simple CI pipeline with python linting, secrets checking, markdown linting, etc. This environment let's the data science experiment with models running on Azure Machine Learning compute without impacting production code.
+Data Scientists need a flexible development environment with some engineering fundamentals such as main branch protection for PR review as well as a simple CI pipeline with python linting, secrets checking, markdown linting, etc. This environment let's the data scientist experiment with models running on Azure Machine Learning compute without impacting production code.
 
 When a model is sufficiently developed by the data scientist, the model code is promoted to the Model Factory. How that code is structured can greatly ease integration of the data scientists code and is the focus of this design document.
 
@@ -65,7 +65,7 @@ Below is the sample code from `mlops/nyc_taxi/src/mlops_pipeline.py` where the o
 
 ### Data Science Script Configuration
 
-The Data Science script must have configuration, which defines the configuration parameter required for the data science scripts. The configuration file should be in yaml format and should be easily configurable. For example, the configuration file for the nyc_taxi model will be stored in the `src/nyc_taxi/common/nyc_config.yaml` folder. And the DS scripts can read the configuration file and use the parameters defined in it.  Below is an example of how the `nyc_taxi_config.yaml` file looks like:
+The Data Science script must have configuration, which defines the configuration parameters required for the data science scripts. The configuration file should be in yaml format and should be easily configurable. For example, the configuration file for the nyc_taxi model will be stored in the `src/nyc_taxi/common/nyc_config.yaml` folder. And the DS scripts can read the configuration file and use the parameters defined in it.  Below is an example of how the `nyc_taxi_config.yaml` file:
 
     ```yaml
     dry_run: True
@@ -125,9 +125,7 @@ Machine Learning model scripts, for example train.py, predict.py, etc. will publ
 
 ### Data Science Script Testing
 
-The Data Science script must be tested thoroughly to ensure that it works as expected. The testing must cover all the components of the script and should be automated as part of the CI pipeline to catch errors prior to merging code into `main`.
-
-The Data Science scripts must be run individually as a python script and tested manually. However, in future, the testing can be automated using the [PYTest](https://docs.pytest.org/en/stable/getting-started.html#get-started) framework. The test files should be placed in the `test` folder of the DSToolkit.
+The Data Science script must be tested thoroughly to ensure that it works as expected. The Data Science scripts must be run individually as a python script and tested manually. However, the testing can be automated using the [PYTest](https://docs.pytest.org/en/stable/getting-started.html#get-started) framework. The test files should be placed in the `test` folder of the DSToolkit.
 
 ![test-folder](../media/test-folder.png)
 
