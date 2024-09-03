@@ -11,6 +11,7 @@ jobs:
     - script: |
         echo "Building an image with tag: ${{ parameters.image_name }}"
       displayName: 'Building an image'
+
     - task: Docker@2
       displayName: Build an image
       inputs:
@@ -19,12 +20,6 @@ jobs:
         tags: |
           ${{ parameters.image_name }}
 
-- job: Build_Validation_Pipeline
-  displayName: Build Validation Pipeline
-  dependsOn: BuildJob
-  pool:
-    vmImage: ubuntu-latest
-  steps:
     - script: |
         echo "Running Docker container for validation"
         docker run --rm ${{ parameters.image_name }} /bin/bash -c "
