@@ -8,6 +8,9 @@ jobs:
   pool:
     vmImage: ubuntu-latest
   steps:
+    - script: |
+        echo "Building an image with tag: ${{ parameters.image_name }}"
+      displayName: 'Building an image'
     - task: Docker@2
       displayName: Build an image
       inputs:
