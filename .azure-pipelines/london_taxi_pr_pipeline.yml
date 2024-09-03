@@ -31,4 +31,4 @@ stages:
     parameters:
       exec_environment: ${{ parameters.env_name }}
       model_type: ${{ parameters.model_type }}
-      image_name: $(Build.BuildId)
+      image_name: $(Build.Repository.Name):$(Build.BuildId)
