@@ -18,8 +18,7 @@ stages:
           - script: |
               python -m mlops.${{ parameters.model_type }}.src.mlops_pipeline \
                 --build_environment ${{ parameters.exec_environment }} \
-                --wait_for_completion True \
-                --output_file ""  # Ensure no file is used
+                --wait_for_completion True
             displayName: "Execute Azure ML Pipeline Job"
         outputs:
           experiment_run_id: Execute_ml_Job_Pipeline.experiment_run_id
