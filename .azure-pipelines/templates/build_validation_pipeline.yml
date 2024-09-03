@@ -1,3 +1,7 @@
+parameters:
+  - name: image_name
+    displayName: "Name of the Docker image"
+
 jobs:
 - job: BuildJob
   displayName: Build Job
@@ -10,7 +14,7 @@ jobs:
         command: build
         Dockerfile: mlops/custom_objectdetection/environment/Dockerfile
         tags: |
-          $(Build.Repository.Name):$(Build.BuildId)
+          ${{ parameters.image_name }}
 
 - job: Build_Validation_Pipeline
   displayName: Build Validation Pipeline
@@ -22,7 +26,7 @@ jobs:
       displayName: Run Docker container for validation
       inputs:
         command: run
-        imageName: $(Build.Repository.Name):$(Build.BuildId)
+        imageName: ${{ parameters.image_name }}
         containerName: validation_container
         options: '--rm'
         arguments: >
