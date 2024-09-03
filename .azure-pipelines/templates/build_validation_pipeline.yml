@@ -1,34 +1,67 @@
 jobs:
-- job: Build_Validation_Pipeline
+- job: BuildJob
+  displayName: Build Job
+  pool:
+    vmImage: ubuntu-latest
   steps:
-  - task: UsePythonVersion@0
-    displayName: 'Use Python 3.9'
-    inputs:
-      versionSpec: '3.9'
-      disableDownloadFromRegistry: true
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        command: build
+        Dockerfile: mlops/custom_objectdetection/environment/Dockerfile
+        tags: |
+          $(Build.Repository.Name):$(Build.BuildId)
 
-  - script: |
-      python -m pip install --upgrade pip
-      pip install -r .azure-pipelines/requirements/build_validation_requirements.txt
-    displayName: "Load Python Dependencies"
+- job: Build_Validation_Pipeline
+  displayName: Build Validation Pipeline
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+    - task: Docker@2
+      displayName: Run Docker container for validation
+      inputs:
+        command: run
+        imageName: ${{ parameters.docker_image }}
+        containerName: validation_container
+        options: '--rm'
+        arguments: >
+          /bin/bash -c "
+          python -m pip install --upgrade pip &&
+          pip install -r .azure-pipelines/requirements/build_validation_requirements.txt &&
+          flake8 . &&
+          pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
+          "
 
-  - script: |
-      flake8 .
-    displayName: "Lint with flake8"
-    enabled: true
+# - job: Build_Validation_Pipeline
+#   steps:
+#   - task: UsePythonVersion@0
+#     displayName: 'Use Python 3.9'
+#     inputs:
+#       versionSpec: '3.9'
+#       disableDownloadFromRegistry: true
 
-  - script: |
-      pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
-    displayName: 'Run Unit Tests'
-    condition: succeededOrFailed()
+#   - script: |
+#       python -m pip install --upgrade pip
+#       pip install -r .azure-pipelines/requirements/build_validation_requirements.txt
+#     displayName: "Load Python Dependencies"
 
-  - task: PublishTestResults@2
-    condition: succeededOrFailed()
-    inputs:
-      testResultsFiles: '**/test-*.xml'
-      testRunTitle: 'Publish Test Results for Python $(python.version)'
+#   - script: |
+#       flake8 .
+#     displayName: "Lint with flake8"
+#     enabled: true
 
-  - task: PublishCodeCoverageResults@1
-    inputs:
-      codeCoverageTool: Cobertura
-      summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
+#   - script: |
+#       pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
+#     displayName: 'Run Unit Tests'
+#     condition: succeededOrFailed()
+
+    - task: PublishTestResults@2
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFiles: '**/test-*.xml'
+        testRunTitle: 'Publish Test Results for Python $(python.version)'
+
+    - task: PublishCodeCoverageResults@1
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'

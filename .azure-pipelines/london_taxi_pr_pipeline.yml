@@ -27,20 +27,6 @@ parameters:
    default: "london_taxi"
 
 stages:
-  - stage: BuildStage
-    displayName: Build Stage
-    jobs:
-      - job: BuildJob
-        displayName: Build Job
-        pool:
-          vmImage: ubuntu-latest
-        steps:
-          - task: Docker@2
-            displayName: Build an image
-            inputs:
-              command: build
-              Dockerfile: mlops/custom_objectdetection/environment/Dockerfile
-
   - template: templates/platform_pr_pipeline.yml
     parameters:
       exec_environment: ${{ parameters.env_name }}
