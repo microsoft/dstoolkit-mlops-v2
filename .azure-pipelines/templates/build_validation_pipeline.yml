@@ -21,7 +21,7 @@ jobs:
       displayName: Run Docker container for validation
       inputs:
         command: run
-        imageName: ${{ parameters.docker_image }}
+        imageName: $(Build.Repository.Name):$(Build.BuildId)
         containerName: validation_container
         options: '--rm'
         arguments: >
