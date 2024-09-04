@@ -16,6 +16,7 @@ stages:
     - build_validation
     jobs:
     - job: Execute_ml_Job_Pipeline
+      displayName: "Execute Azure ML Pipeline Job"
       steps:
       - template: configure_azureml_agent.yml
       - template: execute_python_code.yml
@@ -26,7 +27,6 @@ stages:
               --build_environment ${{parameters.exec_environment}} \
               --wait_for_completion True \
               --output_file run_id.txt
-          displayName: "Execute Azure ML Pipeline Job"
       - task: AzureCLI@2
         displayName: "Cancel AML Pipeline"
         condition: canceled()
