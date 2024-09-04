@@ -25,7 +25,8 @@ jobs:
   dependsOn: BuildJob
   pool:
     vmImage: ubuntu-latest
-  container: ${{ parameters.image_name }}
+  container: 
+    image: ${{ parameters.image_name }}
   steps:
     - script: |
         python -m pip install --upgrade pip &&
