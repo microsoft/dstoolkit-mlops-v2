@@ -29,7 +29,7 @@ stages:
           displayName: "Execute Azure ML Pipeline Job"
       - task: AzureCLI@2
         displayName: "Cancel AML Pipeline"
-        condtion: canceled()
+        condition: canceled()
         inputs:
           azureSubscription: $(AZURE_RM_SVC_CONNECTION)
           scriptType: bash
