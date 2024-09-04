@@ -25,9 +25,11 @@ stages:
               echo "##vso[task.setvariable variable=RUN_NAME;isOutput=true;]$run_name"
             displayName: "Execute Azure ML Pipeline Job"
 
-  - stage: cleanup
-    displayName: Cleanup
-    dependsOn: execute_training_job
+  - stage: cancel_aml_job
+    displayName: Cancel AML Job
+    variables: 
+      # We are saving the name of Azure ML job submitted in previous step to a variable and it will be used as an input to the AzureML Job Wait task
+      azureml_job_name_from_submit_job: $[ dependencies.Execute_ml_Job_Pipeline.outputs['execute_training_job.run_name'] ] 
     condition: canceled()
     jobs:
       - job: CancelAMLPipeline
@@ -35,9 +37,6 @@ stages:
         steps:
           - task: AzureCLI@2
             displayName: "Cancel AML Pipeline"
-            variables: 
-              # We are saving the name of Azure ML job submitted in previous step to a variable and it will be used as an input to the AzureML Job Wait task
-              azureml_job_name_from_submit_job: $[ dependencies.Execute_ml_Job_Pipeline.outputs['execute_training_job.run_name'] ] 
             inputs:
               azureSubscription: $(AZURE_RM_SVC_CONNECTION)
               scriptType: bash
