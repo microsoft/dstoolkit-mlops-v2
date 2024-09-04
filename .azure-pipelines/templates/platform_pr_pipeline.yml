@@ -27,16 +27,9 @@ stages:
               --wait_for_completion True \
               --output_file run_id.txt
             displayName: "Execute Azure ML Pipeline Job"
-
-  - stage: cancel_aml_job
-    displayName: Cancel AML Job
-    condition: canceled()
-    jobs:
-      - job: CancelAMLPipeline
-        displayName: Cancel AML Pipeline if Necessary
-        steps:
-          - task: AzureCLI@2
+      - task: AzureCLI@2
             displayName: "Cancel AML Pipeline"
+            condtion: canceled()
             inputs:
               azureSubscription: $(AZURE_RM_SVC_CONNECTION)
               scriptType: bash
