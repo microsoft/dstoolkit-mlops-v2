@@ -12,10 +12,48 @@ A related Repository, the Data Science Repository, is where the data science tea
 
 ![Model Factory Conceptual Overview](../media/conceptual-overview.png)
 
-## Dedicated Repositories
+## Data Scientists Working Directly in Model Factory
+
+In this approach, data scientists experiment with / develop models directly in the model factory.  Each change, including small iterative experimental data science ones must comply with all engineering fundamentals applied via PR approval and related CI / CD workflows resulting in models being published to the model registry for each data science experiment, most of which are not production ready or ready for deployment.
+
+Pros:
+
+- **Eliminates Integration**: Models are developed and tested directly within the model factory, eliminating the need to integrate model code promoted from the Prototyping repo.
+
+- **Seamless Collaboration**: Working directly in the model factory ensures that all team members are working from the same code-base. Changes made by data scientists and software engineers are immediately visible to everyone, fostering better communication and collaboration.
+
+Cons:
+
+- **Increased Overhead / Inability to Make Breaking Changes**: The model factory contains CI / CD workflows, automated tests and benchmarking which run on PR.  This means that each change must be production ready, deployable and able to pass automated testing and benchmarking.  These strict criteria introduce a lot of overhead that could hinder the ability of data scientists to make experimental changes during model development and drive data scientists back to experimenting with models locally or on stand-alone environments.
+
+- **Experiments are Deployed**: Because experimental, data science related changes are made in the same repository as the CI / CD workflows, each change is integrated and deployed whether it’s ready for production or not.  Without adding additional complexity to filter these changes out, this leads to the publishing and deployment of changes which were experimental in nature and never intended for production.
+
+## Data Scientists Working in Dedicated Directory in Model Factory
+
+This approach has largely the same pros of working directly in the Model Factory.  However, it minimizes the con of increased overhead by providing data scientists a dedicated directory to isolate their experiments from the strict engineering fundamentals and CI / CD processes enforced elsewhere in the model factory.  Isolation is achieved by configuring the CI / CD workflows to ignore changes in this directory.
+
+Let’s say our data scientists’ dedicated directory is `experimentation` placed at the root of the `dstoolkit-mlops-v2`.  Using the sample ` Nyc Taxi PR Workflow`(`.github/workflows/nyc_taxi_pr_pipeline.yml`) in the [dstoolkit-mlops-v2](https://github.com/microsoft/dstoolkit-mlops-v2), we could configure GitHub workflows to ignore this directory by adding a `paths-ignore` block.  For example:
+
+```yaml
+name: Nyc Taxi PR Workflow
+on:
+  pull_request:
+    branches:
+      - development
+    paths:
+      - '.github/**'
+      - 'mlops/common/**'
+      - 'mlops/nyc_taxi/**'
+      - 'model/nyc_taxi/**'
+      - 'src/nyc_src/**'
+      - 'test/nyc_taxi/**'
+    paths-ignore:
+      - '. experimentation/**'
+```
+
+## Data Scientists Working in a Separate Prototyping Repo
 
 1. Data Science / Prototyping Repository:
-
     - Purpose: A sandbox environment for data scientists to develop and experiment with AI models.
     - Key Features:
         - Freedom of Development: Data scientists can freely develop models without the need to adhere to strict engineering practices.
