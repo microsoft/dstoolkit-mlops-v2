@@ -56,7 +56,6 @@ stages:
             resourceGroupName: $(RESOURCE_GROUP_NAME)
             azureMLWorkspaceName: $(WORKSPACE_NAME)
             azureMLJobName: $(azureml_job_name_from_submit_job)
-
       - job: CancelAMLJobIfNeeded
         displayName: Cancel AML Job if Pipeline Canceled
         dependsOn: Execute_ml_Job_Pipeline
