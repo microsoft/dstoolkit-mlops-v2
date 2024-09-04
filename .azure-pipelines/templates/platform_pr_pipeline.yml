@@ -10,37 +10,41 @@ stages:
     jobs:
       - job: Execute_ml_Job_Pipeline
         displayName: Execute Azure ML Pipeline Job
-        variables:
-          experiment_run_id: ''
         steps:
           - template: configure_azureml_agent.yml
-
+        
           - script: |
               python -m mlops.${{ parameters.model_type }}.src.mlops_pipeline \
                 --build_environment ${{ parameters.exec_environment }} \
-                --wait_for_completion True
+                --wait_for_completion True \
+                --output_file run_id.txt
+
+              readarray arr <"run_id.txt"
+              run_name=${arr[0]}
+              echo $run_name
+              echo "##vso[task.setvariable variable=RUN_NAME;isOutput=true;]$run_name"
             displayName: "Execute Azure ML Pipeline Job"
-        outputs:
-          experiment_run_id: Execute_ml_Job_Pipeline.experiment_run_id
 
   - stage: cleanup
     displayName: Cleanup
     dependsOn: execute_training_job
-    condition: always()
+    condition: canceled()
     jobs:
       - job: CancelAMLPipeline
         displayName: Cancel AML Pipeline if Necessary
         steps:
           - task: AzureCLI@2
             displayName: "Cancel AML Pipeline"
+            variables: 
+              # We are saving the name of Azure ML job submitted in previous step to a variable and it will be used as an input to the AzureML Job Wait task
+              azureml_job_name_from_submit_job: $[ dependencies.Execute_ml_Job_Pipeline.outputs['execute_training_job.run_name'] ] 
             inputs:
               azureSubscription: $(AZURE_RM_SVC_CONNECTION)
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
-                if [ "$(Agent.JobStatus)" == "Canceled" ]; then
-                  echo "Pipeline was canceled. Attempting to cancel AML Pipeline..."
-                  az ml pipeline cancel --ids $(execute_training_job.outputs['execute_training_job.experiment_run_id'])
-                else
-                  echo "Pipeline completed normally. No need to cancel AML Pipeline."
-                fi
+                echo "Pipeline was canceled. Attempting to cancel AML Pipeline..."
+                az ml job cancel --name $azureml_job_name_from_submit_job \
+                  --resource-group $(RESOURCE_GROUP_NAME) \
+                  --workspace-name $(WORKSPACE_NAME)
+
