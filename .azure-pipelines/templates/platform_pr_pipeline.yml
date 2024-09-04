@@ -27,20 +27,10 @@ stages:
               --build_environment ${{parameters.exec_environment}} \
               --wait_for_completion True \
               --output_file run_id.txt
-      - task: AzureCLI@2
-        displayName: "Cancel AML Pipeline"
-        condition: canceled()
-        inputs:
-          azureSubscription: $(AZURE_RM_SVC_CONNECTION)
-          scriptType: bash
-          scriptLocation: inlineScript
-          inlineScript: |
-            echo "Pipeline was canceled. Attempting to cancel AML Pipeline..."
 
-            readarray arr <"run_id.txt"
-            run_name=${arr[0]}
-
-            az extension add --name ml
-            az ml job cancel --name $run_name \
-              --resource-group $(RESOURCE_GROUP_NAME) \
-              --workspace-name $(WORKSPACE_NAME)
+      - template: cancel_aml_pipeline.yml
+        parameters:
+          azure_subscription: $(AZURE_RM_SVC_CONNECTION)
+          resource_group_name: $(RESOURCE_GROUP_NAME)
+          workspace_name: $(WORKSPACE_NAME)
+          run_id_file: "run_id.txt"

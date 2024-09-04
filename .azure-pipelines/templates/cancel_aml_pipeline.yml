@@ -1,0 +1,28 @@
+parameters:
+  - name: azure_subscription
+    type: string
+  - name: resource_group_name
+    type: string
+  - name: workspace_name
+    type: string
+  - name: run_id_file
+    type: string
+
+steps:
+  - task: AzureCLI@2
+    displayName: "Cancel AML Pipeline"
+    condition: canceled()
+    inputs:
+      azureSubscription: ${{ parameters.azure_subscription }}
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        echo "Pipeline was canceled. Attempting to cancel AML Pipeline..."
+
+        readarray arr <"${{ parameters.run_id_file }}"
+        run_name=${arr[0]}
+
+        az extension add --name ml
+        az ml job cancel --name $run_name \
+          --resource-group ${{ parameters.resource_group_name }} \
+          --workspace-name ${{ parameters.workspace_name }}
