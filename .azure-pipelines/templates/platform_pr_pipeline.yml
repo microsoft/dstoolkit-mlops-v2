@@ -51,6 +51,7 @@ stages:
               scriptLocation: inlineScript
               inlineScript: |
                 echo "Pipeline was canceled. Attempting to cancel AML Pipeline..."
+                az extension add --name ml
                 az ml job cancel --name $azureml_job_name_from_submit_job \
                   --resource-group $(RESOURCE_GROUP_NAME) \
                   --workspace-name $(WORKSPACE_NAME)
