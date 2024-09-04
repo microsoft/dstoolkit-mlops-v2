@@ -26,22 +26,22 @@ stages:
               --build_environment ${{parameters.exec_environment}} \
               --wait_for_completion True \
               --output_file run_id.txt
-            displayName: "Execute Azure ML Pipeline Job"
+          displayName: "Execute Azure ML Pipeline Job"
       - task: AzureCLI@2
-            displayName: "Cancel AML Pipeline"
-            condtion: canceled()
-            inputs:
-              azureSubscription: $(AZURE_RM_SVC_CONNECTION)
-              scriptType: bash
-              scriptLocation: inlineScript
-              inlineScript: |
-                echo "Pipeline was canceled. Attempting to cancel AML Pipeline..."
+        displayName: "Cancel AML Pipeline"
+        condtion: canceled()
+        inputs:
+          azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            echo "Pipeline was canceled. Attempting to cancel AML Pipeline..."
 
-                readarray arr <"run_id.txt"
-                run_name=${arr[0]}
-                echo $run_name
+            readarray arr <"run_id.txt"
+            run_name=${arr[0]}
+            echo $run_name
 
-                az extension add --name ml
-                az ml job cancel --name $(run_name) \
-                  --resource-group $(RESOURCE_GROUP_NAME) \
-                  --workspace-name $(WORKSPACE_NAME)
+            az extension add --name ml
+            az ml job cancel --name $(run_name) \
+              --resource-group $(RESOURCE_GROUP_NAME) \
+              --workspace-name $(WORKSPACE_NAME)
