@@ -42,6 +42,6 @@ stages:
             echo $run_name
 
             az extension add --name ml
-            az ml job cancel --name $(run_name) \
+            az ml job cancel --name $run_name \
               --resource-group $(RESOURCE_GROUP_NAME) \
               --workspace-name $(WORKSPACE_NAME)
