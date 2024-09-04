@@ -35,9 +35,9 @@ stages:
 
   - stage: cancel_aml_job
     displayName: Cancel AML Job
-    variables: 
-      # We are saving the name of Azure ML job submitted in previous step to a variable and it will be used as an input to the AzureML Job Wait task
-      azureml_job_name_from_submit_job: $[ dependencies.Execute_ml_Job_Pipeline.outputs['execute_training_job.run_name'] ] 
+    variables:
+      - name: run_id_from_submit_job
+        value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ]
     condition: canceled()
     jobs:
       - job: CancelAMLPipeline
