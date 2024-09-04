@@ -39,7 +39,6 @@ stages:
 
             readarray arr <"run_id.txt"
             run_name=${arr[0]}
-            echo $run_name
 
             az extension add --name ml
             az ml job cancel --name $run_name \
