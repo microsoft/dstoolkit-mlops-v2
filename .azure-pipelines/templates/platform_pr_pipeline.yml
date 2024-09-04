@@ -26,18 +26,10 @@ stages:
               --build_environment ${{parameters.exec_environment}} \
               --wait_for_completion True \
               --output_file run_id.txt
-
-              readarray arr <"run_id.txt"
-              run_name=${arr[0]}
-              echo $run_name
-              echo "##vso[task.setvariable variable=RUN_NAME;isOutput=true;]$run_name"
             displayName: "Execute Azure ML Pipeline Job"
 
   - stage: cancel_aml_job
     displayName: Cancel AML Job
-    variables:
-      - name: run_id_from_submit_job
-        value: $[ stageDependencies.execute_training_job.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ]
     condition: canceled()
     jobs:
       - job: CancelAMLPipeline
@@ -51,7 +43,12 @@ stages:
               scriptLocation: inlineScript
               inlineScript: |
                 echo "Pipeline was canceled. Attempting to cancel AML Pipeline..."
+
+                readarray arr <"run_id.txt"
+                run_name=${arr[0]}
+                echo $run_name
+
                 az extension add --name ml
-                az ml job cancel --name $(azureml_job_name_from_submit_job) \
+                az ml job cancel --name $(run_name) \
                   --resource-group $(RESOURCE_GROUP_NAME) \
                   --workspace-name $(WORKSPACE_NAME)
