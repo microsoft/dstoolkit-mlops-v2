@@ -34,20 +34,24 @@ jobs:
 #         flake8 . &&
 #         pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
 
-
-
     - script: |
         echo "Building Docker container for validation"
         docker build -t ${{ parameters.image_name }} -f mlops/custom_objectdetection/environment/Dockerfile .
+      displayName: 'Build Docker container'
 
+    - script: |
         echo "Running Docker container for validation"
-        docker run --rm ${{ parameters.image_name }} -w $(Build.SourcesDirectory) /bin/bash -c "
-          python -m pip install --upgrade pip &&
-          pip install -r .azure-pipelines/requirements/build_validation_requirements.txt &&
-          flake8 . &&
+        docker run --rm ${{ parameters.image_name }} /bin/bash -c "
           pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
         "
-      displayName: 'Run Docker container for validation'
+      displayName: 'Run tests in Docker container'
+
+    - script: |
+        python -m pip install --upgrade pip &&
+        pip install -r $(Build.SourcesDirectory)/.azure-pipelines/requirements/build_validation_requirements.txt &&
+        flake8 . &&
+      displayName: 'Install dependencies and run linting'
+      # TODO move before docker tasks
 
     - task: PublishTestResults@2
       condition: succeededOrFailed()
