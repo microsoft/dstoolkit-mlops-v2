@@ -5,7 +5,7 @@ parameters:
     type: string
   - name: workspace_name
     type: string
-  - name: run_id_file
+  - name: run_name
     type: string
 
 steps:
@@ -18,10 +18,7 @@ steps:
       inlineScript: |
         echo "Pipeline was canceled. Attempting to cancel AML Pipeline..."
 
-        readarray arr <"${{ parameters.run_id_file }}"
-        run_name=${arr[0]}
-
         az extension add --name ml
-        az ml job cancel --name $run_name \
+        az ml job cancel --name ${{ parameters.run_name }} \
           --resource-group ${{ parameters.resource_group_name }} \
           --workspace-name ${{ parameters.workspace_name }}
