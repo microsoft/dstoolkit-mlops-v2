@@ -27,7 +27,6 @@ stages:
               --build_environment ${{parameters.exec_environment}} \
               --wait_for_completion True \
               --output_file run_id.txt
-
       - template: cancel_aml_pipeline.yml
         parameters:
           azure_subscription: $(AZURE_RM_SVC_CONNECTION)
