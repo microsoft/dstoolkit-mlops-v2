@@ -27,6 +27,13 @@ stages:
               --build_environment ${{parameters.exec_environment}} \
               --wait_for_completion True \
               --output_file run_id.txt
+    - job: CancelAzureMLJob
+      displayName: Cancel AzureML Job if ADO Pipeline is canceled
+      condition: canceled()
+      pool: 
+        vmImage: ubuntu-latest
+      dependsOn: WaitForAzureMLJobCompletion
+      steps:
       - template: cancel_aml_pipeline.yml
         parameters:
           azure_subscription: $(AZURE_RM_SVC_CONNECTION)
