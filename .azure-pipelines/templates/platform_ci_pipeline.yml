@@ -57,10 +57,7 @@ stages:
             azureMLJobName: $(azureml_job_name_from_submit_job)
       - job: CancelAzureMLJob
         displayName: Cancel AzureML Job if ADO Pipeline is canceled
-        dependsOn:
-          - Execute_ml_Job_Pipeline
-          - WaitForAzureMLJobCompletion
-        condition: always()
+        condition: canceled()
         pool: 
           vmImage: ubuntu-latest
         steps:
