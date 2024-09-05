@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Start cusom_objectdetection Pipeline",
+            "name": "Python Debugger: Start custom_objectdetection Pipeline",
             "type": "debugpy",
             "request": "launch",
             "module": "mlops.custom_objectdetection.start_local_pipeline",
