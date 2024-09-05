@@ -54,11 +54,6 @@ if __name__ == "__main__":
         subscription_id=config.aml_config["subscription_id"],
         resource_group=config.aml_config["resource_group_name"])
 
-    print("ws:", ws)
-    print("name:", config.aml_config["workspace_name"])
-    print("subscription_id:", config.aml_config["subscription_id"])
-    print("resource_group:", config.aml_config["resource_group_name"])
-
     models = Model.list(ws)
     clean_up_date = datetime.strptime(args.clean_up_date, '%Y-%m-%d').date()
 
