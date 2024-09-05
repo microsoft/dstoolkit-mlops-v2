@@ -21,6 +21,8 @@ stages:
                 --wait_for_completion False \
                 --output_file run_id.txt
         - template: read_run_id.yml
+          parameters:
+            azure_subscription: $(AZURE_RM_SVC_CONNECTION)
       - job: WaitForAzureMLJobCompletion
         displayName: Wait for AzureML Job Completion
         pool: server

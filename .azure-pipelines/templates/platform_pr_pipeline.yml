@@ -28,6 +28,8 @@ stages:
               --wait_for_completion True \
               --output_file run_id.txt
       - template: read_run_id.yml
+        parameters:
+          azure_subscription: $(AZURE_RM_SVC_CONNECTION)
     - job: CancelAzureMLJob
       displayName: Cancel AzureML Job if ADO Pipeline is canceled
       condition: canceled()
