@@ -9,33 +9,7 @@ jobs:
     vmImage: ubuntu-latest
   steps:
     - script: |
-        echo "Building an image with tag: ${{ parameters.image_name }}"
-      displayName: 'Building an image'
-
-    # - task: Docker@2
-    #   displayName: Build an image
-    #   inputs:
-    #     command: build
-    #     Dockerfile: mlops/custom_objectdetection/environment/Dockerfile
-    #     tags: |
-    #       ${{ parameters.image_name }}
-    
-# - job: RunInContainer
-#   displayName: Run in Container
-#   dependsOn: BuildJob
-#   pool:
-#     vmImage: ubuntu-latest
-#   container: 
-#     image: ${{ parameters.image_name }}
-#   steps:
-#     - script: |
-#         python -m pip install --upgrade pip &&
-#         pip install -r .azure-pipelines/requirements/build_validation_requirements.txt &&
-#         flake8 . &&
-#         pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
-
-    - script: |
-        echo "Building Docker container for validation"
+        echo "Building Docker container for validation with tag: ${{ parameters.image_name }}"
         docker build -t ${{ parameters.image_name }} -f mlops/custom_objectdetection/environment/Dockerfile .
       displayName: 'Build Docker container'
 
@@ -48,7 +22,7 @@ jobs:
 
     - script: |
         python -m pip install --upgrade pip &&
-        pip install -r $(Build.SourcesDirectory)/.azure-pipelines/requirements/build_validation_requirements.txt &&
+        pip install -r .azure-pipelines/requirements/build_validation_requirements.txt &&
         flake8 . &&
       displayName: 'Install dependencies and run linting'
       # TODO move before docker tasks
