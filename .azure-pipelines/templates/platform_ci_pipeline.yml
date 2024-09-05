@@ -61,7 +61,7 @@ stages:
           - Execute_ml_Job_Pipeline
           - WaitForAzureMLJobCompletion
         condition: always()
-        pool: ubuntu-latest
+        pool: 'ubuntu-22.04'
         steps:
         - template: cancel_aml_pipeline.yml
           parameters:
