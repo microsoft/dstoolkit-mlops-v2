@@ -60,6 +60,7 @@ stages:
         condition: canceled()
         pool: 
           vmImage: ubuntu-latest
+        dependsOn: WaitForAzureMLJobCompletion
         steps:
         - template: cancel_aml_pipeline.yml
           parameters:
