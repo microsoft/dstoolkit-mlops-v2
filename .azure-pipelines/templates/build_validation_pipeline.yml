@@ -20,32 +20,32 @@ jobs:
         tags: |
           ${{ parameters.image_name }}
     
-- job: RunInContainer
-  displayName: Run in Container
-  dependsOn: BuildJob
-  pool:
-    vmImage: ubuntu-latest
-  container: 
-    image: ${{ parameters.image_name }}
-  steps:
-    - script: |
-        python -m pip install --upgrade pip &&
-        pip install -r .azure-pipelines/requirements/build_validation_requirements.txt &&
-        flake8 . &&
-        pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
+# - job: RunInContainer
+#   displayName: Run in Container
+#   dependsOn: BuildJob
+#   pool:
+#     vmImage: ubuntu-latest
+#   container: 
+#     image: ${{ parameters.image_name }}
+#   steps:
+#     - script: |
+#         python -m pip install --upgrade pip &&
+#         pip install -r .azure-pipelines/requirements/build_validation_requirements.txt &&
+#         flake8 . &&
+#         pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
 
-    # - script: |
-    # TODO: Fix directory
-    #     echo "Building Docker container for validation"
-    #     docker build -t ${{ parameters.image_name }} -f mlops/custom_objectdetection/environment/Dockerfile .
-    #     echo "Running Docker container for validation"
-    #     docker run --rm ${{ parameters.image_name }} /bin/bash -c "
-    #       python -m pip install --upgrade pip &&
-    #       pip install -r .azure-pipelines/requirements/build_validation_requirements.txt &&
-    #       flake8 . &&
-    #       pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
-    #     "
-    #   displayName: 'Run Docker container for validation'
+# echo "Building Docker container for validation"
+# docker build -t ${{ parameters.image_name }} -f mlops/custom_objectdetection/environment/Dockerfile .
+
+    - script: |
+        echo "Running Docker container for validation"
+        docker run --rm ${{ parameters.image_name }} /bin/bash -c "
+          python -m pip install --upgrade pip &&
+          pip install -r $(Build.SourcesDirectory)/.azure-pipelines/requirements/build_validation_requirements.txt &&
+          flake8 . &&
+          pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
+        "
+      displayName: 'Run Docker container for validation'
 
     - task: PublishTestResults@2
       condition: succeededOrFailed()
