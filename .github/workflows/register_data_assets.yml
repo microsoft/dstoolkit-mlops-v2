@@ -5,8 +5,8 @@ on:
     inputs:
       date:
         type: string
-        description: "delete date e.g 2024-05-14"
-        default: '2024-05-14'
+        description: "delete date e.g YYYY-MM-DD"
+        default: '2024-08-14'
         required: true
       jobType:
         type: choice
