@@ -59,7 +59,7 @@ stages:
       - job: CancelAMLJobIfNeeded
         displayName: Cancel AML Job if Pipeline Canceled
         dependsOn: Execute_ml_Job_Pipeline
-        condition: always()
+        condition: canceled()
         pool: 
           vmImage: 'ubuntu-latest'
         steps:
