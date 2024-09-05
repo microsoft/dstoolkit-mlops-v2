@@ -1,0 +1,33 @@
+trigger: none
+pr:
+  branches:
+   include:
+     - development
+  paths:
+    include:
+      - .azure-pipelines/*
+      - mlops/common/*
+      - mlops/custom_objectdetection/*
+      - src/custom_objectdetection_src/*
+      - model/custom_objectdetection/*
+      - src/shared/*
+pool:
+  vmImage: ubuntu-latest
+
+
+variables:
+- group: mlops_platform_dev_vg
+
+parameters:
+ - name: env_name
+   displayName: "Execution Environment"
+   default: "pr"
+ - name: model_type
+   displayName: "model type"
+   default: "custom_objectdetection"
+
+stages:
+  - template: templates/platform_pr_pipeline.yml
+    parameters:
+      exec_environment: ${{ parameters.env_name }}
+      model_type: ${{ parameters.model_type }}

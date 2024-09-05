@@ -1,0 +1,6 @@
+azure-ai-ml>=1.10.0
+azure-identity>=1.15.0
+mlflow==2.11.3
+pandas
+python-dotenv
+scikit-learn

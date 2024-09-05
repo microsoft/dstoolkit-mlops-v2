@@ -1,0 +1,28 @@
+# Ignore Git and version control
+.git
+.gitignore
+
+# Ignore build outputs
+build/
+dist/
+*.class
+*.o
+*.pyc
+
+# Ignore logs and compiled files
+*.log
+*.sql
+*.sqlite
+
+# Ignore development tools
+node_modules/
+bower_components/
+
+# Ignore sensitive files
+*.pem
+*.key
+
+# Ignore specific configuration files
+*.env
+.DS_Store
+Thumbs.db

@@ -14,6 +14,7 @@ stages:
       - template: build_validation_pipeline.yml
         parameters:
           image_name: ${{ parameters.image_name }}
+          model_type: ${{ parameters.model_type }}
 
   - stage: execute_training_job
     displayName: execute_training_job
