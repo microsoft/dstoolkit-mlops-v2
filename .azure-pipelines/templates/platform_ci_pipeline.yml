@@ -21,6 +21,12 @@ stages:
                 --build_environment ${{parameters.exec_environment}} \
                 --wait_for_completion False \
                 --output_file run_id.txt
+        - template: cancel_aml_pipeline.yml
+          parameters:
+            azure_subscription: $(AZURE_RM_SVC_CONNECTION)
+            resource_group_name: $(RESOURCE_GROUP_NAME)
+            workspace_name: $(WORKSPACE_NAME)
+            run_id_file: "run_id.txt"
         - task: AzureCLI@2
           displayName: Read Run ID
           name: read_run_id
@@ -42,12 +48,6 @@ stages:
               metadata=${arr[0]}
               echo $metadata
               echo "##vso[task.setvariable variable=RUN_METADATA;isOutput=true;]$metadata"
-        - template: cancel_aml_pipeline.yml
-          parameters:
-            azure_subscription: $(AZURE_RM_SVC_CONNECTION)
-            resource_group_name: $(RESOURCE_GROUP_NAME)
-            workspace_name: $(WORKSPACE_NAME)
-            run_id_file: "run_id.txt"
       - job: WaitForAzureMLJobCompletion
         displayName: Wait for AzureML Job Completion
         pool: server
