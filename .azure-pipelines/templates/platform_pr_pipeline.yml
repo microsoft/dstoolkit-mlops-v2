@@ -44,4 +44,4 @@ stages:
           azure_subscription: $(AZURE_RM_SVC_CONNECTION)
           resource_group_name: $(RESOURCE_GROUP_NAME)
           workspace_name: $(WORKSPACE_NAME)
-          run_name: azureml_job_name_from_submit_job
+          run_name: $(azureml_job_name_from_submit_job)
