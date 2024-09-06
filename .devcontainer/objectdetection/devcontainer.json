@@ -19,9 +19,11 @@
 				"ms-toolsai.jupyter",
 				"redhat.vscode-yaml",
 			]
-		},
+		}
 
 	},
 
-	"runArgs": ["-v", "/var/run/docker.sock:/var/run/docker.sock"]
+	"runArgs": ["-v", "/var/run/docker.sock:/var/run/docker.sock"],
+	
+	"postStartCommand": "git config --global --add safe.directory /workspaces && sudo chown -R vscode /workspaces && pip install --user -r .azure-pipelines/requirements/build_validation_requirements.txt"
 }
