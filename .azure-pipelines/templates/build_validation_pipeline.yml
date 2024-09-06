@@ -25,7 +25,6 @@ jobs:
     - script: |
         echo "Running Docker container~ for validation"
         docker run --rm --mount type=bind,src=.,dst=/workspace ${{ parameters.image_name }} /bin/bash -c "
-          pwd &&
           sudo chown -R vscode /workspace &&
           python -m pip install --upgrade pip &&
           pip install -r .azure-pipelines/requirements/build_validation_requirements.txt &&
