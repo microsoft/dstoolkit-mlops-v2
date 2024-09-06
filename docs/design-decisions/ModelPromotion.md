@@ -16,7 +16,7 @@ A related Repository, the Data Science Repository, is where the data science tea
 
 ### Data Scientists Working Directly in Model Factory
 
-In this approach, data scientists experiment with / develop models directly in the model factory.  Each change, including small iterative experimental data science ones must comply with all engineering fundamentals applied via PR approval and related CI / CD workflows resulting in models being published to the model registry for each data science experiment, most of which are not production ready or ready for deployment.
+In this approach, data scientists experiment with / develop models directly in the model factory.  Each change, including small iterative experimental data science related ones must comply with all engineering fundamentals applied via PR approval and related CI / CD workflows resulting in models being published to the model registry for each data science experiment, most of which are not production ready or ready for deployment.
 
 Pros:
 
@@ -25,12 +25,26 @@ Pros:
 
 Cons:
 
-- **Increased Overhead / Inability to Make Breaking Changes**: The model factory contains CI / CD workflows, automated tests and benchmarking which run on PR.  This means that each change must be production ready, deployable and able to pass automated testing and benchmarking.  These strict criteria introduce a lot of overhead that could hinder the ability of data scientists to make experimental changes during model development and drive data scientists back to experimenting with models locally or on stand-alone environments.
-- **Experiments are Deployed**: Because experimental, data science related changes are made in the same repository as the CI / CD workflows, each change is integrated and deployed whether it’s ready for production or not.  Without adding additional complexity to filter these changes out, this leads to the publishing and deployment of changes which were experimental in nature and never intended for production.
-## Data Scientists Working in Dedicated Directory in Model Factory
-This approach has largely the same pros of working directly in the Model Factory.  However, it minimizes the con of increased overhead by providing data scientists a dedicated directory to isolate their experiments from the strict engineering fundamentals and CI / CD processes enforced elsewhere in the model factory.  Isolation is achieved by configuring the CI / CD workflows to ignore changes in this directory.
+- **Increased Overhead / Inability to Make Breaking Changes**: The model factory contains CI / CD workflows, automated tests and benchmarking which run on PR.  This means that each change must be production ready, deployable and able to pass automated testing and benchmarking.  These strict criteria introduce a lot of overhead that are a tax on the ability of data scientists to make experimental changes during model development and could drive data scientists back to experimenting with models locally or on stand-alone environments.
+- **Experiments are Integrated / Deployed**: Because experimental, data science related changes are made in the same repository as the productized models and CI / CD workflows, each change is integrated and potentially deployed whether it’s ready for production or not.  Without adding additional complexity to filter these changes out, this leads to the training, publishing and deployment of models for changes which were experimental in nature and never intended for production.
+- **Repository Clutter**: Keeping data science experimentation / prototyping files in the same repository as the model factory could cause the repository to become cluttered with files such as test datasets, python notebooks, etc.  It also clutters the git history as it mixes experimental commits / changes in with those for officially promoted models.
+- **Experiment History Not Preserved**: When data science experimentation occurs in the same repository as promoted models, it also means the git history contains both experimental and productized changes.  This clutters the git history and makes it hard to identify which are which.  This can be prevented by executing / enforcing squash merge commits, however, doing this means that the git history of experimental changes is lost.
 
-Let’s say our data scientists’ dedicated directory is `experimentation` placed at the root of the `dstoolkit-mlops-v2`.  Using the sample ` Nyc Taxi PR Workflow`(`.github/workflows/nyc_taxi_pr_pipeline.yml`) in the [dstoolkit-mlops-v2](https://github.com/microsoft/dstoolkit-mlops-v2), we could configure GitHub workflows to ignore this directory by adding a `paths-ignore` block.  For example:
+### Data Scientists Working in Dedicated Directory in Model Factory
+
+This approach has largely the same pros of working directly in the Model Factory.  However, it minimizes the con of increased overhead by providing data scientists a dedicated directory to isolate their experiments which diables strict engineering fundamentals and CI / CD processes enforced elsewhere in the model factory.  Isolation is achieved by configuring the CI / CD workflows to ignore changes in this directory.
+
+Pros:
+
+- **Seamless Collaboration**: Working directly in the model factory ensures that all team members are working from the same code-base. Changes made by data scientists and software engineers are immediately visible to everyone, fostering better communication and collaboration.
+
+Cons:
+
+- **Models Require Integration**: Once models developed in the data science directory meet the requirements, they can be promoted, at which time they must be explicitly copied from the `experimentation` directory and integrated into the model factory.  This merging process takes time and is a tax on productivity.
+- **Repository Clutter**: Keeping data science experimentation / prototyping files in the same repository as the model factory could cause the repository to become cluttered with files such as test datasets, python notebooks, etc.  It also clutters the git history as it mixes experimental commits / changes in with those for officially promoted models.
+- **Experiment History Not Preserved**: When data science experimentation occurs in the same repository as promoted models, it also means the git history contains both experimental and productized changes.  This clutters the git history and makes it hard to identify which are which.  This can be prevented by executing / enforcing squash merge commits, however, doing this means that the git history of experimental changes is lost.
+
+Let’s say our data scientists’ dedicated directory is `experimentation` placed at the root of the `dstoolkit-mlops-v2`.  Using the sample `Nyc Taxi PR Workflow`(`.github/workflows/nyc_taxi_pr_pipeline.yml`) in the [dstoolkit-mlops-v2](https://github.com/microsoft/dstoolkit-mlops-v2), we could configure GitHub workflows to ignore this directory by adding a `paths-ignore` block.  For example:
 
 ```yaml
 name: Nyc Taxi PR Workflow
@@ -46,7 +60,7 @@ on:
       - 'src/nyc_src/**'
       - 'test/nyc_taxi/**'
     paths-ignore:
-      - '. experimentation/**'
+      - '.experimentation/**'
 ```
 
 ### Data Scientists Working in a Separate Prototyping Repo
@@ -66,17 +80,17 @@ on:
         - Observability: Leverages MLFlow to publish key metrics.
         - Documentation: Comprehensive documentation for using the model factory, integrating new models, model promotion process, dataset management, automated model inferencing, MLOps / CI / CD, observability and metrics, etc.
 
-This approach allocates separate, dedicated repositories for both data scientist's experimentation ("prototyping repo") and the model factory.  Data scientists are free to make quick, iterative experimental changes in the prototyping repo, free from the string engineering fundamentals of the model factory.  Once a model meets the expected quality / criteria, the model, associated training datasets and automated / inference tests are copied and integrated into the model factory using a defined promotion process.
+This approach allocates separate, dedicated repositories for both data scientist's experimentation ("prototyping repo") and the [dstoolkit-mlops-v2](https://github.com/microsoft/dstoolkit-mlops-v2) based model factory.  Data scientists are free to make quick, iterative experimental changes in the prototyping repo, without the constraints of the strict engineering fundamentals of the model factory.  Once a model meets the expected quality / criteria, the model, associated training datasets and automated / inference tests are copied and integrated into the model factory using a defined promotion process.
 
 Pros:
 
 - **Freedom for Experimentation**: Working in a dedicated / independent repo provides data scientists the freedom to experiment and iterate quickly without the constraints of the strict engineering fundamentals applied in the model factory.  Each change does not need to be production ready / deployable.
-- **Only Production Candidate Models Registered**: Because data science experimentation is confined to the dedicated data science repository, only models that are candidates for production are integrated into the model framework.  This reduces clutter and provides a clean history by regulating experimental models to the data science repository.
+- **Only Production Candidate Models Registered**: Because data science experimentation is confined to the dedicated data science repository, only models that are candidates for production are integrated into the model framework.  This reduces clutter and provides a clean git history by regulating experimental models, files and related data to the data science repository.
 - **Self-Documenting Experimentation**: Because data science experimentation is done in its own repository, a history of experimental / prototyping changes is preserved in the source control history.  This can be used for later reference or if new modeling techniques come available and we want to revisit an experiment with a base model.
 
 Cons:
 
-- **Models Require Integration**: Once models developed in the data science repo meet the requirements, they can be promoted, at which time they must be explicitly integrated into the model factory.  This merging process takes time and is a tax on productivity.  This process is outlined below.
+- **Models Require Integration**: Once models developed in the data science repo meet the requirements, they can be promoted, at which time they must be explicitly integrated into the model factory.  This merging process takes time and is a tax on productivity.  This process is outlined in the [Model Promotion Process](#model-promotion-process) section below.
 
 The cons associated with having two repos can be minimized by:
 
