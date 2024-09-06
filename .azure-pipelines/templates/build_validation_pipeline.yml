@@ -13,7 +13,7 @@ jobs:
     - script: |
         # TODO: this won't work for non dockerfile pipelines
         echo "Building Docker container for validation with tag: ${{ parameters.image_name }}"
-        docker build -t ${{ parameters.image_name }} -f mlops/${{ parameters.model_type }}/environment/Dockerfile .
+        docker build -t ${{ parameters.image_name }} -f mlops/${{ parameters.model_type }}/environment/Dockerfile mlops/${{ parameters.model_type }}/environment
       displayName: 'Build Docker container'
 
     - script: |
