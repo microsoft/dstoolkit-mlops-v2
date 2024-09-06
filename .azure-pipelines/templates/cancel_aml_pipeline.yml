@@ -17,6 +17,7 @@ steps:
       scriptLocation: inlineScript
       inlineScript: |
         echo "Pipeline was canceled. Attempting to cancel AML Pipeline..."
+        echo "Job name to cancel: ${{ parameters.run_name }}"
 
         az extension add --name ml
         az ml job cancel --name ${{ parameters.run_name }} \
