@@ -30,7 +30,7 @@ jobs:
     - script: |
         python -m pip install --upgrade pip &&
         pip install -r .azure-pipelines/requirements/build_validation_requirements.txt &&
-        flake8 . &&
+        flake8 .
       displayName: 'Install dependencies and run linting'
       # TODO move before docker tasks
 
