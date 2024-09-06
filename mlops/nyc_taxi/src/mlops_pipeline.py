@@ -192,7 +192,7 @@ def execute_pipeline(
             pipeline_job, experiment_name=experiment_name
         )
 
-        print(f"The job {pipeline_job.name} has been submitted!")
+        f"Pipeline job '{pipeline_job.name}' has been submitted successfully!"
         if output_file is not None:
             with open(output_file, "w") as out_file:
                 out_file.write(pipeline_job.name)
@@ -229,18 +229,21 @@ def execute_pipeline(
                         or pipeline_job.status == "CancelRequested"
                         or pipeline_job.status == "Canceled"
                     ):
+                        print(f"Pipeline job '{pipeline_job.name}' has stopped with status: {pipeline_job.status}.")
                         break
                 else:
+                    print(f"Job '{pipeline_job.name}' exceeded the wait time limit of 1 hour.")
                     break
 
             if pipeline_job.status == "Completed" or pipeline_job.status == "Finished":
-                print("job completed")
+                print("Pipeline job completed successfully.")
             else:
-                raise Exception("Sorry, exiting job with failure..")
+                raise Exception(f"Pipeline job '{pipeline_job.name}' did not complete successfully. Final status: {pipeline_job.status}.")
     except Exception as ex:
         print(
-            "Oops! invalid credentials or error while creating ML environment.. Try again...",
-            ex,
+            f"An error occurred during the execution of the pipeline job. "
+            "Please check your credentials, resource configuration, and job setup, then try again. "
+            f"Error details: {ex}"
         )
         raise
 

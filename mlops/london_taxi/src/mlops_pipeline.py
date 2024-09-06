@@ -219,7 +219,7 @@ def execute_pipeline(
                     time.sleep(20)
                     pipeline_job = client.jobs.get(pipeline_job.name)
 
-                    print("Job Status:", pipeline_job.status)
+                    print(f"Job Status: {pipeline_job.status}")
 
                     current_wait_time = current_wait_time + 15
 
@@ -231,16 +231,17 @@ def execute_pipeline(
                     ):
                         break
                 else:
+                    print(f"Job {pipeline_job.name} exceeded the wait time limit of 1 hour.")
                     break
 
             if pipeline_job.status == "Completed" or pipeline_job.status == "Finished":
-                print("job completed")
+                print("Job completed successfully.")
             else:
-                raise Exception("Sorry, exiting job with failure..")
+                raise Exception(f"Job {pipeline_job.name} did not complete successfully. Current status: {pipeline_job.status}")
     except Exception as ex:
         print(
-            "Oops! invalid credentials or error while creating ML environment.. Try again...",
-            ex,
+            "An error occurred while executing the pipeline. Please check your credentials, resource details, and job configuration. "
+            f"Error details: {ex}"
         )
         raise
 
