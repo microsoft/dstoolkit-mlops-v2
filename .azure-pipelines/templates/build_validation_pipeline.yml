@@ -11,8 +11,8 @@ jobs:
     vmImage: ubuntu-latest
   steps:
     - script: |
-        python -m pip install --upgrade pip &&
-        pip install -r .azure-pipelines/requirements/build_validation_requirements.txt &&
+        python -m pip install --upgrade pip
+        pip install -r .azure-pipelines/requirements/build_validation_requirements.txt
         flake8 .
       displayName: 'Install dependencies and run linting'
 
