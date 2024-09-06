@@ -11,7 +11,13 @@ jobs:
     vmImage: ubuntu-latest
   steps:
     - script: |
-        # TODO: this won't work for non dockerfile pipelines
+        python -m pip install --upgrade pip &&
+        pip install -r .azure-pipelines/requirements/build_validation_requirements.txt &&
+        flake8 .
+      displayName: 'Install dependencies and run linting'
+
+    # TODO: this won't work for non dockerfile pipelines
+    - script: | 
         echo "Building Docker container for validation with tag: ${{ parameters.image_name }}"
         docker build -t ${{ parameters.image_name }} -f mlops/${{ parameters.model_type }}/environment/Dockerfile mlops/${{ parameters.model_type }}/environment
       displayName: 'Build Docker container'
@@ -26,13 +32,6 @@ jobs:
           python -m pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
         "
       displayName: 'Run tests in Docker container'
-
-    - script: |
-        python -m pip install --upgrade pip &&
-        pip install -r .azure-pipelines/requirements/build_validation_requirements.txt &&
-        flake8 .
-      displayName: 'Install dependencies and run linting'
-      # TODO move before docker tasks
 
     - task: PublishTestResults@2
       condition: succeededOrFailed()
