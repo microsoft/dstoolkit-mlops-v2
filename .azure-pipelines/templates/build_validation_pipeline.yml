@@ -18,7 +18,7 @@ jobs:
 
     - script: |
         echo "Running Docker container for validation"
-        docker run --rm ${{ parameters.image_name }} /bin/bash -c "
+        docker run --rm --mount type=bind,src=.,dst=/workspace ${{ parameters.image_name }} /bin/bash -c "
           python -m pip install --upgrade pip &&
           pip install -r ../../../.azure-pipelines/requirements/build_validation_requirements.txt &&
           pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
