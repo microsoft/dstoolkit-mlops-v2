@@ -1,7 +1,7 @@
 """
 This module provides functionality for managing Azure Machine Learning model artifacts resources.
 
-It includes functions to delete the Model Artifacts from Azure Machine Learning workspace based 
+It includes functions to delete the Model Artifacts from Azure Machine Learning workspace based
 on the user specified date.
 The module uses the Azure Machine Learning SDK for Python to interact with Azure resources.
 """
