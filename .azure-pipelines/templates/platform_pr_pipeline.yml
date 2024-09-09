@@ -39,6 +39,7 @@ stages:
       variables: 
         azureml_job_name_from_submit_job: $[ dependencies.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ] 
       steps:
+      - script: echo "AzureML Job Name: $(azureml_job_name_from_submit_job)"
       - template: cancel_aml_pipeline.yml
         parameters:
           azure_subscription: $(AZURE_RM_SVC_CONNECTION)
