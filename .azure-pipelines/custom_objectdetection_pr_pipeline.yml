@@ -32,7 +32,7 @@ stages:
     jobs:
       - template: build_validation_pipeline_docker.yml
         parameters:
-          image_name: ${{ parameters.image_name }}
+          image_name: $(Build.Repository.Name):$(Build.BuildId)
           model_type: ${{ parameters.model_type }}
 
   - stage: execute_training_job
