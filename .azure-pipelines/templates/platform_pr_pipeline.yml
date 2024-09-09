@@ -35,7 +35,7 @@ stages:
       condition: canceled()
       pool: 
         vmImage: ubuntu-latest
-      dependsOn: WaitForAzureMLJobCompletion
+      dependsOn: Execute_ml_Job_Pipeline
       variables: 
         azureml_job_name_from_submit_job: $[ dependencies.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ] 
       steps:
