@@ -1,64 +1,32 @@
-name: Cleanup Registered Models
+name: Register Datasets
 
 on:
   workflow_dispatch:
-    inputs:
-      date:
-        type: string
-        description: "delete date e.g YYYY-MM-DD"
-        default: '2024-08-14'
-        required: true
-      jobType:
-        type: choice
-        description: "Type of the job to be run"
-        default: 'getModelArtifacts'
-        required: true
-        options:
-          - 'getModelArtifacts'
-          - 'deleteModelArtifacts'
+
 env:
-  BUILD_BUILDID: ${{ github.run_id }}
-  BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
-  CLEAN_UP_DATE: ${{ inputs.date }}
-  JOB_TYPE: ${{ inputs.jobType }}
   PYTHON_VERSION: "3.9"
-  RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
-  SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID  }}
-  WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
-
+  SUBSCRIPTION_ID: ${{ vars.subscription_id }}
+  RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
+  WORKSPACE_NAME: ${{ vars.workspace_name }}
+  ARM_CLIENT_ID:  ${{ vars.ARM_CLIENT_ID }}
+  ARM_TENANT_ID:  ${{ vars.ARM_TENANT_ID }}
 jobs:
-  cleanup-registered-models:
+  run-registration:
     runs-on: ubuntu-latest
-    # runs-on: [self-hosted, linux, X64]
-    defaults:
-      run:
-        shell: bash
+    permissions:
+      id-token: write
+      contents: read
     steps:
-      - uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-      - name: Export Secrets
-        uses: oNaiPs/secrets-to-env-action@v1
-        with:
-          secrets: ${{ toJSON(secrets) }}
-          convert: upper
-      
+      - name: Checkout
+        uses: actions/checkout@v1
       - name: Configure Azure ML Agent
-        run: python -m pip install --upgrade -r .github/requirements/execute_job_requirements.txt
-
-      - name: Get Model Artifacts
-        if: env.JOB_TYPE == 'getModelArtifacts'
-        run: |
-          python -m mlops.common.get_registered_models \
-            --clean_up_date ${{ env.CLEAN_UP_DATE }}
-
-      - name: Delete Registered Models
-        if: env.JOB_TYPE == 'deleteModelArtifacts'
-        run: |
-          python -m mlops.common.delete_registered_models \
-            --clean_up_date ${{ env.CLEAN_UP_DATE }}
-            
+        uses: ./.github/actions/configure_azureml_agent
+      - name: Execute Dataset Registration
+        uses: ./.github/actions/execute_shell_code
+        with:
+          arm_client_id: ${{ env.ARM_CLIENT_ID }}
+          arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+          subscription_id: ${{ env.SUBSCRIPTION_ID }}
+          script_parameter: |
+              python -m mlops.common.register_data_asset \
+                  --data_config_path config/data_config.json
