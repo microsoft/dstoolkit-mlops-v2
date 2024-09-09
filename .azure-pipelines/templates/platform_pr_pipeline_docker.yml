@@ -1,5 +1,5 @@
 parameters:
- - name: env_name
+ - name: exec_environment
    displayName: "Execution Environment"
    default: "pr"
  - name: model_type
