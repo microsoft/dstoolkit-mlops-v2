@@ -30,7 +30,7 @@ stages:
   - stage: build_validation
     displayName: build_validation
     jobs:
-      - template: build_validation_pipeline_docker.yml
+      - template: templates/build_validation_pipeline_docker.yml
         parameters:
           image_name: $(Build.Repository.Name):$(Build.BuildId)
           model_type: ${{ parameters.model_type }}
