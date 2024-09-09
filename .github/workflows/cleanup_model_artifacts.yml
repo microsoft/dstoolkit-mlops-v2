@@ -17,15 +17,19 @@ on:
           - 'getModelArtifacts'
           - 'deleteModelArtifacts'
 env:
-  BUILD_BUILDID: ${{ github.run_id }}
-  BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
   CLEAN_UP_DATE: ${{ inputs.date }}
   JOB_TYPE: ${{ inputs.jobType }}
   PYTHON_VERSION: "3.9"
   RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
-  SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID  }}
+  SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
   WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
-
+  ARM_CLIENT_ID: ${{vars.ARM_CLIENT_ID}}
+  ARM_TENANT_ID: ${{vars.ARM_TENANT_ID}}
+  BUILD_BUILDID: ${{ github.run_id }}
+  BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
+permissions:
+  id-token: write
+  contents: read
 jobs:
   cleanup-registered-models:
     runs-on: ubuntu-latest
@@ -34,19 +38,16 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: azure/login@v2
+      - name: Azure login
+        uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - uses: actions/checkout@v4
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.SUBSCRIPTION_ID }}
+      - uses: actions/checkout@v1
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-      - name: Export Secrets
-        uses: oNaiPs/secrets-to-env-action@v1
-        with:
-          secrets: ${{ toJSON(secrets) }}
-          convert: upper
-      
       - name: Configure Azure ML Agent
         run: python -m pip install --upgrade -r .github/requirements/execute_job_requirements.txt
 
