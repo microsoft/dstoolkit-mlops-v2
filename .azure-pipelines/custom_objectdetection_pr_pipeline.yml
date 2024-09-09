@@ -27,8 +27,26 @@ parameters:
    default: "custom_objectdetection"
 
 stages:
-  - template: templates/platform_pr_pipeline.yml
-    parameters:
-      exec_environment: ${{ parameters.env_name }}
-      model_type: ${{ parameters.model_type }}
-      image_name: $(Build.Repository.Name):$(Build.BuildId)
+  - stage: build_validation
+    displayName: build_validation
+    jobs:
+      - template: build_validation_pipeline_docker.yml
+        parameters:
+          image_name: ${{ parameters.image_name }}
+          model_type: ${{ parameters.model_type }}
+
+  - stage: execute_training_job
+    displayName: execute_training_job
+    dependsOn:
+    - build_validation
+    jobs:
+    - job: Execute_ml_Job_Pipeline
+      steps:
+      - template: configure_azureml_agent.yml
+      - template: execute_python_code.yml
+        parameters:
+          step_name: "Execute Azure ML pipeline job"
+          script_parameter: |
+            python -m mlops.${{ parameters.model_type }}.src.mlops_pipeline \
+              --build_environment ${{parameters.exec_environment}} \
+              --wait_for_completion True

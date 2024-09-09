@@ -4,17 +4,12 @@ parameters:
    default: "dev"
  - name: model_type
    displayName: "type of model to execute"
- - name: image_name
-   displayName: "Name of the Docker image"
 
 stages:
   - stage: build_validation
     displayName: build_validation
     jobs:
       - template: build_validation_pipeline.yml
-        parameters:
-          image_name: ${{ parameters.image_name }}
-          model_type: ${{ parameters.model_type }}
 
   - stage: execute_training_job
     displayName: execute_training_job
