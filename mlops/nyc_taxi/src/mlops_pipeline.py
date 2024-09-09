@@ -10,6 +10,7 @@ The pipeline executes the following steps in order:
 6. Finalize and Persist Model: Handles tasks like persisting model metadata, registering the model,
 and generating reports.
 """
+
 from azure.identity import DefaultAzureCredential
 import argparse
 from azure.ai.ml.dsl import pipeline
@@ -229,20 +230,27 @@ def execute_pipeline(
                         or pipeline_job.status == "CancelRequested"
                         or pipeline_job.status == "Canceled"
                     ):
-                        print(f"Pipeline job '{pipeline_job.name}' has stopped with status: {pipeline_job.status}.")
+                        print(
+                            f"Pipeline job '{pipeline_job.name}' has stopped with status: {pipeline_job.status}."
+                        )
                         break
                 else:
-                    print(f"Job '{pipeline_job.name}' exceeded the wait time limit of 1 hour.")
+                    print(
+                        f"Job '{pipeline_job.name}' exceeded the wait time limit of 1 hour."
+                    )
                     break
 
             if pipeline_job.status == "Completed" or pipeline_job.status == "Finished":
                 print("Pipeline job completed successfully.")
             else:
-                raise Exception(f"Pipeline job '{pipeline_job.name}' did not complete successfully. Final status: {pipeline_job.status}.")
+                raise Exception(
+                    f"Pipeline job '{pipeline_job.name}' did not complete successfully. "
+                    f"Final status: {pipeline_job.status}."
+                )
     except Exception as ex:
         print(
-            f"An error occurred during the execution of the pipeline job. "
-            "Please check your credentials, resource configuration, and job setup, then try again. "
+            f"An error occurred during the execution of the pipeline job."
+            "Please check your credentials, resource configuration, job setup, then try again."
             f"Error details: {ex}"
         )
         raise
