@@ -27,22 +27,20 @@ stages:
               --build_environment ${{parameters.exec_environment}} \
               --wait_for_completion True \
               --output_file run_id.txt
-      - template: read_run_id.yml
-        parameters:
-          azure_subscription: $(AZURE_RM_SVC_CONNECTION)
-    - job: CancelAzureMLJob
-      displayName: Cancel AzureML Job if ADO Pipeline is canceled
-      condition: canceled()
-      pool: 
-        vmImage: ubuntu-latest
-      dependsOn: Execute_ml_Job_Pipeline
-      variables: 
-        azureml_job_name_from_submit_job: $[ dependencies.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ] 
-      steps:
-      - script: echo "AzureML Job Name: $(azureml_job_name_from_submit_job)"
-      - template: cancel_aml_pipeline.yml
-        parameters:
-          azure_subscription: $(AZURE_RM_SVC_CONNECTION)
-          resource_group_name: $(RESOURCE_GROUP_NAME)
-          workspace_name: $(WORKSPACE_NAME)
-          run_name: $(azureml_job_name_from_submit_job)
+      - task: AzureCLI@2
+        displayName: "Cancel AML Pipeline"
+        condition: canceled()
+        inputs:
+          azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            echo "Pipeline was canceled. Attempting to cancel AML Pipeline..."
+
+            readarray arr <"run_id.txt"
+            run_name=${arr[0]}
+
+            az extension add --name ml
+            az ml job cancel --name $run_name \
+              --resource-group $(RESOURCE_GROUP_NAME) \
+              --workspace-name $(WORKSPACE_NAME)

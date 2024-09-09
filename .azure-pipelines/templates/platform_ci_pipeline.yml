@@ -1,3 +1,4 @@
+
 parameters:
  - name: exec_environment
    displayName: "Execution Environment"
@@ -20,15 +21,53 @@ stages:
                 --build_environment ${{parameters.exec_environment}} \
                 --wait_for_completion False \
                 --output_file run_id.txt
-        - template: read_run_id.yml
-          parameters:
-            azure_subscription: $(AZURE_RM_SVC_CONNECTION)
+        - task: AzureCLI@2
+          displayName: Read Run ID
+          name: read_run_id
+          inputs:
+            azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+            scriptType: bash
+            scriptLocation: inlineScript
+            workingDirectory: $(System.DefaultWorkingDirectory)
+            inlineScript: |
+              readarray arr <"run_id.txt"
+              run_name=${arr[0]}
+              echo $run_name
+              echo "##vso[task.setvariable variable=RUN_NAME;isOutput=true;]$run_name"
+
+              python -m mlops.common.get_run_metadata \
+                --run_id $run_name \
+                --output_file_name metadata.txt
+              
+              readarray arr <"metadata.txt"
+              metadata=${arr[0]}
+              echo $metadata
+              echo "##vso[task.setvariable variable=RUN_METADATA;isOutput=true;]$metadata"
+        - task: AzureCLI@2
+          displayName: "Cancel AML Pipeline"
+          condition: canceled()
+          inputs:
+            azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
+              echo "Pipeline was canceled. Attempting to cancel AML Pipeline..."
+
+              readarray arr <"run_id.txt"
+              run_name=${arr[0]}
+
+              az extension add --name ml
+              az ml job cancel --name $run_name \
+                --resource-group $(RESOURCE_GROUP_NAME) \
+                --workspace-name $(WORKSPACE_NAME)
+
       - job: WaitForAzureMLJobCompletion
         displayName: Wait for AzureML Job Completion
         pool: server
         timeoutInMinutes: 0
         dependsOn: Execute_ml_Job_Pipeline
         variables: 
+          # We are saving the name of Azure ML job submitted in previous step to a variable and it will be used as an input to the AzureML Job Wait task
           azureml_job_name_from_submit_job: $[ dependencies.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ] 
         steps:
         - task: AzureMLJobWaitTask@1
@@ -37,22 +76,7 @@ stages:
             resourceGroupName: $(RESOURCE_GROUP_NAME)
             azureMLWorkspaceName: $(WORKSPACE_NAME)
             azureMLJobName: $(azureml_job_name_from_submit_job)
-      - job: CancelAzureMLJob
-        displayName: Cancel AzureML Job if ADO Pipeline is canceled
-        condition: canceled()
-        pool: 
-          vmImage: ubuntu-latest
-        dependsOn: WaitForAzureMLJobCompletion
-        variables: 
-          azureml_job_name_from_submit_job: $[ dependencies.Execute_ml_Job_Pipeline.outputs['read_run_id.RUN_NAME'] ]
-        steps:
-        - template: cancel_aml_pipeline.yml
-          parameters:
-            azure_subscription: $(AZURE_RM_SVC_CONNECTION)
-            resource_group_name: $(RESOURCE_GROUP_NAME)
-            workspace_name: $(WORKSPACE_NAME)
-            run_name: $(azureml_job_name_from_submit_job)
-
+      
     - stage: 'Deploy_Online'
       dependsOn: 
       - execute_training_job
