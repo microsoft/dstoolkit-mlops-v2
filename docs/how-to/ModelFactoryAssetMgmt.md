@@ -8,9 +8,6 @@ The Model Factory repository is home to machine learning models that meet metric
 
 This document outlines the process of cleanup of assets in the Azure ML workspace. These assets include Data Assets, Experiments(Jobs), and Registered Models in the Azure Machine Learning Studio that are created as part of the AML jobs.
 
-## Overview
-
-
 ## Detailed Design
 
 This design provides guidance on cleanup/deleting the below assets from the Azure ML workspace.
@@ -50,7 +47,7 @@ The registered Model can be deleted in 2 ways either from the Azure Machine Lear
 
 #### Manually Delete Model Registration
 
-To delete a registered model from the Azure Machine Learning Studio :
+To delete a registered model from the Azure Machine Learning Studio:
 
 1. Navigate to the Azure Machine Learning Studio.
 2. Go to the Models tab.
