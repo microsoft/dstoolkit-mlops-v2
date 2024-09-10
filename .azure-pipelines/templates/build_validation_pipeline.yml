@@ -1,6 +1,6 @@
 parameters:
   - name: is_docker
-    displayName: "Is Docker"
+    displayName: "Is Docker used for build validation?"
     type: boolean
     default: false
   - name: image_name
