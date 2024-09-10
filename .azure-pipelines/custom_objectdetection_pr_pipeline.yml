@@ -25,9 +25,14 @@ parameters:
  - name: model_type
    displayName: "model type"
    default: "custom_objectdetection"
+ - name: is_docker
+   displayName: "Is Docker used for build validation?"
+   type: boolean
+   default: true
 
 stages:
-  - template: templates/platform_pr_pipeline_docker.yml
+  - template: templates/platform_pr_pipeline.yml
     parameters:
       exec_environment: ${{ parameters.env_name }}
       model_type: ${{ parameters.model_type }}
+      is_docker: ${{ parameters.is_docker }}

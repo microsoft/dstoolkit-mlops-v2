@@ -4,12 +4,20 @@ parameters:
    default: "dev"
  - name: model_type
    displayName: "type of model to execute"
+ - name: is_docker
+   displayName: "Is Docker used for build validation?"
+   type: boolean
+   default: false
 
 stages:
   - stage: build_validation
     displayName: build_validation
     jobs:
       - template: build_validation_pipeline.yml
+        parameters:
+          is_docker: ${{ parameters.is_docker }}
+          image_name: $(Build.Repository.Name):$(Build.BuildId)
+          model_type: ${{ parameters.model_type }}
 
   - stage: execute_training_job
     displayName: execute_training_job
