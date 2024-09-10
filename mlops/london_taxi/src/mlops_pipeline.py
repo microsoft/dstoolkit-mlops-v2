@@ -193,7 +193,6 @@ def execute_pipeline(
         )
 
         print(f"The job {pipeline_job.name} has been submitted!")
-
         if output_file is not None:
             with open(output_file, "w") as out_file:
                 out_file.write(pipeline_job.name)
