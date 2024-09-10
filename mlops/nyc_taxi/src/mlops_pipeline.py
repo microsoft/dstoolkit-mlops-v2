@@ -193,7 +193,7 @@ def execute_pipeline(
             pipeline_job, experiment_name=experiment_name
         )
 
-        f"Pipeline job '{pipeline_job.name}' has been submitted successfully!"
+        print(f"Pipeline job '{pipeline_job.name}' has been submitted successfully!")
         if output_file is not None:
             with open(output_file, "w") as out_file:
                 out_file.write(pipeline_job.name)
@@ -249,7 +249,7 @@ def execute_pipeline(
                 )
     except Exception as ex:
         print(
-            f"An error occurred during the execution of the pipeline job."
+            "An error occurred during the execution of the pipeline job."
             "Please check your credentials, resource configuration, job setup, then try again."
             f"Error details: {ex}"
         )
