@@ -6,16 +6,15 @@ on:
       image_name:
         type: string
         description: "Execution Environment"
-        required: true
-        default: "dev"
+        required: false
       model_type:
         type: string
         description: "type of model to execute"
-        required: true
+        required: false
       IS_DOCKER:
         type: boolean
         description: "Is Docker used for build validation?"
-        required: true
+        required: false
         default: false
 
 env:
