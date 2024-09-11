@@ -22,7 +22,7 @@ env:
 
 jobs:
   run-unit-tests-docker:
-    if: ${{ inputs.IS_DOCKER == true }}
+    if: ${{ inputs.IS_DOCKER == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Install dependencies and run linting
@@ -56,7 +56,7 @@ jobs:
           path: "**/test-*.xml"
 
   run-unit-tests:
-    if: ${{ inputs.IS_DOCKER == false }}
+    if: ${{ inputs.IS_DOCKER == 'false' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
