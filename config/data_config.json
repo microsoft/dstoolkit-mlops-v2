@@ -43,6 +43,12 @@
             "DATASET_DESC":"this dataset is for training models"
         },
         {
+            "DATA_PURPOSE": "pr_data",
+            "DATA_PATH":"mlops/custom_objectdetection/data",
+            "DATASET_NAME":"custom_objectdetection_pr_data",
+            "DATASET_DESC":"this dataset is for pr validation only"
+        },
+        {
             "DATA_PURPOSE": "batch_test_data",
             "DATA_PATH":"model/custom_objectdetection/batch_test_data",
             "DATASET_NAME":"custom_objectdetection_batch_test",
