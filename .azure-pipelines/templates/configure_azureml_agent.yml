@@ -4,6 +4,14 @@ steps:
   inputs:
     versionSpec: '3.9'
 
+- task: Cache@2
+  inputs:
+    key: 'python_execute_aml | "$(Agent.OS)" | .azure-pipelines/requirements/execute_job_requirements.txt'
+    restoreKeys: |
+      python_execute_aml | "$(Agent.OS)"
+    path: $(PIP_CACHE_DIR)
+  displayName: 'Cache pip packages'
+
 - task: AzureCLI@2
   displayName: Install Job Requirements
   inputs:

@@ -25,6 +25,8 @@ parameters:
  - name: model_type
    displayName: "model type"
    default: "nyc_taxi"
+- name: PIP_CACHE_DIR
+  value: $(Pipeline.Workspace)/.pip/build_validation
 
 stages:
   - template: templates/platform_pr_pipeline.yml
