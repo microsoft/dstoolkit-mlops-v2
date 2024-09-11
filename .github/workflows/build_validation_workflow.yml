@@ -44,14 +44,14 @@ jobs:
       - name: Build Docker container
         shell: bash
         run: |
-          echo "Building Docker container for validation with tag: {{ inputs.image_name }}"
-          docker build -t {{ inputs.image_name }} -f mlops/{{ inputs.model_type }}/environment/Dockerfile mlops/{{ inputs.model_type }}/environment
+          echo "Building Docker container for validation with tag: ${{ inputs.image_name }}"
+          docker build -t ${{ inputs.image_name }} -f mlops/${{ inputs.model_type }}/environment/Dockerfile mlops/${{ inputs.model_type }}/environment
 
       - name: Run tests in Docker container
         shell: bash
         run: |
           echo "Running Docker container for validation"
-          docker run --rm --mount type=bind,src=.,dst=/workspace {{ inputs.image_name }} /bin/bash -c "
+          docker run --rm --mount type=bind,src=.,dst=/workspace ${{ inputs.image_name }} /bin/bash -c "
             sudo chown -R vscode /workspace &&
             python -m pip install --upgrade pip &&
             pip install -r .github/requirements/build_validation_requirements.txt &&
