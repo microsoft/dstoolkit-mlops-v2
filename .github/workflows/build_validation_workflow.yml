@@ -21,17 +21,31 @@ env:
   PYTHON_VERSION: "3.9"
 
 jobs:
-  run-unit-tests-docker:
-    if: ${{ inputs.IS_DOCKER == true }}
+  run-flake8:
     runs-on: ubuntu-latest
     steps:
-      - name: Install dependencies and run linting
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Load Python Dependencies
         shell: bash
         run: |
+          set -e
           python -m pip install --upgrade pip
-          pip install -r .github/requirements/build_validation_requirements.txt
-          flake8 .
+          python -m pip install --upgrade -r .github/requirements/build_validation_requirements.txt
 
+      - name: Lint Code
+        run: flake8
+  
+  run-unit-tests-docker:
+    if: ${{ inputs.IS_DOCKER == true }}
+    needs: run-flake8
+    runs-on: ubuntu-latest
+    steps:
       - name: Build Docker container
         shell: bash
         run: |
@@ -57,23 +71,9 @@ jobs:
 
   run-unit-tests:
     if: ${{ inputs.IS_DOCKER == false }}
+    needs: run-flake8
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Load Python Dependencies
-        shell: bash
-        run: |
-          set -e
-          python -m pip install --upgrade pip
-          python -m pip install --upgrade -r .github/requirements/build_validation_requirements.txt      
-      - name: Lint Code
-        run: flake8
       - name: Run Unit Tests
         shell: bash
         run: |
