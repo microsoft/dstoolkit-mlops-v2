@@ -12,6 +12,11 @@ on:
         type: string
         description: "type of model to execute"
         required: true
+      IS_DOCKER:
+        type: boolean
+        description: "Is Docker used for build validation?"
+        required: false
+        default: false
 env:
   SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
   RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
