@@ -17,6 +17,7 @@ infra/
 model/
 .devcontainer/
 .github/
+.vscode/
 
 
 # Files
@@ -29,3 +30,6 @@ LICENSE
 CONTRIBUTING.md
 CODE_OF_CONDUCT.md
 .pre-commit-config.yaml
+.amlignore
+.gitignore
+pyproject.toml
