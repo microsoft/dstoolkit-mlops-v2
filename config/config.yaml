@@ -112,7 +112,7 @@ deployment_configs:
       retry_timeout: 300
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_desc: A batch deployment
-      test_dataset_name: london_taxi_batch_test
+      test_dataset_name: nyc_taxi_batch_test
     
     nyc_taxi_online_dev:
       score_file_name: score.py

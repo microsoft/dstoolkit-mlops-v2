@@ -41,6 +41,18 @@
             "DATA_PATH":"mlops/london_taxi/data",
             "DATASET_NAME":"london_taxi_training",
             "DATASET_DESC":"this dataset is for training models"
-        }        
+        },
+        {
+            "DATA_PURPOSE": "batch_test_data",
+            "DATA_PATH":"model/custom_objectdetection/batch_test_data",
+            "DATASET_NAME":"custom_objectdetection_batch_test",
+            "DATASET_DESC":"this dataset is for testing batch deployments"
+        },
+        {
+            "DATA_PURPOSE": "training_data",
+            "DATA_PATH":"mlops/custom_objectdetection/data",
+            "DATASET_NAME":"custom_objectdetection_training",
+            "DATASET_DESC":"this dataset is for training models"
+        }
     ]
 }
