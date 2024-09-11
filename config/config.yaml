@@ -127,3 +127,37 @@ deployment_configs:
       deployment_conda_path: model/nyc_taxi/online_environment/conda.yml
       score_dir: model/nyc_taxi/online
       deployment_instance_count: 1
+
+    custom_objectdetection_batch_dev:
+      score_file_name: score.py
+      score_dir: model/custom_objectdetection/batch
+      batch_cluster_name: batchcluster
+      batch_cluster_region: eastus
+      batch_cluster_size: STANDARD_DS3_v2
+      deployment_conda_path: model/custom_objectdetection/batch_environment/conda.yml
+      endpoint_name: nyc-taxi-be-002
+      endpoint_desc: A batch endpoint serving an MLflow model for online taxi
+      deployment_name: custom-objectdetection-bd-002
+      cluster_instance_count: 1
+      max_concurrency_per_instance: 1
+      mini_batch_size: 10
+      output_file_name: predictions.csv
+      max_retries: 3
+      retry_timeout: 300
+      deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+      deployment_desc: A batch deployment
+      test_dataset_name: custom_objectdetection_batch_test
+    
+    custom_objectdetection_online_dev:
+      score_file_name: score.py
+      test_file_path: model/custom_objectdetection/online_test_data/sample-request.json
+      endpoint_name: custom-objectdetection-rte-003
+      endpoint_desc: An online endpoint serving an MLflow model for online taxi
+      deployment_desc: 
+      deployment_name: nyc-taxi-rtd-003
+      deployment_traffic_allocation: 100
+      deployment_vm_size: Standard_F4s_v2
+      deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+      deployment_conda_path: model/custom_objectdetection/online_environment/conda.yml
+      score_dir: model/custom_objectdetection/online
+      deployment_instance_count: 1
