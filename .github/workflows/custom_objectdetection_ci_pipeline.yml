@@ -1,8 +1,14 @@
 name: Custom Object Detection CI Workflow
+
+# TODO restore
 on:
-  push:
+  pull_request:
     branches:
       - development
+# on:
+#   push:
+#     branches:
+#       - development
     paths:
       - mlops/common/**
       - mlops/**
