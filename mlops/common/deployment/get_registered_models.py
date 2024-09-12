@@ -20,7 +20,6 @@ def parse_args():
     """Parse arguments.
 
     Returns:
-    
         argparse.Namespace: Parsed command line arguments.
     """
     parser = argparse.ArgumentParser(description="Get the Registered Model Artifacts ready for clean up")
