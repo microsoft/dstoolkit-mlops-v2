@@ -23,7 +23,7 @@ on:
         description: "The type of model to run the workflow for"
         required: true
         default: "custom_objectdetection"
-      IS_DOCKER:
+      is_docker:
         type: boolean
         description: "Is Docker used for build validation?"
         required: true
@@ -37,4 +37,4 @@ jobs:
     with:
       exec_environment: ${{ inputs.exec_environment || 'pr' }}
       model_type: ${{ inputs.model_type || 'custom_objectdetection' }}
-      IS_DOCKER: ${{ inputs.IS_DOCKER || true }}
+      is_docker: ${{ inputs.is_docker || true }}

@@ -11,7 +11,7 @@ on:
         type: string
         description: "type of model to execute"
         required: false
-      IS_DOCKER:
+      is_docker:
         type: boolean
         description: "Is Docker used for build validation?"
         required: false
@@ -22,7 +22,7 @@ env:
 
 jobs:
   run-unit-tests-docker:
-    if: ${{ inputs.IS_DOCKER == true }}
+    if: ${{ inputs.is_docker == true }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -65,7 +65,7 @@ jobs:
           path: "**/test-*.xml"
 
   run-unit-tests:
-    if: ${{ inputs.IS_DOCKER == false }}
+    if: ${{ inputs.is_docker == false }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

@@ -12,7 +12,7 @@ on:
         type: string
         description: "type of model to execute"
         required: true
-      IS_DOCKER:
+      is_docker:
         type: boolean
         description: "Is Docker used for build validation?"
         required: false
@@ -32,7 +32,7 @@ jobs:
     with:
       image_name: ${{ inputs.exec_environment }}
       model_type: ${{ inputs.model_type }}
-      IS_DOCKER: ${{ inputs.IS_DOCKER }}
+      is_docker: ${{ inputs.is_docker }}
   execute-ml-job-pipeline:
     name: Execute ML Job Pipeline
     runs-on: ubuntu-latest
