@@ -1,4 +1,5 @@
 """
+
 This module provides functionality for managing Azure Machine Learning model artifacts resources.
 It includes functions to delete the Model Artifacts from Azure Machine Learning workspace based
 on the user specified date.
@@ -18,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 def parse_args():
     """Parse arguments.
+    
     Returns:
         argparse.Namespace: Parsed command line arguments.
     """
