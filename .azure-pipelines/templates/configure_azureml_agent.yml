@@ -22,7 +22,7 @@ steps:
     inlineScript: |
       set -e # fail on error
       python -m pip install --upgrade pip
-      pip install -r .azure-pipelines/requirements/execute_job_requirements.txt
+      pip install -r .azure-pipelines/requirements/execute_job_requirements.txt --cache-dir $(PIP_CACHE_DIR)
       az version
 
 
