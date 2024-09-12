@@ -12,6 +12,7 @@ and generating reports.
 """
 
 from azure.identity import DefaultAzureCredential
+from azure.core.exceptions import ClientAuthenticationError
 import argparse
 from azure.ai.ml.dsl import pipeline
 from azure.ai.ml import MLClient, Input
@@ -230,6 +231,9 @@ def execute_pipeline(
                         or pipeline_job.status == "CancelRequested"
                         or pipeline_job.status == "Canceled"
                     ):
+                        print(
+                            f"Pipeline job '{pipeline_job.name}' has stopped with status: {pipeline_job.status}."
+                        )
                         break
                 else:
                     print(
@@ -244,6 +248,13 @@ def execute_pipeline(
                     f"Job {pipeline_job.name} did not complete successfully. "
                     f"Current status: {pipeline_job.status}"
                 )
+    except ClientAuthenticationError as auth_ex:
+        print(
+            "Authorization error occurred while executing the pipeline."
+            "Please check your credentials and permissions."
+            f"Error details: {auth_ex}"
+        )
+        raise
     except Exception as ex:
         print(
             "An error occurred while executing the pipeline."
