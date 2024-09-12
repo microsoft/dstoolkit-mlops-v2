@@ -17,6 +17,8 @@ pool:
 
 variables:
 - group: mlops_platform_dev_vg
+- name: PIP_CACHE_DIR
+  value: $(Pipeline.Workspace)/.pip/build_validation
 
 parameters:
  - name: env_name
@@ -25,8 +27,6 @@ parameters:
  - name: model_type
    displayName: "model type"
    default: "london_taxi"
- - name: PIP_CACHE_DIR
-   value: $(Pipeline.Workspace)/.pip/build_validation
 
 stages:
   - template: templates/platform_pr_pipeline.yml
