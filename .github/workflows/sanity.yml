@@ -1,0 +1,21 @@
+name: CI for Node.js Project
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build and Test
+    steps:
+    - uses: actions/checkout@v2
+      name: Check out repository
+    - uses: actions/setup-node@v1
+      name: Set up Node.js
+      with:
+        node-version: 12
+    - run: |
+        npm ci
+        npm run build
+        npm test
+      name: Build and Test
