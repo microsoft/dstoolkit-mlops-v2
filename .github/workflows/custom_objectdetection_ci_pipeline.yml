@@ -6,7 +6,6 @@ on:
       - development
     paths:
       - mlops/common/**
-      - mlops/**
       - mlops/custom_objectdetection/**
       - model/custom_objectdetection/**
       - src/custom_objectdetection_src/**
