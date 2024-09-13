@@ -17,7 +17,7 @@ def get_environment(
     workspace_name: str,
     environment_name: str,
     description: str = "Azure ML environment",
-    env_base_image_name: str = None,
+    env_base_image: str = None,
     conda_path: str = None,
     docker_context_path: str = None,
     dockerfile_path: str = None,
@@ -29,7 +29,7 @@ def get_environment(
       subscription_id (str): a subscription id where the workspace is located
       resource_group_name (str): a resource group where the workspace is located
       workspace_name (str): name of the Azure ML workspace
-      env_base_image_name (str): a name of the base image for the environment
+      env_base_image (str): a name of the base image for the environment
       conda_path (str): a path to a conda file with additional packages to install
       environment_name (str): a name of the environment
       description (str): a description of the environment
@@ -48,7 +48,7 @@ def get_environment(
         )
         if conda_path:
             env_docker_conda = Environment(
-                image=env_base_image_name,
+                image=env_base_image,
                 conda_file=conda_path,
                 name=environment_name,
                 description=description,
