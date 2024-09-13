@@ -1,15 +1,20 @@
 name: Custom Object Detection CI Workflow
 
 on:
-  push:
+  pull_request:
     branches:
       - development
-    paths:
-      - mlops/common/**
-      - mlops/docker_taxi/**
-      - model/docker_taxi/**
-      - src/docker_taxi_src/**
-      - test/docker_taxi/**
+# TODO restore
+# on:
+#   push:
+#     branches:
+#       - development
+#     paths:
+#       - mlops/common/**
+#       - mlops/docker_taxi/**
+#       - model/docker_taxi/**
+#       - src/docker_taxi_src/**
+#       - test/docker_taxi/**
   workflow_call:
     inputs:
       exec_environment:
