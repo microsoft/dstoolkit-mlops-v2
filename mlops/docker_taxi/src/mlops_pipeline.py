@@ -31,7 +31,7 @@ gl_pipeline_components = []
 
 
 @pipeline()
-def custom_objectdetection_data_regression(pipeline_job_input, model_name, build_reference):
+def docker_taxi_data_regression(pipeline_job_input, model_name, build_reference):
     """
     Run a pipeline for regression analysis on NYC taxi data.
 
@@ -105,7 +105,7 @@ def construct_pipeline(
     """
     registered_data_asset = ml_client.data.get(name=dataset_name, label="latest")
 
-    parent_dir = os.path.join(os.getcwd(), "mlops/custom_objectdetection/components")
+    parent_dir = os.path.join(os.getcwd(), "mlops/docker_taxi/components")
 
     prepare_data = load_component(source=parent_dir + "/prep.yml")
     transform_data = load_component(source=parent_dir + "/transform.yml")
@@ -129,7 +129,7 @@ def construct_pipeline(
     gl_pipeline_components.append(score_data)
     gl_pipeline_components.append(register_model)
 
-    pipeline_job = custom_objectdetection_data_regression(
+    pipeline_job = docker_taxi_data_regression(
         Input(type="uri_folder", path=registered_data_asset.id),
         model_name,
         build_reference,
@@ -258,7 +258,7 @@ def prepare_and_execute(
         wait_for_completion (str): "True" or "False" - indicates whether to wait for the job to complete.
         output_file (str): The path to the output file where the job name will be written.
     """
-    model_name = "custom_objectdetection"
+    model_name = "docker_taxi"
 
     config = MLOpsConfig(environment=build_environment)
 

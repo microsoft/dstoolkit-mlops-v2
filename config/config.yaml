@@ -25,14 +25,14 @@ pipeline_configs:
     aml_env_name: nyc_env
     dataset_name: nyc_taxi_pr_data
 
-  custom_objectdetection_pr: 
+  docker_taxi_pr: 
     cluster_region: eastus
     cluster_size: STANDARD_DS3_v2
     cluster_name: cpucluster
     dockerfile_path: Dockerfile
-    docker_context_path: mlops/custom_objectdetection/environment
-    aml_env_name: custom_objectdetection_env
-    dataset_name: custom_objectdetection_pr_data
+    docker_context_path: mlops/docker_taxi/environment
+    aml_env_name: docker_taxi_env
+    dataset_name: docker_taxi_pr_data
 
   london_taxi_dev: 
     cluster_region: eastus
@@ -50,14 +50,14 @@ pipeline_configs:
     aml_env_name: nyc_env
     dataset_name: nyc_taxi_pr_data
   
-  custom_objectdetection_dev: 
+  docker_taxi_dev: 
     cluster_region: eastus
     cluster_size: STANDARD_DS3_v2
     cluster_name: cpucluster
     dockerfile_path: Dockerfile
-    docker_context_path: mlops/custom_objectdetection/environment
-    aml_env_name: custom_objectdetection_env
-    dataset_name: custom_objectdetection_pr_data
+    docker_context_path: mlops/docker_taxi/environment
+    aml_env_name: docker_taxi_env
+    dataset_name: docker_taxi_pr_data
 
 deployment_configs:
     london_taxi_batch_dev: 
@@ -128,13 +128,13 @@ deployment_configs:
       score_dir: model/nyc_taxi/online
       deployment_instance_count: 1
 
-    custom_objectdetection_batch_dev:
+    docker_taxi_batch_dev:
       score_file_name: score.py
-      score_dir: model/custom_objectdetection/batch
+      score_dir: model/docker_taxi/batch
       batch_cluster_name: batchcluster
       batch_cluster_region: eastus
       batch_cluster_size: STANDARD_DS3_v2
-      deployment_conda_path: model/custom_objectdetection/batch_environment/conda.yml
+      deployment_conda_path: model/docker_taxi/batch_environment/conda.yml
       endpoint_name: nyc-taxi-be-002
       endpoint_desc: A batch endpoint serving an MLflow model for custom object detection
       deployment_name: custom-objectdetection-bd-002
@@ -146,11 +146,11 @@ deployment_configs:
       retry_timeout: 300
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_desc: A batch deployment
-      test_dataset_name: custom_objectdetection_batch_test
+      test_dataset_name: docker_taxi_batch_test
     
-    custom_objectdetection_online_dev:
+    docker_taxi_online_dev:
       score_file_name: score.py
-      test_file_path: model/custom_objectdetection/online_test_data/sample-request.json
+      test_file_path: model/docker_taxi/online_test_data/sample-request.json
       endpoint_name: custom-objectdetection-rte-003
       endpoint_desc: An online endpoint serving an MLflow model for custom object detection
       deployment_desc: 
@@ -158,6 +158,6 @@ deployment_configs:
       deployment_traffic_allocation: 100
       deployment_vm_size: Standard_F4s_v2
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
-      deployment_conda_path: model/custom_objectdetection/online_environment/conda.yml
-      score_dir: model/custom_objectdetection/online
+      deployment_conda_path: model/docker_taxi/online_environment/conda.yml
+      score_dir: model/docker_taxi/online
       deployment_instance_count: 1

@@ -2,8 +2,8 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/miniconda
 {
 	"name": "DSToolKit-ObjectDetection",
-	"context": "../../mlops/custom_objectdetection/environment",
-	"dockerFile": "../../mlops/custom_objectdetection/environment/Dockerfile",
+	"context": "../../mlops/docker_taxi/environment",
+	"dockerFile": "../../mlops/docker_taxi/environment/Dockerfile",
 
 	// Set *default* container specific settings.json values on container create.
 	"customizations": {

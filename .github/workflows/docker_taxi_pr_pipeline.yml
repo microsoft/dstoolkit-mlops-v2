@@ -7,10 +7,10 @@ on:
     paths:
       - '.github/**'
       - 'mlops/common/**'
-      - 'mlops/custom_objectdetection/**'
-      - 'model/custom_objectdetection/**'
-      - 'src/custom_objectdetection_src/**'
-      - 'test/custom_objectdetection/**'
+      - 'mlops/docker_taxi/**'
+      - 'model/docker_taxi/**'
+      - 'src/docker_taxi_src/**'
+      - 'test/docker_taxi/**'
   workflow_call:
     inputs:
       exec_environment:
@@ -22,7 +22,7 @@ on:
         type: string
         description: "The type of model to run the workflow for"
         required: true
-        default: "custom_objectdetection"
+        default: "docker_taxi"
       is_docker:
         type: boolean
         description: "Is Docker used for build validation?"
@@ -36,5 +36,5 @@ jobs:
     uses: ./.github/workflows/platform_pr_workflow.yml
     with:
       exec_environment: ${{ inputs.exec_environment || 'pr' }}
-      model_type: ${{ inputs.model_type || 'custom_objectdetection' }}
+      model_type: ${{ inputs.model_type || 'docker_taxi' }}
       is_docker: ${{ inputs.is_docker || true }}

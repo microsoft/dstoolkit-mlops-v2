@@ -11,7 +11,7 @@ The template contains the following folders/files:
 - docs: documentation.
 - src: source code that is not related to Azure ML directly. Usually, there is data science related code.
 - mlops: scripts that are related to Azure ML.
-- mlops/london-taxi, mlops/nyc-taxi, mlops/custom_objectdetection: fake pipelines with some basic code.
+- mlops/london-taxi, mlops/nyc-taxi, mlops/docker_taxi: fake pipelines with some basic code.
 - .amlignore: using this file we are removing all the folders and files that are not supposed to be in Azure ML compute.
 
 The template contains the following documents:

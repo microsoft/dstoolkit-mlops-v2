@@ -38,20 +38,20 @@
         },
         {
             "DATA_PURPOSE": "pr_data",
-            "DATA_PATH":"mlops/custom_objectdetection/data",
-            "DATASET_NAME":"custom_objectdetection_pr_data",
+            "DATA_PATH":"mlops/docker_taxi/data",
+            "DATASET_NAME":"docker_taxi_pr_data",
             "DATASET_DESC":"this dataset is for pr validation only"
         },
         {
             "DATA_PURPOSE": "batch_test_data",
-            "DATA_PATH":"model/custom_objectdetection/batch_test_data",
-            "DATASET_NAME":"custom_objectdetection_batch_test",
+            "DATA_PATH":"model/docker_taxi/batch_test_data",
+            "DATASET_NAME":"docker_taxi_batch_test",
             "DATASET_DESC":"this dataset is for testing batch deployments"
         },
         {
             "DATA_PURPOSE": "training_data",
-            "DATA_PATH":"mlops/custom_objectdetection/data",
-            "DATASET_NAME":"custom_objectdetection_training",
+            "DATA_PATH":"mlops/docker_taxi/data",
+            "DATASET_NAME":"docker_taxi_training",
             "DATASET_DESC":"this dataset is for training models"
         }
     ]
