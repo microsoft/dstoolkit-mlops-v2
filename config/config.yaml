@@ -136,7 +136,7 @@ deployment_configs:
       batch_cluster_size: STANDARD_DS3_v2
       deployment_conda_path: model/custom_objectdetection/batch_environment/conda.yml
       endpoint_name: nyc-taxi-be-002
-      endpoint_desc: A batch endpoint serving an MLflow model for online taxi
+      endpoint_desc: A batch endpoint serving an MLflow model for custom object detection
       deployment_name: custom-objectdetection-bd-002
       cluster_instance_count: 1
       max_concurrency_per_instance: 1
@@ -152,7 +152,7 @@ deployment_configs:
       score_file_name: score.py
       test_file_path: model/custom_objectdetection/online_test_data/sample-request.json
       endpoint_name: custom-objectdetection-rte-003
-      endpoint_desc: An online endpoint serving an MLflow model for online taxi
+      endpoint_desc: An online endpoint serving an MLflow model for custom object detection
       deployment_desc: 
       deployment_name: nyc-taxi-rtd-003
       deployment_traffic_allocation: 100
