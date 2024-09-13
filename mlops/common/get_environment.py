@@ -33,7 +33,7 @@ def get_environment(
       conda_path (str): a path to a conda file with additional packages to install
       environment_name (str): a name of the environment
       description (str): a description of the environment
-      docker_context_path (str): The local or remote path to the the docker build context directory
+      docker_context_path (str): The local or remote path to the docker build context directory
       dockerfile_path (str): The path to the dockerfile relative to root of docker build context directory
     Returns:
       Environment: an object that represents the environment
