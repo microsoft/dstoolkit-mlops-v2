@@ -28,6 +28,7 @@ Pipelines:
 
 - .azure-pipelines/nyc_taxi_pr_pipeline.yml
 - .azure-pipelines/london_taxi_pr_pipeline.yml
+- .azure-pipelines/custom_objectdetection_pr_pipeline.yml
 
 **Step 4.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
 
@@ -40,6 +41,7 @@ Pipelines:
 
 - .azure-pipelines/nyc_taxi_ci_pipeline.yml
 - .azure-pipelines/london_taxi_ci_pipeline.yml
+- .azure-pipelines/custom_objectdetection_ci_pipeline.yml
 
 ## Github Workflows Steps
 
@@ -63,6 +65,7 @@ Pipelines:
 
 - .github/workflows/nyc_taxi_pr_pipeline.yml
 - .github/workflows/london_taxi_pr_pipeline.yml
+- .github/workflows/custom_objectdetection_pr_pipeline.yml
 
 **Step 4.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
 Pipeline Parameters:
@@ -74,6 +77,7 @@ Pipelines:
 
 - .github/workflows/nyc_taxi_ci_pipeline.yml
 - .github/workflows/london_taxi_ci_pipeline.yml
+- .github/workflows/custom_objectdetection_ci_pipeline.yml
 
 Below is the sample job run for the CI Pipeline.
 

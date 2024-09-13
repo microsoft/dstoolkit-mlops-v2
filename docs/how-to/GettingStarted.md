@@ -65,11 +65,13 @@ Details about how to create a basic Azure Pipeline can be found in [Create your 
 
 * nyc_taxi
 * london_taxi
+* custom_objectdetection
 
 **Step 7.** Create one or more Azure Pipelines to setup continuous integration for either or both of the use cases listed below:
 
 * nyc_taxi
 * london_taxi
+* custom_objectdetection
 
 **Step 8.** At the Organization Level within Azure Devops, add the Azure DevLabs Machine Learning extension by searching for Machine Learning, clicking the extension pictured below, and then Install on the ensuing page. If you do not have the required permissions, please ask the administrator of the organization to install the extension on your behalf.  
 
