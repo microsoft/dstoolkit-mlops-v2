@@ -1,0 +1,18 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+version: 1
+name: score_sequence_model
+display_name: ScoreSequenceModel
+type: command
+inputs:
+  predictions_folder:
+    type: uri_folder
+outputs:
+  score_report_folder:
+    type: uri_folder
+code: ./../../../
+environment: azureml:sequence-model:1
+command: >-
+  python -m src.sequence_model.score.score
+  --predictions_folder ${{inputs.predictions_folder}}
+  --score_report_folder ${{outputs.score_report_folder}}
+  --model_config src/sequence_model/common/model_config.yml
