@@ -76,51 +76,34 @@ jobs:
       #     TFSTATE_RESOURCE_GROUP_NAME: '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}'
       #     TFSTATE_STORAGE_ACCT_NAME: '${{ env.TFSTATE_STORAGE_ACCT_NAME }}'
       #     WORKSPACE_NAME: '${{ env.WORKSPACE_NAME }}'
-      - name: Verify Azure CLI Version
-        run: az --version
 
-      - name: Create Resource Group for TFState
-        run: |
-          az group create --location ${{ env.LOCATION }} --name ${{ env.TFSTATE_RESOURCE_GROUP_NAME }}
+      - name: Add tfstate resource group
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.SUBSCRIPTION_ID }}  
+      - run: |
+          az --version
+          az group create --location '${{ env.LOCATION }}' --name '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}'
 
-      - name: Set Azure Subscription
-        run: |
-          az account set --subscription ${{ env.SUBSCRIPTION_ID }}
+      - name: Add tfstate account
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.SUBSCRIPTION_ID }}  
+      - run: |
+          az storage account create --name '${{ env.TFSTATE_STORAGE_ACCT_NAME }}' --resource-group '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}' --sku Standard_LRS
 
-      - name: Create Storage Account for TFState
-        run: |
-          az storage account create --name ${{ env.TFSTATE_STORAGE_ACCT_NAME }} --resource-group ${{ env.TFSTATE_RESOURCE_GROUP_NAME }} --sku Standard_LRS
-
-      - name: Create Container for TFState
-        run: |
-          az storage container create --name terraform --account-name ${{ env.TFSTATE_STORAGE_ACCT_NAME }}
-      # - name: Add tfstate resource group
-      #   uses: azure/login@v2
-      #   with:
-      #     client-id: ${{ env.ARM_CLIENT_ID }}
-      #     tenant-id: ${{ env.ARM_TENANT_ID }}
-      #     subscription-id: ${{ env.SUBSCRIPTION_ID }}  
-      # - run: |
-      #     az --version
-      #     az group create --location '${{ env.LOCATION }}' --name '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}'
-
-      # - name: Add tfstate account
-      #   uses: azure/login@v2
-      #   with:
-      #     client-id: ${{ env.ARM_CLIENT_ID }}
-      #     tenant-id: ${{ env.ARM_TENANT_ID }}
-      #     subscription-id: ${{ env.SUBSCRIPTION_ID }}  
-      # - run: |
-      #     az storage account create --name '${{ env.TFSTATE_STORAGE_ACCT_NAME }}' --resource-group '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}' --sku Standard_LRS
-
-      # - name: Add terraform container
-      #   uses: azure/login@v2
-      #   with:
-      #     client-id: ${{ env.ARM_CLIENT_ID }}
-      #     tenant-id: ${{ env.ARM_TENANT_ID }}
-      #     subscription-id: ${{ env.SUBSCRIPTION_ID }}  
-      # - run: |
-      #     az storage container create --name terraform --account-name '${{ env.TFSTATE_STORAGE_ACCT_NAME }}'
+      - name: Add terraform container
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.SUBSCRIPTION_ID }}  
+      - run: |
+          az storage container create --name terraform --account-name '${{ env.TFSTATE_STORAGE_ACCT_NAME }}'
 
       - name: Terraform Install
         uses: hashicorp/setup-terraform@v1
