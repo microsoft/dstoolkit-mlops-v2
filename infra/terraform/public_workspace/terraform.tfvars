@@ -1,7 +1,7 @@
 appinsights_name = "#{APPINSIGHTS_NAME}#"
 container_registry_name = "#{CONTAINER_REGISTRY_NAME}#"
 keyvault_name = "#{KEYVAULT_NAME}#"
-location = "#{LOCATION}#"
+#location = "#{LOCATION}#"
 rg_name = "#{RESOURCE_GROUP_NAME}#"
 storage_acct = "#{STORAGE_ACCT_NAME}#" 
 tfstate_rg_name = "#{TFSTATE_RESOURCE_GROUP_NAME}#"  
