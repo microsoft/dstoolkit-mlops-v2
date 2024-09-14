@@ -1,22 +1,29 @@
 name: ModelFactory-Terraform-Deployment
 on: [workflow_dispatch]
 
+# env:
+#   APPINSIGHTS_NAME: ${{ vars.APPINSIGHTS_NAME }}
+#   AZURE_RM_SVC_CONNECTION: ${{ vars.AZURE_RM_SVC_CONNECTION }}
+#   CONTAINER_REGISTRY_NAME: ${{ vars.CONTAINER_REGISTRY_NAME }}
+#   KEYVAULT_NAME: ${{ vars.KEYVAULT_NAME }}
+#   LOCATION: ${{ vars.LOCATION }}
+#   RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
+#   STORAGE_ACCT_NAME: ${{ vars.STORAGE_ACCT_NAME }}
+#   TFSTATE_RESOURCE_GROUP_NAME: ${{ vars.TFSTATE_RESOURCE_GROUP_NAME }}
+#   TFSTATE_STORAGE_ACCT_NAME: ${{ vars.TFSTATE_STORAGE_ACCT_NAME }}
+#   WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
+#   ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
+#   ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+#   SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
+#   GITHUB_ORG: ${{ vars.GITHUB_ORG }}
+#   GITHUB_REPO: ${{ vars.GITHUB_REPO }}
 env:
-  APPINSIGHTS_NAME: ${{ vars.APPINSIGHTS_NAME }}
-  AZURE_RM_SVC_CONNECTION: ${{ vars.AZURE_RM_SVC_CONNECTION }}
-  CONTAINER_REGISTRY_NAME: ${{ vars.CONTAINER_REGISTRY_NAME }}
-  KEYVAULT_NAME: ${{ vars.KEYVAULT_NAME }}
+  ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }} #39f4867f-68ad-4a93-a2c3-ea0328f793b1
+  ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }} 1b059f48-fb7c-4c1e-a988-17a8e7794d71
+  SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }} a1e2f839-e403-4d66-9a4b-96f6c743606f
   LOCATION: ${{ vars.LOCATION }}
-  RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
-  STORAGE_ACCT_NAME: ${{ vars.STORAGE_ACCT_NAME }}
-  TFSTATE_RESOURCE_GROUP_NAME: ${{ vars.TFSTATE_RESOURCE_GROUP_NAME }}
-  TFSTATE_STORAGE_ACCT_NAME: ${{ vars.TFSTATE_STORAGE_ACCT_NAME }}
-  WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
-  ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
-  ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
-  SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
-  GITHUB_ORG: ${{ vars.GITHUB_ORG }}
-  GITHUB_REPO: ${{ vars.GITHUB_REPO }}
+  TFSTATE_RESOURCE_GROUP_NAME: '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}'
+  TFSTATE_STORAGE_ACCT_NAME: '${{ env.TFSTATE_STORAGE_ACCT_NAME }}'
 
 jobs:
   terraform:
@@ -37,38 +44,38 @@ jobs:
 
       # - name: Check out repository code
       #   uses: actions/checkout@v2
-      - name: See the contents of parameters passed in
-        run: |
-          echo 'See the contents of parameters passed in'
-          echo '${{ env.APPINSIGHTS_NAME }}'
-          echo '${{ env.AZURE_RM_SVC_CONNECTION }}'
-          echo '${{ env.CONTAINER_REGISTRY_NAME }}'
-          echo '${{ env.KEYVAULT_NAME }}'
-          echo '${{ env.LOCATION }}' 
-          echo '${{ env.RESOURCE_GROUP_NAME }}' 
-          echo '${{ env.STORAGE_ACCT_NAME }}'
-          echo '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}'          
-          echo '${{ env.TFSTATE_STORAGE_ACCT_NAME }}'
-          echo '${{ env.WORKSPACE_NAME }}'
-          echo '${{ github.workspace }}'
-          echo '${{ env.SUBSCRIPTION_ID }}'
-          echo '${{ env.ARM_CLIENT_ID }}'
-          echo '${{ env.ARM_TENANT_ID }}'
+      # - name: See the contents of parameters passed in
+      #   run: |
+      #     echo 'See the contents of parameters passed in'
+      #     echo '${{ env.APPINSIGHTS_NAME }}'
+      #     echo '${{ env.AZURE_RM_SVC_CONNECTION }}'
+      #     echo '${{ env.CONTAINER_REGISTRY_NAME }}'
+      #     echo '${{ env.KEYVAULT_NAME }}'
+      #     echo '${{ env.LOCATION }}' 
+      #     echo '${{ env.RESOURCE_GROUP_NAME }}' 
+      #     echo '${{ env.STORAGE_ACCT_NAME }}'
+      #     echo '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}'          
+      #     echo '${{ env.TFSTATE_STORAGE_ACCT_NAME }}'
+      #     echo '${{ env.WORKSPACE_NAME }}'
+      #     echo '${{ github.workspace }}'
+      #     echo '${{ env.SUBSCRIPTION_ID }}'
+      #     echo '${{ env.ARM_CLIENT_ID }}'
+      #     echo '${{ env.ARM_TENANT_ID }}'
 
-      - uses: cschleiden/replace-tokens@v1
-        with:
-          tokenPrefix: '#{'
-          tokenSuffix: '}#'
-          files: '["**/*.tfvars"]'
-        env:
-          APPINSIGHTS_NAME: '${{ env.APPINSIGHTS_NAME }}'
-          CONTAINER_REGISTRY_NAME: '${{ env.CONTAINER_REGISTRY_NAME }}'
-          KEYVAULT_NAME: '${{ env.KEYVAULT_NAME }}'
-          RESOURCE_GROUP_NAME: '${{ env.RESOURCE_GROUP_NAME }}'
-          STORAGE_ACCT_NAME: '${{ env.STORAGE_ACCT_NAME }}'
-          TFSTATE_RESOURCE_GROUP_NAME: '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}'
-          TFSTATE_STORAGE_ACCT_NAME: '${{ env.TFSTATE_STORAGE_ACCT_NAME }}'
-          WORKSPACE_NAME: '${{ env.WORKSPACE_NAME }}'
+      # - uses: cschleiden/replace-tokens@v1
+      #   with:
+      #     tokenPrefix: '#{'
+      #     tokenSuffix: '}#'
+      #     files: '["**/*.tfvars"]'
+      #   env:
+      #     APPINSIGHTS_NAME: '${{ env.APPINSIGHTS_NAME }}'
+      #     CONTAINER_REGISTRY_NAME: '${{ env.CONTAINER_REGISTRY_NAME }}'
+      #     KEYVAULT_NAME: '${{ env.KEYVAULT_NAME }}'
+      #     RESOURCE_GROUP_NAME: '${{ env.RESOURCE_GROUP_NAME }}'
+      #     STORAGE_ACCT_NAME: '${{ env.STORAGE_ACCT_NAME }}'
+      #     TFSTATE_RESOURCE_GROUP_NAME: '${{ env.TFSTATE_RESOURCE_GROUP_NAME }}'
+      #     TFSTATE_STORAGE_ACCT_NAME: '${{ env.TFSTATE_STORAGE_ACCT_NAME }}'
+      #     WORKSPACE_NAME: '${{ env.WORKSPACE_NAME }}'
 
       - name: Add tfstate resource group
         uses: azure/login@v2
@@ -151,20 +158,39 @@ jobs:
             terraform apply -auto-approve -input=false tfplan
         working-directory: ${{ github.workspace }}/infra/terraform/public_workspace
 
+      # Capture Terraform Outputs (dynamically created identity and other resources)
       - name: Capture Terraform Outputs
-        id: outputs
+        id: tf_outputs
         run: |
-          echo "resource_group_name=$(terraform output -raw resource_group_name)" >> $GITHUB_ENV
+          echo "Fetching Terraform Outputs..."
+          echo "provisioned_client_id=$(terraform output -raw client_id)" >> $GITHUB_ENV
+          echo "tenant_id=$(terraform output -raw tenant_id)" >> $GITHUB_ENV
           echo "storage_account_name=$(terraform output -raw storage_account_name)" >> $GITHUB_ENV
-          echo "keyvault_name=$(terraform output -raw keyvault_name)" >> $GITHUB_ENV
+          echo "key_vault_name=$(terraform output -raw key_vault_name)" >> $GITHUB_ENV
           echo "container_registry_name=$(terraform output -raw container_registry_name)" >> $GITHUB_ENV
-          echo "mlops_identity_client_id=$(terraform output -raw mlops_identity_client_id)" >> $GITHUB_ENV
+          echo "app_insights_name=$(terraform output -raw app_insights_name)" >> $GITHUB_ENV
+          echo "workspace_name=$(terraform output -raw workspace_name)" >> $GITHUB_ENV
         working-directory: ${{ github.workspace }}/infra/terraform/public_workspace
 
-      - name: Use Outputs in Next Steps
+      # Verify Environment Variables from Terraform Outputs
+      - name: Verify Environment Variables
         run: |
-          echo "Resource Group: ${{ env.resource_group_name }}"
           echo "Storage Account: ${{ env.storage_account_name }}"
-          echo "Key Vault: ${{ env.keyvault_name }}"
+          echo "Key Vault: ${{ env.key_vault_name }}"
           echo "Container Registry: ${{ env.container_registry_name }}"
-          echo "MLOps Identity Client ID: ${{ env.mlops_identity_client_id }}"
+          echo "App Insights: ${{ env.app_insights_name }}"
+          echo "Workspace: ${{ env.workspace_name }}"
+
+      # Replace tokens in .tfvars files with dynamic environment variables
+      - uses: cschleiden/replace-tokens@v1
+        with:
+          tokenPrefix: '#{'
+          tokenSuffix: '}#'
+          files: '["**/*.tfvars"]'
+        env:
+          APPINSIGHTS_NAME: '${{ env.app_insights_name }}'
+          CONTAINER_REGISTRY_NAME: '${{ env.container_registry_name }}'
+          KEYVAULT_NAME: '${{ env.key_vault_name }}'
+          RESOURCE_GROUP_NAME: '${{ vars.RESOURCE_GROUP_NAME }}'
+          STORAGE_ACCT_NAME: '${{ env.storage_account_name }}'
+          WORKSPACE_NAME: '${{ env.workspace_name }}'
