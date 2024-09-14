@@ -15,6 +15,8 @@ env:
   ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
   ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
   SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
+  GITHUB_ORG: ${{ vars.GITHUB_ORG }}
+  GITHUB_REPO: ${{ vars.GITHUB_REPO }}
 
 jobs:
   terraform:
@@ -148,3 +150,21 @@ jobs:
         run: |
             terraform apply -auto-approve -input=false tfplan
         working-directory: ${{ github.workspace }}/infra/terraform/public_workspace
+
+      - name: Capture Terraform Outputs
+        id: outputs
+        run: |
+          echo "resource_group_name=$(terraform output -raw resource_group_name)" >> $GITHUB_ENV
+          echo "storage_account_name=$(terraform output -raw storage_account_name)" >> $GITHUB_ENV
+          echo "keyvault_name=$(terraform output -raw keyvault_name)" >> $GITHUB_ENV
+          echo "container_registry_name=$(terraform output -raw container_registry_name)" >> $GITHUB_ENV
+          echo "mlops_identity_client_id=$(terraform output -raw mlops_identity_client_id)" >> $GITHUB_ENV
+        working-directory: ${{ github.workspace }}/infra/terraform/public_workspace
+
+      - name: Use Outputs in Next Steps
+        run: |
+          echo "Resource Group: ${{ env.resource_group_name }}"
+          echo "Storage Account: ${{ env.storage_account_name }}"
+          echo "Key Vault: ${{ env.keyvault_name }}"
+          echo "Container Registry: ${{ env.container_registry_name }}"
+          echo "MLOps Identity Client ID: ${{ env.mlops_identity_client_id }}"
