@@ -171,14 +171,6 @@ jobs:
           container_registry_name=$(terraform output -raw container_registry_name || echo "N/A")
           app_insights_name=$(terraform output -raw app_insights_name || echo "N/A")
           workspace_name=$(terraform output -raw workspace_name || echo "N/A")
-
-          echo "provisioned_client_id=$provisioned_client_id" >> $GITHUB_ENV
-          echo "tenant_id=$tenant_id" >> $GITHUB_ENV
-          echo "storage_account_name=$storage_account_name" >> $GITHUB_ENV
-          echo "key_vault_name=$key_vault_name" >> $GITHUB_ENV
-          echo "container_registry_name=$container_registry_name" >> $GITHUB_ENV
-          echo "app_insights_name=$app_insights_name" >> $GITHUB_ENV
-          echo "workspace_name=$workspace_name" >> $GITHUB_ENV
         working-directory: ${{ github.workspace }}/infra/terraform/public_workspace
 
       # Verify Environment Variables from Terraform Outputs
