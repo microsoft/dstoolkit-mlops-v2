@@ -86,7 +86,6 @@ jobs:
         run: |
             terraform validate
         
-
       - name: Terraform Plan
         env:
           ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
@@ -106,3 +105,26 @@ jobs:
         run: |
             terraform apply -auto-approve -input=false tfplan
         working-directory: ${{ github.workspace }}/infra/terraform/public_workspace
+
+      # Capture Terraform Outputs and set them as environment variables
+      - name: Capture Terraform Outputs
+        id: tf_outputs
+        run: |
+          echo "Fetching Terraform Outputs..."
+          app_insights_name=$(terraform output -raw app_insights_name)
+          client_id=$(terraform output -raw client_id)
+          container_registry_name=$(terraform output -raw container_registry_name)
+          key_vault_name=$(terraform output -raw key_vault_name)
+          storage_account_name=$(terraform output -raw storage_account_name)
+          tenant_id=$(terraform output -raw tenant_id)
+          workspace_name=$(terraform output -raw workspace_name)
+
+      - name: Verify Environment Variables
+        run: |
+          echo "App Insights: ${{ env.app_insights_name }}"
+          echo "Client ID: ${{ env.client_id }}"
+          echo "Container Registry: ${{ env.container_registry_name }}"
+          echo "Key Vault: ${{ env.key_vault_name }}"
+          echo "Storage Account: ${{ env.storage_account_name }}"
+          echo "Tenant ID: ${{ env.tenant_id }}"
+          echo "Workspace: ${{ env.workspace_name }}"
