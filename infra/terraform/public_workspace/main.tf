@@ -5,7 +5,6 @@ resource "azurerm_resource_group" "rg" {
   
 }
 
-
 resource "azurerm_application_insights" "aml_appins" {
   name                = "${var.appinsights_name}"
   location            = var.location
@@ -60,7 +59,6 @@ resource "azurerm_user_assigned_identity" "mlops_identity" {
   location            = var.location
   name                = "mlopsv2-testing-mi"
   resource_group_name = var.rg_name
-  depends_on          = [azurerm_resource_group.rg]
 }
 
 resource "azurerm_role_assignment" "mlops_identity_role" {
@@ -76,7 +74,4 @@ resource "azurerm_federated_identity_credential" "github_federated_credential" {
   issuer              = "https://token.actions.githubusercontent.com"
   parent_id           = azurerm_user_assigned_identity.mlops_identity.id
   subject             = "repo:${var.github_org}/${var.github_repo}:ref:refs/heads/main"
-  depends_on          = [azurerm_user_assigned_identity.mlops_identity]
 }
-
-// ... existing code ...
