@@ -1,7 +1,7 @@
 #appinsights_name = "mlopsv2-appins"
 #container_registry_name = "mlopsv2-acr"
 #keyvault_name = "mlopsv2-kv"
-#location = "#{LOCATION}#"
+location = "westeurope"
 #rg_name                = "mlopsv2-rg"
 #storage_acct           = "mlopsv2st"
 tfstate_rg_name        = "#{TFSTATE_RESOURCE_GROUP_NAME}#"  
