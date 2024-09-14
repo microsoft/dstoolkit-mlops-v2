@@ -56,7 +56,7 @@ variable "workspace_name" {
 
 variable "location" {
   type    = string
-  default = "eastus"
+  default = "westeurope"
 }
 
 variable "github_org" {

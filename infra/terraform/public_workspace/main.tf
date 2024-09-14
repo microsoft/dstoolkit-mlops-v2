@@ -55,7 +55,6 @@ resource "azurerm_container_registry" "acr" {
   }
 }
 
-
 resource "azurerm_user_assigned_identity" "mlops_identity" {
   location            = var.location
   name                = "mlopsv2-testing-umi"
