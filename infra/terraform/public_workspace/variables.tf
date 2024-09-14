@@ -15,58 +15,52 @@
 ##############################
 ## Resource Group Variables
 ##############################
-variable "rg_name" {
+variable "location" {
   type    = string
-  default = "mlopsv2tfrg"
-}
-variable "tfstate_rg_name" {
-  type    = string
-  default = "rg-tfstate-terraform"
 }
 
-variable "storage_acct" {
+variable "github_org" {
   type    = string
-  default = "stterraform"
+}
+
+variable "github_repo" {
+  type     = string
 }
 
 variable "tfstate_storage_acct" {
   type    = string
-  default = "sttfstateterraform"
+}
+
+variable "tfstate_rg_name" {
+  type    = string
+}
+
+variable "rg_name" {
+  type    = string
+  default = "mlopsv2-rg"
+}
+
+variable "storage_acct" {
+  type    = string
+  default = "mlopsv2st"
 }
 
 variable "keyvault_name" {
   type    = string
-  default = "kvterraform"
+  default = "mlopsv2-kv"
 }
 
 variable "appinsights_name" {
   type    = string
-  default = "appiterraform"
+  default = "mlopsv2-appins"
 }
 
 variable "container_registry_name" {
   type    = string
-  default = "crterraform"
+  default = "mlopsv2-acr"
 }
 
 variable "workspace_name" {
   type    = string
-  default = "amlterraform"
-}
-
-variable "location" {
-  type    = string
-  default = "westeurope"
-}
-
-variable "github_org" {
-  type        = string
-  description = "GitHub organization name"
-  default = "nstijepovic"
-}
-
-variable "github_repo" {
-  type        = string
-  description = "GitHub repository name"
-  default = "dstoolkit-mlops-v2"
+  default = "mlopsv2-ws"
 }

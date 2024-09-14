@@ -1,14 +1,14 @@
-appinsights_name = vat.appinsights_name
-container_registry_name = var.container_registry_name
-keyvault_name = var.keyvault_name
+#appinsights_name = "mlopsv2-appins"
+#container_registry_name = "mlopsv2-acr"
+#keyvault_name = "mlopsv2-kv"
 location = "#{LOCATION}#"
-rg_name                = var.rg_name
-storage_acct           = var.storage_acct
+#rg_name                = "mlopsv2-rg"
+#storage_acct           = "mlopsv2st"
 tfstate_rg_name        = "#{TFSTATE_RESOURCE_GROUP_NAME}#"  
 tfstate_storage_acct   = "#{TFSTATE_STORAGE_ACCT_NAME}#"
-workspace_name =        var.workspace_name
-github_org             = var.github_org
-github_repo            = var.github_repo
+#workspace_name         = "mlopsv2-ws"
+github_org             = "nstijepovic"
+github_repo            = "dstoolkit-mlops-v2"
 
 # appinsights_name = "#{APPINSIGHTS_NAME}#"
 # container_registry_name = "#{CONTAINER_REGISTRY_NAME}#"
