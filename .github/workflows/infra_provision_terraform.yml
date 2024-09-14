@@ -83,6 +83,10 @@ jobs:
         run: |
           az group create --location ${{ env.LOCATION }} --name ${{ env.TFSTATE_RESOURCE_GROUP_NAME }}
 
+      - name: Set Azure Subscription
+        run: |
+          az account set --subscription ${{ env.SUBSCRIPTION_ID }}
+
       - name: Create Storage Account for TFState
         run: |
           az storage account create --name ${{ env.TFSTATE_STORAGE_ACCT_NAME }} --resource-group ${{ env.TFSTATE_RESOURCE_GROUP_NAME }} --sku Standard_LRS
