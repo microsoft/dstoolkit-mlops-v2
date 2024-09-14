@@ -54,8 +54,19 @@ variable "workspace_name" {
   default = "amlterraform"
 }
 
-
 variable "location" {
   type    = string
   default = "eastus"
+}
+
+variable "github_org" {
+  type        = string
+  description = "GitHub organization name"
+  default = "nstijepovic"
+}
+
+variable "github_repo" {
+  type        = string
+  description = "GitHub repository name"
+  default = "dstoolkit-mlops-v2"
 }
