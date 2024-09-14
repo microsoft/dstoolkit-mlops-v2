@@ -3,20 +3,20 @@ on: [workflow_dispatch]
 
 env:
   APPINSIGHTS_NAME: ${{ vars.APPINSIGHTS_NAME }}
-  # AZURE_RM_SVC_CONNECTION: ${{ vars.AZURE_RM_SVC_CONNECTION }}
-  # CONTAINER_REGISTRY_NAME: ${{ vars.CONTAINER_REGISTRY_NAME }}
-  # KEYVAULT_NAME: ${{ vars.KEYVAULT_NAME }}
+  AZURE_RM_SVC_CONNECTION: ${{ vars.AZURE_RM_SVC_CONNECTION }}
+  CONTAINER_REGISTRY_NAME: ${{ vars.CONTAINER_REGISTRY_NAME }}
+  KEYVAULT_NAME: ${{ vars.KEYVAULT_NAME }}
   LOCATION: ${{ vars.LOCATION }}
-  # RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
-  # STORAGE_ACCT_NAME: ${{ vars.STORAGE_ACCT_NAME }}
+  RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
+  STORAGE_ACCT_NAME: ${{ vars.STORAGE_ACCT_NAME }}
   TFSTATE_RESOURCE_GROUP_NAME: ${{ vars.TFSTATE_RESOURCE_GROUP_NAME }}
   TFSTATE_STORAGE_ACCT_NAME: ${{ vars.TFSTATE_STORAGE_ACCT_NAME }}
-  # WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
+  WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
   ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
   ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
   SUBSCRIPTION_ID: ${{ vars.SUBSCRIPTION_ID }}
-  # GITHUB_ORG: ${{ vars.GITHUB_ORG }}
-  # GITHUB_REPO: ${{ vars.GITHUB_REPO }}
+  GITHUB_ORG: ${{ vars.GITHUB_ORG }}
+  GITHUB_REPO: ${{ vars.GITHUB_REPO }}
   
 # env:
 #   ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }} 
@@ -164,13 +164,21 @@ jobs:
         id: tf_outputs
         run: |
           echo "Fetching Terraform Outputs..."
-          echo "provisioned_client_id=$(terraform output -raw client_id)" >> $GITHUB_ENV
-          echo "tenant_id=$(terraform output -raw tenant_id)" >> $GITHUB_ENV
-          echo "storage_account_name=$(terraform output -raw storage_account_name)" >> $GITHUB_ENV
-          echo "key_vault_name=$(terraform output -raw key_vault_name)" >> $GITHUB_ENV
-          echo "container_registry_name=$(terraform output -raw container_registry_name)" >> $GITHUB_ENV
-          echo "app_insights_name=$(terraform output -raw app_insights_name)" >> $GITHUB_ENV
-          echo "workspace_name=$(terraform output -raw workspace_name)" >> $GITHUB_ENV
+          provisioned_client_id=$(terraform output -raw client_id || echo "N/A")
+          tenant_id=$(terraform output -raw tenant_id || echo "N/A")
+          storage_account_name=$(terraform output -raw storage_account_name || echo "N/A")
+          key_vault_name=$(terraform output -raw key_vault_name || echo "N/A")
+          container_registry_name=$(terraform output -raw container_registry_name || echo "N/A")
+          app_insights_name=$(terraform output -raw app_insights_name || echo "N/A")
+          workspace_name=$(terraform output -raw workspace_name || echo "N/A")
+
+          echo "provisioned_client_id=$provisioned_client_id" >> $GITHUB_ENV
+          echo "tenant_id=$tenant_id" >> $GITHUB_ENV
+          echo "storage_account_name=$storage_account_name" >> $GITHUB_ENV
+          echo "key_vault_name=$key_vault_name" >> $GITHUB_ENV
+          echo "container_registry_name=$container_registry_name" >> $GITHUB_ENV
+          echo "app_insights_name=$app_insights_name" >> $GITHUB_ENV
+          echo "workspace_name=$workspace_name" >> $GITHUB_ENV
         working-directory: ${{ github.workspace }}/infra/terraform/public_workspace
 
       # Verify Environment Variables from Terraform Outputs
