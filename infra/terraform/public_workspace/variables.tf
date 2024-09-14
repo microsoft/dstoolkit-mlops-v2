@@ -17,7 +17,7 @@
 ##############################
 variable "rg_name" {
   type    = string
-  default = "rg-terraform"
+  default = "mlopsv2tfrg"
 }
 variable "tfstate_rg_name" {
   type    = string
