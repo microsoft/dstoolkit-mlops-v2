@@ -57,7 +57,7 @@ variable "appinsights_name" {
 
 variable "container_registry_name" {
   type    = string
-  default = "mlopsv2-acr"
+  default = "mlopsv2acr"
 }
 
 variable "workspace_name" {
