@@ -29,12 +29,9 @@ class Tokenizer(object):
         with open(path, "rb") as f:
             t = json.load(f)
 
-        tokenizer = Tokenizer()
-        tokenizer.vocab_size = t["vocab_size"]
-        tokenizer.words_to_i = t["words_to_i"]
-        tokenizer.i_to_words = t["i_to_words"]
-
-        return tokenizer
+        self.vocab_size = t["vocab_size"]
+        self.words_to_i = t["words_to_i"]
+        self.i_to_words = t["i_to_words"]
 
     def save(self, save_path):
         """Save out the tokenizer information to help us encode/decode later."""

@@ -129,7 +129,8 @@ if __name__ == "__main__":
 
     # Load tokenizer
     logger.info("Load tokenizer.")
-    tokenizer = Tokenizer.load(tokenizer_path)
+    tokenizer = Tokenizer()
+    tokenizer.load(path=tokenizer_path)
     logger.info(f"Vocabularly size: {tokenizer.vocab_size}.")
 
     # Load model
