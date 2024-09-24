@@ -32,7 +32,7 @@ Cons:
 
 ### Data Scientists Working in Dedicated Directory in Model Factory
 
-This approach has largely the same pros of working directly in the Model Factory.  However, it minimizes the con of increased overhead by providing data scientists a dedicated directory to isolate their experiments which diables strict engineering fundamentals and CI / CD processes enforced elsewhere in the model factory.  Isolation is achieved by configuring the CI / CD workflows to ignore changes in this directory.
+This approach has largely the same pros of working directly in the Model Factory.  However, it minimizes the con of increased overhead by providing data scientists a dedicated directory to isolate their experiments which disables strict engineering fundamentals and CI / CD processes enforced elsewhere in the model factory.  Isolation is achieved by configuring the CI / CD workflows to ignore changes in this directory.
 
 Pros:
 
