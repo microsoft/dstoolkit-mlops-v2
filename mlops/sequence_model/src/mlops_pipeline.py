@@ -30,9 +30,6 @@ from mlops.common.naming_utils import (
 )
 
 gl_pipeline_components = []
-benchmark_and_register: bool = True
-force_registration: bool = False
-
 
 @pipeline()
 def sequence_model_pipeline(
@@ -60,19 +57,19 @@ def sequence_model_pipeline(
     score_model_cmp = gl_pipeline_components[2](
         predictions_folder=predict_model_cmp.outputs.predictions_folder,
     )
-    if benchmark_and_register:
-        benchmark_model_cmp = gl_pipeline_components[3](
-            force_registration=force_registration,
-            score_report_folder=score_model_cmp.outputs.score_report_folder,
-        )
 
-        gl_pipeline_components[4](
-            model_name=model_name,
-            score_report_folder=score_model_cmp.outputs.score_report_folder,
-            benchmark_report_folder=benchmark_model_cmp.outputs.benchmark_report_folder,
-            model_artifacts=train_model_cmp.outputs.model_artifacts,
-            predictions_folder=predict_model_cmp.outputs.predictions_folder,
-        )
+    benchmark_model_cmp = gl_pipeline_components[3](
+        force_registration=force_registration,
+        score_report_folder=score_model_cmp.outputs.score_report_folder,
+    )
+
+    gl_pipeline_components[4](
+        model_name=model_name,
+        score_report_folder=score_model_cmp.outputs.score_report_folder,
+        benchmark_report_folder=benchmark_model_cmp.outputs.benchmark_report_folder,
+        model_artifacts=train_model_cmp.outputs.model_artifacts,
+        predictions_folder=predict_model_cmp.outputs.predictions_folder,
+    )
 
     return {
         "pipeline_job_model": train_model_cmp.outputs.model_artifacts,
@@ -130,16 +127,16 @@ def construct_pipeline(
     score_data.environment = environment_name
     gl_pipeline_components.append(score_data)
 
-    if benchmark_and_register:
-        # Benchmark Model
-        benchmark_model = load_component(source=parent_dir + "/benchmark.yml")
-        benchmark_model.environment = environment_name
-        gl_pipeline_components.append(benchmark_model)
 
-        # Register Model
-        register_model_cmp = load_component(source=parent_dir + "/register.yml")
-        register_model_cmp.environment = environment_name
-        gl_pipeline_components.append(register_model_cmp)
+    # Benchmark Model
+    benchmark_model = load_component(source=parent_dir + "/benchmark.yml")
+    benchmark_model.environment = environment_name
+    gl_pipeline_components.append(benchmark_model)
+
+    # Register Model
+    register_model_cmp = load_component(source=parent_dir + "/register.yml")
+    register_model_cmp.environment = environment_name
+    gl_pipeline_components.append(register_model_cmp)
 
     pipeline_job = sequence_model_pipeline(
         pipeline_job_input=Input(type="uri_folder", path=registered_data_asset.id),
