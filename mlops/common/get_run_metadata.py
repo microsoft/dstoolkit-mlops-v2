@@ -66,7 +66,7 @@ def main():
     )
 
     args = parser.parse_args()
-
+    print('Run id:', args.run_id)
     config = MLOpsConfig()
 
     get_run_metadata(
