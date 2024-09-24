@@ -179,7 +179,7 @@ def write_metadata(
     mlflow.set_tracking_uri(mlflow_tracking_uri)
     exp = mlflow.get_experiment_by_name(current_job.experiment_name)
 
-    file_path = os.getenv("GITHUB_ENV", output_file_path)
+    file_path = output_file_path#os.getenv("GITHUB_ENV", output_file_path)
     print('file_path', file_path)
     metadata = {
         "job_url": current_job.studio_url,
