@@ -60,7 +60,6 @@ def sequence_model_pipeline(
     )
 
     benchmark_model_cmp = gl_pipeline_components[3](
-        force_registration=force_registration,
         score_report_folder=score_model_cmp.outputs.score_report_folder,
     )
 
@@ -181,7 +180,7 @@ def write_metadata(
     exp = mlflow.get_experiment_by_name(current_job.experiment_name)
 
     file_path = os.getenv("GITHUB_ENV", output_file_path)
-
+    print('file_path', file_path)
     metadata = {
         "job_url": current_job.studio_url,
         "aml_display_name": current_job.display_name,
@@ -385,19 +384,6 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
-        "--benchmark_and_register",
-        help="Benchmark and Register model.",
-        action="store_true",
-    )
-
-    parser.add_argument(
-        "--force_registration",
-        type=str,
-        default="",
-        help="Register model even if benchmarking fail",
-    )
-
-    parser.add_argument(
         "--output_file", type=str, required=False, help="A file to save run id"
     )
 
@@ -406,13 +392,6 @@ def parse_args() -> argparse.Namespace:
 
 if __name__ == "__main__":
     args = parse_args()
-
-    benchmark_and_register = args.benchmark_and_register
-    force_registration = args.force_registration.upper() == "TRUE"
-
-    print(f"Benchmark and Register: {benchmark_and_register}")
-
-    print(f"Force Registration: {force_registration}")
 
     prepare_and_execute(
         args.triggered_by,

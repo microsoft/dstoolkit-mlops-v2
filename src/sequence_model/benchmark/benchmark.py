@@ -42,13 +42,6 @@ def parse_args() -> Namespace:
         "--benchmark_report_folder", type=str, help="Folder container benchmark report."
     )
 
-    parser.add_argument(
-        "--force_registration",
-        type=str,
-        default="False",
-        help="Register model even if benchmarking fail",
-    )
-
     return parser.parse_args()
 
 
@@ -195,12 +188,8 @@ if __name__ == "__main__":
     best_accuracy = check_prior_model_accuracy(
         benchmark_cfg["model_compare_name"], float(score_report.get("accuracy", 0.0))
     )
-    register_model = args.force_registration == "True" or (
-        benchmarks_met and best_accuracy
-    )
 
     benchmark_report = {
-        "register_model": register_model,
         "benchmarks_met": benchmarks_met,
         "best_accuracy": best_accuracy,
     }
@@ -209,5 +198,3 @@ if __name__ == "__main__":
         json.dump(benchmark_report, file, indent=4)
 
     mlflow.set_propagated_tags(benchmark_report)
-    if not register_model:
-        exit(1)

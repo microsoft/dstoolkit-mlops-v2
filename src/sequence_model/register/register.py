@@ -152,8 +152,7 @@ if __name__ == "__main__":
 
         mlflow.set_tags(benchmark_report_data)
 
-        if benchmark_report_data.get("register_model", True):
-            register(args, args.model_name)
+        register(args, args.model_name)
     except Exception as ex:
         print(
             "Registering Model Failed",

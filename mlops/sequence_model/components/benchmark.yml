@@ -15,7 +15,6 @@ environment: azureml:sequence-model:1
 code: ./../../../
 command: >-
   python -m src.sequence_model.benchmark.benchmark
-  --force_registration ${{inputs.force_registration}}
   --score_report_folder ${{inputs.score_report_folder}}
   --benchmark_report_folder ${{outputs.benchmark_report_folder}}
   --model_config src/sequence_model/common/model_config.yml
