@@ -4,8 +4,6 @@ name: benchmark_sequence_model
 display_name: BenchmarkSequenceModel
 type: command
 inputs:
-  force_registration:
-    type: boolean
   score_report_folder:
     type: uri_folder
 outputs:
