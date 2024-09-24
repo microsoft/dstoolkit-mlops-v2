@@ -2,11 +2,11 @@
 
 ## Overview
 
-This documentation outlines the design of an AI Model Factory consisting of two GitHub repositories: the Data Science / Prototyping Repository and the Model Factory / MLOps Repository. This design allows data scientists to focus on model development without the constraints of adhering to strict engineering practices, while ensuring that models are rigorously tested and deployed through automated processes.
+This documentation describes an optional design pattern for using the Model Factory.  It outlines the design of an AI Model Factory consisting of two GitHub or Azure DevOps repositories: the Data Science / Prototyping Repository and the Model Factory / MLOps Repository. This design allows data scientists to focus on model development without the constraints of adhering to strict engineering practices, while ensuring that models are rigorously tested and deployed through automated processes.
 
 ## What is a Model Factory?
 
-A Model factory based on DSToolkit v2 enables analytics and data science teams in partnership with software engineering teams to go from model development to a stable, reliable and auditable production model artifact built and maintained with strong software engineering fundamentals such as developer experience, testing, observability, release management, DevOps and automation.
+DSToolkit v2 implements a Model Factory which enables analytics and data science teams in partnership with software engineering teams to go from model development to a stable, reliable and auditable production model artifact built and maintained with strong software engineering fundamentals such as developer experience, testing, observability, release management, DevOps and automation.
 
 A related Repository, the Data Science Repository, is where the data science team can focus on Exploratory Data Analysis and model development. The next couple of sections discusses the relationship between the data science repo and the Model Factory in more detail.
 
@@ -90,7 +90,7 @@ Pros:
 
 Cons:
 
-- **Models Require Integration**: Once models developed in the data science repo meet the requirements, they can be promoted, at which time they must be explicitly integrated into the model factory.  This merging process takes time and is a tax on productivity.  This process is outlined in the [Model Promotion Process](#model-promotion-process) section below.
+- **Models Require Integration**: Once models developed in the data science repo meet the requirements, they can be promoted, at which time they must be explicitly integrated into the model factory.  This merging process takes time and is a tax on productivity.  This process is outlined in the [Model Promotion Process](#model-promotion-into-the-model-factory) section below.
 
 The cons associated with having two repos can be minimized by:
 
