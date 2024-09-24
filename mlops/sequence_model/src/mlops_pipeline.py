@@ -31,6 +31,7 @@ from mlops.common.naming_utils import (
 
 gl_pipeline_components = []
 
+
 @pipeline()
 def sequence_model_pipeline(
     pipeline_job_input,
@@ -126,7 +127,6 @@ def construct_pipeline(
     score_data = load_component(source=parent_dir + "/score.yml")
     score_data.environment = environment_name
     gl_pipeline_components.append(score_data)
-
 
     # Benchmark Model
     benchmark_model = load_component(source=parent_dir + "/benchmark.yml")
