@@ -35,5 +35,7 @@ def get_workspace(subscription_id: str, resource_group_name: str, workspace_name
         print(f"Reference to {workspace_name} has been obtained.")
         return workspace
     except Exception as ex:
-        print("Oops!  invalid credentials.. Try again...", ex)
+        "An error occurred while trying to create or update the Azure ML environment. "
+        "Please check your credentials, subscription details, and workspace configuration, and try again. "
+        f"Error details: {ex}"
         raise
