@@ -42,19 +42,29 @@ You can start training pipelines from your local computer by creating an environ
 - Install [Azure Cli and Azure ML extensions](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-configure-cli?view=azureml-api-2&tabs=public#installation)
 - Create the an environment on your local machine using one of the following options below.
 
-- (Option 1). VSCode dev container
+- (Option 1). VSCode base dev container
   - Run the docker desktop daemon
-    - Open repo in the [provided dev container](.devcontainer/devcontainer.json) in VSCode
-      - Open VSCode terminal after the repo is opened in the dev container
+  - Open repo in VSCode
+    - Open the Command Palette (Ctrl+Shift+P)
+    - Select "Reopen in Container"
+    - Choose the base dev container: "DSToolkit .devcontainer\base\devcontainer.json"
+    - Open VSCode terminal after the repo is opened in the dev container
 
-- (Option 2). Create a local conda environment
+- (Option 2). Use the docker_taxi Dockerfile for the dev container
+  - Run the docker desktop daemon
+  - Open repo in VSCode
+    - Open the Command Palette (Ctrl+Shift+P)
+    - Select "Reopen in Container"
+    - Choose the custom dev container: "DSToolkit-DockerTaxi .devcontainer\docker_taxi\devcontainer.json"
+    - Open VSCode terminal after the repo is opened in the dev container
+
+- (Option 3). Create a local conda environment
 
   - Open the terminal and run the following commands to create a conda environment (we assume that anaconda has been installed on your local computer):
 
     - conda env create -name dstoolkit Python=3.9 # this does not work for some computers, the code could be conda create --name dstoolkit python=3.9
     - conda activate dstoolkit # if this doesn't work in your terminal, you can go to the Anaconda Navigator, click Environments, click dstoolkit and then hit the green play button and open terminal from there. 
     - pip install -r .devcontainer/requirements.txt
-
 - Sign in with Azure CLI : run `az login -t <your tenant>`
 
 - **Note**: Before running the training pipeline locally, you will have to have the data assets registered. If not already done, you can register the data using the following command:
