@@ -6,7 +6,7 @@ This documentation describes an optional design pattern for using the Model Fact
 
 ## What is a Model Factory?
 
-DSToolkit v2 implements a Model Factory which enables analytics and data science teams in partnership with software engineering teams to go from model development to a stable, reliable and auditable production model artifact built and maintained with strong software engineering fundamentals such as developer experience, testing, observability, release management, DevOps and automation.
+Model Factory is an MLOps Template for Azure ML.  It enables analytics and data science teams in partnership with software engineering teams to go from model development to a stable, reliable and auditable production model artifact built and maintained with strong software engineering fundamentals such as developer experience, testing, observability, release management, DevOps and automation.
 
 A related Repository, the Data Science Repository, is where the data science team can focus on Exploratory Data Analysis and model development. The next couple of sections discusses the relationship between the data science repo and the Model Factory in more detail.
 
