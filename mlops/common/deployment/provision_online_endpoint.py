@@ -30,7 +30,7 @@ def main():
     model_type = args.model_type
     run_id = args.run_id
     env_type = args.environment_name
-
+    print(f'env_type: {env_type}')
     config = MLOpsConfig(environment=env_type)
 
     ml_client = MLClient(
