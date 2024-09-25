@@ -41,6 +41,6 @@ stages:
             echo "Pipeline was canceled. Attempting to cancel AML Pipeline: ${run_name}..."
 
             az extension add --name ml
-            az ml job cancel --name $run_name \
+            az ml job cancel --name "$run_name" \
               --resource-group $(RESOURCE_GROUP_NAME) \
               --workspace-name $(WORKSPACE_NAME) && echo "Successfully canceled the AML Pipeline."
