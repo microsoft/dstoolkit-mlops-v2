@@ -180,7 +180,6 @@ def write_metadata(
     exp = mlflow.get_experiment_by_name(current_job.experiment_name)
 
     file_path = output_file_path
-    print('file_path', file_path)
     metadata = {
         "job_url": current_job.studio_url,
         "aml_display_name": current_job.display_name,
@@ -191,7 +190,7 @@ def write_metadata(
         "benchmarks_met": exp.tags.get("benchmarks_met"),
         "best_accuracy": exp.tags.get("best_accuracy"),
     }
-
+    print(metadata)
     if file_path:
         with open(file_path, "a") as env_file:
             for key, value in metadata.items():
