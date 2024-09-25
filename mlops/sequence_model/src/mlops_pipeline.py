@@ -190,7 +190,7 @@ def write_metadata(
         "benchmarks_met": exp.tags.get("benchmarks_met"),
         "best_accuracy": exp.tags.get("best_accuracy"),
     }
-    assert next(iter(metadata)) == "aml_name", f"Ensure first element of metadata dict has key 'aml_name'" 
+    assert next(iter(metadata)) == "aml_name", "Ensure first element of metadata dict has key 'aml_name'"
     if file_path:
         with open(file_path, "a") as env_file:
             for key, value in metadata.items():
