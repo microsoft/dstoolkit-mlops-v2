@@ -181,20 +181,23 @@ def write_metadata(
 
     file_path = output_file_path
     metadata = {
+        "aml_name": current_job.name,
         "job_url": current_job.studio_url,
         "aml_display_name": current_job.display_name,
         "aml_run_name": current_job.experiment_name,
         "aml_run_id": current_job.id,
-        "aml_name": current_job.name,
         "register_model": exp.tags.get("register_model"),
         "benchmarks_met": exp.tags.get("benchmarks_met"),
         "best_accuracy": exp.tags.get("best_accuracy"),
     }
-    print(metadata)
+    assert next(iter(metadata)) == "aml_name", f"Ensure first element of metadata dict has key 'aml_name'" 
     if file_path:
         with open(file_path, "a") as env_file:
             for key, value in metadata.items():
-                env_file.write(f"{key.upper()}={value}\n")
+                if key == "aml_name":
+                    env_file.write(f"{value}\n")
+                else:
+                    env_file.write(f"{key.upper()}={value}\n")
 
     return metadata
 
