@@ -30,7 +30,7 @@ def main():
     model_type = args.model_type
     run_id = args.run_id
     env_type = args.environment_name
-    print(f'env_type={env_type}')
+
     config = MLOpsConfig(environment=env_type)
 
     ml_client = MLClient(
@@ -39,7 +39,7 @@ def main():
         config.aml_config["resource_group_name"],
         config.aml_config["workspace_name"],
     )
-    print(f'model_type={model_type}')
+
     deployment_config = config.get_deployment_config(deployment_name=f"{model_type}_online")
 
     endpoint = ManagedOnlineEndpoint(
