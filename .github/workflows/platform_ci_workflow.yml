@@ -80,7 +80,7 @@ jobs:
         uses: ./.github/actions/configure_azureml_agent
       - name: Copy Common Libs
         run: |
-          cp -r src/${{ env.MODEL_TYPE }}/common/* model/${{ env.MODEL_TYPE }}/online
+          cp -r src/${{ inputs.model_type }}/common/* model/${{ inputs.model_type }}/online
       - name: Provision azureml online endpoint
         uses: ./.github/actions/execute_shell_code
         with:
@@ -128,7 +128,7 @@ jobs:
         uses: ./.github/actions/configure_azureml_agent
       - name: Copy Common Libs
         run: |
-          cp -r src/${{ env.MODEL_TYPE }}/common/* model/${{ env.MODEL_TYPE }}/batch
+          cp -r src/${{ inputs.model_type }}/common/* model/${{ inputs.model_type }}/batch
       - name: Provision azureml batch endpoint
         uses: ./.github/actions/execute_shell_code
         with:
