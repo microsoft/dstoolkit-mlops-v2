@@ -34,6 +34,7 @@ class MLOpsConfig:
     def get_deployment_config(self, deployment_name: str) -> Dict:
         """Get the pipeline configuration for given pipeline name and environment."""
         deploymentconfig_name = f"{deployment_name}_{self._environment}"
+        print(self.deployment_configs)
         if deploymentconfig_name in self.deployment_configs:
             return self.deployment_configs[deploymentconfig_name]
 
