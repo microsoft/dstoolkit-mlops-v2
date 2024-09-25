@@ -1,0 +1,31 @@
+name: Print Job Environment Variables
+
+on: [push]
+
+env:
+  GLOBAL_VAR: "This is a global variable"
+
+jobs:
+  print-env:
+    runs-on: ubuntu-latest
+    env:
+      JOB_VAR: "This is a job-level variable"
+      ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ vars.ARM_CLIENT_SECRET }}
+      ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.ARM_CLIENT_ID }}
+          client-secret: ${{ secrets.ARM_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.ARM_TENANT_ID }}
+
+      - name: Print environment variables
+        run: |
+          echo "GLOBAL_VAR: $GLOBAL_VAR"
+          echo "JOB_VAR: $JOB_VAR"
+          echo "ARM_CLIENT_ID: $ARM_CLIENT_ID"
