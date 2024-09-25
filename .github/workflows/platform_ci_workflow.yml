@@ -78,6 +78,9 @@ jobs:
         uses: actions/checkout@v1
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
+      - name: Copy Common Libs
+        run: |
+          cp -r src/${{ env.MODEL_TYPE }}/common/* model/${{ env.MODEL_TYPE }}/online
       - name: Provision azureml online endpoint
         uses: ./.github/actions/execute_shell_code
         with:
@@ -123,7 +126,10 @@ jobs:
         uses: actions/checkout@v1
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
-      - name: Provision azureml online endpoint
+      - name: Copy Common Libs
+        run: |
+          cp -r src/${{ env.MODEL_TYPE }}/common/* model/${{ env.MODEL_TYPE }}/batch
+      - name: Provision azureml batch endpoint
         uses: ./.github/actions/execute_shell_code
         with:
             arm_client_id: ${{ env.ARM_CLIENT_ID }}
