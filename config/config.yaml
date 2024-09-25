@@ -126,7 +126,7 @@ deployment_configs:
       score_dir: model/nyc_taxi/online
       deployment_instance_count: 1
 
-    seq_model_batch_dev:
+    sequence_model_batch_dev:
       score_file_name: score.py
       score_dir: model/sequence_model/batch
       batch_cluster_name: batchcluster
@@ -146,7 +146,7 @@ deployment_configs:
       deployment_desc: A batch deployment
       test_dataset_name: sequence_model_batch_test
 
-    seq_model_online_dev:
+    sequence_model_online_dev:
       score_file_name: score.py
       test_file_path: model/sequence_model/online_test_data/sample-request.json
       endpoint_name: seq-model-rte-005
