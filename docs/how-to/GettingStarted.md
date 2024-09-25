@@ -77,6 +77,8 @@ Details about how to create a basic Azure Pipeline can be found in [Create your 
 
 ![Azure Machine Learning Extension](../media/machinelearningextension.png)
 
+**Step 9.** Use the boolean variable `is_docker` in your GitHub workflows and Azure Pipelines to determine if the unit tests need to use Docker. Set `is_docker` to "true" if the unit tests require Docker, otherwise set it to "false". This variable can be used to conditionally run Docker-related steps in your CI/CD pipelines.
+
 ## GitHub Workflows Setup
 
 **Step 1.** Delete the .azure-pipelines directory
