@@ -2,7 +2,7 @@ trigger: none
 pr:
   branches:
    include:
-     - development
+     - main
   paths:
     include:
       - .azure-pipelines/*
