@@ -5,17 +5,51 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Start docker_taxi Pipeline",
+            "name": "Register Data Asset",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "mlops.common.register_data_asset",
+            "args": [
+                "--data_config_path",
+                "config/data_config.json"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Start NYC Taxi Local Pipeline",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "mlops.nyc_taxi.start_local_pipeline",
+            "args": [
+                "--build_environment=${input:build_environment}",
+                "--wait_for_completion=${input:wait_for_completion}"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Start London Taxi Local Pipeline",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "mlops.london_taxi.start_local_pipeline",
+            "args": [
+                "--build_environment=${input:build_environment}",
+                "--wait_for_completion=${input:wait_for_completion}"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Start Docker Taxi Local Pipeline",
             "type": "debugpy",
             "request": "launch",
             "module": "mlops.docker_taxi.start_local_pipeline",
             "args": [
                 "--build_environment=${input:build_environment}",
                 "--wait_for_completion=${input:wait_for_completion}"
-            ]
-        },
+           ],
+            "console": "integratedTerminal"
+        }
     ],
-    "inputs" : [
+    "inputs": [
         {
             "id": "build_environment",
             "type": "pickString",

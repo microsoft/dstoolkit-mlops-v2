@@ -66,7 +66,8 @@ def get_environment(
         return environment
     except Exception as ex:
         print(
-            "Oops! invalid credentials or error while creating ML environment.. Try again...",
-            ex,
+            "An error occurred while trying to create or update the Azure ML environment. "
+            "Please check your credentials, subscription details, and workspace configuration, and try again. "
+            f"Error details: {ex}"
         )
         raise

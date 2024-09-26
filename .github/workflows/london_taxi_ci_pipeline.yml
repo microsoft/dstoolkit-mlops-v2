@@ -2,7 +2,7 @@ name: London Taxi CI Workflow
 on:
   push:
     branches:
-      - development
+      - main
     paths:
       - mlops/common/**
       - mlops/london_taxi/**

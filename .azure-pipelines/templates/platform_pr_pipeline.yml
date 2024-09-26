@@ -25,6 +25,7 @@ stages:
     - build_validation
     jobs:
     - job: Execute_ml_Job_Pipeline
+      displayName: "Execute Azure ML Pipeline Job"
       steps:
       - template: configure_azureml_agent.yml
       - template: execute_python_code.yml
@@ -33,4 +34,22 @@ stages:
           script_parameter: |
             python -m mlops.${{ parameters.model_type }}.src.mlops_pipeline \
               --build_environment ${{parameters.exec_environment}} \
-              --wait_for_completion True
+              --wait_for_completion True \
+              --output_file run_id.txt
+      - task: AzureCLI@2
+        displayName: "Cancel AML Pipeline"
+        condition: canceled()
+        inputs:
+          azureSubscription: $(AZURE_RM_SVC_CONNECTION)
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            readarray arr <"run_id.txt"
+            run_name=${arr[0]}
+
+            echo "Pipeline was canceled. Attempting to cancel AML Pipeline: ${run_name}..."
+
+            az extension add --name ml
+            az ml job cancel --name "$run_name" \
+              --resource-group $(RESOURCE_GROUP_NAME) \
+              --workspace-name $(WORKSPACE_NAME) && echo "Successfully canceled the AML Pipeline."
