@@ -55,7 +55,7 @@ def run(raw_data):
     """
     logging.info("model 1: request received")
     data = json.loads(raw_data)["data"]
-
+    print(f'data={data}')
     assert (
         len(data) <= model_cfg["max_prior_token_length"]
     ), f"Only {model_cfg['max_prior_token_length']} prior words can \
