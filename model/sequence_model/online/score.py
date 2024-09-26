@@ -29,7 +29,8 @@ def init():
     )
     model_cfg_path = "model_config.yml"
 
-    model_cfg = yaml.safe_load(open(model_cfg_path))
+    cfg = yaml.safe_load(open(model_cfg_path))
+    model_cfg = cfg['model']
 
     # deserialize the model
     model = NgramModel(
