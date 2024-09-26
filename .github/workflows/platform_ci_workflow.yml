@@ -160,6 +160,7 @@ jobs:
             arm_tenant_id: ${{ env.ARM_TENANT_ID }}
             subscription_id: ${{ env.SUBSCRIPTION_ID }}
             script_parameter: |
+                cp -r src/${{ inputs.model_type }}/common/* model/${{ inputs.model_type }}/batch
                 python -m mlops.common.deployment.run_test_batch_deployment \
                   --environment_name ${{ inputs.exec_environment }} \
                   --model_type ${{ inputs.model_type }}
