@@ -64,7 +64,7 @@ def run(raw_data):
     # Encode data
     tokenized_data = tuple(tokenizer.enc(words=data))
 
-    result = model.predict(tokenized_data)
+    result = model.predict(tokenized_data, top_n=3)
 
     # Decode result
     preds = tokenizer.dec(tokens=result)
