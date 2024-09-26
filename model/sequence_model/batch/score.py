@@ -30,8 +30,8 @@ def init():
     )
     model_cfg_path = "model_config.yml"
 
-    model_cfg = yaml.safe_load(open(model_cfg_path))
-
+    cfg = yaml.safe_load(open(model_cfg_path))
+    model_cfg = cfg['model']
     # deserialize the model
     model = NgramModel(
         max_prior_token_length=model_cfg["max_prior_token_length"],
@@ -40,7 +40,8 @@ def init():
     model.load(model_path)
 
     # deserialize the tokenizer
-    tokenizer = Tokenizer.load(tokenizer_path)
+    tokenizer = Tokenizer()
+    tokenizer.load(tokenizer_path)
 
     logging.info("Init complete")
 

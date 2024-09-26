@@ -40,7 +40,8 @@ def init():
     model.load(model_path)
 
     # deserialize the tokenizer
-    tokenizer = Tokenizer.load(tokenizer_path)
+    tokenizer = Tokenizer()
+    tokenizer.load(tokenizer_path)
 
     logging.info("Init complete")
 
