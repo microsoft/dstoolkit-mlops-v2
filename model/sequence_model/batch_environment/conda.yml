@@ -12,4 +12,5 @@ dependencies:
     - numpy
     - pyyaml
     - flake8
+    - pandas
     - black
