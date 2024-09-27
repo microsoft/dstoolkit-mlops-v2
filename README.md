@@ -71,6 +71,35 @@ You can start training pipelines from your local computer by creating an environ
   - `python -m mlops.common.register_data_asset --data_config_path config/data_config.json`
 - Run the training pipeline under test using the module notation (for example, `python -m mlops.nyc_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`)
 
+## Caching Python Dependencies
+
+**Caching** is used to store Python dependencies to improve build times by reusing packages between runs. The cache is managed using the [Cache@2](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/cache-v2?view=azure-pipelines) task in the pipeline.
+
+An example of how caching is implemented in this repo can be found in [build_validation_pipeline.yml](.azure-pipelines\templates\build_validation_pipeline.yml).
+
+### Understanding Cache Key, Cache Path, and Restore Keys
+
+- **Cache Key**: A unique key based on `python_build_validate`, the agent OS (`$(Agent.OS)`), and the `build_validation_requirements.txt` file.
+  
+  Example: 
+  
+``` bash
+python_build_validate | "$(Agent.OS)" | .azure-pipelines/requirements/build_validation_requirements.txt`
+```
+
+- **Cache Path**: Dependencies are cached at `$(PIP_CACHE_DIR)`, where `pip` stores package files.
+
+- **Restore Keys**: If an exact cache match isn’t found, the pipeline will attempt to restore based on partial keys: 
+
+``` bash
+python_build_validate | "$(Agent.OS)"`.
+```
+
+### Variables Used
+
+- **`PIP_CACHE_DIR`**: Directory where `pip` stores cached package files.
+- **`Agent.OS`**: The operating system of the build agent, used as part of the cache key.
+
 ## Running Debug Tasks in VS Code
 
 You can use Visual Studio Code to run and debug specific tasks related to the MLOps pipelines. The following configurations are set up in the [launch.json](.vscode/launch.json) file, allowing you to execute various scripts with ease.

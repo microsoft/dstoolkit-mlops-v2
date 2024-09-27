@@ -1,6 +1,6 @@
 # Testing the initial setup
 
-**Step 1.** In the development branch, supply an explicit value or accept the defaults in the file, config/config.yaml. The pipelines uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi). The config.yaml file is split into the following sections, set the values in each section:
+**Step 1.** In the main branch, supply an explicit value or accept the defaults in the file, config/config.yaml. The pipelines uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi). The config.yaml file is split into the following sections, set the values in each section:
 
 - aml_config: Stores the configuration of azure resources hosting the Azure Machine Learning workspace.
 - environment_config: Stores the base image and dynamic properties set at runtime.
