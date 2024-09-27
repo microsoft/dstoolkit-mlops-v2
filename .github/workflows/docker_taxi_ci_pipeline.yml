@@ -3,7 +3,7 @@ name: Custom Object Detection CI Workflow
 on:
   push:
     branches:
-      - development
+      - main
     paths:
       - mlops/common/**
       - mlops/docker_taxi/**
