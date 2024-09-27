@@ -17,6 +17,8 @@ pool:
 
 variables:
 - group: mlops_platform_dev_vg
+- name: PIP_CACHE_DIR
+  value: $(Pipeline.Workspace)/.pip/build_validation
 
 parameters:
  - name: env_name

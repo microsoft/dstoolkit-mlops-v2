@@ -18,6 +18,8 @@ pool:
 
 variables:
 - group: mlops_platform_dev_vg
+- name: PIP_CACHE_DIR
+  value: $(Pipeline.Workspace)/.pip/configure_agent
 
 parameters:
  - name: env_name
