@@ -37,58 +37,48 @@ resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
 }
 
 // storage
-module stg './modules/storage.template.bicep' = {
-  name: storageAccount
+module stg 'br/public:avm/res/storage/storage-account:0.9.1' = {
   scope: resourceGroup(rg.name)
-  params:{
-    storageAccountName: storageAccount
-    location: rg.location
-    kind: kind
-    accessTier: accessTier
-    accountType: sku
+  name: storageAccount
+  params: {
+    name: storageAccount
   }
 }
 
 // key vault
-module kv './modules/keyvault.template.bicep' = {
-  name: keyVaultName
+module kv 'br/public:avm/res/key-vault/vault:0.9.0' = {
   scope: resourceGroup(rg.name)
+  name: keyVaultName
   params: {
-    keyVaultName: keyVaultName
-    location: rg.location
+    name: keyVaultName
   }
 }
 
 // application insights
-module appInsightsResource './modules/appinsights.template.bicep' = {
-  name:appInsightsName
+module appInsightsResource 'br/public:avm/res/insights/component:0.4.1' = {
   scope: resourceGroup(rg.name)
+  name: appInsightsName
   params: {
-    appInsightsName: appInsightsName
-    location: rg.location
+    name: appInsightsName
+    workspaceResourceId: 
   }
 }
 
 // container registry
- module containerRegistryResource './modules/containerregistry.template.bicep' = {
-  name: containerRegistryName
+ module containerRegistryResource 'br/public:avm/res/container-registry/registry:0.5.1' = {
   scope: resourceGroup(rg.name)
+  name: containerRegistryName
   params: {
-    containerRegistryName: containerRegistryName
-    location: rg.location
+    name: containerRegistryName
   }
  }
 
  // azure machine learning
- module mlworkspace './modules/mlworkspace.template.bicep' = {
-  name: amlWorkspaceName
+ module mlworkspace 'br/public:avm/res/machine-learning-services/workspace:0.8.0' = {
   scope: resourceGroup(rg.name)
+  name: amlWorkspaceName
   params: {
-    amlWorkspaceName: amlWorkspaceName
-    storageAccount: stg.name
-    keyVaultName: kv.name
-    appInsightsName: appInsightsResource.name
-    containerRegistryName: containerRegistryResource.name
-    location: rg.location
+    name: amlWorkspaceName
+    sku: 
   }
-}
+ }
