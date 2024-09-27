@@ -68,9 +68,9 @@ def run(mini_batch: List[str]) -> pd.DataFrame:
                 print("Input data:", line.strip())
                 print("Possible choices for next word:", preds)
 
-        print("Item has been proccessed")
+        print(f"File name: {raw_data} has been processed")
 
         # You need to implement a better way to combine results from the model depends on your desired output
-        results.append("Item has been processed")
+        results.append(f"File name: {raw_data} has been processed")
 
     return pd.DataFrame(results)
