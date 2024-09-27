@@ -10,7 +10,9 @@ The pipeline executes the following steps in order:
 6. Finalize and Persist Model: Handles tasks like persisting model metadata, registering the model,
 and generating reports.
 """
+
 from azure.identity import DefaultAzureCredential
+from azure.core.exceptions import ClientAuthenticationError
 import argparse
 from azure.ai.ml.dsl import pipeline
 from azure.ai.ml import MLClient, Input
@@ -219,7 +221,7 @@ def execute_pipeline(
                     time.sleep(20)
                     pipeline_job = client.jobs.get(pipeline_job.name)
 
-                    print("Job Status:", pipeline_job.status)
+                    print(f"Job Status: {pipeline_job.status}")
 
                     current_wait_time = current_wait_time + 15
 
@@ -229,18 +231,35 @@ def execute_pipeline(
                         or pipeline_job.status == "CancelRequested"
                         or pipeline_job.status == "Canceled"
                     ):
+                        print(
+                            f"Pipeline job '{pipeline_job.name}' has stopped with status: {pipeline_job.status}."
+                        )
                         break
                 else:
+                    print(
+                        f"Job {pipeline_job.name} exceeded the wait time limit of 1 hour."
+                    )
                     break
 
             if pipeline_job.status == "Completed" or pipeline_job.status == "Finished":
-                print("job completed")
+                print("Job completed successfully.")
             else:
-                raise Exception("Sorry, exiting job with failure..")
+                raise Exception(
+                    f"Job {pipeline_job.name} did not complete successfully. "
+                    f"Current status: {pipeline_job.status}"
+                )
+    except ClientAuthenticationError as auth_ex:
+        print(
+            "Authorization error occurred while executing the pipeline."
+            "Please check your credentials and permissions."
+            f"Error details: {auth_ex}"
+        )
+        raise
     except Exception as ex:
         print(
-            "Oops! invalid credentials or error while creating ML environment.. Try again...",
-            ex,
+            "An error occurred while executing the pipeline."
+            "Please check your credentials, resource details, and job configuration."
+            f"Error details: {ex}"
         )
         raise
 

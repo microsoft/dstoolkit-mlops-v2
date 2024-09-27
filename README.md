@@ -62,6 +62,72 @@ You can start training pipelines from your local computer by creating an environ
   - `python -m mlops.common.register_data_asset --data_config_path config/data_config.json`
 - Run the training pipeline under test using the module notation (for example, `python -m mlops.nyc_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`)
 
+## Caching Python Dependencies
+
+**Caching** is used to store Python dependencies to improve build times by reusing packages between runs. The cache is managed using the [Cache@2](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/cache-v2?view=azure-pipelines) task in the pipeline.
+
+An example of how caching is implemented in this repo can be found in [build_validation_pipeline.yml](.azure-pipelines\templates\build_validation_pipeline.yml).
+
+### Understanding Cache Key, Cache Path, and Restore Keys
+
+- **Cache Key**: A unique key based on `python_build_validate`, the agent OS (`$(Agent.OS)`), and the `build_validation_requirements.txt` file.
+  
+  Example: 
+  
+``` bash
+python_build_validate | "$(Agent.OS)" | .azure-pipelines/requirements/build_validation_requirements.txt`
+```
+
+- **Cache Path**: Dependencies are cached at `$(PIP_CACHE_DIR)`, where `pip` stores package files.
+
+- **Restore Keys**: If an exact cache match isn’t found, the pipeline will attempt to restore based on partial keys: 
+
+``` bash
+python_build_validate | "$(Agent.OS)"`.
+```
+
+### Variables Used
+
+- **`PIP_CACHE_DIR`**: Directory where `pip` stores cached package files.
+- **`Agent.OS`**: The operating system of the build agent, used as part of the cache key.
+
+## Running Debug Tasks in VS Code
+
+You can use Visual Studio Code to run and debug specific tasks related to the MLOps pipelines. The following configurations are set up in the [launch.json](.vscode/launch.json) file, allowing you to execute various scripts with ease.
+
+### Available Debug Tasks
+
+1. **Register Data Asset**
+   - **Command:** `python -m mlops.common.register_data_asset --data_config_path config/data_config.json`
+   - **Description:** Registers a data asset using the provided configuration file.
+
+2. **Start NYC Taxi Local Pipeline**
+   - **Command:** `python -m mlops.nyc_taxi.start_local_pipeline --build_environment=<environment> --wait_for_completion=<True/False>`
+   - **Description:** Starts the NYC Taxi pipeline in a local environment. You will be prompted to specify the `build_environment` and whether the pipeline should wait for completion.
+
+3. **Start London Taxi Local Pipeline**
+   - **Command:** `python -m mlops.london_taxi.start_local_pipeline --build_environment=<environment> --wait_for_completion=<True/False>`
+   - **Description:** Starts the London Taxi pipeline in a local environment. You will be prompted to specify the `build_environment` and whether the pipeline should wait for completion.
+
+### How to Run
+
+1. Open the **Debug** panel in Visual Studio Code.
+2. Select the desired debug task from the dropdown list. The options are:
+   - `Register Data Asset`
+   - `Start NYC Taxi Local Pipeline`
+   - `Start London Taxi Local Pipeline`
+3. Click the green play button (`▶`) next to the dropdown to start the task.
+4. For the NYC Taxi and London Taxi pipelines, you will be prompted to enter two values:
+   - **Build Environment:** Choose from `pr`, `dev`, or any other configured environments.
+   - **Wait for Completion:** Choose `True` if you want the pipeline to wait for completion before exiting, or `False` to allow it to run asynchronously.
+5. The output and any debugging information will be displayed in the **Debug Console** or **Integrated Terminal**, depending on the task configuration.
+
+### Notes
+
+- Ensure that your environment is correctly set up and all necessary dependencies are installed before running these tasks.
+- The available options for `build_environment` and `wait_for_completion` are defined in the [launch.json](.vscode/launch.json) file and can be modified to suit your project’s needs.
+- If you encounter any issues, check the [launch.json](.vscode/launch.json) file in the `.vscode` directory to verify the configuration.
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
