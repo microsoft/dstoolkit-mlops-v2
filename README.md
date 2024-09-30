@@ -122,6 +122,43 @@ You can use Visual Studio Code to run and debug specific tasks related to the ML
    - **Wait for Completion:** Choose `True` if you want the pipeline to wait for completion before exiting, or `False` to allow it to run asynchronously.
 5. The output and any debugging information will be displayed in the **Debug Console** or **Integrated Terminal**, depending on the task configuration.
 
+## Build Validation Policies for Azure Repos Git
+
+### Limitation in Azure DevOps Pipelines
+
+Azure DevOps Pipelines do not support PR triggers in YAML configuration for Azure Repos, while this functionality is available for GitHub. Attempting to use the `pr:` section in YAML (example shown below) will not work for Azure Repos:
+
+```yaml
+pr:
+  - master
+  - develop
+```
+
+This limitation means that maintainers need to rely on [branch policies in Azure Repos Git](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser) to enforce build validation, rather than configuring this directly in the pipeline YAML file.
+
+### Community Issue
+
+The issue has been raised by the community, noting that Azure DevOps doesn’t support this PR trigger feature natively, which forces users to manage branch policies through the Azure DevOps UI rather than in YAML configuration. This presents an additional administrative burden as maintainers need to manage both YAML pipeline definitions and non-configuration-based policies.
+
+The community issue and thread discussion can be found [here](https://developercommunity.visualstudio.com/t/pr-triggers-in-yaml-should-be-supported-on-azure-d/385329).
+
+### Alternative: Branch Policies for Build Validation
+
+To enforce build validation in Azure Repos, branch policies provide a robust alternative. These policies allow more configuration options and are essential for protecting branches with mandatory builds before merging pull requests.
+
+Follow the steps outlined in the Azure DevOps [Branch Policies documentation](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser) to set up branch policies for build validation:
+
+- Navigate to your Azure Repos Git repository
+- Go to Project Settings > Repos > Branches
+- Select the branch (e.g., master or develop) where you want to enforce validation
+- Under Policies, configure a Build Validation policy to ensure that a successful build is required before a PR can be completed
+
+By doing this, you can automate build checks as part of your PR workflow, ensuring that only code passing the build can be merged into important branches.
+
+### Best Practice for YAML Defaults
+
+While branch policies handle validation, you can still configure a good default behavior in your pipeline YAML file, setting up defaults that will work in conjunction with branch policies. This allows teams to maintain a standardized pipeline configuration across branches. For more details, refer to the [Azure Pipelines YAML schema documentation](https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/?view=azure-pipelines).
+
 ### Notes
 
 - Ensure that your environment is correctly set up and all necessary dependencies are installed before running these tasks.
