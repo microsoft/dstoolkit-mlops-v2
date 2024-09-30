@@ -11,3 +11,4 @@ azure-ai-ml==1.8.0
 azure-identity==1.16.1
 python-dotenv>=0.10.3
 azureml-mlflow>=1.51
+msal==1.24.0b2
