@@ -126,7 +126,9 @@ You can use Visual Studio Code to run and debug specific tasks related to the ML
 
 ### Limitation in Azure DevOps Pipelines
 
-Azure DevOps Pipelines do not support PR triggers in YAML configuration for Azure Repos, while this functionality is available for GitHub. Attempting to use the `pr:` section in YAML (example shown below) will not work for Azure Repos:
+Azure Pipelines support PR triggers in YAML configuration when the repository is hosted on **GitHub**, but **not** when the repository is hosted on **Azure Repos Git**. In other words, using the `pr:` section in YAML files works for GitHub repos, but **will not** work for Azure Repos Git.
+
+Example of a PR trigger that works in GitHub, but not in Azure Repos:
 
 ```yaml
 pr:
