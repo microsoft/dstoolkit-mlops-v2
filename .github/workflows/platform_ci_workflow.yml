@@ -1,4 +1,4 @@
-name: Platform PR Workflow
+name: Platform CI Workflow
 
 on:
   workflow_call:

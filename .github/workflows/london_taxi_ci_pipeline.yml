@@ -1,4 +1,4 @@
-name: London Taxi PR Workflow
+name: London Taxi CI Workflow
 
 on:
   pull_request:
