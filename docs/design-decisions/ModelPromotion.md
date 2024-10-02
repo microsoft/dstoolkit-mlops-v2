@@ -44,10 +44,10 @@ Cons:
 - **Repository Clutter**: Keeping data science experimentation / prototyping files in the same repository as the model factory could cause the repository to become cluttered with files such as test datasets, python notebooks, etc.  It also clutters the git history as it mixes experimental commits / changes in with those for officially promoted models.
 - **Experiment History Not Preserved**: When data science experimentation occurs in the same repository as promoted models, it also means the git history contains both experimental and productized changes.  This clutters the git history and makes it hard to identify which are which.  This can be prevented by executing / enforcing squash merge commits, however, doing this means that the git history of experimental changes is lost.
 
-Let’s say our data scientist’s dedicated directory is `experimentation` placed at the root of the `dstoolkit-mlops-v2`.  Using the sample `Nyc Taxi PR Workflow`(`.github/workflows/nyc_taxi_pr_pipeline.yml`) in the [dstoolkit-mlops-v2](https://github.com/microsoft/dstoolkit-mlops-v2), we could configure GitHub workflows to ignore this directory by adding a `paths-ignore` block.  For example:
+Let’s say our data scientist’s dedicated directory is `experimentation` placed at the root of the `dstoolkit-mlops-v2`.  Using the sample `Nyc Taxi CI Workflow`(`.github/workflows/nyc_taxi_ci_pipeline.yml`) in the [dstoolkit-mlops-v2](https://github.com/microsoft/dstoolkit-mlops-v2), we could configure GitHub workflows to ignore this directory by adding a `paths-ignore` block.  For example:
 
 ```yaml
-name: Nyc Taxi PR Workflow
+name: Nyc Taxi CI Workflow
 on:
   pull_request:
     branches:

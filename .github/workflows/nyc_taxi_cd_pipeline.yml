@@ -1,0 +1,34 @@
+# Continuous integration (cd) for nyc taxi model 
+name: Nyc Taxi CD Workflow
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - mlops/common/**
+      - mlops/**
+      - mlops/nyc_taxi/**
+      - model/nyc_taxi/**
+      - src/nyc_src/**
+      - test/nyc_taxi/**
+  workflow_call:
+    inputs:
+      exec_environment:
+        type: string
+        description: "Execution Environment"
+        required: true
+        default: "dev"
+      model_type:
+        type: string
+        description: "The type of model to run the workflow for"
+        required: true
+        default: "nyc_taxi"
+permissions:
+  id-token: write
+  contents: read          
+jobs:
+  run-cd-workflow:
+    uses: ./.github/workflows/platform_cd_workflow.yml
+    with:
+      exec_environment: ${{ inputs.exec_environment || 'dev' }}
+      model_type: ${{ inputs.model_type || 'nyc_taxi' }}
