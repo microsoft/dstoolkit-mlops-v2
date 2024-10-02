@@ -1,6 +1,7 @@
 name: Sequence Model CI Workflow
 on:
   push:
+  workflow_dispatch:
 #    branches:
 #      - development
 #    paths:
