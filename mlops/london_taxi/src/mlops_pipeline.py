@@ -190,6 +190,7 @@ def execute_pipeline(
             workspace_name=workspace_name,
         )
 
+        print(f'@@@ experiment_name "{experiment_name}"')
         pipeline_job = client.jobs.create_or_update(
             pipeline_job, experiment_name=experiment_name
         )
