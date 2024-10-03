@@ -1,0 +1,1 @@
+A place to host modules common across stages.
