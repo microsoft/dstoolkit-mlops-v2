@@ -2,13 +2,14 @@ FROM python:3.12-bullseye
 
 RUN set -x
 
-RUN apt-get update \
-    && apt-get -y install curl \
-    && apt-get -y install net-tools \
-    && apt-get -y install procps \
-    && apt-get -y install build-essential \
-    && apt-get -y install docker.io
-
+RUN apt-get update && apt-get -y install \
+    curl \
+    net-tools \
+    procps \
+    build-essential \
+    docker.io \
+    && rm -rf /var/lib/apt/lists/*
+    
 RUN pip install --upgrade pip
 RUN pip install ipython ipykernel
 RUN ipython kernel install --user --name dstoolkit
