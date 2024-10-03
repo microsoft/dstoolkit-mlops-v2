@@ -14,7 +14,7 @@ outputs:
 environment: azureml:AzureML-sklearn-1.1-ubuntu20.04-py38-cpu@latest
 code: ./../../../
 command: >-
-  python -m src.london_taxi.score.score 
+  python -m src.london_src.score.score 
   --predictions ${{inputs.predictions}} 
   --model ${{inputs.model}} 
   --score_report ${{outputs.score_report}}

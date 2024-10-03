@@ -15,7 +15,7 @@ inputs:
 code: ./../../../
 environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu@latest
 command: >-
-  python -m src.nyc_taxi.register.register 
+  python -m src.nyc_src.register.register 
   --model_metadata ${{inputs.model_metadata}}  
   --model_name ${{inputs.model_name}}
   --score_report ${{inputs.score_report}}
