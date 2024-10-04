@@ -150,16 +150,34 @@ To enforce build validation in Azure Repos, branch policies provide a robust alt
 
 Follow the steps outlined in the Azure DevOps [Branch Policies documentation](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser) to set up branch policies for build validation:
 
-- Navigate to your Azure Repos Git repository
-- Go to Project Settings > Repos > Branches
-- Select the branch (e.g., master or develop) where you want to enforce validation
-- Under Policies, configure a Build Validation policy to ensure that a successful build is required before a PR can be completed
+**Note**: You need to have appropriate [permissions](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser#prerequisites) to create Build Validation Policies.
 
-By doing this, you can automate build checks as part of your PR workflow, ensuring that only code passing the build can be merged into important branches.
+1. Ensure you have created the Pipeline prior to creating the Build Validation Policy.
 
-### Best Practice for YAML Defaults
+1. Navigate to Branch Policies:
+    - Go to your Azure DevOps "Project Settings".
+    - Navigate to Repos > Repositories.
+    - Select the Repository from the list.
+    - Select the "Policies" tab.
+    - Find the "Branch Policies" section and select the branch you want to set the policy for (e.g., development).
 
-While branch policies handle validation, you can still configure a good default behavior in your pipeline YAML file, setting up defaults that will work in conjunction with branch policies. This allows teams to maintain a standardized pipeline configuration across branches. For more details, refer to the [Azure Pipelines YAML schema documentation](https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/?view=azure-pipelines).
+1. Add Build Validation:
+    - Under "Build validation", click "+" to add a build policy.
+    - Select the pipeline you want to run when a PR is created or updated.
+    - Configure the policy settings, such as requiring the build to pass before completing the PR.
+    - Fill in the optional box for the paths (see the [Paths](#set-path-policies) section for more information).
+    - Click "Save".
+
+For more information about Build Validation Policies, please see the [documentation](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser#build-validation).
+
+### Set Path Policies
+
+Each policy contains a list of paths that specify which files or directories should trigger the pipeline when
+changed. By defining these paths, we ensure that only the necessary pipelines are executed, reducing unnecessary builds and
+tests, and speeding up the overall CI/CD process. For example:
+
+- Changes to the `src/` directory trigger the build and validation pipeline.
+- Changes to the `src/london_src/*` directory trigger the london_taxi pipelines and not the nyc_taxi or docker_taxi pipelines.
 
 ### Notes
 
