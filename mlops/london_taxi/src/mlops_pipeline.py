@@ -16,7 +16,6 @@ from azure.ai.ml.dsl import pipeline
 from azure.ai.ml import Input
 from azure.ai.ml import load_component
 import os
-from mlops.common.get_environment import get_environment
 from mlops.common.config_utils import MLOpsConfig
 from mlops.common.naming_utils import generate_model_name
 from mlops.common.pipeline_utils import prepare_and_execute_pipeline
@@ -81,24 +80,37 @@ class London_Taxi:
     This class defines the machine learning pipeline for processing, training, and evaluating data.
     """
 
-    def __init__(self, environment_name, build_reference, published_model_name, dataset_name, build_environment, wait_for_completion, output_file, model_name):
+    def __init__(
+        self,
+        environment_name: str,
+        build_reference: str,
+        published_model_name: str,
+        dataset_name: str,
+        build_environment: str,
+        wait_for_completion: str,
+        output_file: str,
+        model_name: str,
+    ):
         """
         Initialize the pipeline job components.
 
         Args:
             environment_name (str): The name of the environment to use for pipeline execution.
             build_reference (str): The build reference for the pipeline job.
-            model_name (str): The name of the model.
+            published_model_name (str): The name of the published model.
             dataset_name (str): The name of the dataset.
+            build_environment (str): The build environment configuration.
+            wait_for_completion (str): Whether to wait for the pipeline job to complete.
+            output_file (str): A file to save the run ID.
+            model_name (str): The name of the model.
         """
         self.environment_name = environment_name
         self.build_reference = build_reference
         self.published_model_name = published_model_name
         self.dataset_name = dataset_name
-        self.gl_pipeline_components = []
-        self.build_environment = build_environment,
-        self.wait_for_completion = wait_for_completion,
-        self.output_file = output_file,
+        self.build_environment = build_environment
+        self.wait_for_completion = wait_for_completion
+        self.output_file = output_file
         self.model_name = model_name
 
     def construct_pipeline(self, ml_client):
@@ -168,19 +180,8 @@ def prepare_and_execute(
     pipeline_config = config.get_pipeline_config(model_name)
     published_model_name = generate_model_name(model_name)
 
-    environment = get_environment(
-        config.aml_config["subscription_id"],
-        config.aml_config["resource_group_name"],
-        config.aml_config["workspace_name"],
-        config.environment_configuration["env_base_image"],
-        pipeline_config["conda_path"],
-        pipeline_config["aml_env_name"],
-    )
-
-    print(f"Environment: {environment.name}, version: {environment.version}")
-
     pipeline = London_Taxi(
-        environment_name=f"azureml:{environment.name}:{environment.version}",
+        environment_name=None,  # will be set in prepare_and_execute_pipeline
         build_reference=config.environment_configuration["build_reference"],
         published_model_name=published_model_name,
         dataset_name=pipeline_config["dataset_name"],

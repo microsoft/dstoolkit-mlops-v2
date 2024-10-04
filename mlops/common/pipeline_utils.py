@@ -9,6 +9,7 @@ import time
 
 from mlops.common.config_utils import MLOpsConfig
 from mlops.common.get_compute import get_compute
+from mlops.common.get_environment import get_environment
 from mlops.common.naming_utils import generate_experiment_name, generate_run_name
 
 
@@ -168,6 +169,21 @@ def prepare_and_execute_pipeline(pipeline):
         pipeline_config["cluster_size"],
         pipeline_config["cluster_region"],
     )
+
+    environment = get_environment(
+        config.aml_config["subscription_id"],
+        config.aml_config["resource_group_name"],
+        config.aml_config["workspace_name"],
+        config.environment_configuration["env_base_image"],
+        pipeline_config["conda_path"],
+        pipeline_config["aml_env_name"],
+    )
+
+    print(f"Environment: {environment.name}, version: {environment.version}")
+
+    environment_name = f"azureml:{environment.name}:{environment.version}"
+
+    pipeline.environment_name = environment_name
 
     pipeline_job = pipeline.construct_pipeline(ml_client)
 
