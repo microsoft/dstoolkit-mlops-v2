@@ -10,7 +10,7 @@ import time
 from mlops.common.config_utils import MLOpsConfig
 from mlops.common.get_compute import get_compute
 from mlops.common.get_environment import get_environment
-from mlops.common.naming_utils import generate_experiment_name, generate_run_name
+from mlops.common.naming_utils import generate_experiment_name, generate_run_name, generate_environment_name
 
 
 def set_pipeline_properties(
@@ -149,6 +149,8 @@ def execute_pipeline(
 def prepare_and_execute_pipeline(pipeline):
 
     config = MLOpsConfig(environment=pipeline.build_environment)
+    
+    pipeline_config = config.get_pipeline_config(pipeline.model_name)
 
     ml_client = MLClient(
         DefaultAzureCredential(),
@@ -156,10 +158,6 @@ def prepare_and_execute_pipeline(pipeline):
         config.aml_config["resource_group_name"],
         config.aml_config["workspace_name"],
     )
-
-    pipeline_config = config.get_pipeline_config(pipeline.model_name)
-    published_experiment_name = generate_experiment_name(pipeline.model_name)
-    published_run_name = generate_run_name(config.environment_configuration["build_reference"])
 
     compute = get_compute(
         config.aml_config["subscription_id"],
@@ -179,9 +177,9 @@ def prepare_and_execute_pipeline(pipeline):
         pipeline_config["aml_env_name"],
     )
 
-    print(f"Environment: {environment.name}, version: {environment.version}")
-
-    environment_name = f"azureml:{environment.name}:{environment.version}"
+    published_experiment_name = generate_experiment_name(pipeline.model_name)
+    published_run_name = generate_run_name(config.environment_configuration["build_reference"])
+    environment_name = generate_environment_name(environment.name, environment.version)
 
     pipeline.environment_name = environment_name
 
