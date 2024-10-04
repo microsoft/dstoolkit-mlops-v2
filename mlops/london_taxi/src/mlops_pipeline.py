@@ -10,9 +10,7 @@ The pipeline executes the following steps in order:
 6. Finalize and Persist Model: Handles tasks like persisting model metadata, registering the model,
 and generating reports.
 """
-
 from azure.identity import DefaultAzureCredential
-from azure.core.exceptions import ClientAuthenticationError
 import argparse
 from azure.ai.ml.dsl import pipeline
 from azure.ai.ml import MLClient, Input
@@ -221,7 +219,7 @@ def execute_pipeline(
                     time.sleep(20)
                     pipeline_job = client.jobs.get(pipeline_job.name)
 
-                    print(f"Job Status: {pipeline_job.status}")
+                    print("Job Status:", pipeline_job.status)
 
                     current_wait_time = current_wait_time + 15
 
@@ -231,35 +229,18 @@ def execute_pipeline(
                         or pipeline_job.status == "CancelRequested"
                         or pipeline_job.status == "Canceled"
                     ):
-                        print(
-                            f"Pipeline job '{pipeline_job.name}' has stopped with status: {pipeline_job.status}."
-                        )
                         break
                 else:
-                    print(
-                        f"Job {pipeline_job.name} exceeded the wait time limit of 1 hour."
-                    )
                     break
 
             if pipeline_job.status == "Completed" or pipeline_job.status == "Finished":
-                print("Job completed successfully.")
+                print("job completed")
             else:
-                raise Exception(
-                    f"Job {pipeline_job.name} did not complete successfully. "
-                    f"Current status: {pipeline_job.status}"
-                )
-    except ClientAuthenticationError as auth_ex:
-        print(
-            "Authorization error occurred while executing the pipeline."
-            "Please check your credentials and permissions."
-            f"Error details: {auth_ex}"
-        )
-        raise
+                raise Exception("Sorry, exiting job with failure..")
     except Exception as ex:
         print(
-            "An error occurred while executing the pipeline."
-            "Please check your credentials, resource details, and job configuration."
-            f"Error details: {ex}"
+            "Oops! invalid credentials or error while creating ML environment.. Try again...",
+            ex,
         )
         raise
 
@@ -303,9 +284,9 @@ def prepare_and_execute(
         config.aml_config["subscription_id"],
         config.aml_config["resource_group_name"],
         config.aml_config["workspace_name"],
-        env_base_image=config.environment_configuration["env_base_image"],
-        conda_path=pipeline_config["conda_path"],
-        environment_name=pipeline_config["aml_env_name"],
+        config.environment_configuration["env_base_image"],
+        pipeline_config["conda_path"],
+        pipeline_config["aml_env_name"],
     )
 
     print(f"Environment: {environment.name}, version: {environment.version}")

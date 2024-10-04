@@ -51,8 +51,6 @@ def get_compute(
             ).result()
             print(f"A new cluster {cluster_name} has been created.")
     except Exception as ex:
-        "An error occurred while trying to create or update the Azure ML environment. "
-        "Please check your credentials, subscription details, and workspace configuration, and try again. "
-        f"Error details: {ex}"
+        print("Oops!  invalid credentials.. Try again...", ex)
         raise
     return compute_object
