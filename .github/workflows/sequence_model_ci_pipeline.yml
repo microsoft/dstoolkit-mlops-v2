@@ -1,16 +1,16 @@
-# Continuous integration (CI) for nyc taxi model 
-name: Nyc Taxi CI Workflow
+name: Sequence Model CI Workflow
 on:
   push:
+  workflow_dispatch:
 #    branches:
-#      - main
+#      - development
 #    paths:
 #      - mlops/common/**
 #      - mlops/**
-#      - mlops/nyc_taxi/**
-#      - model/nyc_taxi/**
-#      - src/nyc_src/**
-#      - test/nyc_taxi/**
+#      - mlops/sequence_model/**
+#      - model/sequence_model/**
+#      - src/sequence_model/**
+#      - test/sequence_model/**
   workflow_call:
     inputs:
       exec_environment:
@@ -22,13 +22,13 @@ on:
         type: string
         description: "The type of model to run the workflow for"
         required: true
-        default: "nyc_taxi"
+        default: "sequence_model"
 permissions:
   id-token: write
-  contents: read          
+  contents: read         
 jobs:
   run-ci-workflow:
     uses: ./.github/workflows/platform_ci_workflow.yml
     with:
       exec_environment: ${{ inputs.exec_environment || 'dev' }}
-      model_type: ${{ inputs.model_type || 'nyc_taxi' }}
+      model_type: ${{ inputs.model_type || 'sequence_model' }}

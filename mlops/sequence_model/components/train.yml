@@ -1,0 +1,18 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+version: 1
+name: train_sequence_model
+display_name: TrainSequenceModel
+type: command
+inputs:
+  dataset_folder:
+    type: uri_folder
+outputs:
+  model_artifacts:
+    type: uri_folder
+code: ./../../../
+environment: azureml:sequence-model:1
+command: >-
+  python -m src.sequence_model.train.train
+  --dataset_folder ${{inputs.dataset_folder}}
+  --model_artifacts ${{outputs.model_artifacts}}
+  --model_config src/sequence_model/common/model_config.yml

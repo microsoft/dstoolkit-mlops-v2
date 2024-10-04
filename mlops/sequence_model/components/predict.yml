@@ -1,0 +1,21 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+version: 1
+name: predict_sequence_model
+display_name: PredictSequenceModel
+type: command
+inputs:
+  dataset_folder:
+    type: uri_folder
+  model_artifacts:
+    type: uri_folder
+outputs:
+  predictions_folder:
+    type: uri_folder
+code: ./../../../
+environment: azureml:sequence-model:1
+command: >-
+  python -m src.sequence_model.predict.predict
+  --dataset_folder ${{inputs.dataset_folder}}
+  --model_artifacts ${{inputs.model_artifacts}}
+  --predictions_folder ${{outputs.predictions_folder}}
+  --model_config src/sequence_model/common/model_config.yml

@@ -1,0 +1,26 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+version: 1
+name: register_sequence_model
+display_name: RegisterSequenceModel
+type: command
+inputs:
+  model_name:
+    type: string
+  score_report_folder:
+    type: uri_folder
+  benchmark_report_folder:
+    type: uri_folder
+  model_artifacts:
+    type: uri_folder
+  predictions_folder:
+    type: uri_folder
+code: ./../../../
+environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu@latest
+command: >-
+  python -m src.sequence_model.register.register
+  --model_name ${{inputs.model_name}}
+  --score_report_folder ${{inputs.score_report_folder}}
+  --benchmark_report_folder ${{inputs.benchmark_report_folder}}
+  --model_artifacts ${{inputs.model_artifacts}}
+  --predictions_folder ${{inputs.predictions_folder}}
+  --model_config src/sequence_model/common/model_config.yml

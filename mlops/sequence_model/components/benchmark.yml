@@ -1,0 +1,18 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+version: 1
+name: benchmark_sequence_model
+display_name: BenchmarkSequenceModel
+type: command
+inputs:
+  score_report_folder:
+    type: uri_folder
+outputs:
+  benchmark_report_folder:
+    type: uri_folder
+environment: azureml:sequence-model:1
+code: ./../../../
+command: >-
+  python -m src.sequence_model.benchmark.benchmark
+  --score_report_folder ${{inputs.score_report_folder}}
+  --benchmark_report_folder ${{outputs.benchmark_report_folder}}
+  --model_config src/sequence_model/common/model_config.yml
