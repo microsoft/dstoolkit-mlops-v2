@@ -1,5 +1,53 @@
+parameters:
+  - name: is_docker
+    displayName: "Is Docker used for build validation?"
+    type: boolean
+    default: false
+  - name: image_name
+    displayName: "Name of the Docker image"
+    type: string
+  - name: model_type
+    displayName: "Model Type"
+    type: string
+
 jobs:
+- job: Build_Validation_Pipeline_Docker
+  condition: eq(${{ parameters.is_docker }}, true)
+  steps:
+  - script: |
+      python -m pip install --upgrade pip
+      pip install -r .azure-pipelines/requirements/build_validation_requirements.txt
+      flake8 .
+    displayName: 'Install dependencies and run linting'
+
+  - script: | 
+      echo "Building Docker container for validation with tag: ${{ parameters.image_name }}"
+      docker build -t ${{ parameters.image_name }} -f mlops/${{ parameters.model_type }}/environment/Dockerfile mlops/${{ parameters.model_type }}/environment
+    displayName: 'Build Docker container'
+
+  - script: |
+      echo "Running Docker container for validation"
+      docker run --rm --mount type=bind,src=.,dst=/workspace ${{ parameters.image_name }} /bin/bash -c "
+        sudo chown -R vscode /workspace &&
+        python -m pip install --upgrade pip &&
+        pip install -r .azure-pipelines/requirements/build_validation_requirements.txt &&
+        python -m pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
+      "
+    displayName: 'Run tests in Docker container'
+  
+  - task: PublishTestResults@2
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFiles: '**/test-*.xml'
+      testRunTitle: 'Publish Test Results for Python $(python.version)'
+
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
+
 - job: Build_Validation_Pipeline
+  condition: eq(${{ parameters.is_docker }}, false)
   steps:
   - task: UsePythonVersion@0
     displayName: 'Use Python 3.9'
