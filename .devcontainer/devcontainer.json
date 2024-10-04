@@ -5,18 +5,29 @@
 	"context": ".",
 	"dockerFile": "Dockerfile",
 
-	// Set *default* container specific settings.json values on container create.
-	"settings": {
-		"terminal.integrated.shell.linux": "/bin/bash"
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"terminal.integrated.shell.linux": "/bin/bash",
+				"[python]": {
+					"editor.defaultFormatter": "ms-python.black-formatter",
+					"editor.formatOnSave": true,
+					"editor.codeActionsOnSave": {
+						"source.organizeImports": "explicit"
+					}
+				},
+				"isort.args":["--profile", "black"]
+			},
+			"extensions": [
+				"leojhonsong.python-extension-pack",
+				"njqdev.vscode-python-typehint",
+				"formulahendry.code-runner",
+				"redhat.vscode-yaml",
+				"streetsidesoftware.code-spell-checker",
+				"ms-python.black-formatter",
+				"ms-python.isort"
+			]
+		}
 	},
-
-	// Add the IDs of extensions you want installed when the container is created.
-	"extensions": [
-		"ms-python.python",
-		"ms-toolsai.vscode-ai",
-		"ms-toolsai.jupyter",
-		"redhat.vscode-yaml"
-	],
-
-	"runArgs": ["-v", "/var/run/docker.sock:/var/run/docker.sock"]
+	"runArgs": ["-v", "/var/run/docker.sock:/var/run/docker.sock"],
 }
