@@ -18,7 +18,7 @@ This solution supports Azure Machine Learning (ML) as a platform for ML, and Azu
 
 ## Setup your source control environment
 
-**Step 1.** Clone the repository, create a *development* branch, and make it the default branch so that all PRs merge to it. This guide assumes that the team works with a *development* branch as the primary source for coding and improving model quality. Later, you can implement an Azure Pipeline to move code from the *development* branch to qa/main or that executes a release process with each check-in. However, release management is not in scope of this guide.
+**Step 1.** Clone the repository, create a *main* branch, and make it the default branch so that all PRs merge to it. This guide assumes that the team works with a *main* branch as the primary source for coding and improving model quality. Later, you can implement an Azure Pipeline to move code from the *main* branch to qa/main or that executes a release process with each check-in. However, release management is not in scope of this guide.
 
 ## Azure DevOps Setup
 
