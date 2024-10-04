@@ -1,6 +1,6 @@
 # Testing the initial setup
 
-**Step 1.** In the main branch, supply an explicit value or accept the defaults in the file, config/config.yaml. The pipelines uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi). The config.yaml file is split into the following sections, set the values in each section:
+**Step 1.** In the development branch, supply an explicit value or accept the defaults in the file, config/config.yaml. The pipelines uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi). The config.yaml file is split into the following sections, set the values in each section:
 
 - aml_config: Stores the configuration of azure resources hosting the Azure Machine Learning workspace.
 - environment_config: Stores the base image and dynamic properties set at runtime.
@@ -28,7 +28,6 @@ Pipelines:
 
 - .azure-pipelines/nyc_taxi_pr_pipeline.yml
 - .azure-pipelines/london_taxi_pr_pipeline.yml
-- .azure-pipelines/docker_taxi_pr_pipeline.yml
 
 **Step 4.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
 
@@ -41,7 +40,6 @@ Pipelines:
 
 - .azure-pipelines/nyc_taxi_ci_pipeline.yml
 - .azure-pipelines/london_taxi_ci_pipeline.yml
-- .azure-pipelines/docker_taxi_ci_pipeline.yml
 
 ## Github Workflows Steps
 
@@ -65,7 +63,6 @@ Pipelines:
 
 - .github/workflows/nyc_taxi_pr_pipeline.yml
 - .github/workflows/london_taxi_pr_pipeline.yml
-- .github/workflows/docker_taxi_pr_pipeline.yml
 
 **Step 4.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
 Pipeline Parameters:
@@ -77,7 +74,6 @@ Pipelines:
 
 - .github/workflows/nyc_taxi_ci_pipeline.yml
 - .github/workflows/london_taxi_ci_pipeline.yml
-- .github/workflows/docker_taxi_ci_pipeline.yml
 
 Below is the sample job run for the CI Pipeline.
 

@@ -3,9 +3,10 @@ name: Nyc Taxi CI Workflow
 on:
   push:
     branches:
-      - main
+      - development
     paths:
       - mlops/common/**
+      - mlops/**
       - mlops/nyc_taxi/**
       - model/nyc_taxi/**
       - src/nyc_src/**

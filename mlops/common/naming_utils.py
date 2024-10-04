@@ -1,8 +1,6 @@
 """This module contains a few utility methods that generate names for for experiments, runs, models."""
-
 import subprocess
 import os
-import re
 
 
 def generate_experiment_name(model_name: str):
@@ -24,7 +22,6 @@ def generate_experiment_name(model_name: str):
         ).strip()
 
     git_branch = git_branch.split("/")[-1]
-    git_branch = re.sub(r"[^a-zA-Z0-9_-]+", "", git_branch)
     return f"{model_name}_{git_branch}"
 
 

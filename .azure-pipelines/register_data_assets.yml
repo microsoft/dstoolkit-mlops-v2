@@ -7,8 +7,6 @@ pool:
 
 variables:
 - group: mlops_platform_dev_vg
-- name: PIP_CACHE_DIR
-  value: $(Pipeline.Workspace)/.pip/register_assets
 
 stages:
 - stage: register_datasets

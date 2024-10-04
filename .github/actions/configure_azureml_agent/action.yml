@@ -13,7 +13,7 @@ runs:
     - name: Checkout
       uses: actions/checkout@v1
 
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v4
       with:
         python-version: ${{ inputs.versionSpec }}
 
