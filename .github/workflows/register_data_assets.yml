@@ -1,12 +1,7 @@
 name: Register Datasets
 
-# TODO restore
-# on:
-#   workflow_dispatch:
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
 
 env:
   PYTHON_VERSION: "3.9"
