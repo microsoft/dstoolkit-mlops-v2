@@ -18,7 +18,7 @@ This solution supports Azure Machine Learning (ML) as a platform for ML, and Azu
 
 ## Setup your source control environment
 
-**Step 1.** Clone the repository, create a *development* branch, and make it the default branch so that all PRs merge to it. This guide assumes that the team works with a *development* branch as the primary source for coding and improving model quality. Later, you can implement an Azure Pipeline to move code from the *development* branch to qa/main or that executes a release process with each check-in. However, release management is not in scope of this guide.
+**Step 1.** Clone the repository, create a *main* branch, and make it the default branch so that all PRs merge to it. This guide assumes that the team works with a *main* branch as the primary source for coding and improving model quality. Later, you can implement an Azure Pipeline to move code from the *main* branch to qa/main or that executes a release process with each check-in. However, release management is not in scope of this guide.
 
 ## Azure DevOps Setup
 
@@ -65,15 +65,19 @@ Details about how to create a basic Azure Pipeline can be found in [Create your 
 
 * nyc_taxi
 * london_taxi
+* docker_taxi
 
 **Step 7.** Create one or more Azure Pipelines to setup continuous integration for either or both of the use cases listed below:
 
 * nyc_taxi
 * london_taxi
+* docker_taxi
 
 **Step 8.** At the Organization Level within Azure Devops, add the Azure DevLabs Machine Learning extension by searching for Machine Learning, clicking the extension pictured below, and then Install on the ensuing page. If you do not have the required permissions, please ask the administrator of the organization to install the extension on your behalf.  
 
 ![Azure Machine Learning Extension](../media/machinelearningextension.png)
+
+**Step 9.** Use the boolean variable `is_docker` in your GitHub workflows and Azure Pipelines to determine if the unit tests need to use Docker. Set `is_docker` to "true" if the unit tests require Docker, otherwise set it to "false". This variable can be used to conditionally run Docker-related steps in your CI/CD pipelines.
 
 ## GitHub Workflows Setup
 

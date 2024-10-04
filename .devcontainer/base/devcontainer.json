@@ -1,0 +1,33 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/miniconda
+{
+	"name": "DSToolKit",
+	"context": ".",
+	"dockerFile": "Dockerfile",
+
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"terminal.integrated.shell.linux": "/bin/bash",
+				"[python]": {
+					"editor.defaultFormatter": "ms-python.black-formatter",
+					"editor.formatOnSave": true,
+					"editor.codeActionsOnSave": {
+						"source.organizeImports": "explicit"
+					}
+				},
+				"isort.args":["--profile", "black"]
+			},
+			"extensions": [
+				"leojhonsong.python-extension-pack",
+				"njqdev.vscode-python-typehint",
+				"formulahendry.code-runner",
+				"redhat.vscode-yaml",
+				"streetsidesoftware.code-spell-checker",
+				"ms-python.black-formatter",
+				"ms-python.isort"
+			]
+		}
+	},
+	"runArgs": ["-v", "/var/run/docker.sock:/var/run/docker.sock"],
+}

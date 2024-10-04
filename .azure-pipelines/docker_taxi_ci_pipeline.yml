@@ -1,0 +1,34 @@
+pr: none
+trigger:
+  branches:
+   include:
+     - main
+  paths:
+    include:
+      - .azure-pipelines/*
+      - mlops/common/*
+      - mlops/docker_taxi/*
+      - src/docker_taxi_src/*
+      - model/docker_taxi/*
+      - src/shared/*
+
+pool:
+  vmImage: ubuntu-latest
+
+
+variables:
+- group: mlops_platform_dev_vg
+
+parameters:
+ - name: env_name
+   displayName: "Execution Environment"
+   default: "dev"
+ - name: model_type
+   displayName: "model type"
+   default: "docker_taxi"
+
+stages:
+  - template: templates/platform_ci_pipeline.yml
+    parameters:
+      exec_environment: ${{ parameters.env_name }}
+      model_type: ${{ parameters.model_type }}

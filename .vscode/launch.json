@@ -1,0 +1,74 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Register Data Asset",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "mlops.common.register_data_asset",
+            "args": [
+                "--data_config_path",
+                "config/data_config.json"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Start NYC Taxi Local Pipeline",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "mlops.nyc_taxi.start_local_pipeline",
+            "args": [
+                "--build_environment=${input:build_environment}",
+                "--wait_for_completion=${input:wait_for_completion}"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Start London Taxi Local Pipeline",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "mlops.london_taxi.start_local_pipeline",
+            "args": [
+                "--build_environment=${input:build_environment}",
+                "--wait_for_completion=${input:wait_for_completion}"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Start Docker Taxi Local Pipeline",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "mlops.docker_taxi.start_local_pipeline",
+            "args": [
+                "--build_environment=${input:build_environment}",
+                "--wait_for_completion=${input:wait_for_completion}"
+           ],
+            "console": "integratedTerminal"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "build_environment",
+            "type": "pickString",
+            "options": [
+                "pr",
+                "dev"
+            ],
+            "description": "The build environment (ex: pr, dev, prod)",
+            "default": "pr",
+        },
+        {
+            "id": "wait_for_completion",
+            "type": "pickString",
+            "options": [
+                "True",
+                "False"
+            ],
+            "description": "Wait for the completion of the pipeline (True/False)",
+            "default": "False",
+        }
+    ]
+}

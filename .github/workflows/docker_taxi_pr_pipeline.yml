@@ -1,0 +1,40 @@
+name: Custom Object Detection PR Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/**'
+      - 'mlops/common/**'
+      - 'mlops/docker_taxi/**'
+      - 'model/docker_taxi/**'
+      - 'src/docker_taxi_src/**'
+      - 'test/docker_taxi/**'
+  workflow_call:
+    inputs:
+      exec_environment:
+        type: string
+        description: "The environment to run the workflow in"
+        required: true
+        default: "pr"
+      model_type:
+        type: string
+        description: "The type of model to run the workflow for"
+        required: true
+        default: "docker_taxi"
+      is_docker:
+        type: boolean
+        description: "Is Docker used for build validation?"
+        required: true
+        default: true
+permissions:
+  id-token: write
+  contents: read    
+jobs:
+  run-pr-workflow:
+    uses: ./.github/workflows/platform_pr_workflow.yml
+    with:
+      exec_environment: ${{ inputs.exec_environment || 'pr' }}
+      model_type: ${{ inputs.model_type || 'docker_taxi' }}
+      is_docker: ${{ inputs.is_docker || true }}

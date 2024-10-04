@@ -47,7 +47,9 @@ Start by copying an existing pipeline config and accepting the defaults or modif
 - cluster_region: Azure region in which the AML compute cluster should be hosted.
 - cluster_size: Set to an Azure VM Size according to the naming convention here: [Azure VM Sizes](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes).
 - cluster_name: A string representing the name of the compute cluster.
-- conda_path: The path within the solution to the conda file used to establish the dependencies needed by a given model.
+- conda_path: The path within the solution to the conda file used to establish the dependencies needed by a given model. (Optional if using `dockerfile_path` and `docker_context_path`)
+- dockerfile_path: The path to the Dockerfile used to build the Docker image for the environment. (Optional if using `conda_path`)
+- docker_context_path: The context path for the Docker build, typically the directory containing the Dockerfile. (Required if using `dockerfile_path`)
 - aml_env_name: A string denoting the name of a given environment for a given model.
 - dataset_name: The name of the dataset used when training the model.
 
