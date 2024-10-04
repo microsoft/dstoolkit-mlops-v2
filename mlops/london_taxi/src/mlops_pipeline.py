@@ -26,6 +26,24 @@ gl_pipeline_components = []
 
 @pipeline()
 def london_taxi_data_regression(pipeline_job_input, model_name, build_reference):
+    """
+    Executes a regression pipeline for London taxi data.
+    This function orchestrates a series of pipeline components to prepare, transform,
+    train, predict, and score a regression model using the provided input data.
+    Args:
+        pipeline_job_input: The raw input data for the pipeline.
+        model_name (str): The name of the model to be used.
+        build_reference (str): A reference identifier for the build.
+    Returns:
+        dict: A dictionary containing the outputs of various stages of the pipeline:
+            - "pipeline_job_prepped_data": The prepared data from the first pipeline component.
+            - "pipeline_job_transformed_data": The transformed data from the second pipeline component.
+            - "pipeline_job_trained_model": The trained model from the third pipeline component.
+            - "pipeline_job_test_data": The test data used for predictions.
+            - "pipeline_job_predictions": The predictions made by the model.
+            - "pipeline_job_score_report": The score report generated from the predictions.
+    """
+
     prepare_sample_data = gl_pipeline_components[0](raw_data=pipeline_job_input)
     transform_sample_data = gl_pipeline_components[1](
         clean_data=prepare_sample_data.outputs.prep_data
@@ -63,12 +81,11 @@ class London_Taxi:
     This class defines the machine learning pipeline for processing, training, and evaluating data.
     """
 
-    def __init__(self, environment_name, build_reference, model_name, dataset_name):
+    def __init__(self, environment_name, build_reference, published_model_name, dataset_name, build_environment, wait_for_completion, output_file, model_name):
         """
         Initialize the pipeline job components.
 
         Args:
-            ml_client: The machine learning client.
             environment_name (str): The name of the environment to use for pipeline execution.
             build_reference (str): The build reference for the pipeline job.
             model_name (str): The name of the model.
@@ -76,13 +93,20 @@ class London_Taxi:
         """
         self.environment_name = environment_name
         self.build_reference = build_reference
-        self.model_name = model_name
+        self.published_model_name = published_model_name
         self.dataset_name = dataset_name
         self.gl_pipeline_components = []
+        self.build_environment = build_environment,
+        self.wait_for_completion = wait_for_completion,
+        self.output_file = output_file,
+        self.model_name = model_name
 
     def construct_pipeline(self, ml_client):
         """
-        Construct a pipeline job for NYC taxi data regression.
+        Construct a pipeline job for London taxi data regression.
+
+        Args:
+            ml_client: The Azure ML client to use for retrieving data assets and components.
 
         Returns:
             pipeline_job: The constructed pipeline job components.
@@ -130,7 +154,15 @@ class London_Taxi:
 def prepare_and_execute(
     model_name, build_environment, wait_for_completion, output_file
 ):
+    """
+    Prepare and execute the pipeline.
 
+    Args:
+        model_name (str): The name of the model.
+        build_environment (str): The build environment configuration.
+        wait_for_completion (str): Whether to wait for the pipeline job to complete.
+        output_file (str): A file to save the run ID.
+    """
     config = MLOpsConfig(environment=build_environment)
 
     pipeline_config = config.get_pipeline_config(model_name)
@@ -148,15 +180,17 @@ def prepare_and_execute(
     print(f"Environment: {environment.name}, version: {environment.version}")
 
     pipeline = London_Taxi(
-        f"azureml:{environment.name}:{environment.version}",
-        config.environment_configuration["build_reference"],
-        published_model_name,
-        pipeline_config["dataset_name"],
+        environment_name=f"azureml:{environment.name}:{environment.version}",
+        build_reference=config.environment_configuration["build_reference"],
+        published_model_name=published_model_name,
+        dataset_name=pipeline_config["dataset_name"],
+        build_environment=build_environment,
+        wait_for_completion=wait_for_completion,
+        output_file=output_file,
+        model_name=model_name,
     )
 
-    prepare_and_execute_pipeline(
-        pipeline, model_name, build_environment, wait_for_completion, output_file
-    )
+    prepare_and_execute_pipeline(pipeline)
 
 
 def main():
@@ -173,7 +207,7 @@ def main():
     parser.add_argument(
         "--wait_for_completion",
         type=str,
-        help="determine if pipeline to wait for job completion",
+        help="determine if pipeline should wait for job completion",
         default="True",
     )
     parser.add_argument(

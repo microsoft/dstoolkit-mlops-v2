@@ -127,9 +127,9 @@ def execute_pipeline(
         raise
 
 
-def prepare_and_execute_pipeline(pipeline, model_name, build_environment, wait_for_completion, output_file):
+def prepare_and_execute_pipeline(pipeline):
 
-    config = MLOpsConfig(environment=build_environment)
+    config = MLOpsConfig(environment=pipeline.build_environment)
 
     ml_client = MLClient(
         DefaultAzureCredential(),
@@ -138,8 +138,8 @@ def prepare_and_execute_pipeline(pipeline, model_name, build_environment, wait_f
         config.aml_config["workspace_name"],
     )
 
-    pipeline_config = config.get_pipeline_config(model_name)
-    published_experiment_name = generate_experiment_name(model_name)
+    pipeline_config = config.get_pipeline_config(pipeline.model_name)
+    published_experiment_name = generate_experiment_name(pipeline.model_name)
     published_run_name = generate_run_name(config.environment_configuration["build_reference"])
 
     compute = get_compute(
@@ -157,8 +157,8 @@ def prepare_and_execute_pipeline(pipeline, model_name, build_environment, wait_f
         pipeline_job,
         cluster_name=compute.name,
         display_name=published_run_name,
-        build_environment=build_environment,
-        build_reference=model_name,
+        build_environment=pipeline.build_environment,
+        build_reference=pipeline.model_name,
     )
 
     execute_pipeline(
@@ -167,6 +167,6 @@ def prepare_and_execute_pipeline(pipeline, model_name, build_environment, wait_f
         config.aml_config["workspace_name"],
         published_experiment_name,
         pipeline_job,
-        wait_for_completion,
-        output_file,
+        pipeline.wait_for_completion,
+        pipeline.output_file,
     )
