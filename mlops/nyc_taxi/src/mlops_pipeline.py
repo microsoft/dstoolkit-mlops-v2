@@ -33,7 +33,7 @@ def nyc_taxi_data_regression(pipeline_job_input, model_name, build_reference):
         pipeline_job_input (str): Path to the input data.
         model_name (str): Name of the model.
         build_reference (str): Reference for the build.
-    
+
     Returns:
         dict: A dictionary containing paths to various data, the model, predictions, and score report.
     """

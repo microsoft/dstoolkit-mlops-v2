@@ -28,7 +28,7 @@ gl_pipeline_components = []
 def london_taxi_data_regression(pipeline_job_input, model_name, build_reference):
     """
     Run a pipeline for regression analysis on London taxi data.
-    
+
     Args:
         pipeline_job_input: The raw input data for the pipeline.
         model_name (str): The name of the model to be used.
