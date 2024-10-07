@@ -36,12 +36,6 @@ def london_taxi_data_regression(pipeline_job_input, model_name, build_reference)
         build_reference (str): A reference identifier for the build.
     Returns:
         dict: A dictionary containing the outputs of various stages of the pipeline:
-            - "pipeline_job_prepped_data": The prepared data from the first pipeline component.
-            - "pipeline_job_transformed_data": The transformed data from the second pipeline component.
-            - "pipeline_job_trained_model": The trained model from the third pipeline component.
-            - "pipeline_job_test_data": The test data used for predictions.
-            - "pipeline_job_predictions": The predictions made by the model.
-            - "pipeline_job_score_report": The score report generated from the predictions.
     """
 
     prepare_sample_data = gl_pipeline_components[0](
