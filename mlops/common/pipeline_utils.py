@@ -17,23 +17,33 @@ def set_pipeline_properties(
     pipeline_job: pipeline,
     cluster_name: str,
     display_name: str,
-    build_environment: str,
-    build_reference: str,
+    tags: dict,
+    default_datastore: str = "workspaceblobstore",
+    force_rerun: bool = True
 ):
     """
+    Set properties for the pipeline job.
+
+    Args:
+        pipeline_job (pipeline): The pipeline job to set properties for.
+        cluster_name (str): The name of the compute cluster.
+        display_name (str): The display name for the pipeline job.
+        tags (dict): A dictionary of key-value pairs to set as tags for the pipeline job.
+        default_datastore (str, optional): The default datastore for the pipeline job. Defaults to "workspaceblobstore".
+        force_rerun (bool, optional): Whether to force rerun the pipeline job. Defaults to True.
+
+    Returns:
+        pipeline: The updated pipeline job with the specified properties.
     """
 
     pipeline_job.display_name = display_name
-    pipeline_job.tags = {
-        "environment": build_environment,
-        "build_reference": build_reference,
-    }
+    pipeline_job.tags = tags
 
     # set pipeline level compute
     pipeline_job.settings.default_compute = cluster_name
-    pipeline_job.settings.force_rerun = True
+    pipeline_job.settings.force_rerun = force_rerun
     # set pipeline level datastore
-    pipeline_job.settings.default_datastore = "workspaceblobstore"
+    pipeline_job.settings.default_datastore = default_datastore
 
     return pipeline_job
 
@@ -186,12 +196,16 @@ def prepare_and_execute_pipeline(pipeline):
 
     pipeline_job = pipeline.construct_pipeline(ml_client)
 
+    pipeline_job_tags = {
+        "environment": pipeline.build_environment,
+        "build_reference": pipeline.model_name,
+    }
+
     pipeline_job = set_pipeline_properties(
         pipeline_job,
         cluster_name=compute.name,
         display_name=published_run_name,
-        build_environment=pipeline.build_environment,
-        build_reference=pipeline.model_name,
+        tags=pipeline_job_tags
     )
 
     execute_pipeline(
