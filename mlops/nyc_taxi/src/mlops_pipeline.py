@@ -27,15 +27,15 @@ gl_pipeline_components = []
 @pipeline()
 def nyc_taxi_data_regression(pipeline_job_input, model_name, build_reference):
     """
-    Executes a regression pipeline for NYC taxi data.
-    This function orchestrates a series of pipeline components to prepare, transform,
-    train, predict, and score a regression model using the provided input data.
+    Run a pipeline for regression analysis on NYC taxi data.
+
     Args:
-        pipeline_job_input: The raw input data for the pipeline.
-        model_name (str): The name of the model to be used.
-        build_reference (str): A reference identifier for the build.
+        pipeline_job_input (str): Path to the input data.
+        model_name (str): Name of the model.
+        build_reference (str): Reference for the build.
+    
     Returns:
-        dict: A dictionary containing the outputs of various stages of the pipeline:
+        dict: A dictionary containing paths to various data, the model, predictions, and score report.
     """
 
     prepare_sample_data = gl_pipeline_components[0](

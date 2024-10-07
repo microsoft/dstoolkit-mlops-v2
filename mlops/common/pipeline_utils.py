@@ -1,6 +1,7 @@
 """
 This module defines a machine learning pipeline for processing, training, and evaluating data.
 """
+
 from azure.identity import DefaultAzureCredential
 from azure.core.exceptions import ClientAuthenticationError
 from azure.ai.ml.dsl import pipeline
@@ -10,7 +11,12 @@ import time
 from mlops.common.config_utils import MLOpsConfig
 from mlops.common.get_compute import get_compute
 from mlops.common.get_environment import get_environment
-from mlops.common.naming_utils import generate_experiment_name, generate_run_name, generate_environment_name
+from mlops.common.naming_utils import (
+    generate_experiment_name,
+    generate_run_name,
+    generate_environment_name,
+)
+from mlops.common.pipeline_job_config import PipelineJobConfig
 
 
 def set_pipeline_properties(
@@ -19,7 +25,7 @@ def set_pipeline_properties(
     display_name: str,
     tags: dict,
     default_datastore: str = "workspaceblobstore",
-    force_rerun: bool = True
+    force_rerun: bool = True,
 ):
     """
     Set properties for the pipeline job.
@@ -47,6 +53,7 @@ def set_pipeline_properties(
 
     return pipeline_job
 
+
 def execute_pipeline(
     subscription_id: str,
     resource_group_name: str,
@@ -70,9 +77,6 @@ def execute_pipeline(
 
     Raises:
         Exception: If the job fails to complete.
-
-    Returns:
-        None
     """
     try:
         client = MLClient(
@@ -156,7 +160,13 @@ def execute_pipeline(
         raise
 
 
-def prepare_and_execute_pipeline(pipeline):
+def prepare_and_execute_pipeline(pipeline: PipelineJobConfig):
+    """
+    Prepare and execute the MLOps pipeline.
+
+    Args:
+        pipeline (PipelineJobConfig): The pipeline job configuration.
+    """
 
     config = MLOpsConfig(environment=pipeline.build_environment)
     pipeline_config = config.get_pipeline_config(pipeline.model_name)
@@ -189,7 +199,9 @@ def prepare_and_execute_pipeline(pipeline):
     )
 
     published_experiment_name = generate_experiment_name(pipeline.model_name)
-    published_run_name = generate_run_name(config.environment_configuration["build_reference"])
+    published_run_name = generate_run_name(
+        config.environment_configuration["build_reference"]
+    )
     environment_name = generate_environment_name(environment.name, environment.version)
 
     pipeline.environment_name = environment_name
@@ -205,7 +217,7 @@ def prepare_and_execute_pipeline(pipeline):
         pipeline_job,
         cluster_name=compute.name,
         display_name=published_run_name,
-        tags=pipeline_job_tags
+        tags=pipeline_job_tags,
     )
 
     execute_pipeline(
