@@ -18,7 +18,7 @@ from azure.ai.ml import load_component
 import os
 from mlops.common.config_utils import MLOpsConfig
 from mlops.common.naming_utils import generate_model_name
-from mlops.common.pipeline import Pipeline
+from mlops.common.pipeline_job_config import PipelineJobConfig
 from mlops.common.pipeline_utils import prepare_and_execute_pipeline
 
 gl_pipeline_components = []
@@ -78,7 +78,7 @@ def london_taxi_data_regression(pipeline_job_input, model_name, build_reference)
     }
 
 
-class London_Taxi(Pipeline):
+class London_Taxi(PipelineJobConfig):
     """
     This is a machine learning pipeline class for processing, training, and evaluating data related to London taxi trips.
 

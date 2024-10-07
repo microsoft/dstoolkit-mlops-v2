@@ -19,7 +19,7 @@ import os
 from mlops.common.config_utils import MLOpsConfig
 from mlops.common.naming_utils import generate_model_name
 from mlops.common.pipeline_utils import prepare_and_execute_pipeline
-from mlops.common.pipeline import Pipeline
+from mlops.common.pipeline_job_config import PipelineJobConfig
 
 gl_pipeline_components = []
 
@@ -78,7 +78,7 @@ def nyc_taxi_data_regression(pipeline_job_input, model_name, build_reference):
     }
 
 
-class NYC_Taxi(Pipeline):
+class NYC_Taxi(PipelineJobConfig):
     """
     This is a machine learning pipeline class for processing, training, and evaluating data related to NYC taxi trips.
 
