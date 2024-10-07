@@ -6,26 +6,25 @@ The idea of this template is to provide a minimum number of scripts to implement
 
 The template contains the following folders/files:
 
-- .github: the folder contains Github Workflow related files(yaml files to define the Builds).
-- .azure-pipelines: the folder contains Azure DevOps related files (yaml files to define Builds).
-- docs: documentation.
-- src: source code that is not related to Azure ML directly. Usually, there is data science related code.
-- mlops: scripts that are related to Azure ML.
-- mlops/london-taxi, mlops/nyc-taxi: fake pipelines with some basic code.
-- .amlignore: using this file we are removing all the folders and files that are not supposed to be in Azure ML compute.
+- [.github](.github): the folder contains Github Workflow related files (yaml files to define the Builds).
+- [.azure-pipelines](.azure-pipelines): the folder contains Azure DevOps related files (yaml files to define Builds).
+- [docs](docs): documentation.
+- [src](src): source code that is not related to Azure ML directly. Usually, there is data science related code.
+- [mlops](mlops): scripts that are related to Azure ML.
+- [mlops/london-taxi](mlops/london-taxi), [mlops/nyc-taxi](mlops/nyc-taxi), [mlops/docker_taxi](mlops/docker_taxi): fake pipelines with some basic code.
+- [.amlignore](.amlignore): using this file we are removing all the folders and files that are not supposed to be in Azure ML compute.
 
 The template contains the following documents:
 
-- docs/BranchingStrategy.md: Explains a recommended branching strategy.
-- docs/FAQ.md: Contains a list of one or more frequently asked questions.
-- docs/GeneralDocumentation.md: Provides guidance and recommended practices on MLOps in general.
-- docs/GettingStarted.md: Explains the process for setting up your implementation of Model Factory.
-- docs/InfrastructureDesign.md: Contains high-level visual representation of the infrastructure used in the solution.
-- docs/OnboardingNewModel.md: Explains the procedure for adding a new model to the solution.
-- docs/TestInitialSetup.md: Explains the procedure to follow to test the ability to deploy an infrastructure, run pr and ci builds.
-- CONTRIBUTING.md: Explains the process for contributing to the project
-- LICENSE.md: A standard License terms document.
-- SECURITY.md: Explains procedure for raising security issues and vulnerabilities in this solution.
+- [docs/how-to/BranchingStrategy.md](docs/how-to/BranchingStrategy.md): Explains a recommended branching strategy.
+- [docs/how-to/GettingStarted.md](docs/how-to/GettingStarted.md): Explains the process for setting up your implementation of Model Factory.
+- [docs/how-to/InfrastructureDesign.md](docs/how-to/InfrastructureDesign.md): Contains high-level visual representation of the infrastructure used in the solution.
+- [docs/how-to/OnboardingNewModel.md](docs/how-to/OnboardingNewModel.md): Explains the procedure for adding a new model to the solution.
+- [docs/how-to/TestInitialSetup.md](docs/how-to/TestInitialSetup.md): Explains the procedure to follow to test the ability to deploy an infrastructure, run pr and ci builds.
+- [docs/references/References.md](docs/references/References.md): Contains references and additional resources related to the project.
+- [CONTRIBUTING.md](CONTRIBUTING.md): Explains the process for contributing to the project.
+- [LICENSE.md](LICENSE.md): A standard License terms document.
+- [SECURITY.md](SECURITY.md): Explains procedure for raising security issues and vulnerabilities in this solution.
 
 ## How to use the repo
 
@@ -43,19 +42,29 @@ You can start training pipelines from your local computer by creating an environ
 - Install [Azure Cli and Azure ML extensions](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-configure-cli?view=azureml-api-2&tabs=public#installation)
 - Create the an environment on your local machine using one of the following options below.
 
-- (Option 1). VSCode dev container
+- (Option 1). VSCode base dev container
   - Run the docker desktop daemon
-    - Open repo in the [provided dev container](.devcontainer/devcontainer.json) in VSCode
-      - Open VSCode terminal after the repo is opened in the dev container
+  - Open repo in VSCode
+    - Open the Command Palette (Ctrl+Shift+P)
+    - Select "Reopen in Container"
+    - Choose the base dev container: "DSToolkit .devcontainer\base\devcontainer.json"
+    - Open VSCode terminal after the repo is opened in the dev container
 
-- (Option 2). Create a local conda environment
+- (Option 2). Use the docker_taxi Dockerfile for the dev container
+  - Run the docker desktop daemon
+  - Open repo in VSCode
+    - Open the Command Palette (Ctrl+Shift+P)
+    - Select "Reopen in Container"
+    - Choose the custom dev container: "DSToolkit-DockerTaxi .devcontainer\docker_taxi\devcontainer.json"
+    - Open VSCode terminal after the repo is opened in the dev container
+
+- (Option 3). Create a local conda environment
 
   - Open the terminal and run the following commands to create a conda environment (we assume that anaconda has been installed on your local computer):
 
     - conda env create -name dstoolkit Python=3.9 # this does not work for some computers, the code could be conda create --name dstoolkit python=3.9
     - conda activate dstoolkit # if this doesn't work in your terminal, you can go to the Anaconda Navigator, click Environments, click dstoolkit and then hit the green play button and open terminal from there. 
     - pip install -r .devcontainer/requirements.txt
-
 - Sign in with Azure CLI : run `az login -t <your tenant>`
 
 - **Note**: Before running the training pipeline locally, you will have to have the data assets registered. If not already done, you can register the data using the following command:

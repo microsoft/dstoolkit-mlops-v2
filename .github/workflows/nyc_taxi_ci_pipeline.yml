@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - mlops/common/**
-      - mlops/**
       - mlops/nyc_taxi/**
       - model/nyc_taxi/**
       - src/nyc_src/**

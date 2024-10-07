@@ -2,18 +2,76 @@ name: Build Validation Workflow
 
 on:
   workflow_call:
+    inputs:
+      image_name:
+        type: string
+        description: "Execution Environment"
+        required: false
+      model_type:
+        type: string
+        description: "type of model to execute"
+        required: false
+      is_docker:
+        type: boolean
+        description: "Is Docker used for build validation?"
+        required: false
+        default: false
 
 env:
   PYTHON_VERSION: "3.9"
 
 jobs:
-  run-unit-tests:
+  run-unit-tests-docker:
+    if: ${{ inputs.is_docker == true }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Load Python Dependencies
+        shell: bash
+        run: |
+          set -e
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade -r .github/requirements/build_validation_requirements.txt      
+      - name: Lint Code
+        run: flake8
+
+      - name: Build Docker container
+        shell: bash
+        run: |
+          echo "Building Docker container for validation with tag: ${{ inputs.image_name }}"
+          docker build -t ${{ inputs.image_name }} -f mlops/${{ inputs.model_type }}/environment/Dockerfile mlops/${{ inputs.model_type }}/environment
+
+      - name: Run tests in Docker container
+        shell: bash
+        run: |
+          echo "Running Docker container for validation"
+          docker run --rm --mount type=bind,src=.,dst=/workspace ${{ inputs.image_name }} /bin/bash -c "
+            sudo chown -R vscode /workspace &&
+            python -m pip install --upgrade pip &&
+            pip install -r .github/requirements/build_validation_requirements.txt &&
+            python -m pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
+          "
+
+      - name: Publish Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: "**/test-*.xml"
+
+  run-unit-tests:
+    if: ${{ inputs.is_docker == false }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
