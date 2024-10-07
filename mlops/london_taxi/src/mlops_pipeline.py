@@ -43,12 +43,14 @@ def london_taxi_data_regression(pipeline_job_input, model_name, build_reference)
             - "pipeline_job_score_report": The score report generated from the predictions.
     """
 
-    prepare_sample_data = gl_pipeline_components[0](raw_data=pipeline_job_input)
+    prepare_sample_data = gl_pipeline_components[0](
+        raw_data=pipeline_job_input,
+    )
     transform_sample_data = gl_pipeline_components[1](
-        clean_data=prepare_sample_data.outputs.prep_data
+        clean_data=prepare_sample_data.outputs.prep_data,
     )
     train_with_sample_data = gl_pipeline_components[2](
-        training_data=transform_sample_data.outputs.transformed_data
+        training_data=transform_sample_data.outputs.transformed_data,
     )
     predict_with_sample_data = gl_pipeline_components[3](
         model_input=train_with_sample_data.outputs.model_output,
