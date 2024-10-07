@@ -149,7 +149,6 @@ def execute_pipeline(
 def prepare_and_execute_pipeline(pipeline):
 
     config = MLOpsConfig(environment=pipeline.build_environment)
-    
     pipeline_config = config.get_pipeline_config(pipeline.model_name)
 
     ml_client = MLClient(

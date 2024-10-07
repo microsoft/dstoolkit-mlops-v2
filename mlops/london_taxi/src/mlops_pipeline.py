@@ -18,6 +18,7 @@ from azure.ai.ml import load_component
 import os
 from mlops.common.config_utils import MLOpsConfig
 from mlops.common.naming_utils import generate_model_name
+from mlops.common.pipeline import Pipeline
 from mlops.common.pipeline_utils import prepare_and_execute_pipeline
 
 gl_pipeline_components = []
@@ -77,43 +78,13 @@ def london_taxi_data_regression(pipeline_job_input, model_name, build_reference)
     }
 
 
-class London_Taxi:
+class London_Taxi(Pipeline):
     """
-    This class defines the machine learning pipeline for processing, training, and evaluating data.
+    This is a machine learning pipeline class for processing, training, and evaluating data related to London taxi trips.
+
+    This class extends the Pipeline class and provides specific implementations for the London taxi data regression pipeline.
+    It includes methods for constructing the pipeline.
     """
-
-    def __init__(
-        self,
-        environment_name: str,
-        build_reference: str,
-        published_model_name: str,
-        dataset_name: str,
-        build_environment: str,
-        wait_for_completion: str,
-        output_file: str,
-        model_name: str,
-    ):
-        """
-        Initialize the pipeline job components.
-
-        Args:
-            environment_name (str): The name of the environment to use for pipeline execution.
-            build_reference (str): The build reference for the pipeline job.
-            published_model_name (str): The name of the published model.
-            dataset_name (str): The name of the dataset.
-            build_environment (str): The build environment configuration.
-            wait_for_completion (str): Whether to wait for the pipeline job to complete.
-            output_file (str): A file to save the run ID.
-            model_name (str): The name of the model.
-        """
-        self.environment_name = environment_name
-        self.build_reference = build_reference
-        self.published_model_name = published_model_name
-        self.dataset_name = dataset_name
-        self.build_environment = build_environment
-        self.wait_for_completion = wait_for_completion
-        self.output_file = output_file
-        self.model_name = model_name
 
     def construct_pipeline(self, ml_client):
         """
