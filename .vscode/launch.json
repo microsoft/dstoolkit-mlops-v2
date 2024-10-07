@@ -41,7 +41,7 @@
             "name": "Start Docker Taxi Local Pipeline",
             "type": "debugpy",
             "request": "launch",
-            "module": "mlops.docker_taxi.start_local_pipeline",
+            "module": "mlops.docker_taxi.src.mlops_pipeline",
             "args": [
                 "--build_environment=${input:build_environment}",
                 "--wait_for_completion=${input:wait_for_completion}"

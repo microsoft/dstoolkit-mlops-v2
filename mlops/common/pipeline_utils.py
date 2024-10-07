@@ -171,9 +171,11 @@ def prepare_and_execute_pipeline(pipeline):
         config.aml_config["subscription_id"],
         config.aml_config["resource_group_name"],
         config.aml_config["workspace_name"],
-        config.environment_configuration["env_base_image"],
-        pipeline_config["conda_path"],
-        pipeline_config["aml_env_name"],
+        env_base_image=config.environment_configuration["env_base_image"],
+        environment_name=pipeline_config["aml_env_name"],
+        docker_context_path=pipeline_config.get("docker_context_path", None),
+        dockerfile_path=pipeline_config.get("dockerfile_path", None),
+        conda_path=pipeline_config.get("conda_path", None),
     )
 
     published_experiment_name = generate_experiment_name(pipeline.model_name)
