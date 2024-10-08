@@ -1,15 +1,15 @@
-# Continuous integration (cd) for nyc taxi model 
-name: Nyc Taxi CD Workflow
+name: Custom Object Detection CD Workflow
+
 on:
   push:
     branches:
       - main
     paths:
       - mlops/common/**
-      - mlops/nyc_taxi/**
-      - model/nyc_taxi/**
-      - src/nyc_src/**
-      - test/nyc_taxi/**
+      - mlops/docker_taxi/**
+      - model/docker_taxi/**
+      - src/docker_taxi_src/**
+      - test/docker_taxi/**
   workflow_call:
     inputs:
       exec_environment:
@@ -21,13 +21,13 @@ on:
         type: string
         description: "The type of model to run the workflow for"
         required: true
-        default: "nyc_taxi"
+        default: "docker_taxi"
 permissions:
   id-token: write
   contents: read          
 jobs:
-  run-cd-workflow:
+  run-ci-workflow:
     uses: ./.github/workflows/platform_cd_workflow.yml
     with:
       exec_environment: ${{ inputs.exec_environment || 'dev' }}
-      model_type: ${{ inputs.model_type || 'nyc_taxi' }}
+      model_type: ${{ inputs.model_type || 'docker_taxi' }}

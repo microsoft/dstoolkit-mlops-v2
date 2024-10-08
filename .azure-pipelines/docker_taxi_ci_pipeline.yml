@@ -1,5 +1,5 @@
-pr: none
-trigger:
+trigger: none
+pr:
   branches:
    include:
      - main
@@ -11,7 +11,6 @@ trigger:
       - src/docker_taxi_src/*
       - model/docker_taxi/*
       - src/shared/*
-
 pool:
   vmImage: ubuntu-latest
 
@@ -22,13 +21,18 @@ variables:
 parameters:
  - name: env_name
    displayName: "Execution Environment"
-   default: "dev"
+   default: "pr"
  - name: model_type
    displayName: "model type"
    default: "docker_taxi"
+ - name: is_docker
+   displayName: "Is Docker used for build validation?"
+   type: boolean
+   default: true
 
 stages:
   - template: templates/platform_ci_pipeline.yml
     parameters:
       exec_environment: ${{ parameters.env_name }}
       model_type: ${{ parameters.model_type }}
+      is_docker: ${{ parameters.is_docker }}

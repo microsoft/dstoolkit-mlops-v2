@@ -12,6 +12,11 @@ on:
         type: string
         description: "type of model to execute"
         required: true
+      is_docker:
+          type: boolean
+          description: "Is Docker used for build validation?"
+          required: false
+          default: false
 env:
   SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
   RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
@@ -24,6 +29,11 @@ jobs:
   build-validation:
     name: Build Validation
     uses: ./.github/workflows/build_validation_workflow.yml
+    with:
+      image_name: ${{ inputs.exec_environment }}
+      model_type: ${{ inputs.model_type }}
+      is_docker: ${{ inputs.is_docker }}
+      
   execute-ml-job-pipeline:
     name: Execute ML Job Pipeline
     runs-on: ubuntu-latest
