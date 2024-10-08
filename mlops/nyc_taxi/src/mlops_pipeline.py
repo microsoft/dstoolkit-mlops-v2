@@ -295,9 +295,9 @@ def prepare_and_execute(
         config.aml_config["subscription_id"],
         config.aml_config["resource_group_name"],
         config.aml_config["workspace_name"],
-        config.environment_configuration["env_base_image"],
-        pipeline_config["conda_path"],
-        pipeline_config["aml_env_name"],
+        env_base_image=config.environment_configuration["env_base_image"],
+        conda_path=pipeline_config["conda_path"],
+        environment_name=pipeline_config["aml_env_name"],
     )
 
     print(f"Environment: {environment.name}, version: {environment.version}")

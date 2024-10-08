@@ -28,8 +28,9 @@ Pipelines:
 
 - .azure-pipelines/nyc_taxi_ci_pipeline.yml
 - .azure-pipelines/london_taxi_ci_pipeline.yml
+- .azure-pipelines/docker_taxi_ci_pipeline.yml
 
-**Step 4.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
+**Step 4.** *Run CD pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
 
 Pipeline Parameters:
 
@@ -40,6 +41,7 @@ Pipelines:
 
 - .azure-pipelines/nyc_taxi_cd_pipeline.yml
 - .azure-pipelines/london_taxi_cd_pipeline.yml
+- .azure-pipelines/docker_taxi_cd_pipeline.yml
 
 ## Github Workflows Steps
 
@@ -63,8 +65,9 @@ Pipelines:
 
 - .github/workflows/nyc_taxi_ci_pipeline.yml
 - .github/workflows/london_taxi_ci_pipeline.yml
+- .github/workflows/docker_taxi_ci_pipeline.yml
 
-**Step 4.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
+**Step 4.** *Run CD pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
 Pipeline Parameters:
 
 - exec_environment: The environment to run the workflow in. Set to "cd" by default
@@ -74,6 +77,7 @@ Pipelines:
 
 - .github/workflows/nyc_taxi_cd_pipeline.yml
 - .github/workflows/london_taxi_cd_pipeline.yml
+- .github/workflows/docker_taxi_cd_pipeline.yml
 
 Below is the sample job run for the CI Pipeline.
 
