@@ -3,8 +3,8 @@
 This solution supports Azure Machine Learning (ML) as a platform for ML, and Azure DevOps or github as a platform for operationalization. MLOps with Model Factory provides automation of the following:
 
 * Infrastructure provisioning using either Azure Pipelines or github workflows using either Bicep or Terraform as the IaC language.
-* A PR build triggered upon changes to one or more models.
-* A CI build and deployment of one or more models to batch and online endpoints.
+* A CI build triggered upon changes to one or more models.
+* A CD build and deployment of one or more models to batch and online endpoints.
 
 ## Assumptions
 
@@ -12,7 +12,7 @@ This solution supports Azure Machine Learning (ML) as a platform for ML, and Azu
 
 * Your team has an Azure Subscription within which to host Model Factory. If you don't have an Azure subscription, create a free account  by following this link. [Free Azure Subscription](https://azure.microsoft.com/en-us/free/search/?ef_id=_k_67e7bdd2a501151df8d8d83b02edc75b_k_&OCID=AIDcmm5edswduu_SEM__k_67e7bdd2a501151df8d8d83b02edc75b_k_&msclkid=67e7bdd2a501151df8d8d83b02edc75b)
 
-* You have created a service connection using workload identity federation to be used to operate the infrastructure, and AML build and ci pipelines. [Connect to Azure by using an Azure Resource Manager service connection](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops). The above process will automatically create the federated credential needed to run Azure Pipelines, however, it will be necessary to add two more federated credentials to support github actions workflows.  Follow the instructions on this page to setup two federated credentials, [Use GitHub Actions to connect to Azure](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-portal%2Cwindows#add-federated-credentials). Create one federated credential using Pull Request as entity type, and one using Branch as entity type and specifying the root branch in your repository.
+* You have created a service connection using workload identity federation to be used to operate the infrastructure, and AML build and CD pipelines. [Connect to Azure by using an Azure Resource Manager service connection](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops). The above process will automatically create the federated credential needed to run Azure Pipelines, however, it will be necessary to add two more federated credentials to support github actions workflows.  Follow the instructions on this page to setup two federated credentials, [Use GitHub Actions to connect to Azure](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-portal%2Cwindows#add-federated-credentials). Create one federated credential using Pull Request as entity type, and one using Branch as entity type and specifying the root branch in your repository.
 
 * You have granted the service principal above, at least Contributor, and User Access Administrator on the target subscription in Azure.
 
@@ -51,7 +51,7 @@ This solution supports Azure Machine Learning (ML) as a platform for ML, and Azu
 
 **Model Deployment Variables.**
 
-**Note Models may be deployed to either batch, online, or both endpoints by setting the properties below. When both are configured to True, the ci pipeline will execute to both endpoints simultaneously.**
+**Note Models may be deployed to either batch, online, or both endpoints by setting the properties below. When both are configured to True, the CD pipeline will execute to both endpoints simultaneously.**
 
 * "IS_BATCH_DEPLOYMENT" - Set to True to deploy models to a batch endpoint.
 * "IS_ONLINE_DEPLOYMENT" - Set to True to deploy models to an online Endpoint.
@@ -90,8 +90,8 @@ Details about how to create a basic Azure Pipeline can be found in [Create your 
 * ARM_TENANT_ID: The tenant id corresponding to the service principal backing the service connection created above.
 * AZURE_RM_SVC_CONNECTION: The service connection name.
 * CONTAINER_REGISTRY_NAME: A string compliant with the naming convention for an azure container registry resource.
-* IS_BATCH_DEPLOYMENT: A Boolean indicating whether to create a batch deployment when executing a given model's ci pipeline.
-* IS_ONLINE_DEPLOYMENT: A Boolean indicating whether to create on online deployment when executing a given model's ci pipeline.
+* IS_BATCH_DEPLOYMENT: A Boolean indicating whether to create a batch deployment when executing a given model's CD pipeline.
+* IS_ONLINE_DEPLOYMENT: A Boolean indicating whether to create on online deployment when executing a given model's CD pipeline.
 * KEYVAULT_NAME: A string compliant with the naming convention for an azure key vault resource.
 * LOCATION: A string compliant with the naming convention for an azure region short name.
 * RESOURCE_GROUP_NAME: A string compliant with the naming convention for an azure resource group resource.
