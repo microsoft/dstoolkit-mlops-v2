@@ -24,7 +24,8 @@ env:
   ARM_CLIENT_ID: ${{vars.ARM_CLIENT_ID}}
   ARM_TENANT_ID: ${{vars.ARM_TENANT_ID}}
   BUILD_BUILDID: ${{ github.run_id }}
-  BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}          
+  BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}  
+
 jobs:
   build-validation:
     name: Build Validation
@@ -39,18 +40,23 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-validation
     steps:
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.SUBSCRIPTION_ID }}
+
       - name: Checkout Actions
         uses: actions/checkout@v1
+
+
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
     
       - name: Execute AzureML Pipeline
-        uses: ./.github/actions/execute_shell_code
-        with:
-            arm_client_id: ${{ env.ARM_CLIENT_ID }}
-            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
-            subscription_id: ${{ env.SUBSCRIPTION_ID }}
-            script_parameter: |
-                python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
-                    --build_environment ${{ inputs.exec_environment }} \
-                    --wait_for_completion True
+        shell: bash
+        run: |
+              python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
+                  --build_environment ${{ inputs.exec_environment }} \
+                  --wait_for_completion True

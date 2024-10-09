@@ -24,21 +24,27 @@ jobs:
     name: Execute training job
     runs-on: ubuntu-latest
     steps:
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.SUBSCRIPTION_ID }}
+
       - name: Checkout Actions
         uses: actions/checkout@v1
+
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
+
       - name: Execute MLOps Standard Pipeline
-        uses: ./.github/actions/execute_shell_code
-        with:
-            arm_client_id: ${{ env.ARM_CLIENT_ID }}
-            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
-            subscription_id: ${{ env.SUBSCRIPTION_ID }}
-            script_parameter: |
-                python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
-                  --build_environment ${{ inputs.exec_environment }} \
-                  --wait_for_completion True \
-                  --output_file run_id.txt
+        shell: bash
+        run: |
+            python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
+              --build_environment ${{ inputs.exec_environment }} \
+              --wait_for_completion True \
+              --output_file run_id.txt
+
       - name: Read Run ID
         shell: bash
         run: |
@@ -46,18 +52,14 @@ jobs:
           run_name=${arr[0]}
           echo $run_name
           echo "RUN_NAME=${run_name}"  >> "$GITHUB_ENV"
+
       - name: Run Metadata
-        uses: ./.github/actions/execute_shell_code
-        env: 
-            RUN_NAME: ${{ env.RUN_NAME }} # pass the run_name as env var
-        with:
-            arm_client_id: ${{ env.ARM_CLIENT_ID }}
-            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
-            subscription_id: ${{ env.SUBSCRIPTION_ID }}
-            script_parameter: |
-                python -m mlops.common.get_run_metadata \
-                  --run_id $RUN_NAME \
-                  --output_file_name metadata.txt
+        shell: bash
+        run: |
+            python -m mlops.common.get_run_metadata \
+              --run_id $RUN_NAME \
+              --output_file_name metadata.txt
+
       - name: Read Metadata
         shell: bash
         run: |
@@ -74,42 +76,41 @@ jobs:
       contents: read
     needs: [execute-training-job]
     steps:
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.SUBSCRIPTION_ID }}
+
       - name: Checkout Actions
         uses: actions/checkout@v1
+
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
+
       - name: Provision azureml online endpoint
-        uses: ./.github/actions/execute_shell_code
-        with:
-            arm_client_id: ${{ env.ARM_CLIENT_ID }}
-            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
-            subscription_id: ${{ env.SUBSCRIPTION_ID }}
-            script_parameter: |
-                python -m mlops.common.deployment.provision_online_endpoint \
-                  --model_type ${{ inputs.model_type }} \
-                  --environment_name ${{ inputs.exec_environment }} \
-                  --run_id ${{ github.run_id }} 
+        shell: bash
+        run: |
+            python -m mlops.common.deployment.provision_online_endpoint \
+              --model_type ${{ inputs.model_type }} \
+              --environment_name ${{ inputs.exec_environment }} \
+              --run_id ${{ github.run_id }} 
+
       - name: Provision azureml deployment
-        uses: ./.github/actions/execute_shell_code
-        with: 
-            arm_client_id: ${{ env.ARM_CLIENT_ID }}
-            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
-            subscription_id: ${{ env.SUBSCRIPTION_ID }}
-            script_parameter: |
-                python -m mlops.common.deployment.provision_online_deployment \
-                  --model_type ${{ inputs.model_type }} \
-                  --environment_name ${{ inputs.exec_environment }} \
-                  --run_id ${{ github.run_id }}
+        shell: bash
+        run: | 
+            python -m mlops.common.deployment.provision_online_deployment \
+              --model_type ${{ inputs.model_type }} \
+              --environment_name ${{ inputs.exec_environment }} \
+              --run_id ${{ github.run_id }}
+
       - name: Test azureml real endpoint
-        uses: ./.github/actions/execute_shell_code
-        with:
-            arm_client_id: ${{ env.ARM_CLIENT_ID }}
-            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
-            subscription_id: ${{ env.SUBSCRIPTION_ID }}
-            script_parameter: |
-                python -m mlops.common.deployment.run_test_model_on_aml \
-                    --environment_name ${{ inputs.exec_environment }} \
-                    --model_type ${{ inputs.model_type }}
+        shell: bash
+        run: |
+            python -m mlops.common.deployment.run_test_model_on_aml \
+                --environment_name ${{ inputs.exec_environment }} \
+                --model_type ${{ inputs.model_type }}
 
   deploy-batch:
     name: Deploy_Batch
@@ -119,44 +120,44 @@ jobs:
       contents: read
     needs: [execute-training-job]
     steps:
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.SUBSCRIPTION_ID }}
+
       - name: Checkout Actions
         uses: actions/checkout@v1
+
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
+
       - name: Provision azureml online endpoint
-        uses: ./.github/actions/execute_shell_code
-        with:
-            arm_client_id: ${{ env.ARM_CLIENT_ID }}
-            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
-            subscription_id: ${{ env.SUBSCRIPTION_ID }}
-            script_parameter: |
-                python -m mlops.common.deployment.provision_batch_endpoint \
-                  --run_id ${{ github.run_id }} \
-                  --environment_name ${{ inputs.exec_environment }} \
-                  --model_type ${{ inputs.model_type }}
+        shell: bash
+        run: |
+            python -m mlops.common.deployment.provision_batch_endpoint \
+              --run_id ${{ github.run_id }} \
+              --environment_name ${{ inputs.exec_environment }} \
+              --model_type ${{ inputs.model_type }}
+
       - name: Wait for 180 seconds
         run: sleep 180
+
       - name: Provision azureml deployment
-        uses: ./.github/actions/execute_shell_code
-        with:
-            arm_client_id: ${{ env.ARM_CLIENT_ID }}
-            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
-            subscription_id: ${{ env.SUBSCRIPTION_ID }}
-            script_parameter: |
-                python -m mlops.common.deployment.provision_batch_deployment \
-                  --run_id ${{ github.run_id }} \
-                  --environment_name ${{ inputs.exec_environment }} \
-                  --model_type ${{ inputs.model_type }}
+        shell: bash
+        run: |
+            python -m mlops.common.deployment.provision_batch_deployment \
+              --run_id ${{ github.run_id }} \
+              --environment_name ${{ inputs.exec_environment }} \
+              --model_type ${{ inputs.model_type }}
+
       - name: Test azureml batch endpoint
-        uses: ./.github/actions/execute_shell_code
-        with:
-            arm_client_id: ${{ env.ARM_CLIENT_ID }}
-            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
-            subscription_id: ${{ env.SUBSCRIPTION_ID }}
-            script_parameter: |
-                python -m mlops.common.deployment.run_test_batch_deployment \
-                  --environment_name ${{ inputs.exec_environment }} \
-                  --model_type ${{ inputs.model_type }}
+        shell: bash
+        run: |
+            python -m mlops.common.deployment.run_test_batch_deployment \
+              --environment_name ${{ inputs.exec_environment }} \
+              --model_type ${{ inputs.model_type }}
 
   change_model_tag:
     name: Apply Production Tag
@@ -168,16 +169,21 @@ jobs:
     environment:
         name: dev
     steps:
-        - name: Checkout Actions
-          uses: actions/checkout@v1
-        - name: Configure Azure ML Agent
-          uses: ./.github/actions/configure_azureml_agent
-        - name: Provision azureml online endpoint
-          uses: ./.github/actions/execute_shell_code
-          with:
-            arm_client_id: ${{ env.ARM_CLIENT_ID }}
-            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
-            subscription_id: ${{ env.SUBSCRIPTION_ID }}
-            script_parameter: |
-                python -m mlops.common.deployment.approve_model \
-                  --model_type ${{ inputs.model_type }}
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.SUBSCRIPTION_ID }}
+
+      - name: Checkout Actions
+        uses: actions/checkout@v1
+
+      - name: Configure Azure ML Agent
+        uses: ./.github/actions/configure_azureml_agent
+        
+      - name: Provision azureml online endpoint
+        shell: bash
+        run: |
+            python -m mlops.common.deployment.approve_model \
+              --model_type ${{ inputs.model_type }}

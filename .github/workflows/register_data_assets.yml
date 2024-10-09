@@ -17,16 +17,21 @@ jobs:
       id-token: write
       contents: read
     steps:
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.SUBSCRIPTION_ID }}
+
       - name: Checkout
         uses: actions/checkout@v1
+
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
+
       - name: Execute Dataset Registration
-        uses: ./.github/actions/execute_shell_code
-        with:
-          arm_client_id: ${{ env.ARM_CLIENT_ID }}
-          arm_tenant_id: ${{ env.ARM_TENANT_ID }}
-          subscription_id: ${{ env.SUBSCRIPTION_ID }}
-          script_parameter: |
+        shell: bash
+        run: |
               python -m mlops.common.register_data_asset \
                   --data_config_path config/data_config.json

@@ -26,7 +26,7 @@ permissions:
   id-token: write
   contents: read          
 jobs:
-  run-ci-workflow:
+  run-cd-workflow:
     uses: ./.github/workflows/platform_cd_workflow.yml
     with:
       exec_environment: ${{ inputs.exec_environment || 'dev' }}
