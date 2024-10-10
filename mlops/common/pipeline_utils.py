@@ -1,6 +1,4 @@
-"""
-This module defines a machine learning pipeline for processing, training, and evaluating data.
-"""
+"""This module defines a machine learning pipeline for processing, training, and evaluating data."""
 
 from azure.identity import DefaultAzureCredential
 from azure.core.exceptions import ClientAuthenticationError
@@ -41,7 +39,6 @@ def set_pipeline_properties(
     Returns:
         pipeline: The updated pipeline job with the specified properties.
     """
-
     pipeline_job.display_name = display_name
     pipeline_job.tags = tags
 
@@ -167,7 +164,6 @@ def prepare_and_execute_pipeline(pipeline: PipelineJobConfig):
     Args:
         pipeline (PipelineJobConfig): The pipeline job configuration.
     """
-
     config = MLOpsConfig(environment=pipeline.build_environment)
     pipeline_config = config.get_pipeline_config(pipeline.model_name)
 

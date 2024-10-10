@@ -1,12 +1,8 @@
-"""
-A module to define the Pipeline class for setting up and managing pipeline job properties.
-"""
+"""A module to define the Pipeline class for setting up and managing pipeline job properties."""
 
 
 class PipelineJobConfig:
-    """
-    A class to set up the common properties of a pipeline job.
-    """
+    """A class to set up the common properties of a pipeline job."""
 
     def __init__(
         self,

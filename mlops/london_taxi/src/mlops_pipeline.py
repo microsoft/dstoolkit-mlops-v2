@@ -37,7 +37,6 @@ def london_taxi_data_regression(pipeline_job_input, model_name, build_reference)
     Returns:
         dict: A dictionary containing the outputs of various stages of the pipeline:
     """
-
     prepare_sample_data = gl_pipeline_components[0](
         raw_data=pipeline_job_input,
     )
@@ -72,12 +71,12 @@ def london_taxi_data_regression(pipeline_job_input, model_name, build_reference)
     }
 
 
-class London_Taxi(PipelineJobConfig):
+class LondonTaxi(PipelineJobConfig):
     """
-    This is a machine learning pipeline class for processing, training, and evaluating data related to London taxi trips.
+    Class for the London taxi data Azure ML pipeline configuration and construction.
 
-    This class extends the Pipeline class and provides specific implementations for the London taxi data regression pipeline.
-    It includes methods for constructing the pipeline.
+    This class extends the Pipeline class and provides specific implementations for the London taxi data
+    regression pipeline. It includes methods for constructing the pipeline.
     """
 
     def construct_pipeline(self, ml_client):
@@ -147,7 +146,7 @@ def prepare_and_execute(
     pipeline_config = config.get_pipeline_config(model_name)
     published_model_name = generate_model_name(model_name)
 
-    pipeline = London_Taxi(
+    pipeline = LondonTaxi(
         environment_name=None,  # will be set in prepare_and_execute_pipeline
         build_reference=config.environment_configuration["build_reference"],
         published_model_name=published_model_name,

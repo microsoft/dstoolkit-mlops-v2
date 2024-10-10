@@ -37,7 +37,6 @@ def nyc_taxi_data_regression(pipeline_job_input, model_name, build_reference):
     Returns:
         dict: A dictionary containing paths to various data, the model, predictions, and score report.
     """
-
     prepare_sample_data = gl_pipeline_components[0](
         raw_data=pipeline_job_input,
     )
@@ -72,12 +71,12 @@ def nyc_taxi_data_regression(pipeline_job_input, model_name, build_reference):
     }
 
 
-class NYC_Taxi(PipelineJobConfig):
+class NYCTaxi(PipelineJobConfig):
     """
-    This is a machine learning pipeline class for processing, training, and evaluating data related to NYC taxi trips.
+    Class for the NYC taxi data Azure ML pipeline configuration and construction.
 
-    This class extends the Pipeline class and provides specific implementations for the NYC taxi data regression pipeline.
-    It includes methods for constructing the pipeline.
+    This class extends the Pipeline class and provides specific implementations for the NYC taxi data
+    regression pipeline. It includes methods for constructing the pipeline.
     """
 
     def construct_pipeline(self, ml_client):
@@ -147,7 +146,7 @@ def prepare_and_execute(
     pipeline_config = config.get_pipeline_config(model_name)
     published_model_name = generate_model_name(model_name)
 
-    pipeline = NYC_Taxi(
+    pipeline = NYCTaxi(
         environment_name=None,  # will be set in prepare_and_execute_pipeline
         build_reference=config.environment_configuration["build_reference"],
         published_model_name=published_model_name,
