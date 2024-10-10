@@ -3,6 +3,7 @@
 import os
 import logging
 import pandas as pd
+import pathlib
 from typing import List
 import yaml
 from seq_model import NgramModel
@@ -33,8 +34,11 @@ def init():
     contents = os.listdir('.')
     for item in contents:
         print(item)
+    
+    path = pathlib.Path(__file__).with_name(model_cfg_path)
+    cfg = yaml.safe_load(path.open())
 
-    cfg = yaml.safe_load(open(model_cfg_path))
+    #cfg = yaml.safe_load(open(model_cfg_path))
     model_cfg = cfg['model']
     # deserialize the model
     model = NgramModel(
