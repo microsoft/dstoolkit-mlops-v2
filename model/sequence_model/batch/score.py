@@ -30,6 +30,10 @@ def init():
     )
     model_cfg_path = "model_config.yml"
 
+    contents = os.listdir('.')
+    for item in contents:
+        print(item)
+
     cfg = yaml.safe_load(open(model_cfg_path))
     model_cfg = cfg['model']
     # deserialize the model
