@@ -1,5 +1,5 @@
-pr: none
-trigger:
+trigger: none
+pr:
   branches:
    include:
      - main
@@ -15,16 +15,15 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-
 variables:
 - group: mlops_platform_dev_vg
 - name: PIP_CACHE_DIR
-  value: $(Pipeline.Workspace)/.pip/configure_agent
+  value: $(Pipeline.Workspace)/.pip/build_validation
 
 parameters:
  - name: env_name
    displayName: "Execution Environment"
-   default: "dev"
+   default: "pr"
  - name: model_type
    displayName: "model type"
    default: "london_taxi"

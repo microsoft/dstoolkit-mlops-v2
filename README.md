@@ -131,6 +131,63 @@ You can use Visual Studio Code to run and debug specific tasks related to the ML
    - **Wait for Completion:** Choose `True` if you want the pipeline to wait for completion before exiting, or `False` to allow it to run asynchronously.
 5. The output and any debugging information will be displayed in the **Debug Console** or **Integrated Terminal**, depending on the task configuration.
 
+## Build Validation Policies for Azure Repos Git
+
+### Limitation in Azure DevOps Pipelines
+
+Azure Pipelines support PR triggers in YAML configuration when the repository is hosted on **GitHub**, but **not** when the repository is hosted on **Azure Repos Git**. In other words, using the `pr:` section in YAML files works for GitHub repos, but **will not** work for Azure Repos Git.
+
+Example of a PR trigger that works in GitHub, but not in Azure Repos:
+
+```yaml
+pr:
+  - master
+  - develop
+```
+
+This limitation means that maintainers need to rely on [branch policies in Azure Repos Git](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser) to enforce build validation, rather than configuring this directly in the pipeline YAML file.
+
+### Community Issue
+
+The issue has been raised by the community, noting that Azure DevOps doesn’t support this PR trigger feature natively, which forces users to manage branch policies through the Azure DevOps UI rather than in YAML configuration. This presents an additional administrative burden as maintainers need to manage both YAML pipeline definitions and non-configuration-based policies.
+
+The community issue and thread discussion can be found [here](https://developercommunity.visualstudio.com/t/pr-triggers-in-yaml-should-be-supported-on-azure-d/385329).
+
+### Alternative: Branch Policies for Build Validation
+
+To enforce build validation in Azure Repos, branch policies provide a robust alternative. These policies allow more configuration options and are essential for protecting branches with mandatory builds before merging pull requests.
+
+Follow the steps outlined in the Azure DevOps [Branch Policies documentation](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser) to set up branch policies for build validation:
+
+**Note**: You need to have appropriate [permissions](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser#prerequisites) to create Build Validation Policies.
+
+1. Ensure you have created the Pipeline prior to creating the Build Validation Policy.
+
+1. Navigate to Branch Policies:
+    - Go to your Azure DevOps "Project Settings".
+    - Navigate to Repos > Repositories.
+    - Select the Repository from the list.
+    - Select the "Policies" tab.
+    - Find the "Branch Policies" section and select the branch you want to set the policy for (e.g., development).
+
+1. Add Build Validation:
+    - Under "Build validation", click "+" to add a build policy.
+    - Select the pipeline you want to run when a PR is created or updated.
+    - Configure the policy settings, such as requiring the build to pass before completing the PR.
+    - Fill in the optional box for the paths (see the [Paths](#set-path-policies) section for more information).
+    - Click "Save".
+
+For more information about Build Validation Policies, please see the [documentation](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser#build-validation).
+
+### Set Path Policies
+
+Each policy contains a list of paths that specify which files or directories should trigger the pipeline when
+changed. By defining these paths, we ensure that only the necessary pipelines are executed, reducing unnecessary builds and
+tests, and speeding up the overall CI/CD process. For example:
+
+- Changes to the `src/` directory trigger the build and validation pipeline.
+- Changes to the `src/london_src/*` directory trigger the london_taxi pipelines and not the nyc_taxi or docker_taxi pipelines.
+
 ### Notes
 
 - Ensure that your environment is correctly set up and all necessary dependencies are installed before running these tasks.
