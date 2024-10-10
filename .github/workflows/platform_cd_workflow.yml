@@ -1,4 +1,5 @@
 name: Platform CD Workflow
+
 on:
   workflow_call:
     inputs:
@@ -11,6 +12,7 @@ on:
         type: string
         description: "type of model to execute"
         required: true
+
 env:
   SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
   RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
@@ -18,24 +20,19 @@ env:
   ARM_CLIENT_ID: ${{vars.ARM_CLIENT_ID}}
   ARM_TENANT_ID: ${{vars.ARM_TENANT_ID}}
   BUILD_BUILDID: ${{ github.run_id }}
-  BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}            
+  BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
+
 jobs:
   execute-training-job:
     name: Execute training job
     runs-on: ubuntu-latest
     steps:
-      - name: Azure login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ env.ARM_CLIENT_ID }}
-          tenant-id: ${{ env.ARM_TENANT_ID }}
-          subscription-id: ${{ env.SUBSCRIPTION_ID }}
-
-      - name: Checkout Actions
-        uses: actions/checkout@v1
-
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
+        with:
+          arm_client_id: ${{ env.ARM_CLIENT_ID }}
+          arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+          subscription_id: ${{ env.SUBSCRIPTION_ID }}
 
       - name: Execute MLOps Standard Pipeline
         shell: bash
@@ -76,18 +73,12 @@ jobs:
       contents: read
     needs: [execute-training-job]
     steps:
-      - name: Azure login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ env.ARM_CLIENT_ID }}
-          tenant-id: ${{ env.ARM_TENANT_ID }}
-          subscription-id: ${{ env.SUBSCRIPTION_ID }}
-
-      - name: Checkout Actions
-        uses: actions/checkout@v1
-
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
+        with:
+          arm_client_id: ${{ env.ARM_CLIENT_ID }}
+          arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+          subscription_id: ${{ env.SUBSCRIPTION_ID }}
 
       - name: Provision azureml online endpoint
         shell: bash
@@ -120,18 +111,12 @@ jobs:
       contents: read
     needs: [execute-training-job]
     steps:
-      - name: Azure login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ env.ARM_CLIENT_ID }}
-          tenant-id: ${{ env.ARM_TENANT_ID }}
-          subscription-id: ${{ env.SUBSCRIPTION_ID }}
-
-      - name: Checkout Actions
-        uses: actions/checkout@v1
-
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
+        with:
+          arm_client_id: ${{ env.ARM_CLIENT_ID }}
+          arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+          subscription_id: ${{ env.SUBSCRIPTION_ID }}
 
       - name: Provision azureml online endpoint
         shell: bash
@@ -169,18 +154,12 @@ jobs:
     environment:
         name: dev
     steps:
-      - name: Azure login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ env.ARM_CLIENT_ID }}
-          tenant-id: ${{ env.ARM_TENANT_ID }}
-          subscription-id: ${{ env.SUBSCRIPTION_ID }}
-
-      - name: Checkout Actions
-        uses: actions/checkout@v1
-
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
+        with:
+          arm_client_id: ${{ env.ARM_CLIENT_ID }}
+          arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+          subscription_id: ${{ env.SUBSCRIPTION_ID }}
         
       - name: Provision azureml online endpoint
         shell: bash

@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
 
 env:
-  PYTHON_VERSION: "3.9"
   SUBSCRIPTION_ID: ${{ vars.subscription_id }}
   RESOURCE_GROUP_NAME: ${{ vars.resource_group_name }}
   WORKSPACE_NAME: ${{ vars.workspace_name }}
   ARM_CLIENT_ID:  ${{ vars.ARM_CLIENT_ID }}
   ARM_TENANT_ID:  ${{ vars.ARM_TENANT_ID }}
+
 jobs:
   run-registration:
     runs-on: ubuntu-latest
@@ -17,18 +17,12 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - name: Azure login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ env.ARM_CLIENT_ID }}
-          tenant-id: ${{ env.ARM_TENANT_ID }}
-          subscription-id: ${{ env.SUBSCRIPTION_ID }}
-
-      - name: Checkout
-        uses: actions/checkout@v1
-
       - name: Configure Azure ML Agent
         uses: ./.github/actions/configure_azureml_agent
+        with:
+          arm_client_id: ${{ env.ARM_CLIENT_ID }}
+          arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+          subscription_id: ${{ env.SUBSCRIPTION_ID }}
 
       - name: Execute Dataset Registration
         shell: bash

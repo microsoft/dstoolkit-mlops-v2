@@ -6,10 +6,26 @@ inputs:
   versionSpec:
     description: "The Python version to use in the environment."
     default: "3.9"
+  arm_client_id:
+    description: "client id of service principal used to authenticate with azure"
+    required: true
+  arm_tenant_id:
+    description: "client id of service principal used to authenticate with azure"
+    required: true    
+  subscription_id:
+    description: "client id of service principal used to authenticate with azure"
+    required: true 
 
 runs:
   using: composite
   steps:
+    - name: Azure login
+      uses: azure/login@v2
+      with:
+        client-id: ${{ inputs.arm_client_id }}
+        tenant-id: ${{ inputs.arm_tenant_id }}
+        subscription-id: ${{ inputs.subscription_id }}
+
     - name: Checkout
       uses: actions/checkout@v1
 
@@ -20,7 +36,5 @@ runs:
     - name: Load Python Dependencies
       shell: bash
       run: |
-        set -e # fail on error
         python -m pip install --upgrade pip
         python -m pip install --upgrade -r .github/requirements/execute_job_requirements.txt
-        az version
