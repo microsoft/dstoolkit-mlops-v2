@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Configure Azure ML Agent
-        uses: ./.github/actions/configure_azureml_agent
+        uses: "./.github/actions/configure_azureml_agent"
         with:
           arm_client_id: ${{ env.ARM_CLIENT_ID }}
           arm_tenant_id: ${{ env.ARM_TENANT_ID }}
@@ -74,7 +74,7 @@ jobs:
     needs: [execute-training-job]
     steps:
       - name: Configure Azure ML Agent
-        uses: ./.github/actions/configure_azureml_agent
+        uses: "./.github/actions/configure_azureml_agent"
         with:
           arm_client_id: ${{ env.ARM_CLIENT_ID }}
           arm_tenant_id: ${{ env.ARM_TENANT_ID }}
@@ -112,7 +112,7 @@ jobs:
     needs: [execute-training-job]
     steps:
       - name: Configure Azure ML Agent
-        uses: ./.github/actions/configure_azureml_agent
+        uses: "./.github/actions/configure_azureml_agent"
         with:
           arm_client_id: ${{ env.ARM_CLIENT_ID }}
           arm_tenant_id: ${{ env.ARM_TENANT_ID }}
@@ -155,7 +155,7 @@ jobs:
         name: dev
     steps:
       - name: Configure Azure ML Agent
-        uses: ./.github/actions/configure_azureml_agent
+        uses: "./.github/actions/configure_azureml_agent"
         with:
           arm_client_id: ${{ env.ARM_CLIENT_ID }}
           arm_tenant_id: ${{ env.ARM_TENANT_ID }}
