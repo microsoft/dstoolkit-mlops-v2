@@ -27,6 +27,9 @@ jobs:
     name: Execute training job
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Configure Azure ML Agent
         uses: "./.github/actions/configure_azureml_agent"
         with:
@@ -73,6 +76,9 @@ jobs:
       contents: read
     needs: [execute-training-job]
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Configure Azure ML Agent
         uses: "./.github/actions/configure_azureml_agent"
         with:
@@ -111,6 +117,9 @@ jobs:
       contents: read
     needs: [execute-training-job]
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Configure Azure ML Agent
         uses: "./.github/actions/configure_azureml_agent"
         with:
@@ -154,6 +163,9 @@ jobs:
     environment:
         name: dev
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Configure Azure ML Agent
         uses: "./.github/actions/configure_azureml_agent"
         with:

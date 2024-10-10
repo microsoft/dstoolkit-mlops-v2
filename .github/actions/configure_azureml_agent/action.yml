@@ -26,9 +26,6 @@ runs:
         tenant-id: ${{ inputs.arm_tenant_id }}
         subscription-id: ${{ inputs.subscription_id }}
 
-    - name: Checkout
-      uses: actions/checkout@v1
-
     - uses: actions/setup-python@v5
       with:
         python-version: ${{ inputs.versionSpec }}
