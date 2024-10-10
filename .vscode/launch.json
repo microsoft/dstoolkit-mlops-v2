@@ -19,7 +19,7 @@
             "name": "Start NYC Taxi Local Pipeline",
             "type": "debugpy",
             "request": "launch",
-            "module": "mlops.nyc_taxi.start_local_pipeline",
+            "module": "mlops.nyc_taxi.src.mlops_pipeline",
             "args": [
                 "--build_environment=${input:build_environment}",
                 "--wait_for_completion=${input:wait_for_completion}"
@@ -30,7 +30,7 @@
             "name": "Start London Taxi Local Pipeline",
             "type": "debugpy",
             "request": "launch",
-            "module": "mlops.london_taxi.start_local_pipeline",
+            "module": "mlops.london_taxi.src.mlops_pipeline",
             "args": [
                 "--build_environment=${input:build_environment}",
                 "--wait_for_completion=${input:wait_for_completion}"
@@ -41,7 +41,7 @@
             "name": "Start Docker Taxi Local Pipeline",
             "type": "debugpy",
             "request": "launch",
-            "module": "mlops.docker_taxi.start_local_pipeline",
+            "module": "mlops.docker_taxi.src.mlops_pipeline",
             "args": [
                 "--build_environment=${input:build_environment}",
                 "--wait_for_completion=${input:wait_for_completion}"
