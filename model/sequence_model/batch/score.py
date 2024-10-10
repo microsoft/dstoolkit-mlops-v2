@@ -70,7 +70,7 @@ def run(mini_batch: List[str]) -> pd.DataFrame:
             for line in f:
                 data = tuple(line.strip().split(" "))
                 tokenized_data = tokenizer.enc(words=data)
-                result = model.predict(tokenized_data)
+                result = model.predict(tokenized_data, top_n=3)
                 preds = tokenizer.dec(result)
                 print("Input data:", line.strip())
                 print("Possible choices for next word:", preds)
