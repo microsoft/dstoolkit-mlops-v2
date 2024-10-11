@@ -242,7 +242,7 @@ def execute_pipeline(
         print(f"The job {pipeline_job.name} has been submitted!")
 
         if wait_for_completion == "True":
-            total_wait_time = 172800
+            total_wait_time = 3600
             current_wait_time = 0
             job_status = [
                 "NotStarted",
@@ -324,12 +324,12 @@ def prepare_and_execute(
         pipeline_config["cluster_region"],
     )
     environment = get_environment(
-        config.aml_config["subscription_id"],
-        config.aml_config["resource_group_name"],
-        config.aml_config["workspace_name"],
-        config.environment_configuration["env_base_image"],
-        pipeline_config["conda_path"],
-        pipeline_config["aml_env_name"],
+        subscription_id = config.aml_config["subscription_id"],
+        resource_group_name = config.aml_config["resource_group_name"],
+        workspace_name = config.aml_config["workspace_name"],
+        env_base_image = config.environment_configuration["env_base_image"],
+        conda_path = pipeline_config["conda_path"],
+        aml_env_name = pipeline_config["aml_env_name"],
     )
     print(f"Environment: {environment.name}, version: {environment.version}")
     published_model_name = generate_model_name(model_name)
