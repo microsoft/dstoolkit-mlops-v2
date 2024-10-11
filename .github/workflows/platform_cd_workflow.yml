@@ -89,6 +89,7 @@ jobs:
       - name: Provision azureml online endpoint
         shell: bash
         run: |
+            [ -d "src/${{ inputs.model_type }}/common/" ] && cp -r src/${{ inputs.model_type }}/common/* model/${{ inputs.model_type }}/online
             python -m mlops.common.deployment.provision_online_endpoint \
               --model_type ${{ inputs.model_type }} \
               --environment_name ${{ inputs.exec_environment }} \
@@ -97,6 +98,7 @@ jobs:
       - name: Provision azureml deployment
         shell: bash
         run: | 
+            [ -d "src/${{ inputs.model_type }}/common/" ] && cp -r src/${{ inputs.model_type }}/common/* model/${{ inputs.model_type }}/online
             python -m mlops.common.deployment.provision_online_deployment \
               --model_type ${{ inputs.model_type }} \
               --environment_name ${{ inputs.exec_environment }} \
@@ -105,6 +107,7 @@ jobs:
       - name: Test azureml real endpoint
         shell: bash
         run: |
+            [ -d "src/${{ inputs.model_type }}/common/" ] && cp -r src/${{ inputs.model_type }}/common/* model/${{ inputs.model_type }}/online
             python -m mlops.common.deployment.run_test_model_on_aml \
                 --environment_name ${{ inputs.exec_environment }} \
                 --model_type ${{ inputs.model_type }}
@@ -130,6 +133,7 @@ jobs:
       - name: Provision azureml online endpoint
         shell: bash
         run: |
+            [ -d "src/${{ inputs.model_type }}/common/" ] && cp -r src/${{ inputs.model_type }}/common/* model/${{ inputs.model_type }}/online
             python -m mlops.common.deployment.provision_batch_endpoint \
               --run_id ${{ github.run_id }} \
               --environment_name ${{ inputs.exec_environment }} \
@@ -141,6 +145,7 @@ jobs:
       - name: Provision azureml deployment
         shell: bash
         run: |
+            [ -d "src/${{ inputs.model_type }}/common/" ] && cp -r src/${{ inputs.model_type }}/common/* model/${{ inputs.model_type }}/online
             python -m mlops.common.deployment.provision_batch_deployment \
               --run_id ${{ github.run_id }} \
               --environment_name ${{ inputs.exec_environment }} \
@@ -149,6 +154,7 @@ jobs:
       - name: Test azureml batch endpoint
         shell: bash
         run: |
+            [ -d "src/${{ inputs.model_type }}/common/" ] && cp -r src/${{ inputs.model_type }}/common/* model/${{ inputs.model_type }}/online
             python -m mlops.common.deployment.run_test_batch_deployment \
               --environment_name ${{ inputs.exec_environment }} \
               --model_type ${{ inputs.model_type }}
