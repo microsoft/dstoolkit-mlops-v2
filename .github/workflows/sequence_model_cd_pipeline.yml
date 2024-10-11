@@ -1,6 +1,6 @@
 name: Sequence Model CI Workflow
 on:
-  push:
+  pull_request:
     branches:
       - main
     paths:
