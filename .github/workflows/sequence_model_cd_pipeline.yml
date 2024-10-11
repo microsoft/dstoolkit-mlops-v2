@@ -1,0 +1,33 @@
+name: Sequence Model CI Workflow
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - mlops/common/**
+      - mlops/**
+      - mlops/sequence_model/**
+      - model/sequence_model/**
+      - src/sequence_model/**
+      - test/sequence_model/**
+  workflow_call:
+    inputs:
+      exec_environment:
+        type: string
+        description: "Execution Environment"
+        required: true
+        default: "dev"
+      model_type:
+        type: string
+        description: "The type of model to run the workflow for"
+        required: true
+        default: "sequence_model"
+permissions:
+  id-token: write
+  contents: read         
+jobs:
+  run-ci-workflow:
+    uses: ./.github/workflows/platform_ci_workflow.yml
+    with:
+      exec_environment: ${{ inputs.exec_environment || 'dev' }}
+      model_type: ${{ inputs.model_type || 'sequence_model' }}
