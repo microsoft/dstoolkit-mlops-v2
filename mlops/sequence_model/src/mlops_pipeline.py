@@ -316,20 +316,20 @@ def prepare_and_execute(
     )
     pipeline_config = config.get_pipeline_config(model_name)
     compute = get_compute(
-        config.aml_config["subscription_id"],
-        config.aml_config["resource_group_name"],
-        config.aml_config["workspace_name"],
-        pipeline_config["cluster_name"],
-        pipeline_config["cluster_size"],
-        pipeline_config["cluster_region"],
+        subscription_id=config.aml_config["subscription_id"],
+        resource_group_name=config.aml_config["resource_group_name"],
+        workspace_name=config.aml_config["workspace_name"],
+        cluster_name=pipeline_config["cluster_name"],
+        cluster_size=pipeline_config["cluster_size"],
+        cluster_region=pipeline_config["cluster_region"],
     )
     environment = get_environment(
-        subscription_id = config.aml_config["subscription_id"],
-        resource_group_name = config.aml_config["resource_group_name"],
-        workspace_name = config.aml_config["workspace_name"],
-        env_base_image = config.environment_configuration["env_base_image"],
-        conda_path = pipeline_config["conda_path"],
-        aml_env_name = pipeline_config["aml_env_name"],
+        subscription_id=config.aml_config["subscription_id"],
+        resource_group_name=config.aml_config["resource_group_name"],
+        workspace_name=config.aml_config["workspace_name"],
+        env_base_image=config.environment_configuration["env_base_image"],
+        conda_path=pipeline_config["conda_path"],
+        aml_env_name=pipeline_config["aml_env_name"],
     )
     print(f"Environment: {environment.name}, version: {environment.version}")
     published_model_name = generate_model_name(model_name)
