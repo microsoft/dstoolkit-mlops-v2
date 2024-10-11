@@ -69,9 +69,7 @@ def run(mini_batch: List[str]) -> pd.DataFrame:
         with open(raw_data, "r") as f:
             for line in f:
                 data = line.strip().split(" ")
-                print(data)
                 tokenized_data = tuple(tokenizer.enc(words=data))
-                print(tokenized_data)
                 result = model.predict(tokenized_data, top_n=3)
                 preds = tokenizer.dec(result)
                 print("Input data:", line.strip())

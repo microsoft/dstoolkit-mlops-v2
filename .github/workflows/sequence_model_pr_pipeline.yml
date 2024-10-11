@@ -1,18 +1,16 @@
 name: Sequence Model PR Workflow
 
 on:
-  push:
-  workflow_dispatch:
-#  pull_request:
-#    branches:
-#      - development
-#    paths:
-#      - '.github/**'
-#      - 'mlops/common/**'
-#      - 'mlops/sequence_model/**'
-#      - 'model/sequence_model/**'
-#      - 'src/sequence_model/**'
-#      - 'test/sequence_model/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/**'
+      - 'mlops/common/**'
+      - 'mlops/sequence_model/**'
+      - 'model/sequence_model/**'
+      - 'src/sequence_model/**'
+      - 'test/sequence_model/**'
   workflow_call:
     inputs:
       exec_environment:

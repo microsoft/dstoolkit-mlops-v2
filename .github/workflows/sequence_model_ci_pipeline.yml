@@ -1,16 +1,15 @@
 name: Sequence Model CI Workflow
 on:
   push:
-  workflow_dispatch:
-#    branches:
-#      - development
-#    paths:
-#      - mlops/common/**
-#      - mlops/**
-#      - mlops/sequence_model/**
-#      - model/sequence_model/**
-#      - src/sequence_model/**
-#      - test/sequence_model/**
+    branches:
+      - main
+    paths:
+      - mlops/common/**
+      - mlops/**
+      - mlops/sequence_model/**
+      - model/sequence_model/**
+      - src/sequence_model/**
+      - test/sequence_model/**
   workflow_call:
     inputs:
       exec_environment:
