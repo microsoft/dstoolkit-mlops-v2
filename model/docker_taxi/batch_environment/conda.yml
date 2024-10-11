@@ -1,0 +1,12 @@
+name: prs-env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+    - pandas
+    - numpy==1.23.5
+    - scikit-learn==1.3.2
+    - azureml-core
+    - azureml-dataset-runtime[fuse]

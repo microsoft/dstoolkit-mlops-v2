@@ -1,5 +1,5 @@
-trigger: none
-pr:
+pr: none
+trigger:
   branches:
    include:
      - main
@@ -7,29 +7,30 @@ pr:
     include:
       - .azure-pipelines/*
       - mlops/common/*
-      - mlops/london_taxi/*
-      - src/london_src/*
-      - model/london_taxi/*
+      - mlops/nyc_taxi/*
+      - src/nyc_src/*
+      - model/nyc_taxi/*
       - src/shared/*
 
 pool:
   vmImage: ubuntu-latest
 
+
 variables:
 - group: mlops_platform_dev_vg
 - name: PIP_CACHE_DIR
-  value: $(Pipeline.Workspace)/.pip/build_validation
+  value: $(Pipeline.Workspace)/.pip/configure_agent
 
 parameters:
  - name: env_name
    displayName: "Execution Environment"
-   default: "pr"
+   default: "dev"
  - name: model_type
    displayName: "model type"
-   default: "london_taxi"
+   default: "nyc_taxi"
 
 stages:
-  - template: templates/platform_pr_pipeline.yml
+  - template: templates/platform_cd_pipeline.yml
     parameters:
       exec_environment: ${{ parameters.env_name }}
       model_type: ${{ parameters.model_type }}

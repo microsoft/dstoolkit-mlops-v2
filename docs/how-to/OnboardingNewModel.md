@@ -22,7 +22,7 @@ The /config/config.yaml file contains a node for the following:
 
 - aml_config: Stores the configuration of azure resources hosting the Azure Machine Learning workspace.
 - environment_config: Stores the base image and dynamic properties set at runtime.
-- pipeline_configs: Stores the configuration for pr and dev pipelines for each model supported by the solution.
+- pipeline_configs: Stores the configuration for ci and dev pipelines for each model supported by the solution.
 - deploy_configs: Stores online and batch configuration for deployments for each model.
 
 ### aml_config
@@ -47,7 +47,9 @@ Start by copying an existing pipeline config and accepting the defaults or modif
 - cluster_region: Azure region in which the AML compute cluster should be hosted.
 - cluster_size: Set to an Azure VM Size according to the naming convention here: [Azure VM Sizes](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes).
 - cluster_name: A string representing the name of the compute cluster.
-- conda_path: The path within the solution to the conda file used to establish the dependencies needed by a given model.
+- conda_path: The path within the solution to the conda file used to establish the dependencies needed by a given model. (Optional if using `dockerfile_path` and `docker_context_path`)
+- dockerfile_path: The path to the Dockerfile used to build the Docker image for the environment. (Optional if using `conda_path`)
+- docker_context_path: The context path for the Docker build, typically the directory containing the Dockerfile. (Required if using `dockerfile_path`)
 - aml_env_name: A string denoting the name of a given environment for a given model.
 - dataset_name: The name of the dataset used when training the model.
 
@@ -140,9 +142,9 @@ The test folder contains one top level folder for each model. The name of the fo
 
 ## .azure-pipelines folder  
 
-The .azure-pipelines folder contains a pr and a ci file for each model. There are two yaml pipelines per model in this folder. Add a new pair of files for the new model and make the following changes: 
+The .azure-pipelines folder contains a ci and a cd file for each model. There are two yaml pipelines per model in this folder. Add a new pair of files for the new model and make the following changes: 
 
-- The include paths in trigger and pr section with values related to new ML Model.
+- The include paths in trigger and ci section with values related to new ML Model.
 - The default value for model_type parameter in parameters section.
 
 ## Implement a robust and scalable solution for data provisioning
@@ -151,9 +153,9 @@ When implementing model factory, use whichever method the team normally uses for
 
 ## Test the new model
 
-Having completed the steps above, you should now be able to run a test of the pr and ci builds for the new model.  Find/Fix bugs as needed until the pr and ci execute successfully.
+Having completed the steps above, you should now be able to run a test of the ci and cd builds for the new model.  Find/Fix bugs as needed until the ci and cd execute successfully.
 
 - If using Azure pipelines, run the pipeline, register_data_assets.yml to upload data for the new model.
 - If using github workflows, run the workflow , register_data_assets.yml to upload data for the new model.
-- Upon check-in, the pr model should be triggered automatically.  If it is not triggered automatically, run the pipeline manually.
-- Once the pr pipeline completes, execute the ci pipeline for the new model.
+- Upon check-in, the ci model should be triggered automatically.  If it is not triggered automatically, run the pipeline manually.
+- Once the ci pipeline completes, execute the cd pipeline for the new model.

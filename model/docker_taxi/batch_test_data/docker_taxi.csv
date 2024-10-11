@@ -1,0 +1,4 @@
+distance,dropoff_latitude,dropoff_longitude,passengers,pickup_latitude,pickup_longitude,store_forward,vendor,pickup_weekday,pickup_month,pickup_monthday,pickup_hour,pickup_minute,pickup_second,dropoff_weekday,dropoff_month,dropoff_monthday,dropoff_hour,dropoff_minute,dropoff_second
+0.9,40.73394012451172,-74.00725555419922,1,40.73118209838867,-74.00128173828125,0,1,6,1,10,11,50,31,6,1,10,11,55,51
+4.7,40.71599197387695,-73.99481964111328,1,40.71211624145508,-73.9439697265625,0,1,3,1,7,23,2,35,3,1,7,23,16,39
+1.22,40.69337844848633,-73.97087860107422,1,40.692501068115234,-73.98727416992188,0,2,5,1,30,21,4,7,5,1,30,21,9,9

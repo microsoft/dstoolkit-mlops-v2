@@ -18,28 +18,30 @@
 
 - .azure-pipelines/register_data_assets.yml
 
-**Step 3.** *Run PR pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for build validation
-Pipeline Parameters:
-
-- exec_environment: The environment to run the workflow in. Set to "pr" by default
-- model_type: The type of model for which to run the pr workflow. Set to {model name} by default
-  
-Pipelines:
-
-- .azure-pipelines/nyc_taxi_pr_pipeline.yml
-- .azure-pipelines/london_taxi_pr_pipeline.yml
-
-**Step 4.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
-
+**Step 3.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for build validation
 Pipeline Parameters:
 
 - exec_environment: The environment to run the workflow in. Set to "ci" by default
-- model_type: The type of model for which to run the pr workflow. Set to {model name} by default
-
+- model_type: The type of model for which to run the CI workflow. Set to {model name} by default
+  
 Pipelines:
 
 - .azure-pipelines/nyc_taxi_ci_pipeline.yml
 - .azure-pipelines/london_taxi_ci_pipeline.yml
+- .azure-pipelines/docker_taxi_ci_pipeline.yml
+
+**Step 4.** *Run CD pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
+
+Pipeline Parameters:
+
+- exec_environment: The environment to run the workflow in. Set to "ci" by default
+- model_type: The type of model for which to run the CI workflow. Set to {model name} by default
+
+Pipelines:
+
+- .azure-pipelines/nyc_taxi_cd_pipeline.yml
+- .azure-pipelines/london_taxi_cd_pipeline.yml
+- .azure-pipelines/docker_taxi_cd_pipeline.yml
 
 ## Github Workflows Steps
 
@@ -52,28 +54,30 @@ Pipelines:
 
 - .github/workflows/register_data_assets.yml
 
-**Step 3.** *Run PR pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for build validation
+**Step 3.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for build validation
 
-Pipeline Parameters:
-
-- exec_environment: The environment to run the workflow in. Set to "pr" by default
-- model_type: The type of model for which to run the pr workflow. Set to {model name} by default
-  
-Pipelines:
-
-- .github/workflows/nyc_taxi_pr_pipeline.yml
-- .github/workflows/london_taxi_pr_pipeline.yml
-
-**Step 4.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
 Pipeline Parameters:
 
 - exec_environment: The environment to run the workflow in. Set to "ci" by default
-- model_type: The type of model for which to run the pr workflow. Set to {model name} by default
-
+- model_type: The type of model for which to run the CI workflow. Set to {model name} by default
+  
 Pipelines:
 
 - .github/workflows/nyc_taxi_ci_pipeline.yml
 - .github/workflows/london_taxi_ci_pipeline.yml
+- .github/workflows/docker_taxi_ci_pipeline.yml
+
+**Step 4.** *Run CD pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
+Pipeline Parameters:
+
+- exec_environment: The environment to run the workflow in. Set to "cd" by default
+- model_type: The type of model for which to run the CI workflow. Set to {model name} by default
+
+Pipelines:
+
+- .github/workflows/nyc_taxi_cd_pipeline.yml
+- .github/workflows/london_taxi_cd_pipeline.yml
+- .github/workflows/docker_taxi_cd_pipeline.yml
 
 Below is the sample job run for the CI Pipeline.
 
@@ -111,7 +115,7 @@ Below is the sample job run for the CI Pipeline.
 
 - config/data_config.json
 
-**Step 2.** Since you can confidently build the infrastructure, register data assets, and run a pr and ci build for a model, you are ready to add your own use cases to the Model Factory. See [Onboarding a New Model](./OnboardingNewModel.md)
+**Step 2.** Since you can confidently build the infrastructure, register data assets, and run a ci and cd build for a model, you are ready to add your own use cases to the Model Factory. See [Onboarding a New Model](./OnboardingNewModel.md)
 
 ## Known Issues
 
