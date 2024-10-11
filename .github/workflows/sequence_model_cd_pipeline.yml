@@ -27,7 +27,7 @@ permissions:
   contents: read         
 jobs:
   run-ci-workflow:
-    uses: ./.github/workflows/platform_ci_workflow.yml
+    uses: ./.github/workflows/platform_cd_workflow.yml
     with:
       exec_environment: ${{ inputs.exec_environment || 'dev' }}
       model_type: ${{ inputs.model_type || 'sequence_model' }}
