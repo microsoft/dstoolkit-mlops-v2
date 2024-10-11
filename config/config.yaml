@@ -151,6 +151,7 @@ deployment_configs:
       batch_cluster_region: eastus
       batch_cluster_size: STANDARD_DS3_v2
       deployment_conda_path: model/sequence_model/batch_environment/conda.yml
+      deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       endpoint_name: seq-model-be-004
       endpoint_desc: A batch endpoint serving a custom model for the sequence model
       deployment_name: seq-model-bd-004

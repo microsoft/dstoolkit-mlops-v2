@@ -1,4 +1,4 @@
-name: Sequence Model CI Workflow
+name: Sequence Model CD Workflow
 on:
   pull_request:
     branches:
