@@ -153,7 +153,7 @@ deployment_configs:
       cluster_instance_count: 1
       max_concurrency_per_instance: 1
       max_retries: 3
-      retry_timeout: 300
+      retry_timeout: 600
       deployment_conda_path: model/sequence_model/batch_environment/conda.yml
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       endpoint_name: seq-model-be-004
@@ -178,7 +178,7 @@ deployment_configs:
       mini_batch_size: 10
       output_file_name: predictions.csv
       max_retries: 3
-      retry_timeout: 300
+      retry_timeout: 600
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_desc: A batch deployment
       test_dataset_name: docker_taxi_batch_test
