@@ -25,12 +25,12 @@ gl_pipeline_components = []
 
 
 @pipeline()
-def docker_taxi_data_regression(pipeline_job_input, model_name, build_reference):
+def docker_taxi_data_regression(pipeline_job_input: Input, model_name: str, build_reference: str):
     """
     Run a pipeline for regression analysis on Docker taxi data.
 
     Args:
-        pipeline_job_input: The raw input data for the pipeline.
+        pipeline_job_input (Input): The raw input data for the pipeline.
         model_name (str): The name of the model to be used.
         build_reference (str): A reference identifier for the build.
 

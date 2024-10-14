@@ -25,14 +25,14 @@ gl_pipeline_components = []
 
 
 @pipeline()
-def nyc_taxi_data_regression(pipeline_job_input, model_name, build_reference):
+def nyc_taxi_data_regression(pipeline_job_input: Input, model_name: str, build_reference: str):
     """
     Run a pipeline for regression analysis on NYC taxi data.
 
     Args:
-        pipeline_job_input (str): Path to the input data.
-        model_name (str): Name of the model.
-        build_reference (str): Reference for the build.
+        pipeline_job_input (Input): The raw input data for the pipeline.
+        model_name (str): The name of the model to be used.
+        build_reference (str): A reference identifier for the build.
 
     Returns:
         dict: A dictionary containing paths to various data, the model, predictions, and score report.
