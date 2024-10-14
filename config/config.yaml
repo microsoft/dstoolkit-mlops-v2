@@ -25,6 +25,14 @@ pipeline_configs:
     aml_env_name: nyc_env
     dataset_name: nyc_taxi_pr_data
 
+  sequence_model_pr:
+    cluster_region: eastus2
+    cluster_size: STANDARD_DS3_V2
+    cluster_name: cpucluster
+    conda_path: mlops/sequence_model/environment/conda.yml
+    aml_env_name: sequence-model
+    dataset_uri_folder: sequence_model_data
+
   docker_taxi_pr: 
     cluster_region: eastus
     cluster_size: STANDARD_DS3_v2
@@ -50,6 +58,14 @@ pipeline_configs:
     aml_env_name: nyc_env
     dataset_name: nyc_taxi_pr_data
   
+  sequence_model_dev:
+    cluster_region: eastus2
+    cluster_size: STANDARD_DS3_V2
+    cluster_name: cpucluster
+    conda_path: mlops/sequence_model/environment/conda.yml
+    aml_env_name: sequence-model
+    dataset_uri_folder: sequence_model_data
+
   docker_taxi_dev: 
     cluster_region: eastus
     cluster_size: STANDARD_DS3_v2
@@ -128,6 +144,25 @@ deployment_configs:
       score_dir: model/nyc_taxi/online
       deployment_instance_count: 1
 
+    sequence_model_batch_dev:
+      score_file_name: score.py
+      score_dir: model/sequence_model/batch
+      batch_cluster_name: batchcluster
+      batch_cluster_region: eastus
+      batch_cluster_size: STANDARD_DS3_v2
+      cluster_instance_count: 1
+      max_concurrency_per_instance: 1
+      max_retries: 3
+      retry_timeout: 1800
+      deployment_conda_path: model/sequence_model/batch_environment/conda.yml
+      deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+      endpoint_name: seq-model-be-004
+      endpoint_desc: A batch endpoint serving a custom model for the sequence model
+      deployment_name: seq-model-bd-004
+      test_dataset_name: sequence_model_batch_test
+      mini_batch_size: 10
+      output_file_name: predictions.csv
+  
     docker_taxi_batch_dev:
       score_file_name: score.py
       score_dir: model/docker_taxi/batch
@@ -143,10 +178,24 @@ deployment_configs:
       mini_batch_size: 10
       output_file_name: predictions.csv
       max_retries: 3
-      retry_timeout: 300
+      retry_timeout: 1800
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_desc: A batch deployment
       test_dataset_name: docker_taxi_batch_test
+
+    sequence_model_online_dev:
+      score_file_name: score.py
+      test_file_path: model/sequence_model/online_test_data/sample-request.json
+      endpoint_name: seq-model-rte-005
+      endpoint_desc: An online endpoint serving a custom model for the sequence model
+      deployment_desc: 
+      deployment_name: seq-model-rtd-005
+      deployment_traffic_allocation: 100
+      deployment_vm_size: Standard_F4s_v2
+      deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+      deployment_conda_path: model/sequence_model/online_environment/conda.yml
+      score_dir: model/sequence_model/online
+      deployment_instance_count: 1
     
     docker_taxi_online_dev:
       score_file_name: score.py

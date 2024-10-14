@@ -1,0 +1,16 @@
+name: prs-env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+    - azureml-core
+    - azureml-dataset-runtime[fuse]
+    - tqdm
+    - nltk
+    - numpy
+    - pyyaml
+    - flake8
+    - pandas
+    - black

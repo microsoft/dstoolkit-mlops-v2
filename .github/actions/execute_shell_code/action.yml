@@ -1,0 +1,33 @@
+name: execute_shell_code
+
+description: execute a shell script given in the inputs
+
+inputs:
+  arm_client_id:
+    description: "client id of service principal used to authenticate with azure"
+    required: true
+  arm_tenant_id:
+    description: "client id of service principal used to authenticate with azure"
+    required: true    
+  subscription_id:
+    description: "client id of service principal used to authenticate with azure"
+    required: true 
+  script_parameter:
+    description: "Parameters to execute code"
+    required: true
+    default: "python --version"
+
+runs:
+  using: composite
+  steps:
+    - name: Azure login
+      uses: azure/login@v2
+      with:
+        client-id: ${{ inputs.arm_client_id }}
+        tenant-id: ${{ inputs.arm_tenant_id }}
+        subscription-id: ${{ inputs.subscription_id }}
+
+    - name: Execute code
+      shell: bash
+      run: |
+        ${{inputs.script_parameter}}
