@@ -95,27 +95,12 @@ class LondonTaxi(PipelineJobConfig):
 
         parent_dir = os.path.join(os.getcwd(), "mlops/london_taxi/components")
 
-        prepare_data = load_component(source=parent_dir + "/prep.yml")
-        transform_data = load_component(source=parent_dir + "/transform.yml")
-        train_model = load_component(source=parent_dir + "/train.yml")
-        predict_result = load_component(source=parent_dir + "/predict.yml")
-        score_data = load_component(source=parent_dir + "/score.yml")
-        register_model = load_component(source=parent_dir + "/register.yml")
+        components = ["prep", "transform", "train", "predict", "score", "register"]
 
-        # Set the environment name to custom environment using name and version number
-        prepare_data.environment = self.environment_name
-        transform_data.environment = self.environment_name
-        train_model.environment = self.environment_name
-        predict_result.environment = self.environment_name
-        score_data.environment = self.environment_name
-        register_model.environment = self.environment_name
-
-        gl_pipeline_components.append(prepare_data)
-        gl_pipeline_components.append(transform_data)
-        gl_pipeline_components.append(train_model)
-        gl_pipeline_components.append(predict_result)
-        gl_pipeline_components.append(score_data)
-        gl_pipeline_components.append(register_model)
+        for component in components:
+            comp = load_component(source=f"{parent_dir}/{component}.yml")
+            comp.environment = self.environment_name
+            gl_pipeline_components.append(comp)
 
         pipeline_job = london_taxi_data_regression(
             Input(type="uri_folder", path=registered_data_asset.id),
