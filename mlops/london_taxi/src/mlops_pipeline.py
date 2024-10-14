@@ -146,7 +146,7 @@ def prepare_and_execute(
     pipeline_config = config.get_pipeline_config(model_name)
     published_model_name = generate_model_name(model_name)
 
-    pipeline = LondonTaxi(
+    pipeline_job_config = LondonTaxi(
         environment_name=None,  # will be set in prepare_and_execute_pipeline
         build_reference=config.environment_configuration["build_reference"],
         published_model_name=published_model_name,
@@ -157,7 +157,7 @@ def prepare_and_execute(
         model_name=model_name,
     )
 
-    prepare_and_execute_pipeline(pipeline)
+    prepare_and_execute_pipeline(pipeline_job_config)
 
 
 def main():
