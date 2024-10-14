@@ -1,6 +1,6 @@
 name: Sequence Model CD Workflow
 on:
-  push:
+  pull_request:
     branches:
       - main
     paths:
