@@ -130,7 +130,7 @@ class LondonTaxi(PipelineJobConfig):
 
 
 def prepare_and_execute(
-    model_name, build_environment, wait_for_completion, output_file
+    model_name: str, build_environment: str, wait_for_completion: bool, output_file: str
 ):
     """
     Prepare and execute the pipeline.
@@ -138,7 +138,7 @@ def prepare_and_execute(
     Args:
         model_name (str): The name of the model.
         build_environment (str): The build environment configuration.
-        wait_for_completion (str): Whether to wait for the pipeline job to complete.
+        wait_for_completion (bool): Whether to wait for the pipeline job to complete.
         output_file (str): A file to save the run ID.
     """
     config = MLOpsConfig(environment=build_environment)
@@ -173,9 +173,9 @@ def main():
     )
     parser.add_argument(
         "--wait_for_completion",
-        type=str,
+        type=bool,
         help="determine if pipeline should wait for job completion",
-        default="True",
+        default=True,
     )
     parser.add_argument(
         "--output_file", type=str, required=False, help="A file to save run id"

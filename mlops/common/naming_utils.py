@@ -65,7 +65,7 @@ def generate_run_name(build_id: str):
     return f"run_{build}"
 
 
-def generate_environment_name(environment_name, environment_version):
+def generate_environment_name(environment_name: str, environment_version: str):
     """
     Generate a unique experiment name based on the environment object.
 
