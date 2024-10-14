@@ -11,7 +11,7 @@ class PipelineJobConfig:
         published_model_name: str,
         dataset_name: str,
         build_environment: str,
-        wait_for_completion: bool,
+        wait_for_completion: str,
         output_file: str,
         model_name: str,
     ):
@@ -24,7 +24,7 @@ class PipelineJobConfig:
             published_model_name (str): The name of the published model.
             dataset_name (str): The name of the dataset.
             build_environment (str): The build environment configuration.
-            wait_for_completion (bool): Whether to wait for the pipeline job to complete.
+            wait_for_completion (str): Whether to wait for the pipeline job to complete.
             output_file (str): A file to save the run ID.
             model_name (str): The name of the model.
         """
