@@ -63,3 +63,19 @@ def generate_run_name(build_id: str):
     build = os.environ.get("BUILD_BUILDID")
 
     return f"run_{build}"
+
+
+def generate_environment_name(environment_name: str, environment_version: str):
+    """
+    Generate a unique experiment name based on the environment object.
+
+    Parameters:
+        environment_name (str): the name of the environment
+        environment_version (str): the version of the environment
+
+    Returns:
+        string: experiment name according to the pattern
+    """
+    print(f"Environment: {environment_name}, version: {environment_version}")
+
+    return f"azureml:{environment_name}:{environment_version}"

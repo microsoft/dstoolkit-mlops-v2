@@ -11,39 +11,31 @@ The pipeline executes the following steps in order:
 and generating reports.
 """
 
-from azure.identity import DefaultAzureCredential
-from azure.core.exceptions import ClientAuthenticationError
 import argparse
 from azure.ai.ml.dsl import pipeline
-from azure.ai.ml import MLClient, Input
+from azure.ai.ml import Input
 from azure.ai.ml import load_component
-import time
 import os
-from mlops.common.get_compute import get_compute
-from mlops.common.get_environment import get_environment
 from mlops.common.config_utils import MLOpsConfig
-from mlops.common.naming_utils import (
-    generate_experiment_name,
-    generate_model_name,
-    generate_run_name,
-)
-
+from mlops.common.naming_utils import generate_model_name
+from mlops.common.pipeline_job_config import PipelineJobConfig
+from mlops.common.pipeline_utils import prepare_and_execute_pipeline
 
 gl_pipeline_components = []
 
 
 @pipeline()
-def london_taxi_data_regression(pipeline_job_input, model_name, build_reference):
+def london_taxi_data_regression(pipeline_job_input: Input, model_name: str, build_reference: str):
     """
-    Run a pipeline for regression analysis on NYC taxi data.
+    Run a pipeline for regression analysis on London taxi data.
 
-    Parameters:
-    pipeline_job_input (str): Path to the input data.
-    model_name (str): Name of the model.
-    build_reference (str): Reference for the build.
+    Args:
+        pipeline_job_input (Input): The raw input data for the pipeline.
+        model_name (str): The name of the model to be used.
+        build_reference (str): A reference identifier for the build.
 
     Returns:
-    dict: A dictionary containing paths to various data, the model, predictions, and score report.
+        dict: A dictionary containing the outputs of various stages of the pipeline:
     """
     prepare_sample_data = gl_pipeline_components[0](
         raw_data=pipeline_job_input,
@@ -79,268 +71,86 @@ def london_taxi_data_regression(pipeline_job_input, model_name, build_reference)
     }
 
 
-def construct_pipeline(
-    cluster_name: str,
-    environment_name: str,
-    display_name: str,
-    build_environment: str,
-    build_reference: str,
-    model_name: str,
-    dataset_name: str,
-    ml_client,
-):
+class LondonTaxi(PipelineJobConfig):
     """
-    Construct a pipeline job for NYC taxi data regression.
+    Class for the London taxi data Azure ML pipeline configuration and construction.
 
-    Args:
-        cluster_name (str): The name of the cluster to use for pipeline execution.
-        environment_name (str): The name of the environment to use for pipeline execution.
-        display_name (str): The display name of the pipeline job.
-        build_environment (str): The environment to deploy the pipeline job.
-        build_reference (str): The build reference for the pipeline job.
-        model_name (str): The name of the model.
-        dataset_name (str): The name of the dataset.
-        ml_client: The machine learning client.
-
-    Returns:
-        pipeline_job: The constructed pipeline job.
+    This class extends the Pipeline class and provides specific implementations for the London taxi data
+    regression pipeline. It includes methods for constructing the pipeline.
     """
-    registered_data_asset = ml_client.data.get(name=dataset_name, label="latest")
 
-    parent_dir = os.path.join(os.getcwd(), "mlops/london_taxi/components")
+    def construct_pipeline(self, ml_client):
+        """
+        Construct a pipeline job for London taxi data regression.
 
-    prepare_data = load_component(source=parent_dir + "/prep.yml")
-    transform_data = load_component(source=parent_dir + "/transform.yml")
-    train_model = load_component(source=parent_dir + "/train.yml")
-    predict_result = load_component(source=parent_dir + "/predict.yml")
-    score_data = load_component(source=parent_dir + "/score.yml")
-    register_model = load_component(source=parent_dir + "/register.yml")
+        Args:
+            ml_client: The Azure ML client to use for retrieving data assets and components.
 
-    # Set the environment name to custom environment using name and version number
-    prepare_data.environment = environment_name
-    transform_data.environment = environment_name
-    train_model.environment = environment_name
-    predict_result.environment = environment_name
-    score_data.environment = environment_name
-    register_model.environment = environment_name
-
-    gl_pipeline_components.append(prepare_data)
-    gl_pipeline_components.append(transform_data)
-    gl_pipeline_components.append(train_model)
-    gl_pipeline_components.append(predict_result)
-    gl_pipeline_components.append(score_data)
-    gl_pipeline_components.append(register_model)
-
-    pipeline_job = london_taxi_data_regression(
-        Input(type="uri_folder", path=registered_data_asset.id),
-        model_name,
-        build_reference,
-    )
-
-    pipeline_job.display_name = display_name
-    pipeline_job.tags = {
-        "environment": build_environment,
-        "build_reference": build_reference,
-    }
-
-    # demo how to change pipeline output settings
-    pipeline_job.outputs.pipeline_job_prepped_data.mode = "rw_mount"
-
-    # set pipeline level compute
-    pipeline_job.settings.default_compute = cluster_name
-    pipeline_job.settings.force_rerun = True
-    # set pipeline level datastore
-    pipeline_job.settings.default_datastore = "workspaceblobstore"
-
-    return pipeline_job
-
-
-def execute_pipeline(
-    subscription_id: str,
-    resource_group_name: str,
-    workspace_name: str,
-    experiment_name: str,
-    pipeline_job: pipeline,
-    wait_for_completion: str,
-    output_file: str,
-):
-    """
-    Execute a pipeline job in Azure Machine Learning service.
-
-    Args:
-        subscription_id (str): The Azure subscription ID.
-        resource_group_name (str): The name of the resource group.
-        workspace_name (str): The name of the Azure Machine Learning workspace.
-        experiment_name (str): The name of the experiment.
-        pipeline_job (pipeline): The pipeline job to be executed.
-        wait_for_completion (str): "True" or "False" - indicates whether to wait for the job to complete.
-        output_file (str): The path to the output file where the job name will be written.
-
-    Raises:
-        Exception: If the job fails to complete.
-
-    Returns:
-        None
-    """
-    try:
-        client = MLClient(
-            DefaultAzureCredential(),
-            subscription_id=subscription_id,
-            resource_group_name=resource_group_name,
-            workspace_name=workspace_name,
+        Returns:
+            pipeline_job: The constructed pipeline job components.
+        """
+        registered_data_asset = ml_client.data.get(
+            name=self.dataset_name, label="latest"
         )
 
-        pipeline_job = client.jobs.create_or_update(
-            pipeline_job, experiment_name=experiment_name
+        parent_dir = os.path.join(os.getcwd(), "mlops/london_taxi/components")
+
+        components = ["prep", "transform", "train", "predict", "score", "register"]
+
+        for component in components:
+            comp = load_component(source=f"{parent_dir}/{component}.yml")
+            comp.environment = self.environment_name
+            gl_pipeline_components.append(comp)
+
+        pipeline_job = london_taxi_data_regression(
+            Input(type="uri_folder", path=registered_data_asset.id),
+            self.model_name,
+            self.build_reference,
         )
 
-        print(f"The job {pipeline_job.name} has been submitted!")
-        if output_file is not None:
-            with open(output_file, "w") as out_file:
-                out_file.write(pipeline_job.name)
+        # demo how to change pipeline output settings
+        pipeline_job.outputs.pipeline_job_prepped_data.mode = "rw_mount"
 
-        if wait_for_completion == "True":
-            total_wait_time = 3600
-            current_wait_time = 0
-            job_status = [
-                "NotStarted",
-                "Queued",
-                "Starting",
-                "Preparing",
-                "Running",
-                "Finalizing",
-                "Provisioning",
-                "CancelRequested",
-                "Failed",
-                "Canceled",
-                "NotResponding",
-            ]
-
-            while pipeline_job.status in job_status:
-                if current_wait_time <= total_wait_time:
-                    time.sleep(20)
-                    pipeline_job = client.jobs.get(pipeline_job.name)
-
-                    print(f"Job Status: {pipeline_job.status}")
-
-                    current_wait_time = current_wait_time + 15
-
-                    if (
-                        pipeline_job.status == "Failed"
-                        or pipeline_job.status == "NotResponding"
-                        or pipeline_job.status == "CancelRequested"
-                        or pipeline_job.status == "Canceled"
-                    ):
-                        print(
-                            f"Pipeline job '{pipeline_job.name}' has stopped with status: {pipeline_job.status}."
-                        )
-                        break
-                else:
-                    print(
-                        f"Job {pipeline_job.name} exceeded the wait time limit of 1 hour."
-                    )
-                    break
-
-            if pipeline_job.status == "Completed" or pipeline_job.status == "Finished":
-                print("Job completed successfully.")
-            else:
-                raise Exception(
-                    f"Job {pipeline_job.name} did not complete successfully. "
-                    f"Current status: {pipeline_job.status}"
-                )
-    except ClientAuthenticationError as auth_ex:
-        print(
-            "Authorization error occurred while executing the pipeline."
-            "Please check your credentials and permissions."
-            f"Error details: {auth_ex}"
-        )
-        raise
-    except Exception as ex:
-        print(
-            "An error occurred while executing the pipeline."
-            "Please check your credentials, resource details, and job configuration."
-            f"Error details: {ex}"
-        )
-        raise
+        return pipeline_job
 
 
 def prepare_and_execute(
-    build_environment: str,
-    wait_for_completion: str,
-    output_file: str,
+    model_name: str, build_environment: str, wait_for_completion: str, output_file: str
 ):
     """
-    Prepare and execute the MLOps pipeline.
+    Prepare and execute the pipeline.
 
     Args:
-        build_environment (str): environment name to execute.
-        wait_for_completion (str): "True" or "False" - indicates whether to wait for the job to complete.
-        output_file (str): The path to the output file where the job name will be written.
+        model_name (str): The name of the model.
+        build_environment (str): The build environment configuration.
+        wait_for_completion (str): Whether to wait for the pipeline job to complete.
+        output_file (str): A file to save the run ID.
     """
-    model_name = "london_taxi"
-
     config = MLOpsConfig(environment=build_environment)
 
-    ml_client = MLClient(
-        DefaultAzureCredential(),
-        config.aml_config["subscription_id"],
-        config.aml_config["resource_group_name"],
-        config.aml_config["workspace_name"],
-    )
-
     pipeline_config = config.get_pipeline_config(model_name)
-
-    compute = get_compute(
-        config.aml_config["subscription_id"],
-        config.aml_config["resource_group_name"],
-        config.aml_config["workspace_name"],
-        pipeline_config["cluster_name"],
-        pipeline_config["cluster_size"],
-        pipeline_config["cluster_region"],
-    )
-
-    environment = get_environment(
-        config.aml_config["subscription_id"],
-        config.aml_config["resource_group_name"],
-        config.aml_config["workspace_name"],
-        env_base_image=config.environment_configuration["env_base_image"],
-        conda_path=pipeline_config["conda_path"],
-        environment_name=pipeline_config["aml_env_name"],
-    )
-
-    print(f"Environment: {environment.name}, version: {environment.version}")
-
     published_model_name = generate_model_name(model_name)
-    published_experiment_name = generate_experiment_name(model_name)
-    published_run_name = generate_run_name(
-        config.environment_configuration["build_reference"]
+
+    pipeline_job_config = LondonTaxi(
+        environment_name=None,  # will be set in prepare_and_execute_pipeline
+        build_reference=config.environment_configuration["build_reference"],
+        published_model_name=published_model_name,
+        dataset_name=pipeline_config["dataset_name"],
+        build_environment=build_environment,
+        wait_for_completion=wait_for_completion,
+        output_file=output_file,
+        model_name=model_name,
     )
 
-    pipeline_job = construct_pipeline(
-        compute.name,
-        f"azureml:{environment.name}:{environment.version}",
-        published_run_name,
-        build_environment,
-        config.environment_configuration["build_reference"],
-        published_model_name,
-        pipeline_config["dataset_name"],
-        ml_client,
-    )
-
-    execute_pipeline(
-        config.aml_config["subscription_id"],
-        config.aml_config["resource_group_name"],
-        config.aml_config["workspace_name"],
-        published_experiment_name,
-        pipeline_job,
-        wait_for_completion,
-        output_file,
-    )
+    prepare_and_execute_pipeline(pipeline_job_config)
 
 
 def main():
     """Parse the command line arguments and call the `prepare_and_execute` function."""
     parser = argparse.ArgumentParser("build_environment")
+    parser.add_argument(
+        "--model_name", type=str, help="name of the model", default="london_taxi"
+    )
     parser.add_argument(
         "--build_environment",
         type=str,
@@ -349,7 +159,7 @@ def main():
     parser.add_argument(
         "--wait_for_completion",
         type=str,
-        help="determine if pipeline to wait for job completion",
+        help="determine if pipeline should wait for job completion",
         default="True",
     )
     parser.add_argument(
@@ -358,7 +168,10 @@ def main():
     args = parser.parse_args()
 
     prepare_and_execute(
-        args.build_environment, args.wait_for_completion, args.output_file
+        args.model_name,
+        args.build_environment,
+        args.wait_for_completion,
+        args.output_file,
     )
 
 
