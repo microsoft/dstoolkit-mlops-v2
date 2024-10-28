@@ -38,7 +38,7 @@ The resulting command looks like:
 ```yaml
 ...
 command: >-
-  python -m src.nyc_src.train.train
+  python -m src.nyc_taxi.train.train
   --train_path ${{inputs.train_path}}
   --val_path ${{inputs.val_path}}
   --meta_path ${{outputs.meta_path}}

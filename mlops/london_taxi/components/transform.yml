@@ -12,7 +12,7 @@ outputs:
 code: ./../../../
 environment: azureml:AzureML-sklearn-1.1-ubuntu20.04-py38-cpu@latest
 command: >-
-  python -m src.london_src.transform.transform
+  python -m src.london_taxi.transform.transform
   --clean_data ${{inputs.clean_data}} 
   --transformed_data ${{outputs.transformed_data}}
 
