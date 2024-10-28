@@ -186,7 +186,7 @@ changed. By defining these paths, we ensure that only the necessary pipelines ar
 tests, and speeding up the overall CI/CD process. For example:
 
 - Changes to the `src/` directory trigger the build and validation pipeline.
-- Changes to the `src/london_src/*` directory trigger the london_taxi pipelines and not the nyc_taxi or docker_taxi pipelines.
+- Changes to the `src/london_taxi/*` directory trigger the london_taxi pipelines and not the nyc_taxi or docker_taxi pipelines.
 
 ### Notes
 

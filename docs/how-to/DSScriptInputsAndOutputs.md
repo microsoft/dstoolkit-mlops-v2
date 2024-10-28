@@ -2,7 +2,7 @@
 
 ## Context and Scope
 
-The GitHub workflows create Azure Machine Learning (AML) jobs which in turn run the scripts defined under this repo's src directory.  For example, [src/nyc_src/train/train.py](/src/nyc_src/train/train.py).  Each of these scripts requires a series of inputs and produces outputs which can be used in downstream scripts.  Understanding how inputs and outputs to these scripts function is critical when integrating promoted models.
+The GitHub workflows create Azure Machine Learning (AML) jobs which in turn run the scripts defined under this repo's src directory.  For example, [src/nyc_taxi/train/train.py](/src/nyc_taxi/train/train.py).  Each of these scripts requires a series of inputs and produces outputs which can be used in downstream scripts.  Understanding how inputs and outputs to these scripts function is critical when integrating promoted models.
 
 ## Script Inputs and Outputs
 

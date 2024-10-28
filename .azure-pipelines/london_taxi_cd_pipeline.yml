@@ -8,7 +8,7 @@ trigger:
       - .azure-pipelines/*
       - mlops/common/*
       - mlops/london_taxi/*
-      - src/london_src/*
+      - src/london_taxi/*
       - model/london_taxi/*
       - src/shared/*
 
