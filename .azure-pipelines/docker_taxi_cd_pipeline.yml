@@ -1,5 +1,12 @@
-pr: none
-trigger:
+# pr: none
+# trigger:
+#   branches:
+#    include:
+#      - main
+#   paths:
+#     include:
+trigger: none
+pr:
   branches:
    include:
      - main

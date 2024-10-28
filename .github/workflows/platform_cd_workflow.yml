@@ -94,6 +94,7 @@ jobs:
         shell: bash
         run: |
             [ -d "src/${{ inputs.model_type }}/common/" ] && cp -r src/${{ inputs.model_type }}/common/* model/${{ inputs.model_type }}/online
+        continue-on-error: true
 
       - name: Provision azureml online endpoint
         uses: ./.github/actions/execute_shell_code
