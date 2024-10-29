@@ -93,7 +93,8 @@ jobs:
       - name: Copy common files
         shell: bash
         run: |
-            [ -d "src/${{ inputs.model_type }}/common/" ] && cp -r src/${{ inputs.model_type }}/common/* model/${{ inputs.model_type }}/online || true
+            [ -d "src/${{ inputs.model_type }}/common/" ] && cp -r src/${{ inputs.model_type }}/common/* model/${{ inputs.model_type }}/online
+        continue-on-error: true
 
       - name: Provision azureml online endpoint
         uses: ./.github/actions/execute_shell_code
@@ -151,7 +152,8 @@ jobs:
       - name: Copy common files
         shell: bash
         run: |
-            [ -d "src/${{ inputs.model_type }}/common/" ] && cp -r src/${{ inputs.model_type }}/common/* model/${{ inputs.model_type }}/batch || true
+            [ -d "src/${{ inputs.model_type }}/common/" ] && cp -r src/${{ inputs.model_type }}/common/* model/${{ inputs.model_type }}/batch
+        continue-on-error: true
 
       - name: Provision azureml batch endpoint
         uses: ./.github/actions/execute_shell_code
