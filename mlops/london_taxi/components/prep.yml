@@ -12,7 +12,7 @@ outputs:
 code: ./../../../
 environment: azureml:AzureML-sklearn-1.1-ubuntu20.04-py38-cpu@latest
 command: >-
-  python -m src.london_src.prep.prep 
+  python -m src.london_taxi.prep.prep 
   --raw_data ${{inputs.raw_data}} 
   --prep_data ${{outputs.prep_data}}
 

@@ -9,7 +9,7 @@ on:
       - 'mlops/common/**'
       - 'mlops/docker_taxi/**'
       - 'model/docker_taxi/**'
-      - 'src/docker_taxi_src/**'
+      - 'src/docker_taxi/**'
       - 'test/docker_taxi/**'
   workflow_call:
     inputs:

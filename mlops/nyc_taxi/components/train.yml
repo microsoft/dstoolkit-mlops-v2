@@ -16,7 +16,7 @@ outputs:
 code: ./../../../
 environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu@latest
 command: >-
-  python -m src.nyc_src.train.train
+  python -m src.nyc_taxi.train.train
   --training_data ${{inputs.training_data}} 
   --test_data ${{outputs.test_data}} 
   --model_output ${{outputs.model_output}}

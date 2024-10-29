@@ -8,7 +8,7 @@ pr:
       - .azure-pipelines/*
       - mlops/common/*
       - mlops/nyc_taxi/*
-      - src/nyc_src/*
+      - src/nyc_taxi/*
       - model/nyc_taxi/*
       - src/shared/*
 pool:

@@ -8,7 +8,7 @@ pr:
       - .azure-pipelines/*
       - mlops/common/*
       - mlops/docker_taxi/*
-      - src/docker_taxi_src/*
+      - src/docker_taxi/*
       - model/docker_taxi/*
       - src/shared/*
 pool:

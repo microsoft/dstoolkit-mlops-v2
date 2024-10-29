@@ -7,7 +7,7 @@ on:
       - mlops/common/**
       - mlops/london_taxi/**
       - model/london_taxi/**
-      - src/london_src/**
+      - src/london_taxi/**
       - test/london_taxi/**
   workflow_call:
     inputs:
