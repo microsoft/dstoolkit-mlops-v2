@@ -1,7 +1,12 @@
 name: Custom Object Detection CD Workflow
 
+# on:
+#   push:
+#     branches:
+#       - main
+# TODO
 on:
-  push:
+  pull_request:
     branches:
       - main
     paths:
