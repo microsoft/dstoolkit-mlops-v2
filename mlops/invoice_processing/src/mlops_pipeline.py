@@ -226,7 +226,6 @@ def prepare_and_execute(
 
     pipeline_config = config.get_pipeline_config(model_name)
     published_model_name = generate_model_name(model_name)
-    experiment_description = config.get_experiment_description()
 
     pipeline_job_config = InvoiceProcessing(
         environment_name=None,  # will be set in prepare_and_execute_pipeline
