@@ -86,7 +86,7 @@ jobs:
       - name: Run Unit Tests
         shell: bash
         run: |
-          pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
+          PYTHONPATH=$PYTHONPATH:$(pwd)/src pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
       - name: Publish Test Results
         uses: actions/upload-artifact@v4
         with:
