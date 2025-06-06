@@ -1,0 +1,10 @@
+{
+    "gpt_only": {
+        "azure_openai_endpoint": "http://example",
+        "azure_openai_api_key": "example"
+    },
+    "mock_ocr_extractor": {
+        "encoding": "utf-16",
+        "logging_enabled": false
+    }
+}

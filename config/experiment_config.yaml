@@ -1,0 +1,31 @@
+experiment_description: 
+  user_name: <USER_NAME>
+  title: <EXPERIMENT_TITLE>
+  hypothesis:  <EXPERIMENT_HYPOTHESIS>
+
+prep_config:
+  samples_amount: 4
+  sampling_seed: 42
+
+predict_config:
+  strategy: gpt_only
+  gpt_deployment_name: gpt-4o
+  temperature: 0
+  prompt_config:
+    prompt_name: medical_claim_reimbursement
+    line_item_instructions: complex
+
+score_config:
+  fuzzy_match_config:
+    field_match_threshold: 0.0
+  exact_match_fields:
+    start_date_match: true
+    end_date_match: true
+    amount_match: true
+  find_best_matches_strategy: levenshtein
+  matchers_dict:
+    serviceStartDate: date_exact_match
+    serviceEndDate: date_exact_match
+    amount: amount_exact_match
+    description: description_levenshtein
+
