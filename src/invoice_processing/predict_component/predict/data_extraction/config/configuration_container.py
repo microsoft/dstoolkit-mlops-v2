@@ -1,4 +1,6 @@
 """Container for storing configurations of extractors."""
+
+
 class ConfigurationContainer:
     """A simple service container to store configurations for extractors."""
 
