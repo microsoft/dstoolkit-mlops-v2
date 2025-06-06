@@ -20,6 +20,7 @@ runs:
   using: composite
   steps:
     - name: Clear Azure CLI token cache
+      shell: bash
       run: |
         rm -rf ~/.azure
 
