@@ -14,6 +14,7 @@ class PipelineJobConfig:
         wait_for_completion: str,
         output_file: str,
         model_name: str,
+        **kwargs
     ):
         """
         Initialize the pipeline job components.
@@ -36,3 +37,5 @@ class PipelineJobConfig:
         self.wait_for_completion = wait_for_completion
         self.output_file = output_file
         self.model_name = model_name
+        for key, value in kwargs.items():
+            setattr(self, key, value)
