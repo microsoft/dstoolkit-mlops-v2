@@ -1,7 +1,7 @@
 experiment_description: 
-  user_name: <USER_NAME>
-  title: <EXPERIMENT_TITLE>
-  hypothesis:  <EXPERIMENT_HYPOTHESIS>
+  user_name: user
+  title: title
+  hypothesis: hypothesis
 
 prep_config:
   samples_amount: 4
