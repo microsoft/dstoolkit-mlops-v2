@@ -1,5 +1,4 @@
-"""Class that performs exact matches for text"""
-
+"""Class that performs exact matches for text."""
 import logging
 
 from .base_matcher import BaseMatcher
@@ -11,15 +10,11 @@ log = logging.getLogger(__name__)
 class TextExactMatcher(BaseMatcher):
 
     def get_matcher_name(self):
-        """
-        return matcher name.
-        """
+        """Return matcher name."""
         return "text_exact_match"
 
     def get_match(self, comparison_df, field_name):
-        """
-        Get match result per line item.
-        """
+        """Get match result per line item."""
         match_df = comparison_df.apply(
             lambda x: self.text_exact_match(
                 x[f"{field_name}_gt"], x[f"{field_name}_pred"]
@@ -31,6 +26,7 @@ class TextExactMatcher(BaseMatcher):
     def text_exact_match(self, str1: str, str2: str):
         """
         Find out whether the dates are identical.
+
         Args:
             str1: First string value
             date_str2: Second string value
@@ -48,8 +44,8 @@ class TextExactMatcher(BaseMatcher):
 
     def find_best_matches(self, comparison_df):
         """
-        For every line item in the ground truth data, find the most similar
-        line item in the predictions
+        For each line item in the ground truth, find the most similar in  predictions.
+
         Args:
             comparison_df: a dataframe which is the cartesian product of the
             line items inthe ground truth and the predictions datasets

@@ -1,5 +1,4 @@
-"""Class that performs exact matches for amounts"""
-
+"""Class that performs exact matches for amounts."""
 import logging
 
 from .base_matcher import BaseMatcher
@@ -9,13 +8,12 @@ log = logging.getLogger(__name__)
 
 
 class AmountExactMatcher(BaseMatcher):
-    """
-    Calculate amount exact match.
-    """
+    """Calculate amount exact match."""
 
     def amount_exact_match(self, amount1, amount2):
         """
-        Find out whether the amounts in ground truth and prediction are equal
+        Find out whether the amounts in ground truth and prediction are equal.
+
         Args:
             amount_str1: First amount value
             amount_str2: Second amount value
@@ -33,15 +31,11 @@ class AmountExactMatcher(BaseMatcher):
         return match
 
     def get_matcher_name(self):
-        """
-        return matcher name.
-        """
+        """Return matcher name."""
         return "amount_exact_match"
 
     def get_match(self, comparison_df, field_name):
-        """
-        Get match result per line item.
-        """
+        """Get match result per line item."""
         match_df = comparison_df.apply(
             lambda x: self.amount_exact_match(
                 x[f"{field_name}_gt"], x[f"{field_name}_pred"]

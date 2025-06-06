@@ -1,13 +1,17 @@
+"""This module manages the prompts used in the data extraction process."""
 from pathlib import Path
 import frontmatter
 from jinja2 import Environment, FileSystemLoader, StrictUndefined, TemplateError, meta, select_autoescape
 
 
 class PromptManager:
+    """Manages the prompts used in the data extraction process."""    
+
     _env = None
 
     @classmethod
     def _get_env(cls, templates_dir="prompts/templates"):
+        """Get the Jinja2 environment for rendering templates."""
         templates_dir = Path(__file__).parent.parent / templates_dir
         if cls._env is None:
             cls._env = Environment(
@@ -19,6 +23,7 @@ class PromptManager:
 
     @staticmethod
     def get_prompt(template, **kwargs):
+        """Render a prompt template with the provided context."""
         env = PromptManager._get_env()
         template_path = f"{template}.j2"
         with open(env.loader.get_source(env, template_path)[1]) as file:
@@ -32,6 +37,7 @@ class PromptManager:
 
     @staticmethod
     def get_template_info(template):
+        """Get information about a prompt template."""
         env = PromptManager._get_env()
         template_path = f"{template}.j2"
         with open(env.loader.get_source(env, template_path)[1]) as file:

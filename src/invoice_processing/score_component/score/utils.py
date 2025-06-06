@@ -1,8 +1,5 @@
 """
-utils.py
-
-This module contains various utility functions that can be used across
-different parts of the project.
+Utility functions for invoice processing scoring component.
 
 Functions:
     read_json_file(file_path):
@@ -12,7 +9,6 @@ Functions:
     load_csv_file(file_path):
         Reads a CSV file and returns the parsed data.
 """
-
 import json
 from pathlib import Path
 from typing import Union, List
@@ -23,9 +19,38 @@ from dateutil.parser import parse
 log = logging.getLogger(__name__)
 
 
+def _load_json_from_file(file_path):
+    """Helper to load JSON from a single file and return data."""
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            curr_data = json.load(f)
+            return curr_data
+    except FileNotFoundError:
+        log.error(f"Error: The file at {file_path} was not found")
+    except json.JSONDecodeError:
+        log.error(f"Error: The file at {file_path} is not a valid JSON")
+    return None
+
+
+def _load_json_from_directory(directory_path):
+    """Helper to load JSON from all files in a directory."""
+    all_data = []
+    all_data_dict = {}
+    for file_path in Path(directory_path).glob("*.json"):
+        log.debug(f"file_path: {file_path}")
+        curr_data = _load_json_from_file(file_path)
+        if curr_data is not None:
+            if isinstance(curr_data, list):
+                all_data += curr_data
+            else:
+                all_data_dict[str(file_path)] = curr_data
+    return all_data, all_data_dict
+
+
 def load_json_file(path: Union[str, Path]):
     """
     Reads a JSON file and returns the parsed data.
+
     Args:
         file_path (str): The path to the JSON file to be read.
     Returns:
@@ -33,42 +58,18 @@ def load_json_file(path: Union[str, Path]):
     Raises:
         FileNotFoundError
     """
-    # Load ground truth data
-    all_data = []
-    all_data_dict = {}
     data_path = Path(path)
     if data_path.is_dir():
-        # Multiple files in a directory
-        for file_path in data_path.glob("*.json"):
-            log.debug(f"file_path: {file_path}")
-            try:
-                with open(file_path, "r", encoding="utf-8") as f:
-                    curr_data = json.load(f)
-                    # For ground truth format
-                    if isinstance(curr_data, List):
-                        all_data = all_data + curr_data
-                    # For predictions data format
-                    else:
-                        all_data_dict[str(file_path)] = curr_data
-            except FileNotFoundError:
-                log.error(f"Error: The file at {file_path} was not found")
-            except json.JSONDecodeError:
-                log.error(f"Error: The file at {file_path} is not a valid JSON")
+        all_data, all_data_dict = _load_json_from_directory(data_path)
     else:
-        # Single file
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                curr_data = json.load(f)
-                # For ground truth format
-                if isinstance(curr_data, List):
-                    all_data = all_data + curr_data
-                # For predictions data format
-                else:
-                    all_data_dict[str(file_path)] = curr_data
-        except FileNotFoundError:
-            log.error(f"Error: The file at {file_path} was not found")
-        except json.JSONDecodeError:
-            log.error(f"Error: The file at {file_path} is not a valid JSON")
+        all_data = []
+        all_data_dict = {}
+        curr_data = _load_json_from_file(data_path)
+        if curr_data is not None:
+            if isinstance(curr_data, list):
+                all_data += curr_data
+            else:
+                all_data_dict[str(data_path)] = curr_data
     if len(all_data) > 1:
         return all_data
     else:
@@ -76,9 +77,7 @@ def load_json_file(path: Union[str, Path]):
 
 
 def normalize_string(value: str) -> str:
-    """
-    Normalize string by stripping extra whitespace and converting to lowercase.
-    """
+    """Normalize string by stripping extra whitespace and converting to lowercase."""
     if not isinstance(value, str):
         return str(value)
     value = re.sub(r"\s+", " ", value).strip().lower()
@@ -89,10 +88,7 @@ def normalize_string(value: str) -> str:
 
 
 def preprocess_amount(amount):
-    """
-    Amount pre-processing - remove parentheses and
-    white spaces from amount string
-    """
+    """Remove parentheses and white spaces from amount string."""
     parsed_amount = ""
     if isinstance(amount, str):
         parsed_amount = amount.strip()
@@ -105,10 +101,7 @@ def preprocess_amount(amount):
 
 
 def preprocess_date(date_str):
-    """
-    Date preprocessing - remove whitespaces and parse
-    date string into date object
-    """
+    """Remove whitespaces and parse date string into date object."""
     date_str = date_str.strip()
     date = parse(date_str)
     return date

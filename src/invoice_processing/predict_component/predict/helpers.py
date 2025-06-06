@@ -1,3 +1,4 @@
+"""This module contains helper functions for the predict component of the invoice processing application."""
 import base64
 import json
 import logging

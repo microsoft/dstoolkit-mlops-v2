@@ -1,3 +1,4 @@
+"""This module implements the GPTOnlyExtractor class for extracting data using Azure OpenAI."""
 import json
 import logging
 from python_retry import retry
@@ -21,7 +22,8 @@ log = logging.getLogger(__name__)
 
 class GPTOnlyExtractor(Extractor):
     """
-    Extraction implementation use Azure OpenAI Model
+    Extraction implementation use Azure OpenAI Model.
+
     Args:
             config (dict): The configuration dictionary. the following values are expected:
                 - azure_openai_endpoint (str): Azure OpenAI endpoint.
@@ -37,6 +39,7 @@ class GPTOnlyExtractor(Extractor):
     """
 
     def __init__(self, config: dict, logger_proxy: LoggerProxy):
+        """Initialize the GPTOnlyExtractor with the provided configuration and logger."""
         self.client = AzureOpenAI(
             azure_endpoint=config.get("azure_openai_endpoint"),
             api_key=config.get("azure_openai_api_key"),

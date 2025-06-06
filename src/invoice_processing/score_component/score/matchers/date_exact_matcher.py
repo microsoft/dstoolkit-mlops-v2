@@ -1,5 +1,4 @@
-"""Class that performs exact matches for dates"""
-
+"""Class that performs exact matches for dates."""
 import logging
 
 from .base_matcher import BaseMatcher
@@ -13,6 +12,7 @@ class DateExactMatcher(BaseMatcher):
     def dates_exact_match(self, date_str1: str, date_str2: str):
         """
         Find out whether the dates are identical.
+
         Args:
             date_str1: First date value
             date_str2: Second date value
@@ -39,15 +39,11 @@ class DateExactMatcher(BaseMatcher):
         return match
 
     def get_matcher_name(self):
-        """
-        return matcher name.
-        """
+        """Return matcher name."""
         return "date_exact_match"
 
     def get_match(self, comparison_df, field_name):
-        """
-        Get match result per line item.
-        """
+        """Get match result per line item."""
         match_df = comparison_df.apply(
             lambda x: self.dates_exact_match(
                 x[f"{field_name}_gt"], x[f"{field_name}_pred"]

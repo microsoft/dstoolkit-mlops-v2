@@ -1,5 +1,6 @@
 class ConfigurationContainer:
     """A simple service container to store configurations for extractors."""
+
     _config_registry = {}
 
     @classmethod

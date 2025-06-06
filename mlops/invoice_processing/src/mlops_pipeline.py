@@ -154,7 +154,6 @@ class InvoiceProcessing(PipelineJobConfig):
         Returns:
             pipeline_job: The constructed pipeline job components.
         """
-
         registered_data_asset = ml_client.data.get(
             name=self.dataset_name, label="latest"
         )

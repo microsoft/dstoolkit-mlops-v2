@@ -1,5 +1,6 @@
 """
 This module contains the ExtractionEvaluator class, which provides evaluation methods for data extraction from images.
+
 The class includes functionalities for calculating various metrics and generating reports.
 
 Classes: ExtractionEvaluation: a class for evaluation of data extraction from images
@@ -18,8 +19,7 @@ log = logging.getLogger(__name__)
 
 class ExtractionEvaluator:
     """
-    A comprehensive evaluator for comparing invoice details between
-    ground truth and predictions.
+    An evaluator for comparing invoice details between ground truth and predictions.
 
     This class currently supports single file evaluation
     with flexible comparison strategies.
@@ -57,6 +57,7 @@ class ExtractionEvaluator:
     def get_matcher(self, matcher_class_name: str):
         """
         Create an instance of the requested matcher.
+
         Args: matcher_class_name: Name of the matcher per
             field as defined in the experiment config file.
         Returns:
@@ -75,9 +76,7 @@ class ExtractionEvaluator:
             return None
 
     def get_matcher_for_best_matches_strategy(self, best_matches_strategy: str):
-        """
-        Get find best matches strategy.
-        """
+        """Get find best matches strategy."""
         if best_matches_strategy == "levenshtein":
             return LevenshteinMatcher()
         elif best_matches_strategy == "text_exact_match":
@@ -89,6 +88,7 @@ class ExtractionEvaluator:
     def get_match_method(self, matcher_name: str):
         """
         Get match method from matcher name.
+
             Args: matcher_name: name of the matcher
             Returns: match method (currently exact_match or levenshtein)
         """
@@ -107,7 +107,9 @@ class ExtractionEvaluator:
     ):
         """
         Compare the line items in the ground trith data with the line items in the prediction data.
+
         Find exact matches if exist and calculate fuzzy match metrics for relevent fields.
+
         Args:
             ground_truth_df: A dataframe in which each column is a different
             extracted field (startDate, endDate, amount, description)
@@ -142,12 +144,12 @@ class ExtractionEvaluator:
     ):
         """
         Report the line items match results and additional datasets for error analysis.
+
         Args:
             comparison_df (pd.DataFrame): dataframe will all possible combinations
             of line items from the ground truth and the predictions.
             best_matches_dict (Dict): Dictionary with lists per fuzzy match method,
             of pairs of matched ground truth and prediction line items.
-        Returns:
         """
         unmatched_gt = pd.DataFrame()
         gt_cols = []
@@ -195,6 +197,7 @@ class ExtractionEvaluator:
     ):
         """
         Calculate the evaluation metric per invoice per field. Currently supports accuracy.
+
         Args:
             match_results_df (pd.DataFrame): A dataframe with all line items from
             the ground truth and the predictions: line items of the ground truth and
@@ -217,6 +220,7 @@ class ExtractionEvaluator:
     def calculate_mean_accuracy_per_invoice(self, matches_eval_fields: pd.DataFrame):
         """
         Calcualte the mean accuracy per field in a single invoice.
+
         Args:
             matches_eval_fields (pd.DataFrame): A dataframe with the ressulting matches
             per line item in the ground truth data which includes only the fields we would
@@ -232,7 +236,8 @@ class ExtractionEvaluator:
 
     def calculate_mean_accuracy_per_batch(self, all_invoices_results: pd.DataFrame):
         """
-        Calcualte the mean accuracy per field in a batch of invoices.
+        Calculate the mean accuracy per field in a batch of invoices.
+
         Args:
             all_invoices_results (pd.DataFrame): A dataframe with the mean accuracy
             results of all invoices in the experiment.
@@ -256,7 +261,8 @@ class ExtractionEvaluator:
         self, unmatched_pred: pd.DataFrame(), best_matches_df: pd.DataFrame()
     ):
         """
-        This function calculates the precision per invoice (record).
+        Calculate the precision per invoice (record).
+
         Args:
             unmatched_pred: Dataframe of line items in the extracted data that
             were not matched to any ground truth line item (defined as FPs).
@@ -276,7 +282,8 @@ class ExtractionEvaluator:
         self, unmatched_gt: pd.DataFrame(), best_matches_df: pd.DataFrame()
     ):
         """
-        This function calculates the precision per invoice (record).
+        Calculate the recall per invoice (record).
+
         Args:
             unmatched_gt: Dataframe of line items in the ground truth data that
             were not matched to any extracted line item (defined as FNs).

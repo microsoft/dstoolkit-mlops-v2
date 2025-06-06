@@ -1,3 +1,4 @@
+"""This module contains the predict function for the invoice processing component."""
 import ast
 import os
 import argparse
@@ -34,14 +35,14 @@ def predict(
     prediction_path,
 ) -> None:
     """
-    Perform end-to-end initialization and processing input folder's .png and .jpg files
-    using the specified model type with Azure services.
+    Perform data extraction using the specified orchestration strategy and Azure OpenAI model.
 
     This includes:
         - Initializing the Azure OpenAI client.
         - Creating prompt messages for the model.
         - Processing each file in the input folder.
         - Saving the output as a JSON file in the output folder.
+
     Args:
         strategy (string): orchestration strategy name
         temperature (float): LLM temperature
@@ -50,7 +51,6 @@ def predict(
         test_data (str): a folder with input data
         prediction_path (str): a folder for storing predictions
     """
-
     config_dict = ast.literal_eval(prompt_config)
     params = {
         "gpt_deployment_name": gpt_deployment_name,
@@ -121,6 +121,7 @@ def predict(
 
 
 def estimate_cost(gpt_deployment_name, performance_df):
+    """Estimate the cost of processing based on the number of tokens used."""
     total_input_tokens = performance_df.loc[:, 'prompt_tokens'].sum()
     total_output_tokens = performance_df.loc[:, 'completion_tokens'].sum()
     if gpt_deployment_name == 'gpt-4o':
@@ -141,6 +142,7 @@ def estimate_cost(gpt_deployment_name, performance_df):
 
 
 def glob_by_extesion(test_data, types):
+    """Glob files by extension in the specified test data directory."""
     all_images = []
     for type in types:
         arr = glob(f'{test_data}/*{type}')
@@ -149,6 +151,7 @@ def glob_by_extesion(test_data, types):
 
 
 def process(extractor: Extractor, input_path, output_folder) -> tuple[ExtractionResponse, float]:
+    """Process a single input file and return the extraction response and execution time."""
     base64_image = convert_image_to_base64(input_path)
 
     start_time = time.time()

@@ -1,5 +1,6 @@
 """
 This module runs the evaluation step of the experimentation framework.
+
 First, the ground truth data and the predictions data are read.
 Next, each line item in the ground truth data is compared against
 line items from the prediction data to find the best match for
@@ -8,7 +9,6 @@ calculated per field and a general accuracy is calculated
 for all fields combined.
 The score results are logged into AML.
 """
-
 import os
 import argparse
 
@@ -29,6 +29,7 @@ log = logging.getLogger(__name__)
 def get_score_config(score_config_str):
     """
     Load score config from dict loaded as str.
+
     Args:
         components_config: Dictionary loaded as string with configuration
     Returns:
@@ -52,7 +53,8 @@ def get_score_config(score_config_str):
 
 def create_extraction_evaluator(components_config):
     """
-    Initialize evaluator object
+    Initialize evaluator object.
+
     Args:
         components_config: Dictionary loaded as string with configuration
     Returns:
@@ -75,13 +77,14 @@ def create_extraction_evaluator(components_config):
 
 def get_gt_and_pred_data_for_evaluation(ground_truth, predictions):
     """
-    Parse current JSON input to DataFrames
-        Args:
-            ground_truth: Ground truth JSON object
-            predictions: Predictions JSON object
-        Returns:
-            gt_data: DataFrame of the line items of the ground truth data
-            pred_data: DataFrame of the line items of the predictions data
+    Parse current JSON input to DataFrames.
+
+    Args:
+        ground_truth: Ground truth JSON object
+        predictions: Predictions JSON object
+    Returns:
+        gt_data: DataFrame of the line items of the ground truth data
+        pred_data: DataFrame of the line items of the predictions data
     """
     # normalize ground truth and predictions structure
     ground_truth_invoice = ground_truth["lineItems"]
@@ -123,6 +126,7 @@ def get_corresponding_prediction_path(
 ):
     """
     Get the file path of the predictions that correspond to a given ground truth file.
+
     Args:
         gt_path (str): File path to the currently evaluated ground truth data.
         pred_path (str): path to the predictions directory or file path
@@ -151,6 +155,7 @@ def add_ref_ids_to_result_dfs(
 ):
     """
     Add reference ids or predicted data path to the reported results dataframes.
+
     Args:
         best_matches_df: Dataframe with the line items that were matched.
         unmatched_gt: Dataframe with line items from the ground truth that were not matched.
@@ -179,9 +184,12 @@ def add_ref_ids_to_result_dfs(
 
 def evaluate(all_invoices_pred, all_invoices_gt, components_config):
     """
-    Evaluates the quality of data extraction from images by comparing
-    the extracted data to ground truth. This function calculates the
-    accuracy, precision and recall to assess the correctness of the extraction.
+    Evaluate the quality of data extraction from images.
+
+    It does it by comparing the extracted data to ground truth.
+    This function calculates the accuracy, precision and recall
+    to assess the correctness of the extraction.
+
     Args:
         predictions_file_path (str): Path of the predictions
         file (the extracted data)
@@ -293,9 +301,7 @@ def log_results(
     overall_precision: float,
     overall_recall: float,
 ):
-    """
-    Log score results to AML
-    """
+    """Log score results to AML."""
     score_results_output_path = "score_results.csv"
     all_unmatched_gt_path = "all_unmatched_gt.csv"
     all_unmatched_pred_path = "all_unmatched_pred.csv"
@@ -336,7 +342,8 @@ def main(
     all_unmatched_pred_path,
     components_config,
 ):
-    """Load ground truth and predictions data, call score function.
+    """
+    Load ground truth and predictions data, call score function.
 
     Args:
         predictions_path (string): path to predictions data

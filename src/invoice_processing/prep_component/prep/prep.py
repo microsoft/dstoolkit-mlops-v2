@@ -1,3 +1,4 @@
+"""This module contains the preprocessing step for invoice processing."""
 import argparse
 import os
 import random
@@ -10,7 +11,7 @@ log = logging.getLogger(__name__)
 
 def sample_data(data_paths, samples_amount, sampling_seed):
     """
-    Samples randomly number of data paths based on input amount and seed.
+    Take a sample of data paths based on the specified amount and seed.
 
     Parameters:
       data_paths (str): paths to files
@@ -41,7 +42,6 @@ def main(raw_data, prep_data, samples_amount, sampling_seed):
       samples_amount (int): amount of samples to randomly use from the data set, 0 means all
       sampling_seed (int): seed for random sampling of dataset, -1 means no seed
     """
-
     mlflow.log_param('number_of_samples', samples_amount)
 
     lines = [

@@ -9,6 +9,7 @@ class DataExtractorFactory:
 
     @classmethod
     def load_default_extractors(cls) -> None:
+        """Load default extractors into the factory registry."""
         from .extractors.gpt_only_extractor import GPTOnlyExtractor
         cls.register("gpt_only", "invoice", GPTOnlyExtractor)
 
@@ -39,7 +40,6 @@ class DataExtractorFactory:
     def create(cls, category: str, name: str, additional_config: dict,
                logger_proxy: LoggerProxy) -> Extractor:
         """Create an instance of extractor by category and name."""
-
         if (category not in cls._registry or name not in cls._registry[category]):
             raise ValueError(
                 f"Extractor {name} in category {category} is not registered"

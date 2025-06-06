@@ -1,5 +1,4 @@
-"""Class that performs exact matches for dates"""
-
+"""Class that performs exact matches for dates."""
 import logging
 from typing import Dict
 import pandas as pd
@@ -11,8 +10,10 @@ log = logging.getLogger(__name__)
 
 
 class LevenshteinMatcher(BaseMatcher):
+    """Class that performs fuzzy matches using Levenshtein distance."""
 
     def get_matcher_name(self):
+        """Return matcher name."""
         return "levenshtein"
 
     def calculate_levenshtein_ratio(self, string1: str, string2: str):
@@ -38,9 +39,7 @@ class LevenshteinMatcher(BaseMatcher):
         return rounded_levenshtein_ratio
 
     def get_match(self, comparison_df, field_name):
-        """
-        Get match result per line item. Calculates Levenshtein ratio.
-        """
+        """Get match result per line item. Calculates Levenshtein ratio."""
         match_df = comparison_df.apply(
             lambda x: self.calculate_levenshtein_ratio(
                 x[f"{field_name}_gt"], x[f"{field_name}_pred"]
@@ -51,8 +50,8 @@ class LevenshteinMatcher(BaseMatcher):
 
     def find_best_matches(self, comparison_df: pd.DataFrame, fuzzy_match_config: Dict):
         """
-        For every line item in the ground truth data, find the most similar
-        line item in the predictions
+        For each line item in the ground truth, find the most similar in predictions.
+
         Args:
             comparison_df: a dataframe which is the cartesian product of the
             line items inthe ground truth and the predictions datasets
