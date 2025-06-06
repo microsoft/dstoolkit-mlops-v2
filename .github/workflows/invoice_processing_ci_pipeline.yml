@@ -1,0 +1,34 @@
+name: Invoice Processing CI Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+
+  workflow_dispatch:
+    inputs:
+      exec_environment:
+        type: string
+        description: "The environment to run the workflow in"
+        required: true
+        default: "pr"
+      model_type:
+        type: string
+        description: "The type of model to run the workflow for"
+        required: true
+        default: "invoice_processing"
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  run-ci-workflow:
+    uses: ./.github/workflows/platform_ci_workflow.yml
+    with:
+      exec_environment: ${{ inputs.exec_environment || 'pr' }}
+      model_type: ${{ inputs.model_type || 'invoice_processing' }}
+    secrets: inherit
