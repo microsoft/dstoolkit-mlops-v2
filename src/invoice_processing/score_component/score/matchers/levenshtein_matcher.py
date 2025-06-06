@@ -18,7 +18,7 @@ class LevenshteinMatcher(BaseMatcher):
 
     def calculate_levenshtein_ratio(self, string1: str, string2: str):
         """
-        Calculates the Levenshtein ratio between two strings.
+        Calculate the Levenshtein ratio between two strings.
 
         The Levenshtein ratio is a measure of the similarity between two strings,
         defined as the ratio of the Levenshtein distance to the length of the longer string.
@@ -58,7 +58,6 @@ class LevenshteinMatcher(BaseMatcher):
         Returns:
             A dictionary of the best matches: {"fuzzy_match_method_name": best_matches_df}
         """
-
         levenshtein_ratio_thr = fuzzy_match_config["field_match_threshold"]
         remaining_comparisons = comparison_df.copy()
         best_matches_list_levenshtein = []

@@ -8,6 +8,7 @@ log = logging.getLogger(__name__)
 
 
 class TextExactMatcher(BaseMatcher):
+    """Class that performs exact matches for text."""
 
     def get_matcher_name(self):
         """Return matcher name."""

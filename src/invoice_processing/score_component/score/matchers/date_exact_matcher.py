@@ -8,6 +8,7 @@ log = logging.getLogger(__name__)
 
 
 class DateExactMatcher(BaseMatcher):
+    """Class that performs exact matches for dates."""
 
     def dates_exact_match(self, date_str1: str, date_str2: str):
         """

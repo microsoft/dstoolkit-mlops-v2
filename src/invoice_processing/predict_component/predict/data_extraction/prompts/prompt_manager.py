@@ -5,7 +5,7 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined, TemplateError
 
 
 class PromptManager:
-    """Manages the prompts used in the data extraction process."""    
+    """Manages the prompts used in the data extraction process."""
 
     _env = None
 

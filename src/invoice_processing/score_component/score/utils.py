@@ -11,7 +11,7 @@ Functions:
 """
 import json
 from pathlib import Path
-from typing import Union, List
+from typing import Union
 import re
 import logging
 from dateutil.parser import parse
@@ -20,7 +20,7 @@ log = logging.getLogger(__name__)
 
 
 def _load_json_from_file(file_path):
-    """Helper to load JSON from a single file and return data."""
+    """Load JSON data from a file."""
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             curr_data = json.load(f)
@@ -33,7 +33,7 @@ def _load_json_from_file(file_path):
 
 
 def _load_json_from_directory(directory_path):
-    """Helper to load JSON from all files in a directory."""
+    """Load JSON data from all files in a directory."""
     all_data = []
     all_data_dict = {}
     for file_path in Path(directory_path).glob("*.json"):
@@ -49,7 +49,7 @@ def _load_json_from_directory(directory_path):
 
 def load_json_file(path: Union[str, Path]):
     """
-    Reads a JSON file and returns the parsed data.
+    Read a JSON file and returns the parsed data.
 
     Args:
         file_path (str): The path to the JSON file to be read.

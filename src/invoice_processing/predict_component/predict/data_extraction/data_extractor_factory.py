@@ -1,3 +1,4 @@
+"""Factory for creating data extractors based on categories."""
 from .config.configuration_container import ConfigurationContainer
 from .extractors.base_extractor import Extractor, LoggerProxy
 
