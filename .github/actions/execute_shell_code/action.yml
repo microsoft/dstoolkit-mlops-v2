@@ -20,6 +20,10 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Clear Azure CLI token cache
+      run: |
+        rm -rf ~/.azure
+
     - name: Azure login
       uses: azure/login@v2
       with:
