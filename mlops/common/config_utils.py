@@ -1,4 +1,5 @@
 """Configuration utils to load config from yaml/json."""
+
 import os
 from typing import Dict, Any
 from pathlib import Path
@@ -12,18 +13,33 @@ class MLOpsConfig:
     _raw_config: Any
 
     def __init__(
-        self, environment: str = "pr", config_path: Path = "config/config.yaml"
+        self,
+        environment: str = "pr",
+        config_path: Path = "config/config.yaml",
+        exp_config_path: Path = "config/experiment_config.yaml"
     ):
         """Intialize MLConfig with yaml config data."""
         self.config_path = config_path
+        self.exp_config_path = exp_config_path
         self._environment = environment
         load_dotenv()
         with open(config_path, "r", encoding="utf-8") as stream:
             self._raw_config = yaml.safe_load(os.path.expandvars(stream.read()))
 
+        with open(exp_config_path, "r", encoding="utf-8") as stream:
+            self._raw_desc_config = yaml.safe_load(os.path.expandvars(stream.read()))["experiment_description"]
+
     def __getattr__(self, __name: str) -> Any:
         """Get values for top level keys in configuration."""
         return self._raw_config[__name]
+
+    def get_experiment_description(self) -> str:
+        """Get the experiment description from the configuration."""
+        name = self._raw_desc_config["user_name"]
+        title = self._raw_desc_config["title"]
+        hypothesis = self._raw_desc_config["hypothesis"]
+
+        return f"User Name: {name} \n\n Title: {title} \n\n Hypothesis: {hypothesis}"
 
     def get_pipeline_config(self, pipeline_name: str) -> Dict:
         """Get the pipeline configuration for given pipeline name and environment."""
