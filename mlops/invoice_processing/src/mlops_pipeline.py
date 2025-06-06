@@ -240,7 +240,7 @@ def prepare_and_execute(
         predictions=predictions,
     )
 
-    prepare_and_execute_pipeline(pipeline_job_config, experiment_description)
+    prepare_and_execute_pipeline(pipeline_job_config)
 
 
 def main():
