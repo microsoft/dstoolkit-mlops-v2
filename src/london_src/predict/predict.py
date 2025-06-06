@@ -34,6 +34,7 @@ def main(model_input, test_data, prediction_path):
 
     for line in lines:
         print(line)
+        print("Loading test data...")
 
     test_x, testy = load_test_data(test_data)
     predict(test_x, testy, model_input, prediction_path)
