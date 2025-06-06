@@ -1,8 +1,3 @@
-experiment_description: 
-  user_name: <USER_NAME>
-  title: <EXPERIMENT_TITLE>
-  hypothesis:  <EXPERIMENT_HYPOTHESIS>
-
 prep_config:
   samples_amount: 4
   sampling_seed: 42

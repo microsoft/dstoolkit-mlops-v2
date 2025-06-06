@@ -26,20 +26,9 @@ class MLOpsConfig:
         with open(config_path, "r", encoding="utf-8") as stream:
             self._raw_config = yaml.safe_load(os.path.expandvars(stream.read()))
 
-        with open(exp_config_path, "r", encoding="utf-8") as stream:
-            self._raw_desc_config = yaml.safe_load(os.path.expandvars(stream.read()))["experiment_description"]
-
     def __getattr__(self, __name: str) -> Any:
         """Get values for top level keys in configuration."""
         return self._raw_config[__name]
-
-    def get_experiment_description(self) -> str:
-        """Get the experiment description from the configuration."""
-        name = self._raw_desc_config["user_name"]
-        title = self._raw_desc_config["title"]
-        hypothesis = self._raw_desc_config["hypothesis"]
-
-        return f"User Name: {name} \n\n Title: {title} \n\n Hypothesis: {hypothesis}"
 
     def get_pipeline_config(self, pipeline_name: str) -> Dict:
         """Get the pipeline configuration for given pipeline name and environment."""

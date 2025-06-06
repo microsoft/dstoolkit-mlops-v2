@@ -54,18 +54,7 @@ This file is only used by the invoice_processing pipeline and is used to configu
 
 The file has several sections, each section configures a different component of the experiment.
 
-The `experiment_description` section enables the users to add more information about the experiment they are about to run. The user can provide their user name, give a title to the experiment and explain what hypothesis is being tested in this experiment. This information will be logged into AML's job description.
-
-``` yaml
-experiment_description: 
-  user_name: <USER_NAME>
-  title: <EXPERIMENT_TITLE>
-  hypothesis:  <EXPERIMENT_HYPOTHESIS>
-```
-
-Providing this information will make it easier to differentiate between the different AML runs.
-
-The next section in the config file configures the data preparation step of the pipeline.
+The first section in the config file configures the data preparation step of the pipeline.
 
 ```yaml
 prep_config:
