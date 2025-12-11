@@ -1,0 +1,36 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: predict_labels
+version: 1
+display_name: PredictLabels
+type: command
+enable_caching: true
+inputs:
+  strategy:
+    type: string
+  temperature:
+    type: number
+  gpt_deployment_name:
+    type: string
+  prompt_config:
+    type: string
+  test_data:
+    type: uri_folder
+  azure_openai_endpoint:
+    type: string
+  azure_openai_api_key:
+    type: string
+outputs:
+  predictions:
+    type: uri_folder
+environment:  azureml:AzureML-sklearn-1.1-ubuntu20.04-py38-cpu@latest
+code: ./../../../src/invoice_processing/predict_component
+command: >-
+  python -m predict.predict
+  --strategy ${{inputs.strategy}}
+  --temperature ${{inputs.temperature}}
+  --gpt_deployment_name ${{inputs.gpt_deployment_name}}
+  --azure_openai_endpoint ${{inputs.azure_openai_endpoint}}
+  --azure_openai_api_key ${{inputs.azure_openai_api_key}}
+  --prompt_config "${{inputs.prompt_config}}"
+  --test_data ${{inputs.test_data}}
+  --predictions ${{outputs.predictions}}

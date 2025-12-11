@@ -1,0 +1,34 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: score_model
+version: 1
+display_name: ScoreModel
+type: command
+enable_caching: true
+inputs:
+  predictions:
+    type: uri_folder
+  ground_truth:
+    type: uri_folder
+  score_config:
+    type: string
+outputs:
+  score_report:
+    type: uri_file
+  missing_refs:
+    type: uri_file
+  all_unmatched_gt:
+    type: uri_file
+  all_unmatched_pred:
+    type: uri_file
+
+environment: azureml:AzureML-sklearn-1.1-ubuntu20.04-py38-cpu@latest
+code: ./../../../src/invoice_processing/score_component
+command: >-
+  python -m score.score
+  --predictions ${{inputs.predictions}}
+  --ground_truth ${{inputs.ground_truth}} 
+  --score_report ${{outputs.score_report}}
+  --missing_refs ${{outputs.missing_refs}}
+  --all_unmatched_gt ${{outputs.all_unmatched_gt}}
+  --all_unmatched_pred ${{outputs.all_unmatched_pred}}
+  --score_config "${{inputs.score_config}}"

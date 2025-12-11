@@ -1,4 +1,5 @@
 """Configuration utils to load config from yaml/json."""
+
 import os
 from typing import Dict, Any
 from pathlib import Path
@@ -12,10 +13,14 @@ class MLOpsConfig:
     _raw_config: Any
 
     def __init__(
-        self, environment: str = "pr", config_path: Path = "config/config.yaml"
+        self,
+        environment: str = "pr",
+        config_path: Path = "config/config.yaml",
+        exp_config_path: Path = "config/experiment_config.yaml"
     ):
         """Intialize MLConfig with yaml config data."""
         self.config_path = config_path
+        self.exp_config_path = exp_config_path
         self._environment = environment
         load_dotenv()
         with open(config_path, "r", encoding="utf-8") as stream:

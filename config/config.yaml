@@ -41,6 +41,15 @@ pipeline_configs:
     docker_context_path: mlops/docker_taxi/environment
     aml_env_name: docker_taxi_env
     dataset_name: docker_taxi_pr_data
+  
+  invoice_processing_pr:
+    cluster_region: eastus
+    cluster_size: STANDARD_DS3_v2
+    cluster_name: cpucluster
+    conda_path: mlops/invoice_processing/environment/conda.yml
+    aml_env_name: invoice_processing_env
+    dataset_name: invoice_processing_test
+    gt_name: invoice_processing_test_gt
 
   london_taxi_dev: 
     cluster_region: eastus
@@ -74,6 +83,15 @@ pipeline_configs:
     docker_context_path: mlops/docker_taxi/environment
     aml_env_name: docker_taxi_env
     dataset_name: docker_taxi_pr_data
+
+  invoice_processing_dev:
+    cluster_region: eastus
+    cluster_size: STANDARD_DS3_v2
+    cluster_name: cpucluster
+    conda_path: mlops/invoice_processing/environment/conda.yml
+    aml_env_name: invoice_processing_env
+    dataset_name: validated_gt_images
+    gt_name: validated_gt_annotations
 
 deployment_configs:
     london_taxi_batch_dev: 

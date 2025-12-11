@@ -1,0 +1,25 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: prepare_invoices
+display_name: PrepInvoices
+version: 1
+type: command
+enable_caching: true
+inputs:
+  raw_data: 
+    type: uri_folder
+  samples_amount:
+    type: integer
+  sampling_seed:
+    type: integer
+
+outputs:
+  prep_data:
+    type: uri_folder
+code: ./../../../src/invoice_processing/prep_component
+environment: azureml:AzureML-sklearn-1.1-ubuntu20.04-py38-cpu@latest
+command: >-
+  python -m prep.prep
+  --raw_data ${{inputs.raw_data}} 
+  --samples_amount ${{inputs.samples_amount}}
+  --sampling_seed ${{inputs.sampling_seed}}
+  --prep_data ${{outputs.prep_data}}

@@ -53,6 +53,18 @@
             "DATA_PATH":"mlops/docker_taxi/data",
             "DATASET_NAME":"docker_taxi_training",
             "DATASET_DESC":"this dataset is for training models"
+        },
+        {
+            "DATA_PURPOSE": "test_data",
+            "DATA_PATH":"mlops/invoice_processing/data/raw_data",
+            "DATASET_NAME":"invoice_processing_test",
+            "DATASET_DESC":"this dataset is for pr validation only"
+        },
+        {
+            "DATA_PURPOSE": "ground_truth",
+            "DATA_PATH":"mlops/invoice_processing/data/ground_truth",
+            "DATASET_NAME":"invoice_processing_test_gt",
+            "DATASET_DESC":"this dataset is for pr validation only"
         }
     ]
 }

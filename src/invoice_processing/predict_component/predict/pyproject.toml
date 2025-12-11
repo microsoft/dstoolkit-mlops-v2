@@ -1,0 +1,25 @@
+[project]
+version = "0.0.10"
+description = "A shared package of extraction strategies for content digitization."
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "openai",
+    "pydantic",
+    "jinja2",
+    "python-frontmatter",
+    "python-retry"
+]
+
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["data_extraction*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.j2"]
