@@ -1,6 +1,14 @@
 name: London Taxi CI Workflow
 
 on:
+  workflow_dispatch:
+    inputs:
+      exec_environment:
+        type: string
+        default: "pr"
+      model_type:
+        type: string
+        default: "london_taxi"
   pull_request:
     branches:
       - main
@@ -25,7 +33,7 @@ on:
         default: "london_taxi"
 permissions:
   id-token: write
-  contents: read    
+  contents: read
 jobs:
   run-ci-workflow:
     uses: ./.github/workflows/platform_ci_workflow.yml

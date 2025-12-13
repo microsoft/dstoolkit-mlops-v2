@@ -1,5 +1,13 @@
 name: London Taxi CD Workflow
 on:
+  workflow_dispatch:
+    inputs:
+      exec_environment:
+        type: string
+        default: "dev"
+      model_type:
+        type: string
+        default: "london_taxi"
   push:
     branches:
       - main
@@ -23,7 +31,7 @@ on:
         default: "london_taxi"
 permissions:
   id-token: write
-  contents: read         
+  contents: read
 jobs:
   run-cd-workflow:
     uses: ./.github/workflows/platform_cd_workflow.yml
