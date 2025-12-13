@@ -37,6 +37,18 @@ jobs:
           arm_tenant_id: ${{ env.ARM_TENANT_ID }}
           subscription_id: ${{ env.SUBSCRIPTION_ID }}
 
+      - name: Temporarily Enable Storage Public Access
+        run: |
+          echo "Temporarily enabling storage public access for workflow execution..."
+          echo "Note: This is acceptable for sample/learning environments. For production, use resource access rules."
+          az storage account update \
+            --name mfstac003 \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --default-action Allow
+          echo "Waiting for network rule propagation..."
+          sleep 5
+
       - name: Execute MLOps Standard Pipeline
         uses: ./.github/actions/execute_shell_code
         with:
@@ -56,6 +68,17 @@ jobs:
           run_name=${arr[0]}
           echo $run_name
           echo "RUN_NAME=${run_name}"  >> "$GITHUB_ENV"
+
+      - name: Restore Storage Network Restrictions
+        if: always()
+        run: |
+          echo "Restoring storage network restrictions..."
+          az storage account update \
+            --name mfstac003 \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --default-action Deny
+          echo "Storage access restored to restricted mode."
 
       - name: Run Metadata
         shell: bash
@@ -110,11 +133,11 @@ jobs:
                 python -m mlops.common.deployment.provision_online_endpoint \
                   --model_type ${{ inputs.model_type }} \
                   --environment_name ${{ inputs.exec_environment }} \
-                  --run_id ${{ github.run_id }}  
+                  --run_id ${{ github.run_id }}
 
       - name: Provision azureml deployment
         uses: ./.github/actions/execute_shell_code
-        with: 
+        with:
             arm_client_id: ${{ env.ARM_CLIENT_ID }}
             arm_tenant_id: ${{ env.ARM_TENANT_ID }}
             subscription_id: ${{ env.SUBSCRIPTION_ID }}
@@ -214,7 +237,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    needs: [execute-training-job]    
+    needs: [execute-training-job]
     environment:
         name: dev
     steps:
@@ -227,7 +250,7 @@ jobs:
           arm_client_id: ${{ env.ARM_CLIENT_ID }}
           arm_tenant_id: ${{ env.ARM_TENANT_ID }}
           subscription_id: ${{ env.SUBSCRIPTION_ID }}
-        
+
       - name: Provision azureml online endpoint
         uses: ./.github/actions/execute_shell_code
         with:

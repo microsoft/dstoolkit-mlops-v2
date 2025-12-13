@@ -66,49 +66,17 @@ jobs:
           arm_tenant_id: ${{ env.ARM_TENANT_ID }}
           subscription_id: ${{ env.SUBSCRIPTION_ID }}
 
-      - name: Add GitHub Runner IP to Storage Firewall
+      - name: Temporarily Enable Storage Public Access
         run: |
-          echo "Getting runner public IP..."
-          RUNNER_IP=$(curl -s https://api.ipify.org)
-          echo "Runner IP: $RUNNER_IP"
-
-          echo "Adding IP to storage account firewall..."
-          az storage account network-rule add \
-            --account-name mfstac003 \
+          echo "Temporarily enabling storage public access for workflow execution..."
+          echo "Note: This is acceptable for sample/learning environments. For production, use resource access rules."
+          az storage account update \
+            --name mfstac003 \
             --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-            --ip-address $RUNNER_IP
-
-          echo "Waiting for firewall rule to propagate..."
-          sleep 10
-
-      - name: Diagnostic - Test Storage Access for AzureML Workspace identity
-        run: |
-          echo "=== Testing Storage Account Access ==="
-
-          # Get storage account key for testing
-          STORAGE_ACCOUNT="mfstac003"
-          RESOURCE_GROUP="${{ env.RESOURCE_GROUP_NAME }}"
-
-          echo "Testing network connectivity to storage account..."
-          az storage account show --name $STORAGE_ACCOUNT --resource-group $RESOURCE_GROUP --query "name" -o tsv
-
-          echo "Checking public network access setting..."
-          az storage account show --name $STORAGE_ACCOUNT --resource-group $RESOURCE_GROUP --query "publicNetworkAccess" -o tsv
-
-          echo "Checking network rule set..."
-          az storage account show --name $STORAGE_ACCOUNT --resource-group $RESOURCE_GROUP --query "networkRuleSet"
-
-          echo "Testing blob write access with current identity..."
-          CONTAINER_NAME="azureml-test-$(date +%s)"
-          az storage container create --account-name $STORAGE_ACCOUNT --name $CONTAINER_NAME --auth-mode login || echo "FAILED: Cannot create container"
-
-          if az storage container exists --account-name $STORAGE_ACCOUNT --name $CONTAINER_NAME --auth-mode login -o tsv | grep -q "True"; then
-            echo "SUCCESS: Storage access is working"
-            az storage container delete --account-name $STORAGE_ACCOUNT --name $CONTAINER_NAME --auth-mode login
-          else
-            echo "FAILED: Storage access is blocked"
-            exit 1
-          fi
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --default-action Allow
+          echo "Waiting for network rule propagation..."
+          sleep 5
 
       - name: Execute AzureML Pipeline
         uses: ./.github/actions/execute_shell_code
@@ -121,12 +89,13 @@ jobs:
                   --build_environment ${{ inputs.exec_environment }} \
                   --wait_for_completion True
 
-      - name: Remove GitHub Runner IP from Storage Firewall
+      - name: Restore Storage Network Restrictions
         if: always()
         run: |
-          echo "Removing runner IP from storage account firewall..."
-          RUNNER_IP=$(curl -s https://api.ipify.org)
-          az storage account network-rule remove \
-            --account-name mfstac003 \
+          echo "Restoring storage network restrictions..."
+          az storage account update \
+            --name mfstac003 \
             --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-            --ip-address $RUNNER_IP || echo "IP already removed or not found"
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --default-action Deny
+          echo "Storage access restored to restricted mode."
