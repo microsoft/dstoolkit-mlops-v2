@@ -81,17 +81,6 @@ jobs:
           echo $run_name
           echo "RUN_NAME=${run_name}"  >> "$GITHUB_ENV"
 
-      - name: Restore Storage Network Restrictions
-        if: always()
-        run: |
-          echo "Restoring storage network restrictions..."
-          az storage account update \
-            --name mfstac003 \
-            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-            --subscription ${{ env.SUBSCRIPTION_ID }} \
-            --default-action Deny
-          echo "Storage access restored to restricted mode."
-
       - name: Run Metadata
         shell: bash
         run: |
@@ -272,3 +261,36 @@ jobs:
             script_parameter: |
                 python -m mlops.common.deployment.approve_model \
                   --model_type ${{ inputs.model_type }}
+
+  cleanup:
+    name: Cleanup and Restore Security
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    needs: [execute-training-job, deploy-online, deploy-batch, change_model_tag]
+    if: always()
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Azure ML Agent
+        uses: "./.github/actions/configure_azureml_agent"
+        with:
+          arm_client_id: ${{ env.ARM_CLIENT_ID }}
+          arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+          subscription_id: ${{ env.SUBSCRIPTION_ID }}
+
+      - name: Restore Storage Network Restrictions
+        run: |
+          echo "All deployment jobs completed. Restoring storage network restrictions..."
+          az storage account update \
+            --name mfstac003 \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --default-action Deny
+          echo "Storage access restored to restricted mode."
+          echo ""
+          echo "⚠️  NOTE: Deployed endpoints are now running but will have limited storage access."
+          echo "For production environments, configure persistent access for endpoint identities."
+          echo "See docs/how-to/ProductionNetworkSecurity.md for guidance."
