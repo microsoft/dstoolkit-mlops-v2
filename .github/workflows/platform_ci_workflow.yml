@@ -66,6 +66,35 @@ jobs:
           arm_tenant_id: ${{ env.ARM_TENANT_ID }}
           subscription_id: ${{ env.SUBSCRIPTION_ID }}
 
+      - name: Diagnostic - Test Storage Access for AzureML Workspace identity
+        run: |
+          echo "=== Testing Storage Account Access ==="
+
+          # Get storage account key for testing
+          STORAGE_ACCOUNT="mfstac003"
+          RESOURCE_GROUP="${{ env.RESOURCE_GROUP_NAME }}"
+
+          echo "Testing network connectivity to storage account..."
+          az storage account show --name $STORAGE_ACCOUNT --resource-group $RESOURCE_GROUP --query "name" -o tsv
+
+          echo "Checking public network access setting..."
+          az storage account show --name $STORAGE_ACCOUNT --resource-group $RESOURCE_GROUP --query "publicNetworkAccess" -o tsv
+
+          echo "Checking network rule set..."
+          az storage account show --name $STORAGE_ACCOUNT --resource-group $RESOURCE_GROUP --query "networkRuleSet"
+
+          echo "Testing blob write access with current identity..."
+          CONTAINER_NAME="azureml-test-$(date +%s)"
+          az storage container create --account-name $STORAGE_ACCOUNT --name $CONTAINER_NAME --auth-mode login || echo "FAILED: Cannot create container"
+
+          if az storage container exists --account-name $STORAGE_ACCOUNT --name $CONTAINER_NAME --auth-mode login -o tsv | grep -q "True"; then
+            echo "SUCCESS: Storage access is working"
+            az storage container delete --account-name $STORAGE_ACCOUNT --name $CONTAINER_NAME --auth-mode login
+          else
+            echo "FAILED: Storage access is blocked"
+            exit 1
+          fi
+
       - name: Execute AzureML Pipeline
         uses: ./.github/actions/execute_shell_code
         with:
