@@ -1,6 +1,14 @@
 name: Platform CD Workflow
 
 on:
+  workflow_dispatch:
+    inputs:
+      exec_environment:
+        type: string
+        default: "dev"
+      model_type:
+        type: string
+        default: "nyc_taxi"
   workflow_call:
     inputs:
       exec_environment:
@@ -12,6 +20,10 @@ on:
         type: string
         description: "type of model to execute"
         required: true
+
+permissions:
+  id-token: write
+  contents: read
 
 env:
   SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
