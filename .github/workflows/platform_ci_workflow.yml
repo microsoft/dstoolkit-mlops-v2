@@ -66,6 +66,21 @@ jobs:
           arm_tenant_id: ${{ env.ARM_TENANT_ID }}
           subscription_id: ${{ env.SUBSCRIPTION_ID }}
 
+      - name: Add GitHub Runner IP to Storage Firewall
+        run: |
+          echo "Getting runner public IP..."
+          RUNNER_IP=$(curl -s https://api.ipify.org)
+          echo "Runner IP: $RUNNER_IP"
+
+          echo "Adding IP to storage account firewall..."
+          az storage account network-rule add \
+            --account-name mfstac003 \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --ip-address $RUNNER_IP
+
+          echo "Waiting for firewall rule to propagate..."
+          sleep 10
+
       - name: Diagnostic - Test Storage Access for AzureML Workspace identity
         run: |
           echo "=== Testing Storage Account Access ==="
@@ -105,3 +120,13 @@ jobs:
               python -m mlops.${{ inputs.model_type }}.src.mlops_pipeline \
                   --build_environment ${{ inputs.exec_environment }} \
                   --wait_for_completion True
+
+      - name: Remove GitHub Runner IP from Storage Firewall
+        if: always()
+        run: |
+          echo "Removing runner IP from storage account firewall..."
+          RUNNER_IP=$(curl -s https://api.ipify.org)
+          az storage account network-rule remove \
+            --account-name mfstac003 \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --ip-address $RUNNER_IP || echo "IP already removed or not found"
