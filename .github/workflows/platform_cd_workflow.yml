@@ -124,6 +124,47 @@ jobs:
               echo "No common directory found for ${{ inputs.model_type }}, skipping copy"
             fi
 
+      - name: Validate Storage Configuration
+        run: |
+          echo "=== Validating Storage Configuration for Deployment ==="
+
+          # Get storage configuration
+          DEFAULT_ACTION=$(az storage account show \
+            --name mfstac003 \
+            --resource-group rg_modelfactory \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --query 'networkRuleSet.defaultAction' -o tsv)
+
+          SHARED_KEY_ACCESS=$(az storage account show \
+            --name mfstac003 \
+            --resource-group rg_modelfactory \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --query 'allowSharedKeyAccess' -o tsv)
+
+          echo "Storage Account: mfstac003"
+          echo "Default Action: $DEFAULT_ACTION"
+          echo "Shared Key Access: $SHARED_KEY_ACCESS"
+
+          # Validate storage is accessible
+          if [ "$DEFAULT_ACTION" != "Allow" ]; then
+            echo "❌ ERROR: Storage default action is '$DEFAULT_ACTION' - must be 'Allow' for deployment"
+            echo "The endpoint needs to download the model from storage during provisioning."
+            exit 1
+          fi
+
+          # Test actual blob access
+          echo "Testing blob access with workflow identity..."
+          if ! az storage container list \
+            --account-name mfstac003 \
+            --auth-mode login \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --output table; then
+            echo "❌ ERROR: Workflow identity cannot access storage - this indicates RBAC or network issues"
+            exit 1
+          fi
+
+          echo "✅ Storage configuration validated successfully"
+
       - name: Provision azureml online endpoint
         uses: ./.github/actions/execute_shell_code
         with:
@@ -136,6 +177,45 @@ jobs:
                   --environment_name ${{ inputs.exec_environment }} \
                   --run_id ${{ github.run_id }}
 
+      - name: Validate Endpoint Identity Storage Access
+        run: |
+          echo "=== Validating Endpoint Identity Permissions ==="
+
+          ENDPOINT_IDENTITY=$(az ml online-endpoint show \
+            --name ${{ inputs.model_type }}-rte-003 \
+            --resource-group rg_modelfactory \
+            --workspace-name mfaml001 \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --query 'identity.principal_id' -o tsv)
+
+          if [ -z "$ENDPOINT_IDENTITY" ]; then
+            echo "❌ ERROR: Could not retrieve endpoint managed identity"
+            exit 1
+          fi
+
+          echo "Endpoint Identity: $ENDPOINT_IDENTITY"
+
+          # Check for required storage roles
+          STORAGE_SCOPE="/subscriptions/${{ env.SUBSCRIPTION_ID }}/resourceGroups/rg_modelfactory/providers/Microsoft.Storage/storageAccounts/mfstac003"
+
+          ROLE_ASSIGNMENTS=$(az role assignment list \
+            --assignee $ENDPOINT_IDENTITY \
+            --scope $STORAGE_SCOPE \
+            --query '[].roleDefinitionName' -o tsv)
+
+          echo "Current RBAC roles on storage:"
+          echo "$ROLE_ASSIGNMENTS"
+
+          # Validate endpoint has at least Storage Blob Data Reader
+          if ! echo "$ROLE_ASSIGNMENTS" | grep -qE "(Storage Blob Data Reader|Storage Blob Data Contributor|Storage Blob Data Owner|Contributor|Owner)"; then
+            echo "❌ ERROR: Endpoint identity lacks required storage role"
+            echo "Required: At least 'Storage Blob Data Reader' role on storage account"
+            echo "The endpoint needs this to download the model during deployment."
+            exit 1
+          fi
+
+          echo "✅ Endpoint identity permissions validated successfully"
+
       - name: Provision azureml deployment
         uses: ./.github/actions/execute_shell_code
         with:
@@ -147,42 +227,6 @@ jobs:
                   --model_type ${{ inputs.model_type }} \
                   --environment_name ${{ inputs.exec_environment }} \
                   --run_id ${{ github.run_id }}
-
-      - name: Verify Storage Access from Runner
-        run: |
-          echo "Checking storage account accessibility from workflow runner..."
-          az storage account show \
-            --name mfstac003 \
-            --resource-group rg_modelfactory \
-            --subscription ${{ env.SUBSCRIPTION_ID }} \
-            --query '{name:name, defaultAction:networkRuleSet.defaultAction, publicAccess:publicNetworkAccess, sharedKeyAccess:allowSharedKeyAccess}' \
-            -o table
-
-          echo "Testing blob access with workflow identity..."
-          az storage container list \
-            --account-name mfstac003 \
-            --auth-mode login \
-            --subscription ${{ env.SUBSCRIPTION_ID }} \
-            --output table || echo "Warning: Workflow identity cannot list containers"
-
-      - name: Verify Endpoint Identity Storage Access
-        run: |
-          echo "Getting endpoint managed identity..."
-          ENDPOINT_IDENTITY=$(az ml online-endpoint show \
-            --name ${{ inputs.model_type }}-rte-003 \
-            --resource-group rg_modelfactory \
-            --workspace-name mfaml001 \
-            --subscription ${{ env.SUBSCRIPTION_ID }} \
-            --query 'identity.principal_id' -o tsv)
-
-          echo "Endpoint Identity: $ENDPOINT_IDENTITY"
-
-          echo "Checking RBAC role assignments on storage account..."
-          az role assignment list \
-            --assignee $ENDPOINT_IDENTITY \
-            --scope /subscriptions/${{ env.SUBSCRIPTION_ID }}/resourceGroups/rg_modelfactory/providers/Microsoft.Storage/storageAccounts/mfstac003 \
-            --query '[].{Role:roleDefinitionName, Scope:scope}' \
-            -o table
 
       - name: Wait for endpoint startup and model download
         run: |
