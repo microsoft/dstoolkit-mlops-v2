@@ -15,12 +15,12 @@ on:
           - sequence_model
       model_name:
         type: string
-        description: "Model name (e.g., nyc_taxi_model_nyc_taxi_update_20251201)"
-        required: true
+        description: "Optional: Specific model name (leave empty to auto-discover latest)"
+        required: false
       model_version:
         type: string
-        description: "Model version number"
-        required: true
+        description: "Optional: Specific model version (leave empty to auto-discover latest)"
+        required: false
       exec_environment:
         type: choice
         description: "Environment"
@@ -68,6 +68,63 @@ jobs:
             else
               echo "No common directory found for ${{ inputs.model_type }}, skipping copy"
             fi
+
+      - name: Discover Model Name and Version
+        id: discover_model
+        run: |
+          echo "=== Discovering Model Information ==="
+          
+          if [ -n "${{ inputs.model_name }}" ] && [ -n "${{ inputs.model_version }}" ]; then
+            echo "Using provided model name and version"
+            MODEL_NAME="${{ inputs.model_name }}"
+            MODEL_VERSION="${{ inputs.model_version }}"
+          else
+            echo "Auto-discovering latest model for ${{ inputs.model_type }}"
+            
+            # List all models and filter by model_type prefix, sort by creation time
+            MODEL_INFO=$(az ml model list \
+              --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+              --workspace-name ${{ env.WORKSPACE_NAME }} \
+              --subscription ${{ env.SUBSCRIPTION_ID }} \
+              --query "[?starts_with(name, '${{ inputs.model_type }}')].{name:name, version:version, created:creation_context.created_at}" \
+              -o json | python -c "
+import sys, json
+models = json.load(sys.stdin)
+if not models:
+    print('ERROR: No models found', file=sys.stderr)
+    sys.exit(1)
+# Sort by created date descending
+models_sorted = sorted(models, key=lambda x: x['created'], reverse=True)
+latest = models_sorted[0]
+print(f\"{latest['name']}|{latest['version']}\")
+")
+            
+            if [ $? -ne 0 ]; then
+              echo "❌ ERROR: Failed to discover model"
+              exit 1
+            fi
+            
+            MODEL_NAME=$(echo $MODEL_INFO | cut -d'|' -f1)
+            MODEL_VERSION=$(echo $MODEL_INFO | cut -d'|' -f2)
+          fi
+          
+          echo "Model Name: $MODEL_NAME"
+          echo "Model Version: $MODEL_VERSION"
+          
+          # Set outputs
+          echo "model_name=$MODEL_NAME" >> $GITHUB_OUTPUT
+          echo "model_version=$MODEL_VERSION" >> $GITHUB_OUTPUT
+          
+          # Verify model exists
+          echo "Verifying model exists..."
+          az ml model show \
+            --name $MODEL_NAME \
+            --version $MODEL_VERSION \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --workspace-name ${{ env.WORKSPACE_NAME }} \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --query '{name:name, version:version, type:type, path:path}' \
+            -o table
 
       - name: Validate Storage Configuration
         run: |
@@ -220,7 +277,7 @@ jobs:
         if: always()
         run: |
           echo "=== Deployment Summary ==="
-          echo "Model: ${{ inputs.model_name }} v${{ inputs.model_version }}"
+          echo "Model: ${{ steps.discover_model.outputs.model_name }} v${{ steps.discover_model.outputs.model_version }}"
           echo "Model Type: ${{ inputs.model_type }}"
           echo "Environment: ${{ inputs.exec_environment }}"
 
@@ -244,3 +301,7 @@ jobs:
             --subscription ${{ env.SUBSCRIPTION_ID }} \
             --query '{name:name, state:provisioning_state, traffic:traffic}' \
             -o table
+          
+          echo ""
+          echo "View deployment logs:"
+          echo "az ml online-deployment get-logs --name \$(az ml online-endpoint show --name $ENDPOINT_NAME -g ${{ env.RESOURCE_GROUP_NAME }} -w ${{ env.WORKSPACE_NAME }} --subscription ${{ env.SUBSCRIPTION_ID }} --query 'traffic' -o tsv | head -1 | cut -d':' -f1) --endpoint-name $ENDPOINT_NAME -g ${{ env.RESOURCE_GROUP_NAME }} -w ${{ env.WORKSPACE_NAME }} --subscription ${{ env.SUBSCRIPTION_ID }}"
