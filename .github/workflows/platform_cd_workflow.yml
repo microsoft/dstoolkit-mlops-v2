@@ -103,6 +103,7 @@ jobs:
       id-token: write
       contents: read
     needs: [execute-training-job]
+    if: vars.IS_ONLINE_DEPLOYMENT == 'True'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -181,8 +182,20 @@ jobs:
         run: |
           echo "=== Validating Endpoint Identity Permissions ==="
 
+          # Get endpoint name from config (model_type uses underscore, endpoint names use hyphens)
+          ENDPOINT_NAME=$(python -c "
+          import yaml
+          with open('config/config.yaml', 'r') as f:
+              config = yaml.safe_load(f)
+              deployment_key = '${{ inputs.model_type }}_online_${{ inputs.exec_environment }}'
+              endpoint_name = config['${{ inputs.exec_environment }}'][deployment_key]['endpoint_name']
+              print(endpoint_name)
+          ")
+
+          echo "Endpoint Name: $ENDPOINT_NAME"
+
           ENDPOINT_IDENTITY=$(az ml online-endpoint show \
-            --name ${{ inputs.model_type }}-rte-003 \
+            --name $ENDPOINT_NAME \
             --resource-group rg_modelfactory \
             --workspace-name mfaml001 \
             --subscription ${{ env.SUBSCRIPTION_ID }} \
@@ -252,6 +265,7 @@ jobs:
       id-token: write
       contents: read
     needs: [execute-training-job]
+    if: vars.IS_BATCH_DEPLOYMENT == 'True'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
