@@ -189,6 +189,16 @@ jobs:
               config = yaml.safe_load(f)
               deployment_key = '${{ inputs.model_type }}_online_${{ inputs.exec_environment }}'
               endpoint_name = config['pipeline_configs'][deployment_key]['endpoint_name']
+              print(endpoint_name)
+          ")
+
+          echo "Endpoint Name: $ENDPOINT_NAME"
+
+          ENDPOINT_IDENTITY=$(az ml online-endpoint show \
+            --name $ENDPOINT_NAME \
+            --resource-group rg_modelfactory \
+            --workspace-name mfaml001 \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
             --query 'identity.principal_id' -o tsv)
 
           if [ -z "$ENDPOINT_IDENTITY" ]; then

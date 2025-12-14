@@ -1,0 +1,246 @@
+name: Deploy Online Endpoint Only
+
+on:
+  workflow_dispatch:
+    inputs:
+      model_type:
+        type: choice
+        description: "Model type to deploy"
+        required: true
+        default: "nyc_taxi"
+        options:
+          - nyc_taxi
+          - london_taxi
+          - docker_taxi
+          - sequence_model
+      model_name:
+        type: string
+        description: "Model name (e.g., nyc_taxi_model_nyc_taxi_update_20251201)"
+        required: true
+      model_version:
+        type: string
+        description: "Model version number"
+        required: true
+      exec_environment:
+        type: choice
+        description: "Environment"
+        required: true
+        default: "dev"
+        options:
+          - dev
+          - test
+          - prod
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
+  RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
+  WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
+  ARM_CLIENT_ID: ${{vars.ARM_CLIENT_ID}}
+  ARM_TENANT_ID: ${{vars.ARM_TENANT_ID}}
+  BUILD_BUILDID: ${{ github.run_id }}
+  BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  deploy-online:
+    name: Fast Deploy Online Endpoint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Azure ML Agent
+        uses: "./.github/actions/configure_azureml_agent"
+        with:
+          arm_client_id: ${{ env.ARM_CLIENT_ID }}
+          arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+          subscription_id: ${{ env.SUBSCRIPTION_ID }}
+
+      - name: Copy common files
+        shell: bash
+        run: |
+            if [ -d "src/${{ inputs.model_type }}/common/" ]; then
+              echo "Copying common files for ${{ inputs.model_type }}"
+              cp -r src/${{ inputs.model_type }}/common/* model/${{ inputs.model_type }}/online
+            else
+              echo "No common directory found for ${{ inputs.model_type }}, skipping copy"
+            fi
+
+      - name: Validate Storage Configuration
+        run: |
+          echo "=== Validating Storage Configuration for Deployment ==="
+
+          # Get storage configuration
+          DEFAULT_ACTION=$(az storage account show \
+            --name mfstac003 \
+            --resource-group rg_modelfactory \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --query 'networkRuleSet.defaultAction' -o tsv)
+
+          SHARED_KEY_ACCESS=$(az storage account show \
+            --name mfstac003 \
+            --resource-group rg_modelfactory \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --query 'allowSharedKeyAccess' -o tsv)
+
+          echo "Storage Account: mfstac003"
+          echo "Default Action: $DEFAULT_ACTION"
+          echo "Shared Key Access: $SHARED_KEY_ACCESS"
+
+          # Validate storage is accessible
+          if [ "$DEFAULT_ACTION" != "Allow" ]; then
+            echo "❌ ERROR: Storage default action is '$DEFAULT_ACTION' - must be 'Allow' for deployment"
+            echo "The endpoint needs to download the model from storage during provisioning."
+            exit 1
+          fi
+
+          # Test actual blob access
+          echo "Testing blob access with workflow identity..."
+          if ! az storage container list \
+            --account-name mfstac003 \
+            --auth-mode login \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --output table; then
+            echo "❌ ERROR: Workflow identity cannot access storage - this indicates RBAC or network issues"
+            exit 1
+          fi
+
+          echo "✅ Storage configuration validated successfully"
+
+      - name: Provision or Update Online Endpoint
+        run: |
+          echo "=== Provisioning Online Endpoint ==="
+
+          # Get endpoint name from config
+          ENDPOINT_NAME=$(python -c "
+          import yaml
+          with open('config/config.yaml', 'r') as f:
+              config = yaml.safe_load(f)
+              deployment_key = '${{ inputs.model_type }}_online_${{ inputs.exec_environment }}'
+              endpoint_name = config['pipeline_configs'][deployment_key]['endpoint_name']
+              print(endpoint_name)
+          ")
+
+          echo "Endpoint Name: $ENDPOINT_NAME"
+
+          # Check if endpoint exists
+          if az ml online-endpoint show \
+            --name $ENDPOINT_NAME \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --workspace-name ${{ env.WORKSPACE_NAME }} \
+            --subscription ${{ env.SUBSCRIPTION_ID }} > /dev/null 2>&1; then
+            echo "Endpoint $ENDPOINT_NAME already exists"
+          else
+            echo "Creating endpoint $ENDPOINT_NAME"
+            az ml online-endpoint create \
+              --name $ENDPOINT_NAME \
+              --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+              --workspace-name ${{ env.WORKSPACE_NAME }} \
+              --subscription ${{ env.SUBSCRIPTION_ID }}
+          fi
+
+      - name: Validate Endpoint Identity Storage Access
+        run: |
+          echo "=== Validating Endpoint Identity Permissions ==="
+
+          # Get endpoint name from config
+          ENDPOINT_NAME=$(python -c "
+          import yaml
+          with open('config/config.yaml', 'r') as f:
+              config = yaml.safe_load(f)
+              deployment_key = '${{ inputs.model_type }}_online_${{ inputs.exec_environment }}'
+              endpoint_name = config['pipeline_configs'][deployment_key]['endpoint_name']
+              print(endpoint_name)
+          ")
+
+          echo "Endpoint Name: $ENDPOINT_NAME"
+
+          ENDPOINT_IDENTITY=$(az ml online-endpoint show \
+            --name $ENDPOINT_NAME \
+            --resource-group rg_modelfactory \
+            --workspace-name mfaml001 \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --query 'identity.principal_id' -o tsv)
+
+          if [ -z "$ENDPOINT_IDENTITY" ]; then
+            echo "❌ ERROR: Could not retrieve endpoint managed identity"
+            exit 1
+          fi
+
+          echo "Endpoint Identity: $ENDPOINT_IDENTITY"
+
+          # Check for required storage roles
+          STORAGE_SCOPE="/subscriptions/${{ env.SUBSCRIPTION_ID }}/resourceGroups/rg_modelfactory/providers/Microsoft.Storage/storageAccounts/mfstac003"
+
+          ROLE_ASSIGNMENTS=$(az role assignment list \
+            --assignee $ENDPOINT_IDENTITY \
+            --scope $STORAGE_SCOPE \
+            --query '[].roleDefinitionName' -o tsv)
+
+          echo "Current RBAC roles on storage:"
+          echo "$ROLE_ASSIGNMENTS"
+
+          # Validate endpoint has at least Storage Blob Data Reader
+          if ! echo "$ROLE_ASSIGNMENTS" | grep -qE "(Storage Blob Data Reader|Storage Blob Data Contributor|Storage Blob Data Owner|Contributor|Owner)"; then
+            echo "❌ ERROR: Endpoint identity lacks required storage role"
+            echo "Required: At least 'Storage Blob Data Reader' role on storage account"
+            echo "The endpoint needs this to download the model during deployment."
+            exit 1
+          fi
+
+          echo "✅ Endpoint identity permissions validated successfully"
+
+      - name: Deploy Model to Endpoint
+        uses: ./.github/actions/execute_shell_code
+        with:
+            arm_client_id: ${{ env.ARM_CLIENT_ID }}
+            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+            subscription_id: ${{ env.SUBSCRIPTION_ID }}
+            script_parameter: |
+                python -m mlops.common.deployment.provision_online_deployment \
+                  --model_type ${{ inputs.model_type }} \
+                  --environment_name ${{ inputs.exec_environment }} \
+                  --run_id ${{ github.run_id }}
+
+      - name: Test Online Endpoint
+        uses: ./.github/actions/execute_shell_code
+        with:
+            arm_client_id: ${{ env.ARM_CLIENT_ID }}
+            arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+            subscription_id: ${{ env.SUBSCRIPTION_ID }}
+            script_parameter: |
+                python -m mlops.common.deployment.run_test_model_on_aml \
+                    --environment_name ${{ inputs.exec_environment }} \
+                    --model_type ${{ inputs.model_type }}
+
+      - name: Deployment Summary
+        if: always()
+        run: |
+          echo "=== Deployment Summary ==="
+          echo "Model: ${{ inputs.model_name }} v${{ inputs.model_version }}"
+          echo "Model Type: ${{ inputs.model_type }}"
+          echo "Environment: ${{ inputs.exec_environment }}"
+
+          # Get endpoint name from config
+          ENDPOINT_NAME=$(python -c "
+          import yaml
+          with open('config/config.yaml', 'r') as f:
+              config = yaml.safe_load(f)
+              deployment_key = '${{ inputs.model_type }}_online_${{ inputs.exec_environment }}'
+              endpoint_name = config['pipeline_configs'][deployment_key]['endpoint_name']
+              print(endpoint_name)
+          ")
+
+          echo "Endpoint: $ENDPOINT_NAME"
+
+          # Get deployment status
+          az ml online-endpoint show \
+            --name $ENDPOINT_NAME \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --workspace-name ${{ env.WORKSPACE_NAME }} \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --query '{name:name, state:provisioning_state, traffic:traffic}' \
+            -o table
