@@ -148,6 +148,48 @@ jobs:
                   --environment_name ${{ inputs.exec_environment }} \
                   --run_id ${{ github.run_id }}
 
+      - name: Verify Storage Access from Runner
+        run: |
+          echo "Checking storage account accessibility from workflow runner..."
+          az storage account show \
+            --name mfstac003 \
+            --resource-group rg_modelfactory \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --query '{name:name, defaultAction:networkRuleSet.defaultAction, publicAccess:publicNetworkAccess, sharedKeyAccess:allowSharedKeyAccess}' \
+            -o table
+
+          echo "Testing blob access with workflow identity..."
+          az storage container list \
+            --account-name mfstac003 \
+            --auth-mode login \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --output table || echo "Warning: Workflow identity cannot list containers"
+
+      - name: Verify Endpoint Identity Storage Access
+        run: |
+          echo "Getting endpoint managed identity..."
+          ENDPOINT_IDENTITY=$(az ml online-endpoint show \
+            --name ${{ inputs.model_type }}-rte-003 \
+            --resource-group rg_modelfactory \
+            --workspace-name mfaml001 \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --query 'identity.principal_id' -o tsv)
+
+          echo "Endpoint Identity: $ENDPOINT_IDENTITY"
+
+          echo "Checking RBAC role assignments on storage account..."
+          az role assignment list \
+            --assignee $ENDPOINT_IDENTITY \
+            --scope /subscriptions/${{ env.SUBSCRIPTION_ID }}/resourceGroups/rg_modelfactory/providers/Microsoft.Storage/storageAccounts/mfstac003 \
+            --query '[].{Role:roleDefinitionName, Scope:scope}' \
+            -o table
+
+      - name: Wait for endpoint startup and model download
+        run: |
+          echo "Waiting for endpoint to complete startup and model download..."
+          echo "This ensures storage remains accessible during async endpoint provisioning."
+          sleep 600
+
       - name: Test azureml real endpoint
         uses: ./.github/actions/execute_shell_code
         with:
@@ -281,16 +323,14 @@ jobs:
           arm_tenant_id: ${{ env.ARM_TENANT_ID }}
           subscription_id: ${{ env.SUBSCRIPTION_ID }}
 
-      - name: Restore Storage Network Restrictions
+      - name: Storage Access Note
         run: |
-          echo "All deployment jobs completed. Restoring storage network restrictions..."
-          az storage account update \
-            --name mfstac003 \
-            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-            --subscription ${{ env.SUBSCRIPTION_ID }} \
-            --default-action Deny
-          echo "Storage access restored to restricted mode."
+          echo "✅ All deployment jobs completed."
           echo ""
-          echo "⚠️  NOTE: Deployed endpoints are now running but will have limited storage access."
-          echo "For production environments, configure persistent access for endpoint identities."
-          echo "See docs/how-to/ProductionNetworkSecurity.md for guidance."
+          echo "⚠️  NOTE: Storage remains open (defaultAction: Allow) to support endpoint startup and model downloads."
+          echo "This is acceptable for dev/sample environments where endpoints use managed identity (RBAC) with allowSharedKeyAccess=false."
+          echo ""
+          echo "For production environments with stricter network requirements:"
+          echo "  1. Add endpoint service principals to storage network rules"
+          echo "  2. Or configure storage service endpoints/private endpoints"
+          echo "  3. Ensure endpoint identities have Storage Blob Data Reader/Contributor roles"
