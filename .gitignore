@@ -136,3 +136,4 @@ dmypy.json
 /logs/
 # Mamba temporary environment resolution artifacts (auto-generated, do not commit)
 mlops/*/environment/mamba*
+interrogate_deployment.ps1
