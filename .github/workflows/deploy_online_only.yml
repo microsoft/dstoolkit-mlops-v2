@@ -39,6 +39,7 @@ env:
   SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
   RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
   WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
+  STORAGE_ACCOUNT_NAME: ${{ vars.STORAGE_ACCOUNT_NAME }}
   ARM_CLIENT_ID: ${{vars.ARM_CLIENT_ID}}
   ARM_TENANT_ID: ${{vars.ARM_TENANT_ID}}
   BUILD_BUILDID: ${{ github.run_id }}
@@ -94,21 +95,62 @@ jobs:
           else
             echo "Auto-discovering latest model for ${{ inputs.model_type }}"
 
-            # List all models and filter by model_type prefix, sort by creation time
-            MODEL_INFO=$(az ml model list \
+            # Get unique model names with the prefix
+            UNIQUE_NAMES=$(az ml model list \
               --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
               --workspace-name ${{ env.WORKSPACE_NAME }} \
               --subscription ${{ env.SUBSCRIPTION_ID }} \
-              --query "[?starts_with(name, '${{ inputs.model_type }}')].{name:name, version:version, created:creation_context.created_at}" \
-              -o json | python3 -c "import sys, json; models = json.load(sys.stdin); models_sorted = sorted(models, key=lambda x: x['created'], reverse=True) if models else []; print(f\"{models_sorted[0]['name']}|{models_sorted[0]['version']}\") if models_sorted else sys.exit(1)")
+              --query "[?starts_with(name, '${{ inputs.model_type }}')].name" \
+              -o tsv | sort -u)
 
-            if [ $? -ne 0 ]; then
-              echo "ERROR: Failed to discover model for ${{ inputs.model_type }}"
+            if [ -z "$UNIQUE_NAMES" ]; then
+              echo "ERROR: No models found with prefix ${{ inputs.model_type }}"
               exit 1
             fi
 
-            MODEL_NAME=$(echo $MODEL_INFO | cut -d'|' -f1)
-            MODEL_VERSION=$(echo $MODEL_INFO | cut -d'|' -f2)
+            echo "Found models: $UNIQUE_NAMES"
+
+            # Find the latest version across all matching models
+            LATEST_CREATED=""
+            BEST_NAME=""
+            BEST_VERSION=""
+
+            while IFS= read -r model_name; do
+              echo "Checking latest version of: $model_name"
+
+              # Get all versions for this model
+              ALL_VERSIONS=$(az ml model list \
+                --name "$model_name" \
+                --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+                --workspace-name ${{ env.WORKSPACE_NAME }} \
+                --subscription ${{ env.SUBSCRIPTION_ID }} \
+                --query "[].{version:version, created:creation_context.created_at}" \
+                -o json)
+
+              # Sort by created date and get the latest
+              LATEST_INFO=$(echo "$ALL_VERSIONS" | python3 -c "import sys, json; versions=json.load(sys.stdin); sorted_versions=sorted(versions, key=lambda x: x['created'], reverse=True); print(json.dumps(sorted_versions[0]) if sorted_versions else '{}')")
+
+              THIS_VERSION=$(echo "$LATEST_INFO" | python3 -c "import sys, json; d=json.load(sys.stdin); print(str(d.get('version', '')) if d else '')")
+              THIS_CREATED=$(echo "$LATEST_INFO" | python3 -c "import sys, json; d=json.load(sys.stdin); print(d.get('created', '') if d else '')")
+
+              echo "  Latest version: $THIS_VERSION (created: $THIS_CREATED)"
+
+              if [ -z "$LATEST_CREATED" ] || [[ "$THIS_CREATED" > "$LATEST_CREATED" ]]; then
+                LATEST_CREATED="$THIS_CREATED"
+                BEST_NAME="$model_name"
+                BEST_VERSION="$THIS_VERSION"
+              fi
+            done <<< "$UNIQUE_NAMES"
+
+            MODEL_NAME="$BEST_NAME"
+            MODEL_VERSION="$BEST_VERSION"
+
+            echo "Selected: $MODEL_NAME version $MODEL_VERSION"
+
+            if [ -z "$MODEL_NAME" ] || [ -z "$MODEL_VERSION" ]; then
+              echo "ERROR: Could not determine latest model"
+              exit 1
+            fi
           fi
 
           echo "Model Name: $MODEL_NAME"
@@ -117,15 +159,41 @@ jobs:
           echo "model_name=$MODEL_NAME" >> $GITHUB_OUTPUT
           echo "model_version=$MODEL_VERSION" >> $GITHUB_OUTPUT
 
-          echo "Verifying model exists..."
-          az ml model show \
+          echo ""
+          echo "=== Verifying Model Registration ==="
+
+          if az ml model show \
             --name $MODEL_NAME \
             --version $MODEL_VERSION \
             --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
             --workspace-name ${{ env.WORKSPACE_NAME }} \
-            --subscription ${{ env.SUBSCRIPTION_ID }} \
-            --query '{name:name, version:version, type:type, path:path}' \
-            -o table
+            --subscription ${{ env.SUBSCRIPTION_ID }} > /dev/null 2>&1; then
+
+            echo "✅ Model found in workspace"
+
+            # Display model details
+            az ml model show \
+              --name $MODEL_NAME \
+              --version $MODEL_VERSION \
+              --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+              --workspace-name ${{ env.WORKSPACE_NAME }} \
+              --subscription ${{ env.SUBSCRIPTION_ID }} \
+              --query '{name:name, version:version, type:type, path:path, createdTime:creation_context.created_at}' \
+              -o table
+          else
+            echo "❌ ERROR: Model not found in workspace"
+            echo "Model Name: $MODEL_NAME"
+            echo "Model Version: $MODEL_VERSION"
+            echo ""
+            echo "Available models for ${{ inputs.model_type }}:"
+            az ml model list \
+              --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+              --workspace-name ${{ env.WORKSPACE_NAME }} \
+              --subscription ${{ env.SUBSCRIPTION_ID }} \
+              --query "[?starts_with(name, '${{ inputs.model_type }}')].{name:name, version:version, created:creation_context.created_at}" \
+              -o table || echo "No models found"
+            exit 1
+          fi
 
       - name: Validate Storage Configuration
         run: |
@@ -133,18 +201,18 @@ jobs:
 
           # Get storage configuration
           DEFAULT_ACTION=$(az storage account show \
-            --name mfstac003 \
-            --resource-group rg_modelfactory \
+            --name ${{ env.STORAGE_ACCOUNT_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
             --subscription ${{ env.SUBSCRIPTION_ID }} \
             --query 'networkRuleSet.defaultAction' -o tsv)
 
           SHARED_KEY_ACCESS=$(az storage account show \
-            --name mfstac003 \
-            --resource-group rg_modelfactory \
+            --name ${{ env.STORAGE_ACCOUNT_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
             --subscription ${{ env.SUBSCRIPTION_ID }} \
             --query 'allowSharedKeyAccess' -o tsv)
 
-          echo "Storage Account: mfstac003"
+          echo "Storage Account: ${{ env.STORAGE_ACCOUNT_NAME }}"
           echo "Default Action: $DEFAULT_ACTION"
           echo "Shared Key Access: $SHARED_KEY_ACCESS"
 
@@ -158,7 +226,7 @@ jobs:
           # Test actual blob access
           echo "Testing blob access with workflow identity..."
           if ! az storage container list \
-            --account-name mfstac003 \
+            --account-name ${{ env.STORAGE_ACCOUNT_NAME }} \
             --auth-mode login \
             --subscription ${{ env.SUBSCRIPTION_ID }} \
             --output table; then
@@ -218,8 +286,8 @@ jobs:
 
           ENDPOINT_IDENTITY=$(az ml online-endpoint show \
             --name $ENDPOINT_NAME \
-            --resource-group rg_modelfactory \
-            --workspace-name mfaml001 \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --workspace-name ${{ env.WORKSPACE_NAME }} \
             --subscription ${{ env.SUBSCRIPTION_ID }} \
             --query 'identity.principal_id' -o tsv)
 
@@ -231,7 +299,7 @@ jobs:
           echo "Endpoint Identity: $ENDPOINT_IDENTITY"
 
           # Check for required storage roles
-          STORAGE_SCOPE="/subscriptions/${{ env.SUBSCRIPTION_ID }}/resourceGroups/rg_modelfactory/providers/Microsoft.Storage/storageAccounts/mfstac003"
+          STORAGE_SCOPE="/subscriptions/${{ env.SUBSCRIPTION_ID }}/resourceGroups/${{ env.RESOURCE_GROUP_NAME }}/providers/Microsoft.Storage/storageAccounts/${{ env.STORAGE_ACCOUNT_NAME }}"
 
           ROLE_ASSIGNMENTS=$(az role assignment list \
             --assignee $ENDPOINT_IDENTITY \
