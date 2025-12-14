@@ -39,7 +39,7 @@ env:
   SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
   RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
   WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
-  STORAGE_ACCOUNT_NAME: ${{ vars.STORAGE_ACCOUNT_NAME }}
+  STORAGE_ACCOUNT_NAME: ${{ vars.STORAGE_ACCT_NAME }}
   ARM_CLIENT_ID: ${{vars.ARM_CLIENT_ID}}
   ARM_TENANT_ID: ${{vars.ARM_TENANT_ID}}
   BUILD_BUILDID: ${{ github.run_id }}
@@ -246,7 +246,7 @@ jobs:
           with open('config/config.yaml', 'r') as f:
               config = yaml.safe_load(f)
               deployment_key = '${{ inputs.model_type }}_online_${{ inputs.exec_environment }}'
-              endpoint_name = config['pipeline_configs'][deployment_key]['endpoint_name']
+              endpoint_name = config['deployment_configs'][deployment_key]['endpoint_name']
               print(endpoint_name)
           ")
 
@@ -278,7 +278,7 @@ jobs:
           with open('config/config.yaml', 'r') as f:
               config = yaml.safe_load(f)
               deployment_key = '${{ inputs.model_type }}_online_${{ inputs.exec_environment }}'
-              endpoint_name = config['pipeline_configs'][deployment_key]['endpoint_name']
+              endpoint_name = config['deployment_configs'][deployment_key]['endpoint_name']
               print(endpoint_name)
           ")
 
@@ -356,7 +356,7 @@ jobs:
           with open('config/config.yaml', 'r') as f:
               config = yaml.safe_load(f)
               deployment_key = '${{ inputs.model_type }}_online_${{ inputs.exec_environment }}'
-              endpoint_name = config['pipeline_configs'][deployment_key]['endpoint_name']
+              endpoint_name = config['deployment_configs'][deployment_key]['endpoint_name']
               print(endpoint_name)
           ")
 
