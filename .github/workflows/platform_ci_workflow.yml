@@ -37,6 +37,7 @@ env:
   SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
   RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
   WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
+  STORAGE_ACCOUNT_NAME: ${{ vars.STORAGE_ACCT_NAME }}
   ARM_CLIENT_ID: ${{vars.ARM_CLIENT_ID}}
   ARM_TENANT_ID: ${{vars.ARM_TENANT_ID}}
   BUILD_BUILDID: ${{ github.run_id }}
@@ -68,15 +69,19 @@ jobs:
 
       - name: Temporarily Enable Storage Public Access
         run: |
-          echo "Temporarily enabling storage public access for workflow execution..."
+          echo "Temporarily enabling storage public network access for training job execution..."
           echo "Note: This is acceptable for sample/learning environments. For production, use resource access rules."
+
+          # Enable public network access for training jobs to access storage
           az storage account update \
-            --name mfstac003 \
+            --name ${{ env.STORAGE_ACCOUNT_NAME }} \
             --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
             --subscription ${{ env.SUBSCRIPTION_ID }} \
-            --default-action Allow
-          echo "Waiting for network rule propagation..."
-          sleep 5
+            --default-action Allow \
+            --public-network-access Enabled
+
+          echo "Waiting for storage configuration propagation..."
+          sleep 15
 
       - name: Execute AzureML Pipeline
         uses: ./.github/actions/execute_shell_code
@@ -94,8 +99,9 @@ jobs:
         run: |
           echo "Restoring storage network restrictions..."
           az storage account update \
-            --name mfstac003 \
+            --name ${{ env.STORAGE_ACCOUNT_NAME }} \
             --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
             --subscription ${{ env.SUBSCRIPTION_ID }} \
-            --default-action Deny
+            --default-action Deny \
+            --public-network-access Disabled
           echo "Storage access restored to restricted mode."

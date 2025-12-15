@@ -52,15 +52,19 @@ jobs:
 
       - name: Temporarily Enable Storage Public Access
         run: |
-          echo "Temporarily enabling storage public access for workflow execution..."
+          echo "Temporarily enabling storage public network access for training job execution..."
           echo "Note: This is acceptable for sample/learning environments. For production, use resource access rules."
+
+          # Enable public network access for training jobs to access storage
           az storage account update \
             --name ${{ env.STORAGE_ACCOUNT_NAME }} \
             --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
             --subscription ${{ env.SUBSCRIPTION_ID }} \
-            --default-action Allow
-          echo "Waiting for network rule propagation..."
-          sleep 5
+            --default-action Allow \
+            --public-network-access Enabled
+
+          echo "Waiting for storage configuration propagation..."
+          sleep 15
 
       - name: Execute MLOps Standard Pipeline
         uses: ./.github/actions/execute_shell_code
@@ -73,6 +77,18 @@ jobs:
                   --build_environment ${{ inputs.exec_environment }} \
                   --wait_for_completion True \
                   --output_file run_id.txt
+
+      - name: Restore Storage Network Restrictions
+        if: always()
+        run: |
+          echo "Restoring storage network restrictions..."
+          az storage account update \
+            --name ${{ env.STORAGE_ACCOUNT_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --default-action Deny \
+            --public-network-access Disabled
+          echo "Storage access restored to restricted mode."
 
       - name: Read Run ID
         shell: bash
