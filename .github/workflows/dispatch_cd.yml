@@ -12,7 +12,7 @@ on:
         type: string
         description: "Model type to deploy (e.g., nyc_taxi, london_taxi, docker_taxi)"
         required: false
-        default: "nyc_taxi"
+        default: "london_taxi"
 
 permissions:
   id-token: write

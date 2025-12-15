@@ -7,7 +7,7 @@ on:
         type: choice
         description: "Model type to deploy"
         required: true
-        default: "nyc_taxi"
+        default: "london_taxi"
         options:
           - nyc_taxi
           - london_taxi

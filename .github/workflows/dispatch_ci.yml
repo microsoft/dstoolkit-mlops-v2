@@ -12,12 +12,12 @@ on:
         type: string
         description: "Model type to run (e.g., nyc_taxi, london_taxi, docker_taxi, sequence_model)"
         required: false
-        default: "nyc_taxi"
+        default: "london_taxi"
       is_docker:
           type: boolean
           description: "Is Docker used for build validation?"
           required: true
-          default: false        
+          default: false
 
 permissions:
   id-token: write

@@ -1,11 +1,11 @@
 # Testing the initial setup
 
-**Step 1.** In the main branch, supply an explicit value or accept the defaults in the file, config/config.yaml. The pipelines uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. nyc_taxi, london_taxi). The config.yaml file is split into the following sections, set the values in each section:
+**Step 1.** In the main branch, supply an explicit value or accept the defaults in the file, config/config.yaml. The pipelines uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. london_taxi, docker_taxi, sequence_model). The config.yaml file is split into the following sections, set the values in each section:
 
 - aml_config: Stores the configuration of azure resources hosting the Azure Machine Learning workspace.
 - environment_config: Stores the base image and dynamic properties set at runtime.
 - pipeline_configs: Stores the configuration for pr and dev pipelines for each model supported by the solution.
-- deploy_configs: Stores online and batch configuration for deployments for each model.  
+- deploy_configs: Stores online and batch configuration for deployments for each model.
 
 ## Azure DevOps Steps
 
@@ -23,10 +23,9 @@ Pipeline Parameters:
 
 - exec_environment: The environment to run the workflow in. Set to "ci" by default
 - model_type: The type of model for which to run the CI workflow. Set to {model name} by default
-  
+
 Pipelines:
 
-- .azure-pipelines/nyc_taxi_ci_pipeline.yml
 - .azure-pipelines/london_taxi_ci_pipeline.yml
 - .azure-pipelines/docker_taxi_ci_pipeline.yml
 
@@ -39,7 +38,6 @@ Pipeline Parameters:
 
 Pipelines:
 
-- .azure-pipelines/nyc_taxi_cd_pipeline.yml
 - .azure-pipelines/london_taxi_cd_pipeline.yml
 - .azure-pipelines/docker_taxi_cd_pipeline.yml
 
@@ -60,10 +58,9 @@ Pipeline Parameters:
 
 - exec_environment: The environment to run the workflow in. Set to "ci" by default
 - model_type: The type of model for which to run the CI workflow. Set to {model name} by default
-  
+
 Pipelines:
 
-- .github/workflows/nyc_taxi_ci_pipeline.yml
 - .github/workflows/london_taxi_ci_pipeline.yml
 - .github/workflows/docker_taxi_ci_pipeline.yml
 
@@ -75,7 +72,6 @@ Pipeline Parameters:
 
 Pipelines:
 
-- .github/workflows/nyc_taxi_cd_pipeline.yml
 - .github/workflows/london_taxi_cd_pipeline.yml
 - .github/workflows/docker_taxi_cd_pipeline.yml
 

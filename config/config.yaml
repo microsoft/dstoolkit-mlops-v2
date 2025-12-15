@@ -9,21 +9,13 @@ environment_configuration:
   build_reference: ${BUILD_BUILDID}
 
 pipeline_configs:
-  london_taxi_pr: 
+  london_taxi_pr:
     cluster_region: eastus
     cluster_size: STANDARD_DS3_v2
     cluster_name: cpucluster
     conda_path: mlops/london_taxi/environment/conda.yml
     aml_env_name: london_env
     dataset_name: london_taxi_pr_data
-
-  nyc_taxi_pr: 
-    cluster_region: eastus
-    cluster_size: STANDARD_DS3_v2
-    cluster_name: cpucluster
-    conda_path: mlops/nyc_taxi/environment/conda.yml
-    aml_env_name: nyc_env
-    dataset_name: nyc_taxi_pr_data
 
   sequence_model_pr:
     cluster_region: eastus2
@@ -38,7 +30,7 @@ pipeline_configs:
       num_sequences: 100
       sequence_length: 20
 
-  docker_taxi_pr: 
+  docker_taxi_pr:
     cluster_region: eastus
     cluster_size: STANDARD_DS3_v2
     cluster_name: cpucluster
@@ -47,7 +39,7 @@ pipeline_configs:
     aml_env_name: docker_taxi_env
     dataset_name: docker_taxi_pr_data
 
-  london_taxi_dev: 
+  london_taxi_dev:
     cluster_region: eastus
     cluster_size: STANDARD_DS3_v2
     cluster_name: cpucluster
@@ -55,14 +47,6 @@ pipeline_configs:
     aml_env_name: london_env
     dataset_name: london_taxi_pr_data
 
-  nyc_taxi_dev: 
-    cluster_region: eastus
-    cluster_size: STANDARD_DS3_v2
-    cluster_name: cpucluster
-    conda_path: mlops/nyc_taxi/environment/conda.yml
-    aml_env_name: nyc_env
-    dataset_name: nyc_taxi_pr_data
-  
   sequence_model_dev:
     cluster_region: eastus2
     cluster_size: STANDARD_DS3_V2
@@ -76,7 +60,7 @@ pipeline_configs:
       num_sequences: 100
       sequence_length: 20
 
-  docker_taxi_dev: 
+  docker_taxi_dev:
     cluster_region: eastus
     cluster_size: STANDARD_DS3_v2
     cluster_name: cpucluster
@@ -86,7 +70,7 @@ pipeline_configs:
     dataset_name: docker_taxi_pr_data
 
 deployment_configs:
-    london_taxi_batch_dev: 
+    london_taxi_batch_dev:
       score_file_name: score.py
       score_dir: model/london_taxi/batch
       batch_cluster_name: batchcluster
@@ -105,53 +89,19 @@ deployment_configs:
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_desc: A batch deployment
       test_dataset_name: london_taxi_batch_test
-    
+
     london_taxi_online_dev:
       score_file_name: score.py
       test_file_path: model/london_taxi/online_test_data/sample-request.json
       endpoint_name: london-taxi-rte-001
       endpoint_desc: An online endpoint serving an MLflow model for online taxi
-      deployment_desc: 
+      deployment_desc:
       deployment_name: london-taxi-rtd-001
       deployment_traffic_allocation: 100
       deployment_vm_size: Standard_F4s_v2
       deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
       deployment_conda_path: model/london_taxi/online_environment/conda.yml
       score_dir: model/london_taxi/online
-      deployment_instance_count: 1
-      
-    nyc_taxi_batch_dev:
-      score_file_name: score.py
-      score_dir: model/nyc_taxi/batch
-      batch_cluster_name: batchcluster
-      batch_cluster_region: eastus
-      batch_cluster_size: STANDARD_DS3_v2
-      deployment_conda_path: model/nyc_taxi/batch_environment/conda.yml
-      endpoint_name: nyc-taxi-be-002
-      endpoint_desc: A batch endpoint serving an MLflow model for online taxi
-      deployment_name: nyc-taxi-bd-002
-      cluster_instance_count: 1
-      max_concurrency_per_instance: 1
-      mini_batch_size: 10
-      output_file_name: predictions.csv
-      max_retries: 3
-      retry_timeout: 300
-      deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
-      deployment_desc: A batch deployment
-      test_dataset_name: nyc_taxi_batch_test
-    
-    nyc_taxi_online_dev:
-      score_file_name: score.py
-      test_file_path: model/nyc_taxi/online_test_data/sample-request.json
-      endpoint_name: nyc-taxi-rte-003
-      endpoint_desc: An online endpoint serving an MLflow model for online taxi
-      deployment_desc: 
-      deployment_name: nyc-taxi-rtd-003
-      deployment_traffic_allocation: 100
-      deployment_vm_size: Standard_F4s_v2
-      deployment_base_image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
-      deployment_conda_path: model/nyc_taxi/online_environment/conda.yml
-      score_dir: model/nyc_taxi/online
       deployment_instance_count: 1
 
     sequence_model_batch_dev:
@@ -172,7 +122,7 @@ deployment_configs:
       test_dataset_name: sequence_model_batch_test
       mini_batch_size: 10
       output_file_name: predictions.csv
-  
+
     docker_taxi_batch_dev:
       score_file_name: score.py
       score_dir: model/docker_taxi/batch
@@ -198,7 +148,7 @@ deployment_configs:
       test_file_path: model/sequence_model/online_test_data/sample-request.json
       endpoint_name: seq-model-rte-005
       endpoint_desc: An online endpoint serving a custom model for the sequence model
-      deployment_desc: 
+      deployment_desc:
       deployment_name: seq-model-rtd-005
       deployment_traffic_allocation: 100
       deployment_vm_size: Standard_F4s_v2
@@ -206,13 +156,13 @@ deployment_configs:
       deployment_conda_path: model/sequence_model/online_environment/conda.yml
       score_dir: model/sequence_model/online
       deployment_instance_count: 1
-    
+
     docker_taxi_online_dev:
       score_file_name: score.py
       test_file_path: model/docker_taxi/online_test_data/sample-request.json
       endpoint_name: docker-taxi-rte-003
       endpoint_desc: An online endpoint serving an MLflow model for docker taxi
-      deployment_desc: 
+      deployment_desc:
       deployment_name: docker-taxi-rtd-003
       deployment_traffic_allocation: 100
       deployment_vm_size: Standard_F4s_v2

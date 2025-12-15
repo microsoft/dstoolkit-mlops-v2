@@ -61,19 +61,19 @@ Details about how to create a basic Azure Pipeline can be found in [Create your 
 
 **Step 5.** Create an azure pipeline to deploy the infrastructure using either the bicep (*.azure-pipelines/infra/bicep/infra_provision_bicep_pipeline.yml*) or terraform (*.azure-pipelines/infra/terraform/infra_provision_terraform_pipeline.yml*) yaml files.
 
-**Step 6.** Create one or more Azure Pipelines to setup build validation for either or both of the use cases listed below:
+**Step 6.** Create one or more Azure Pipelines to setup build validation for the use cases listed below:
 
-* nyc_taxi
 * london_taxi
 * docker_taxi
+* sequence_model
 
-**Step 7.** Create one or more Azure Pipelines to setup continuous integration for either or both of the use cases listed below:
+**Step 7.** Create one or more Azure Pipelines to setup continuous integration for the use cases listed below:
 
-* nyc_taxi
 * london_taxi
 * docker_taxi
+* sequence_model
 
-**Step 8.** At the Organization Level within Azure Devops, add the Azure DevLabs Machine Learning extension by searching for Machine Learning, clicking the extension pictured below, and then Install on the ensuing page. If you do not have the required permissions, please ask the administrator of the organization to install the extension on your behalf.  
+**Step 8.** At the Organization Level within Azure Devops, add the Azure DevLabs Machine Learning extension by searching for Machine Learning, clicking the extension pictured below, and then Install on the ensuing page. If you do not have the required permissions, please ask the administrator of the organization to install the extension on your behalf.
 
 ![Azure Machine Learning Extension](../media/machinelearningextension.png)
 
