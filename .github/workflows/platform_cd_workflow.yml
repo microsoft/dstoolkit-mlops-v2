@@ -8,7 +8,7 @@ on:
         default: "dev"
       model_type:
         type: string
-        default: "nyc_taxi"
+        default: "london_taxi"
   workflow_call:
     inputs:
       exec_environment:
