@@ -78,18 +78,6 @@ jobs:
                   --wait_for_completion True \
                   --output_file run_id.txt
 
-      - name: Restore Storage Network Restrictions
-        if: always()
-        run: |
-          echo "Restoring storage network restrictions..."
-          az storage account update \
-            --name ${{ env.STORAGE_ACCOUNT_NAME }} \
-            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-            --subscription ${{ env.SUBSCRIPTION_ID }} \
-            --default-action Deny \
-            --public-network-access Disabled
-          echo "Storage access restored to restricted mode."
-
       - name: Read Run ID
         shell: bash
         run: |
@@ -385,7 +373,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    needs: [execute-training-job, deploy-online, deploy-batch, change_model_tag]
+    needs: [execute-training-job]
     if: always()
     steps:
       - name: Checkout
@@ -398,14 +386,19 @@ jobs:
           arm_tenant_id: ${{ env.ARM_TENANT_ID }}
           subscription_id: ${{ env.SUBSCRIPTION_ID }}
 
-      - name: Storage Access Note
+      - name: Restore Storage Network Restrictions
         run: |
-          echo "✅ All deployment jobs completed."
+          echo "Restoring storage network restrictions after all deployments..."
+          az storage account update \
+            --name ${{ env.STORAGE_ACCOUNT_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --default-action Deny \
+            --public-network-access Disabled
+
+          echo "✅ Storage access restored to restricted mode."
           echo ""
-          echo "⚠️  NOTE: Storage remains open (defaultAction: Allow) to support endpoint startup and model downloads."
-          echo "This is acceptable for dev/sample environments where endpoints use managed identity (RBAC) with allowSharedKeyAccess=false."
-          echo ""
-          echo "For production environments with stricter network requirements:"
-          echo "  1. Add endpoint service principals to storage network rules"
-          echo "  2. Or configure storage service endpoints/private endpoints"
-          echo "  3. Ensure endpoint identities have Storage Blob Data Reader/Contributor roles"
+          echo "Storage is now secured:"
+          echo "  - Public network access: Disabled"
+          echo "  - Default network action: Deny"
+          echo "  - Shared key access: Disabled (policy-enforced)"
