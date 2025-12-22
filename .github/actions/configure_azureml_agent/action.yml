@@ -11,14 +11,41 @@ inputs:
     required: true
   arm_tenant_id:
     description: "client id of service principal used to authenticate with azure"
-    required: true    
+    required: true
   subscription_id:
     description: "client id of service principal used to authenticate with azure"
-    required: true 
+    required: true
 
 runs:
   using: composite
   steps:
+    - name: Debug - Check Input Values
+      shell: bash
+      run: |
+        echo "=== Debugging Input Values ==="
+        echo "arm_client_id length: ${#CLIENT_ID}"
+        echo "arm_tenant_id length: ${#TENANT_ID}"
+        echo "subscription_id length: ${#SUB_ID}"
+        if [ -z "$CLIENT_ID" ]; then
+          echo "ERROR: arm_client_id is empty!"
+        else
+          echo "arm_client_id first 4 chars: ${CLIENT_ID:0:4}..."
+        fi
+        if [ -z "$TENANT_ID" ]; then
+          echo "ERROR: arm_tenant_id is empty!"
+        else
+          echo "arm_tenant_id first 4 chars: ${TENANT_ID:0:4}..."
+        fi
+        if [ -z "$SUB_ID" ]; then
+          echo "ERROR: subscription_id is empty!"
+        else
+          echo "subscription_id first 4 chars: ${SUB_ID:0:4}..."
+        fi
+      env:
+        CLIENT_ID: ${{ inputs.arm_client_id }}
+        TENANT_ID: ${{ inputs.arm_tenant_id }}
+        SUB_ID: ${{ inputs.subscription_id }}
+
     - name: Azure login
       uses: azure/login@v2
       with:
