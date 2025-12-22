@@ -41,3 +41,4 @@ jobs:
       exec_environment: ${{ inputs.exec_environment || 'pr' }}
       model_type: ${{ inputs.model_type || 'london_taxi' }}
       is_docker: false
+    secrets: inherit
