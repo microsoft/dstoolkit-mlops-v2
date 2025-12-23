@@ -28,27 +28,27 @@ on:
           description: "Is Docker used for build validation?"
           required: true
           default: false
-      arm_client_id:
-        required: true
-        type: string
-      arm_tenant_id:
-        required: true
-        type: string
-      subscription_id:
-        required: true
-        type: string
+      # arm_client_id:
+      #   required: true
+      #   type: string
+      # arm_tenant_id:
+      #   required: true
+      #   type: string
+      # subscription_id:
+      #   required: true
+      #   type: string
 
 permissions:
   id-token: write
   contents: read
 
 env:
-  SUBSCRIPTION_ID: ${{inputs.subscription_id}}
+  SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
   RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
   WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
   STORAGE_ACCOUNT_NAME: ${{ vars.STORAGE_ACCT_NAME }}
-  # ARM_CLIENT_ID: ${{inputs.ARM_CLIENT_ID}}
-  # ARM_TENANT_ID: ${{inputs.ARM_TENANT_ID}}
+  ARM_CLIENT_ID: ${{vars.ARM_CLIENT_ID}}
+  ARM_TENANT_ID: ${{vars.ARM_TENANT_ID}}
   BUILD_BUILDID: ${{ github.run_id }}
   BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
 
