@@ -1,4 +1,4 @@
-FROM python:3.12-bullseye
+FROM mcr.microsoft.com/devcontainers/python:3.12
 
 RUN set -x
 
@@ -9,7 +9,7 @@ RUN apt-get update && apt-get -y install \
     build-essential \
     docker.io \
     && rm -rf /var/lib/apt/lists/*
-    
+
 RUN pip install --upgrade pip
 RUN pip install ipython ipykernel
 RUN ipython kernel install --user --name dstoolkit

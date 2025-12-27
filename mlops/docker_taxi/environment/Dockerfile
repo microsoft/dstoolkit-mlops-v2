@@ -1,8 +1,6 @@
-ARG PYTORCH="2.0.1"
-ARG CUDA="11.7"
-ARG CUDNN="8"
+ARG BASE_IMAGE=mcr.microsoft.com/azureml/curated/pytorch-2.0-cuda11.7-cudnn8-ubuntu20.04
 
-FROM pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
+FROM ${BASE_IMAGE}
 
 ENV TORCH_CUDA_ARCH_LIST="6.0 6.1 7.0 7.5 8.0 8.6+PTX" \
     TORCH_NVCC_FLAGS="-Xfatbin -compress-all" \
@@ -28,11 +26,11 @@ RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
 # Create a non-root user
 RUN groupadd --gid $USER_GID $USERNAME \
-&& useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
-&& apt-get update \
-&& apt-get install -y sudo \
-&& echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-&& chmod 0440 /etc/sudoers.d/$USERNAME
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && apt-get update \
+    && apt-get install -y sudo \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
 
 # Switch to non-root user
 USER $USERNAME

@@ -50,9 +50,7 @@ jobs:
           set -e
           python -m pip install --upgrade pip
           python -m pip install --upgrade \
-            -r .github/requirements/build_validation_requirements.txt \
-            --extra-index-url https://azuremlsdktestpypi.azureedge.net/sdk-cli-v2/azureml-mlflow/ \
-            --trusted-host azuremlsdktestpypi.azureedge.net
+            -r .github/requirements/build_validation_requirements.txt
 
       - name: Show Package Versions
         shell: bash
@@ -90,9 +88,7 @@ jobs:
           docker run --rm --mount type=bind,src=.,dst=/workspace ${{ inputs.image_name }} /bin/bash -c "
             sudo chown -R vscode /workspace &&
             python -m pip install --upgrade pip &&
-            pip install -r .github/requirements/build_validation_requirements.txt \
-              --extra-index-url https://azuremlsdktestpypi.azureedge.net/sdk-cli-v2/azureml-mlflow/ \
-              --trusted-host azuremlsdktestpypi.azureedge.net &&
+            pip install -r .github/requirements/build_validation_requirements.txt &&
             python -m pytest --junitxml=junit/test-results.xml --cov=. --cov-report=xml
           "
 
