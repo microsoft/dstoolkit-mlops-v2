@@ -85,7 +85,7 @@ jobs:
         shell: bash
         run: |
           echo "Running Docker container for validation"
-          docker run --rm --mount type=bind,src=.,dst=/workspace ${{ inputs.image_name }} /bin/bash -c "
+          docker run --rm --mount type=bind,src=.,dst=/workspace -w /workspace ${{ inputs.image_name }} /bin/bash -c "
             sudo chown -R vscode /workspace &&
             python -m pip install --upgrade pip &&
             pip install -r .github/requirements/build_validation_requirements.txt &&
