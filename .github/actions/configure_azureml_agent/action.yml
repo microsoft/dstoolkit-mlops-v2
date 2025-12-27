@@ -46,6 +46,15 @@ runs:
         TENANT_ID: ${{ inputs.arm_tenant_id }}
         SUB_ID: ${{ inputs.subscription_id }}
 
+    - name: Clear Azure CLI Cache
+      shell: bash
+      run: |
+        echo "Clearing Azure CLI cache to prevent authentication issues..."
+        rm -rf ~/.azure/msal_http_cache.bin || true
+        rm -rf ~/.azure/msal_token_cache.bin || true
+        rm -rf ~/.azure/service_principal_entries.bin || true
+        echo "Azure CLI cache cleared."
+
     - name: Azure login
       uses: azure/login@v2
       with:

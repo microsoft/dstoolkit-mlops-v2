@@ -1,4 +1,7 @@
-name: ModelFactory-Bicep-Deployment
+name: "[DEPRECATED] ModelFactory-Bicep-Deployment"
+# ⚠️ DEPRECATED: This workflow is no longer actively maintained.
+# Please use infra_provision_terraform.yml instead.
+# Bicep files are kept for reference only and may be out of sync.
 on:
   workflow_dispatch:
 env:
