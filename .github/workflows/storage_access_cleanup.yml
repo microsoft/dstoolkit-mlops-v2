@@ -37,7 +37,7 @@ jobs:
           echo "Checking for workflows with same commit and branch..."
 
           COMMIT_SHA="${{ github.event.workflow_run.head_commit.id }}"
-          BRANCH_NAME="${{ github.event.workflow_run.head_branch }}"
+          BRANCH_NAME="$BRANCH_NAME"
           CURRENT_RUN_ID="${{ github.run_id }}"
           MAX_ITERATIONS=60  # 30 minutes (60 * 30 seconds)
           ITERATION=0
@@ -84,6 +84,7 @@ jobs:
           echo "timeout_reached=$TIMEOUT_REACHED" >> $GITHUB_ENV
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: ${{ github.event.workflow_run.head_branch }}
 
       - name: Restore Storage Network Restrictions
         run: |
@@ -120,11 +121,13 @@ jobs:
 
       - name: Log Cleanup Summary
         if: always()
+        env:
+          BRANCH_NAME: ${{ github.event.workflow_run.head_branch }}
         run: |
           echo ""
           echo "========== Storage Access Cleanup Summary =========="
           echo "Commit SHA: ${{ github.event.workflow_run.head_commit.id }}"
-          echo "Branch: ${{ github.event.workflow_run.head_branch }}"
+          echo "Branch: $BRANCH_NAME"
           echo ""
           if [ "$timeout_reached" = "true" ]; then
             echo "[WARNING] Cleanup completed after 30-minute timeout."
