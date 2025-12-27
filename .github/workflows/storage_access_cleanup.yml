@@ -1,0 +1,139 @@
+name: Storage Access Cleanup
+
+on:
+  workflow_run:
+    workflows: ["Platform CI Workflow"]
+    types: [completed]
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
+  RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
+  STORAGE_ACCOUNT_NAME: ${{ vars.STORAGE_ACCT_NAME }}
+  ARM_CLIENT_ID: ${{vars.ARM_CLIENT_ID}}
+  ARM_TENANT_ID: ${{vars.ARM_TENANT_ID}}
+
+jobs:
+  cleanup-storage-access:
+    name: Cleanup Storage Access
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Azure ML Agent
+        uses: "./.github/actions/configure_azureml_agent"
+        with:
+          arm_client_id: ${{ env.ARM_CLIENT_ID }}
+          arm_tenant_id: ${{ env.ARM_TENANT_ID }}
+          subscription_id: ${{ env.SUBSCRIPTION_ID }}
+
+      - name: Wait for Other Workflows and Cleanup Instances to Complete
+        run: |
+          echo "Waiting for other platform_ci_workflow instances and cleanup workflows to complete..."
+          echo "Checking for workflows with same commit and branch..."
+          
+          COMMIT_SHA="${{ github.event.workflow_run.head_commit.id }}"
+          BRANCH_NAME="${{ github.event.workflow_run.head_branch }}"
+          CURRENT_RUN_ID="${{ github.run_id }}"
+          MAX_ITERATIONS=60  # 30 minutes (60 * 30 seconds)
+          ITERATION=0
+          TIMEOUT_REACHED=false
+          
+          echo "Commit SHA: $COMMIT_SHA"
+          echo "Branch: $BRANCH_NAME"
+          echo "Current cleanup run ID: $CURRENT_RUN_ID"
+          
+          while [ $ITERATION -lt $MAX_ITERATIONS ]; do
+            # Query for other running platform_ci_workflow instances with same commit and branch
+            RUNNING_CI_COUNT=$(gh run list \
+              --workflow platform_ci_workflow.yml \
+              --branch "$BRANCH_NAME" \
+              --status in_progress \
+              --json databaseId,headCommit \
+              --jq "[.[] | select(.headCommit.oid == \"$COMMIT_SHA\")] | length")
+            
+            # Query for other running cleanup workflows with same commit and branch
+            RUNNING_CLEANUP_COUNT=$(gh run list \
+              --workflow storage_access_cleanup.yml \
+              --branch "$BRANCH_NAME" \
+              --status in_progress \
+              --json databaseId,headCommit \
+              --jq "[.[] | select(.headCommit.oid == \"$COMMIT_SHA\" and .databaseId != $CURRENT_RUN_ID)] | length")
+            
+            TOTAL_RUNNING=$((RUNNING_CI_COUNT + RUNNING_CLEANUP_COUNT))
+            
+            if [ "$TOTAL_RUNNING" -eq 0 ]; then
+              echo "✅ No other running workflows or cleanup instances found. Proceeding with storage disablement."
+              break
+            fi
+            
+            ITERATION=$((ITERATION + 1))
+            echo "Iteration $ITERATION/$MAX_ITERATIONS: Found $RUNNING_CI_COUNT CI workflows and $RUNNING_CLEANUP_COUNT other cleanup workflows. Waiting..."
+            sleep 30
+          done
+          
+          if [ $ITERATION -ge $MAX_ITERATIONS ]; then
+            TIMEOUT_REACHED=true
+            echo "⚠️ WARNING: Timeout reached after 30 minutes. Proceeding with cleanup anyway."
+          fi
+          
+          echo "timeout_reached=$TIMEOUT_REACHED" >> $GITHUB_ENV
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Restore Storage Network Restrictions
+        run: |
+          echo "Restoring storage network restrictions..."
+          az storage account update \
+            --name ${{ env.STORAGE_ACCOUNT_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --default-action Deny \
+            --public-network-access Disabled
+          echo "Storage access restored to restricted mode."
+
+      - name: Verify Storage Access is Disabled
+        run: |
+          echo "Verifying storage public network access is disabled..."
+          
+          CURRENT_STATUS=$(az storage account show \
+            --name ${{ env.STORAGE_ACCOUNT_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --query "publicNetworkAccess" -o tsv)
+          
+          DEFAULT_ACTION=$(az storage account show \
+            --name ${{ env.STORAGE_ACCOUNT_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --subscription ${{ env.SUBSCRIPTION_ID }} \
+            --query "networkRuleSet.defaultAction" -o tsv)
+          
+          if [ "$CURRENT_STATUS" = "Disabled" ] && [ "$DEFAULT_ACTION" = "Deny" ]; then
+            echo "✅ Storage is correctly restricted. Public access: $CURRENT_STATUS, Default action: $DEFAULT_ACTION"
+          else
+            echo "⚠️ WARNING: Storage may not be fully restricted. Public access: $CURRENT_STATUS, Default action: $DEFAULT_ACTION"
+          fi
+
+      - name: Log Cleanup Summary
+        if: always()
+        run: |
+          echo ""
+          echo "========== Storage Access Cleanup Summary =========="
+          echo "Commit SHA: ${{ github.event.workflow_run.head_commit.id }}"
+          echo "Branch: ${{ github.event.workflow_run.head_branch }}"
+          echo ""
+          if [ "${{ env.timeout_reached }}" = "true" ]; then
+            echo "⚠️ WARNING: Cleanup completed after 30-minute timeout."
+            echo "   Not all CI workflows or cleanup instances may have finished."
+            echo "   However, storage restrictions have been applied."
+          else
+            echo "✅ Cleanup completed successfully."
+            echo "   All parallel CI workflows have finished."
+            echo "   All other cleanup instances have completed."
+            echo "   Storage access has been restricted."
+          fi
+          echo "====================================================="
