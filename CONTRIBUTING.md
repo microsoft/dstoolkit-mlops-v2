@@ -16,7 +16,7 @@ git clone https://github.com/[your-github-username]/[your-repository-name].git
 Make sure to replace [your-github-username] with your actual GitHub username and [your-repository-name] with the name of your forked repository.
 
 ## Set Up Access to Relevant Services
-Please ensure that you have the appropriate permissions and credentials to avoid any issues during the contribution process. This includes access to your GitHub repository and Azure Subscription. If your contribution requires access to Azure Machine Learning compute, make sure you have the necessary permissions and access before proceeding with your changes.  
+Please ensure that you have the appropriate permissions and credentials to avoid any issues during the contribution process. This includes access to your GitHub repository and Azure Subscription. If your contribution requires access to Azure Machine Learning compute, make sure you have the necessary permissions and access before proceeding with your changes.
 
 ## Install Dependencies and Validate Environment
 Before making changes, ensure that you have installed all the dependencies required for the project. This include Conda, Python 3.8 (ideal), azureml sdk v2 and tools. Validate that your development environment is set up correctly and meets the project's requirements.
@@ -33,7 +33,7 @@ Replace [branch-name] with a descriptive name for your branch that indicates the
 Now it's time to make your changes! Follow the coding style and guidelines of the project, and thoroughly test your changes in your local environment. Ensure that your changes do not introduce any errors or break the existing functionality. Be sure to add appropriate comments and documentation as needed.
 
 ## Validate code changes
-Before submitting your contribution, it's crucial to validate your changes by building and testing the project on your environment. This includes running code quality checks, linting, unit tests, MLOps CI/CD workflows, and Azure ML pipelines including training scripts. Make sure that your changes do not cause any build failures or test errors. 
+Before submitting your contribution, it's crucial to validate your changes by building and testing the project on your environment. This includes running code quality checks, linting, unit tests, MLOps CI/CD workflows, and Azure ML pipelines including training scripts. Make sure that your changes do not cause any build failures or test errors.
 
 ## Commit and Push Changes
 Once you're confident with your changes, commit your changes and push them to your forked repository using the following commands:
@@ -49,7 +49,7 @@ Replace [branch-name] with the name of your branch.
 Go to the original [Your Repository Name] repository on GitHub and click on the "New Pull Request" button. Select your branch from the base and compare branches drop-down menus. Review your changes and provide a descriptive title and detailed description for your pull request. Include relevant information, such as the purpose of your contribution, the changes made, and any necessary context. Click on the "Create Pull Request" button to submit your contribution.
 
 ## Validate Builds and Tests
-After the PR is created, GitHub Actions workflows will run build validation. Any feedback from build validation must be addressed, or the PR will not be merged to the target branch. 
+After the PR is created, GitHub Actions workflows will run build validation. Any feedback from build validation must be addressed, or the PR will not be merged to the target branch.
 
 ## Review and Address Feedback
 Your pull request will be reviewed by the repository maintainers, and they may provide feedback or request changes. Be sure to monitor your pull request and address any feedback in a timely manner. This may involve making additional changes, providing clarification, or addressing any issues raised during the review process.
