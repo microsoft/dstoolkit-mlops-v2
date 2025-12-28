@@ -1,16 +1,6 @@
+# [DEPRECATED] Azure Pipelines is retired; GitHub Actions is the primary CI/CD. File kept for reference and will be removed after 2026-01-31.
 pr: none
-trigger:
-  branches:
-   include:
-     - main
-  paths:
-    include:
-      - .azure-pipelines/*
-      - mlops/common/*
-      - mlops/london_taxi/*
-      - src/london_src/*
-      - model/london_taxi/*
-      - src/shared/*
+trigger: none
 
 pool:
   vmImage: ubuntu-latest

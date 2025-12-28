@@ -1,3 +1,4 @@
+# [DEPRECATED] Azure Pipelines is retired; GitHub Actions is the primary CI/CD. File kept for reference and will be removed after 2026-01-31.
 pr: none
 trigger: none
 pool:
@@ -8,7 +9,7 @@ variables:
 - group: mlops_platform_dev_vg
 
 jobs:
-- job: Deploy_MLOps_v2_Infrastructure  
+- job: Deploy_MLOps_v2_Infrastructure
   steps:
       - script: |
           echo 'See the contents of parameters passed in'
@@ -16,8 +17,8 @@ jobs:
           echo '$(AZURE_RM_SVC_CONNECTION)'
           echo '$(CONTAINER_REGISTRY_NAME)'
           echo '$(KEYVAULT_NAME)'
-          echo '$(LOCATION)' 
-          echo '$(RESOURCE_GROUP_NAME)' 
+          echo '$(LOCATION)'
+          echo '$(RESOURCE_GROUP_NAME)'
           echo '$(STORAGE_ACCT_NAME)'
           echo '$(WORKSPACE_NAME)'
         enabled: true
@@ -39,4 +40,4 @@ jobs:
             appInsightsName='$(APPINSIGHTS_NAME)' `
             containerRegistryName='$(CONTAINER_REGISTRY_NAME)' `
             amlWorkspaceName='$(WORKSPACE_NAME)'
-        enabled: true                
+        enabled: true

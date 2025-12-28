@@ -7,12 +7,14 @@ The idea of this template is to provide a minimum number of scripts to implement
 The template contains the following folders/files:
 
 - [.github](.github): the folder contains Github Workflow related files (yaml files to define the Builds).
-- [.azure-pipelines](.azure-pipelines): the folder contains Azure DevOps related files (yaml files to define Builds).
+- [.azure-pipelines](.azure-pipelines): legacy Azure DevOps pipelines (deprecated, triggers disabled, kept for reference until 2026-01-31).
 - [docs](docs): documentation.
 - [src](src): source code that is not related to Azure ML directly. Usually, there is data science related code.
 - [mlops](mlops): scripts that are related to Azure ML.
 - [mlops/london-taxi](mlops/london-taxi), [mlops/nyc-taxi](mlops/nyc-taxi), [mlops/docker_taxi](mlops/docker_taxi): fake pipelines with some basic code.
 - [.amlignore](.amlignore): using this file we are removing all the folders and files that are not supposed to be in Azure ML compute.
+
+GitHub Actions is the active CI/CD system. Azure Pipelines definitions remain in the repo for reference only with all triggers disabled and will be removed after 2026-01-31.
 
 The template contains the following documents:
 
@@ -38,7 +40,7 @@ You can start training pipelines from your local computer by creating an environ
 - SUBSCRIPTION_ID
 - RESOURCE_GROUP_NAME
 - WORKSPACE_NAME
-- Check all parameters in [config.yaml](config/config.yaml) for the model under test.  **Note**: In the sample code provided in this solution, the development team elected to use a single config file, but this is by no means the only way to do this. It's possible to simplify configs by extracting elements common across all models into their own file, and to create model-specific configs in their own files.  The Class MLOPsConfig supports passing config_path in its constructor enabling a modular design for configuration. 
+- Check all parameters in [config.yaml](config/config.yaml) for the model under test.  **Note**: In the sample code provided in this solution, the development team elected to use a single config file, but this is by no means the only way to do this. It's possible to simplify configs by extracting elements common across all models into their own file, and to create model-specific configs in their own files.  The Class MLOPsConfig supports passing config_path in its constructor enabling a modular design for configuration.
 - Install [Azure Cli and Azure ML extensions](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-configure-cli?view=azureml-api-2&tabs=public#installation)
 - Create the an environment on your local machine using one of the following options below.
 
@@ -63,7 +65,7 @@ You can start training pipelines from your local computer by creating an environ
   - Open the terminal and run the following commands to create a conda environment (we assume that anaconda has been installed on your local computer):
 
     - conda env create -name dstoolkit Python=3.10 # this does not work for some computers, the code could be conda create --name dstoolkit python=3.10
-    - conda activate dstoolkit # if this doesn't work in your terminal, you can go to the Anaconda Navigator, click Environments, click dstoolkit and then hit the green play button and open terminal from there. 
+    - conda activate dstoolkit # if this doesn't work in your terminal, you can go to the Anaconda Navigator, click Environments, click dstoolkit and then hit the green play button and open terminal from there.
     - pip install -r .devcontainer/requirements.txt
 - Sign in with Azure CLI : run `az login -t <your tenant>`
 
@@ -71,7 +73,9 @@ You can start training pipelines from your local computer by creating an environ
   - `python -m mlops.common.register_data_asset --data_config_path config/data_config.json`
 - Run the training pipeline under test using the module notation (for example, `python -m mlops.nyc_taxi.start_local_pipeline --build_environment pr --wait_for_completion True`)
 
-## Caching Python Dependencies
+## Caching Python Dependencies (legacy Azure Pipelines)
+
+Legacy note: Azure Pipelines are deprecated and disabled; the details below are retained only for historical reference. GitHub Actions is the active CI/CD system.
 
 **Caching** is used to store Python dependencies to improve build times by reusing packages between runs. The cache is managed using the [Cache@2](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/cache-v2?view=azure-pipelines) task in the pipeline.
 
@@ -80,16 +84,16 @@ An example of how caching is implemented in this repo can be found in [build_val
 ### Understanding Cache Key, Cache Path, and Restore Keys
 
 - **Cache Key**: A unique key based on `python_build_validate`, the agent OS (`$(Agent.OS)`), and the `build_validation_requirements.txt` file.
-  
-  Example: 
-  
+
+  Example:
+
 ``` bash
 python_build_validate | "$(Agent.OS)" | .azure-pipelines/requirements/build_validation_requirements.txt`
 ```
 
 - **Cache Path**: Dependencies are cached at `$(PIP_CACHE_DIR)`, where `pip` stores package files.
 
-- **Restore Keys**: If an exact cache match isn’t found, the pipeline will attempt to restore based on partial keys: 
+- **Restore Keys**: If an exact cache match isn’t found, the pipeline will attempt to restore based on partial keys:
 
 ``` bash
 python_build_validate | "$(Agent.OS)"`.
@@ -132,6 +136,8 @@ You can use Visual Studio Code to run and debug specific tasks related to the ML
 5. The output and any debugging information will be displayed in the **Debug Console** or **Integrated Terminal**, depending on the task configuration.
 
 ## Build Validation Policies for Azure Repos Git
+
+Legacy note: Azure Pipelines and Azure Repos integrations described below are deprecated; GitHub Actions is the supported CI/CD path, and this section is retained for reference only.
 
 ### Limitation in Azure DevOps Pipelines
 
@@ -210,8 +216,8 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 ## Trademarks
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
+This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft
+trademarks or logos is subject to and must follow
 [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.

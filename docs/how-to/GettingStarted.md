@@ -56,28 +56,9 @@ This solution supports Azure Machine Learning (ML) as a platform for ML, and Azu
 * "IS_BATCH_DEPLOYMENT" - Set to True to deploy models to a batch endpoint.
 * "IS_ONLINE_DEPLOYMENT" - Set to True to deploy models to an online Endpoint.
 
-**Step 4.** Create Azure Pipelines to deploy the infrastructure, and operate model builds and continuous integration.
-Details about how to create a basic Azure Pipeline can be found in [Create your first pipeline](https://learn.microsoft.com/en-us/azure/devops/pipelines/create-first-pipeline?view=azure-devops&tabs).
+**Legacy note:** Azure Pipelines setup is deprecated and kept only for reference; triggers are disabled and GitHub Actions is the supported CI/CD path. If you must consult the old YAMLs, see the files under .azure-pipelines, but new deployments should use the GitHub Workflows steps below.
 
-**Step 5.** Create an azure pipeline to deploy the infrastructure using either the bicep (*.azure-pipelines/infra/bicep/infra_provision_bicep_pipeline.yml*) or terraform (*.azure-pipelines/infra/terraform/infra_provision_terraform_pipeline.yml*) yaml files.
-
-**Step 6.** Create one or more Azure Pipelines to setup build validation for the use cases listed below:
-
-* london_taxi
-* docker_taxi
-* sequence_model
-
-**Step 7.** Create one or more Azure Pipelines to setup continuous integration for the use cases listed below:
-
-* london_taxi
-* docker_taxi
-* sequence_model
-
-**Step 8.** At the Organization Level within Azure Devops, add the Azure DevLabs Machine Learning extension by searching for Machine Learning, clicking the extension pictured below, and then Install on the ensuing page. If you do not have the required permissions, please ask the administrator of the organization to install the extension on your behalf.
-
-![Azure Machine Learning Extension](../media/machinelearningextension.png)
-
-**Step 9.** Use the boolean variable `is_docker` in your GitHub workflows and Azure Pipelines to determine if the unit tests need to use Docker. Set `is_docker` to "true" if the unit tests require Docker, otherwise set it to "false". This variable can be used to conditionally run Docker-related steps in your CI/CD pipelines.
+**Use the boolean variable `is_docker` in your GitHub workflows** to determine if the unit tests need to use Docker. Set `is_docker` to "true" if the unit tests require Docker, otherwise set it to "false". This variable can be used to conditionally run Docker-related steps in your CI/CD pipelines.
 
 ## GitHub Workflows Setup
 

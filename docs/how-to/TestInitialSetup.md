@@ -7,7 +7,9 @@
 - pipeline_configs: Stores the configuration for pr and dev pipelines for each model supported by the solution.
 - deploy_configs: Stores online and batch configuration for deployments for each model.
 
-## Azure DevOps Steps
+## Azure DevOps Steps (legacy/deprecated)
+
+Azure Pipelines are deprecated and triggers are disabled; use the GitHub Workflows Steps below for active CI/CD. The steps in this section are retained for historical reference only.
 
 **Step 1.** *Provision Infrastructure* - Execute the infrastructure provisioning pipeline (infra_provision_bicep_pipeline.yml OR infra_provision_terraform_pipeline.yml).
 
@@ -18,7 +20,7 @@
 
 - .azure-pipelines/register_data_assets.yml
 
-**Step 3.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for build validation
+**Step 3.** *Run CI workflow for a model of your choice* - Execute the GitHub Actions workflows listed below for build validation
 Pipeline Parameters:
 
 - exec_environment: The environment to run the workflow in. Set to "ci" by default
@@ -59,18 +61,18 @@ Pipeline Parameters:
 - exec_environment: The environment to run the workflow in. Set to "ci" by default
 - model_type: The type of model for which to run the CI workflow. Set to {model name} by default
 
-Pipelines:
+Workflows:
 
 - .github/workflows/london_taxi_ci_pipeline.yml
 - .github/workflows/docker_taxi_ci_pipeline.yml
 
-**Step 4.** *Run CD pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for continuous integration.
+**Step 4.** *Run CD workflow for a model of your choice* - Execute the GitHub Actions workflows listed below for deployment validation.
 Pipeline Parameters:
 
 - exec_environment: The environment to run the workflow in. Set to "cd" by default
 - model_type: The type of model for which to run the CI workflow. Set to {model name} by default
 
-Pipelines:
+Workflows:
 
 - .github/workflows/london_taxi_cd_pipeline.yml
 - .github/workflows/docker_taxi_cd_pipeline.yml

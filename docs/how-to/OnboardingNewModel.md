@@ -18,7 +18,7 @@ Follow these steps to onboard a new ML model to your Model Factory:
 
 The /config/config.yaml file contains a node for the following:
 
-**Note: Unless you have modified variable names in either variable groups or github variables, leave all $(variables) unchanged.** 
+**Note: Unless you have modified variable names in either variable groups or github variables, leave all $(variables) unchanged.**
 
 - aml_config: Stores the configuration of azure resources hosting the Azure Machine Learning workspace.
 - environment_config: Stores the base image and dynamic properties set at runtime.
@@ -30,7 +30,7 @@ The /config/config.yaml file contains a node for the following:
 Set the properties for this component in Azure Pipelines variable group of your Azure DevOps project or within Variables in your github repository:
 
 - subscription_id: The subscription id in Azure hosting the Azure Machine Learning workspace.
-- resource_group_name: The name of the resource group hosting the Azure Machine Learning workspace. 
+- resource_group_name: The name of the resource group hosting the Azure Machine Learning workspace.
 - workspace_name: The name of the Azure Machine Learning workspace in which the models will be trained and served.
 
 ### environment config
@@ -87,14 +87,14 @@ Start by copying an existing deployment config and accepting the defaults or mod
 - deployment_name:  A name for the deployment serving the model.
 - deployment_traffic_allocation: A number setting the traffic attribute for an online endpoint.
 - deployment_vm_size: Set to an Azure VM Size according to the naming convention here: [Azure VM Sizes](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes).
-- deployment_base_image: Reference to the base image used in serving the model. A note on base image selection. When choosing the base image for inferencing take into consideration compatibility with the libraries, dependencies, and performance characteristics of your model. Also consider image maintainability, size, and licensing.  
+- deployment_base_image: Reference to the base image used in serving the model. A note on base image selection. When choosing the base image for inferencing take into consideration compatibility with the libraries, dependencies, and performance characteristics of your model. Also consider image maintainability, size, and licensing.
 - deployment_conda_path: Path to the conda file to be used when serving the given model.
 - score_dir: Directory within which the scoring file is stored.
-- deployment_instance_count: number of nodes in the cluster serving the model.  
+- deployment_instance_count: number of nodes in the cluster serving the model.
 
 ## Extend the src folder
 
-The src folder contains one top level folder for each model. The name of the folder corresponds to the pipeline config and deployment config nodes in the /config/config.yaml file. For instance, the pipeline config node in the config.yaml file contains a node for "london_taxi_pr". Accordingly, there is a folder in /src called "london_taxi" that corresponds to the model name.  You can start by copying one of the existing {root}/src/model folders and pasting it in this folder.  Once copied, rename it to the model name of the new model, and modify the folders and files within the new folder according the steps required by the new model. 
+The src folder contains one top level folder for each model. The name of the folder corresponds to the pipeline config and deployment config nodes in the /config/config.yaml file. For instance, the pipeline config node in the config.yaml file contains a node for "london_taxi_pr". Accordingly, there is a folder in /src called "london_taxi" that corresponds to the model name.  You can start by copying one of the existing {root}/src/model folders and pasting it in this folder.  Once copied, rename it to the model name of the new model, and modify the folders and files within the new folder according the steps required by the new model.
 
 Each sample usecase has steps for prep, transform, train, predict, score and register the model.  You can use the same steps or add or remove steps based on your specific usecase.
 Common Steps to include:
@@ -108,7 +108,7 @@ Common Steps to include:
 
 ## Extend the mlops folder
 
-The mlops folder contains one top level folder for each model. The name of the folder corresponds to the pipeline config and deployment config nodes in the /config/config.yaml file. For instance, the pipeline config node in the config.yaml file contains a node for "london_taxi_pr". Accordingly, there is a folder in /mlops called "london_taxi" that corresponds to the model name. You can start by copying one of the existing model folders and pasting it in this folder.  Once copied, rename it to the model name of the new model, and modify the files within the new folder.  
+The mlops folder contains one top level folder for each model. The name of the folder corresponds to the pipeline config and deployment config nodes in the /config/config.yaml file. For instance, the pipeline config node in the config.yaml file contains a node for "london_taxi_pr". Accordingly, there is a folder in /mlops called "london_taxi" that corresponds to the model name. You can start by copying one of the existing model folders and pasting it in this folder.  Once copied, rename it to the model name of the new model, and modify the files within the new folder.
 
 There are multiple sub-folders in this folder. The following modifications should be made:
 
@@ -118,11 +118,11 @@ There are multiple sub-folders in this folder. The following modifications shoul
 
 ### mlops/{model}/data
 
-- If the new model requires batch inferencing, add a relevant dataset to the "data" folder to enable testing of the batch endpoint. 
+- If the new model requires batch inferencing, add a relevant dataset to the "data" folder to enable testing of the batch endpoint.
 
 ### mlops/{model}/environment folder
 
-- The environment folder contains the conda.yml file needed by the Model related to any python package dependencies. 
+- The environment folder contains the conda.yml file needed by the Model related to any python package dependencies.
 
 ### mlops/{model}/src folder
 
@@ -140,12 +140,9 @@ The model folder contains one top level folder for each model. The name of the f
 
 The test folder contains one top level folder for each model. The name of the folder corresponds to the pipeline config and deployment config nodes in the /config/config.yaml file. For instance, the pipeline config node in the config.yaml file contains a node for "london_taxi_pr". Accordingly, there is a folder in /model called "london_taxi" that corresponds to the model name. You can start by copying one of the existing model folders and pasting it in this folder.  Once copied, rename it to the model name of the new model, and modify the files within the new folder. Depending on the serving model, remove either of the batch or online. Add any unit tests for the new ML Model should be stored in new folder.
 
-## .azure-pipelines folder  
+## .azure-pipelines folder
 
-The .azure-pipelines folder contains a ci and a cd file for each model. There are two yaml pipelines per model in this folder. Add a new pair of files for the new model and make the following changes: 
-
-- The include paths in trigger and ci section with values related to new ML Model.
-- The default value for model_type parameter in parameters section.
+Legacy note: Azure Pipelines are deprecated and triggers are disabled. The YAMLs are kept only for reference and will be removed after 2026-01-31. Use the GitHub Actions workflows under .github/workflows to add CI/CD for new models instead of creating new Azure Pipelines files.
 
 ## Implement a robust and scalable solution for data provisioning
 

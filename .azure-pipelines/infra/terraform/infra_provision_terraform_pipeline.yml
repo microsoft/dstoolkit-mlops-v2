@@ -1,3 +1,4 @@
+# [DEPRECATED] Azure Pipelines is retired; GitHub Actions is the primary CI/CD. File kept for reference and will be removed after 2026-01-31.
 pr: none
 trigger: none
 pool:
@@ -8,7 +9,7 @@ variables:
 - group: mlops_platform_dev_vg
 
 jobs:
-- job: Deploy_MLOps_v2_Infrastructure  
+- job: Deploy_MLOps_v2_Infrastructure
   steps:
   - script: |
       echo 'See the contents of parameters passed in'
@@ -16,10 +17,10 @@ jobs:
       echo '$(AZURE_RM_SVC_CONNECTION)'
       echo '$(CONTAINER_REGISTRY_NAME)'
       echo '$(KEYVAULT_NAME)'
-      echo '$(LOCATION)' 
-      echo '$(RESOURCE_GROUP_NAME)' 
+      echo '$(LOCATION)'
+      echo '$(RESOURCE_GROUP_NAME)'
       echo '$(STORAGE_ACCT_NAME)'
-      echo '$(TFSTATE_RESOURCE_GROUP_NAME)'          
+      echo '$(TFSTATE_RESOURCE_GROUP_NAME)'
       echo '$(TFSTATE_STORAGE_ACCT_NAME)'
       echo '$(WORKSPACE_NAME)'
 
@@ -41,7 +42,7 @@ jobs:
       enableRecursion: false
       useLegacyPattern: false
       enableTelemetry: false
-    enabled: true 
+    enabled: true
 
   - task: AzureCLI@2
     displayName: Add tfstate resource group
@@ -92,7 +93,7 @@ jobs:
       backendServiceArm: '$(AZURE_RM_SVC_CONNECTION)'
       ensureBackend: true
       backendAzureRmResourceGroupName: '$(TFSTATE_RESOURCE_GROUP_NAME)'
-      backendAzureRmStorageAccountName: '$(TFSTATE_STORAGE_ACCT_NAME)' 
+      backendAzureRmStorageAccountName: '$(TFSTATE_STORAGE_ACCT_NAME)'
       backendAzureRmContainerName: terraform
       backendAzureRmKey: mlops.tfstate
     enabled: true
