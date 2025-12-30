@@ -114,7 +114,6 @@ jobs:
 
   storage-access-join:
     name: Storage Access Join
-    needs: [enable-storage-access, announce-storage-skip]
     runs-on: ubuntu-latest
     if: ${{ always() }}
     steps:
