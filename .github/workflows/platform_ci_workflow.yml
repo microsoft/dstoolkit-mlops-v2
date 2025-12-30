@@ -94,7 +94,7 @@ jobs:
 
   build-validation:
     name: Build Validation
-    needs: enable-storage-access
+    needs: storage-access-join
     uses: ./.github/workflows/build_validation_workflow.yml
     with:
       image_name: ${{ inputs.exec_environment }}
@@ -111,6 +111,17 @@ jobs:
           echo "Storage public network access was NOT enabled for this run (enable_storage_public_access=false)."
           echo "If deployments fail, check RBAC and private endpoint configuration for mfstac003 and mfacr001."
           echo "To run with temporary public access enabled, set input 'enable_storage_public_access=true' when triggering the workflow."
+
+  storage-access-join:
+    name: Storage Access Join
+    needs: [enable-storage-access, announce-storage-skip]
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    steps:
+      - name: Report storage access mode
+        run: |
+          echo "enable_storage_public_access=${{ inputs.enable_storage_public_access }}"
+          echo "This job joins whichever of enable-storage-access or announce-storage-skip ran."
 
   execute-ml-job-pipeline:
     name: Execute ML Job Pipeline
