@@ -12,6 +12,9 @@ on:
       is_docker:
         type: boolean
         default: false
+      enable_storage_public_access:
+        type: boolean
+        default: false
   workflow_call:
     inputs:
       exec_environment:
@@ -28,6 +31,11 @@ on:
           description: "Is Docker used for build validation?"
           required: true
           default: false
+      enable_storage_public_access:
+        type: boolean
+        description: "Temporarily enable storage public network access for this run"
+        required: false
+        default: false
       # arm_client_id:
       #   required: true
       #   type: string
@@ -55,6 +63,7 @@ env:
 jobs:
   enable-storage-access:
     name: Enable Storage Public Access
+    if: ${{ inputs.enable_storage_public_access }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -91,6 +100,17 @@ jobs:
       image_name: ${{ inputs.exec_environment }}
       model_type: ${{ inputs.model_type }}
       is_docker: ${{ inputs.is_docker }}
+
+  announce-storage-skip:
+    name: Announce storage public access skipped
+    if: ${{ !inputs.enable_storage_public_access }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log storage public access skipped
+        run: |
+          echo "Storage public network access was NOT enabled for this run (enable_storage_public_access=false)."
+          echo "If deployments fail, check RBAC and private endpoint configuration for mfstac003 and mfacr001."
+          echo "To run with temporary public access enabled, set input 'enable_storage_public_access=true' when triggering the workflow."
 
   execute-ml-job-pipeline:
     name: Execute ML Job Pipeline
