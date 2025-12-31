@@ -130,12 +130,21 @@ class MLOpsConfig:
         if pipelineconfig_name in self.pipeline_configs:
             return self.pipeline_configs[pipelineconfig_name]
 
+        available = ', '.join(sorted(self.pipeline_configs.keys()))
+        raise KeyError(
+            f"Pipeline config '{pipelineconfig_name}' not found in {self.config_path}. ``pipeline_configs`` keys: {available}"
+        )
+
     def get_deployment_config(self, deployment_name: str) -> Dict:
         """Get the pipeline configuration for given pipeline name and environment."""
         deploymentconfig_name = f"{deployment_name}_{self._environment}"
-
         if deploymentconfig_name in self.deployment_configs:
             return self.deployment_configs[deploymentconfig_name]
+
+        available = ', '.join(sorted(self.deployment_configs.keys()))
+        raise KeyError(
+            f"Deployment config '{deploymentconfig_name}' not found in {self.config_path}. ``deployment_configs`` keys: {available}"
+        )
 
 
 if __name__ == "__main__":
