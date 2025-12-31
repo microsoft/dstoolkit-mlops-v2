@@ -64,6 +64,20 @@ def wait_for_deployment_ready(ml_client, endpoint_name, deployment_name, max_wai
                 )
                 return True
             if state in ["Failed", "Canceled"]:
+                # Fetch and print full deployment details to aid debugging
+                try:
+                    detailed = ml_client.online_deployments.get(
+                        name=deployment_name, endpoint_name=endpoint_name
+                    )
+                    print("--- Deployment diagnostic dump ---")
+                    try:
+                        print(detailed)
+                    except Exception:
+                        # Fallback to repr if printing the object fails
+                        print(repr(detailed))
+                except Exception as _:
+                    print(f"Unable to fetch detailed deployment info for {deployment_name}")
+
                 raise Exception(
                     f"Deployment {deployment_name} in {state} state - manual intervention required"
                 )
@@ -122,6 +136,19 @@ def deploy_with_retry(
                 raise
         except Exception as e:
             print(f"Unexpected error during deployment: {str(e)}")
+            # Try to fetch current deployment status for additional context
+            try:
+                dep_name = getattr(deployment, 'name', None)
+                ep_name = getattr(deployment, 'endpoint_name', None)
+                if dep_name and ep_name:
+                    current = ml_client.online_deployments.get(name=dep_name, endpoint_name=ep_name)
+                    print("--- Current deployment state dump ---")
+                    try:
+                        print(current)
+                    except Exception:
+                        print(repr(current))
+            except Exception:
+                print("Could not retrieve live deployment state for diagnostics")
             raise
 
     raise Exception("Deployment failed after all retry attempts")
