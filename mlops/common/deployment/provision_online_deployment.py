@@ -5,6 +5,8 @@ It supports real-time deployment scenarios.
 """
 import argparse
 import time
+import json
+import requests
 from azure.ai.ml import MLClient
 from azure.ai.ml.entities import (
     ManagedOnlineDeployment,
@@ -15,6 +17,36 @@ from azure.identity import DefaultAzureCredential
 from azure.core.exceptions import ResourceExistsError
 from mlops.common.config_utils import MLOpsConfig
 from mlops.common.naming_utils import generate_model_name
+
+
+def _fetch_and_save_async_operation(uri, credential):
+    """Fetch the Azure async operation payload and save it to a file for diagnostics."""
+    if not uri:
+        print("No AzureAsyncOperationUri available to fetch.")
+        return
+
+    try:
+        token = credential.get_token("https://management.azure.com/.default").token
+        headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+        print(f"Fetching Azure async operation payload from: {uri}")
+        resp = requests.get(uri, headers=headers, timeout=30)
+        try:
+            payload = resp.json()
+            pretty = json.dumps(payload, indent=2)
+        except Exception:
+            pretty = resp.text
+
+        print("--- AzureAsyncOperation payload ---")
+        print(pretty)
+
+        try:
+            with open("deployment_async_operation.json", "w", encoding="utf-8") as fh:
+                fh.write(pretty)
+            print("Wrote async operation payload to deployment_async_operation.json")
+        except Exception as e:
+            print(f"Unable to write async op payload to file: {e}")
+    except Exception as e:
+        print(f"Failed to fetch Azure async operation payload: {e}")
 
 
 def wait_for_endpoint_ready(ml_client, endpoint_name, max_wait=600):
@@ -75,6 +107,24 @@ def wait_for_deployment_ready(ml_client, endpoint_name, deployment_name, max_wai
                     except Exception:
                         # Fallback to repr if printing the object fails
                         print(repr(detailed))
+                    # Attempt to fetch Azure async operation payload for deeper diagnostics
+                    try:
+                        credential = DefaultAzureCredential()
+                        async_uri = None
+                        props = getattr(detailed, "properties", None)
+                        if props:
+                            try:
+                                async_uri = props.get("AzureAsyncOperationUri")
+                            except Exception:
+                                async_uri = getattr(props, "AzureAsyncOperationUri", None)
+                        if not async_uri:
+                            # Try top-level properties fallback
+                            async_uri = getattr(detailed, "AzureAsyncOperationUri", None)
+
+                        if async_uri:
+                            _fetch_and_save_async_operation(async_uri, credential)
+                    except Exception as _:
+                        print("Unable to fetch Azure async operation payload for diagnostics")
                 except Exception as _:
                     print(f"Unable to fetch detailed deployment info for {deployment_name}")
 
@@ -147,6 +197,22 @@ def deploy_with_retry(
                         print(current)
                     except Exception:
                         print(repr(current))
+                        # Attempt to fetch async op payload if available on the current deployment object
+                        try:
+                            credential = DefaultAzureCredential()
+                            async_uri = None
+                            props = getattr(current, "properties", None)
+                            if props:
+                                try:
+                                    async_uri = props.get("AzureAsyncOperationUri")
+                                except Exception:
+                                    async_uri = getattr(props, "AzureAsyncOperationUri", None)
+                            if not async_uri:
+                                async_uri = getattr(current, "AzureAsyncOperationUri", None)
+                            if async_uri:
+                                _fetch_and_save_async_operation(async_uri, credential)
+                        except Exception:
+                            print("Unable to fetch async op payload for current deployment state")
             except Exception:
                 print("Could not retrieve live deployment state for diagnostics")
             raise
