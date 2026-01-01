@@ -168,62 +168,62 @@ jobs:
 
           echo "\nDeriving published model name for smoke download test..."
           PUBLISHED_MODEL_NAME=$(python - <<PY
-from mlops.common.naming_utils import generate_model_name
-print(generate_model_name("${{ inputs.model_type }}"))
-PY
-)
-          echo "Published model name: $PUBLISHED_MODEL_NAME"
+          from mlops.common.naming_utils import generate_model_name
+          print(generate_model_name("${{ inputs.model_type }}"))
+          PY
+          )
+                    echo "Published model name: $PUBLISHED_MODEL_NAME"
 
-          echo "Listing registered models to find latest version..."
-          MODEL_LIST_JSON=$(az ml model list \
-            --name "$PUBLISHED_MODEL_NAME" \
-            --workspace-name ${{ env.WORKSPACE_NAME }} \
-            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-            --subscription ${{ env.SUBSCRIPTION_ID }} -o json)
+                    echo "Listing registered models to find latest version..."
+                    MODEL_LIST_JSON=$(az ml model list \
+                      --name "$PUBLISHED_MODEL_NAME" \
+                      --workspace-name ${{ env.WORKSPACE_NAME }} \
+                      --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+                      --subscription ${{ env.SUBSCRIPTION_ID }} -o json)
 
-          if [ -z "$MODEL_LIST_JSON" ] || [ "$MODEL_LIST_JSON" = "[]" ]; then
-            echo "❌ ERROR: No registered model found named '$PUBLISHED_MODEL_NAME'"
-            exit 1
-          fi
+                    if [ -z "$MODEL_LIST_JSON" ] || [ "$MODEL_LIST_JSON" = "[]" ]; then
+                      echo "❌ ERROR: No registered model found named '$PUBLISHED_MODEL_NAME'"
+                      exit 1
+                    fi
 
-          LATEST_VERSION=$(echo "$MODEL_LIST_JSON" | python - <<PY
-import sys, json
-info = json.load(sys.stdin)
-if not info:
-    sys.exit(2)
-print(info[0].get('version'))
-PY
-)
+                    LATEST_VERSION=$(echo "$MODEL_LIST_JSON" | python - <<PY
+          import sys, json
+          info = json.load(sys.stdin)
+          if not info:
+              sys.exit(2)
+          print(info[0].get('version'))
+          PY
+          )
 
-          echo "Latest model version: $LATEST_VERSION"
+                    echo "Latest model version: $LATEST_VERSION"
 
-          echo "Attempting model download using AD auth (auth-mode login)..."
-          if ! az ml model download \
-            --name "$PUBLISHED_MODEL_NAME" \
-            --version "$LATEST_VERSION" \
-            --download-path /tmp/model-download \
-            --auth-mode login \
-            --workspace-name ${{ env.WORKSPACE_NAME }} \
-            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-            --subscription ${{ env.SUBSCRIPTION_ID }}; then
-            echo "❌ ERROR: Model download via AD auth failed - this indicates missing RBAC on the model storage or workspace"
-            exit 1
-          fi
+                    echo "Attempting model download using AD auth (auth-mode login)..."
+                    if ! az ml model download \
+                      --name "$PUBLISHED_MODEL_NAME" \
+                      --version "$LATEST_VERSION" \
+                      --download-path /tmp/model-download \
+                      --auth-mode login \
+                      --workspace-name ${{ env.WORKSPACE_NAME }} \
+                      --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+                      --subscription ${{ env.SUBSCRIPTION_ID }}; then
+                      echo "❌ ERROR: Model download via AD auth failed - this indicates missing RBAC on the model storage or workspace"
+                      exit 1
+                    fi
 
-          echo "✅ Storage RBAC smoke tests passed (workflow identity can list blobs and download model)."
+                    echo "✅ Storage RBAC smoke tests passed (workflow identity can list blobs and download model)."
 
-          # Test actual blob access
-          echo "Testing blob access with workflow identity..."
-          if ! az storage container list \
-            --account-name ${{ env.STORAGE_ACCOUNT_NAME }} \
-            --auth-mode login \
-            --subscription ${{ env.SUBSCRIPTION_ID }} \
-            --output table; then
-            echo "❌ ERROR: Workflow identity cannot access storage - this indicates RBAC or network issues"
-            exit 1
-          fi
+                    # Test actual blob access
+                    echo "Testing blob access with workflow identity..."
+                    if ! az storage container list \
+                      --account-name ${{ env.STORAGE_ACCOUNT_NAME }} \
+                      --auth-mode login \
+                      --subscription ${{ env.SUBSCRIPTION_ID }} \
+                      --output table; then
+                      echo "❌ ERROR: Workflow identity cannot access storage - this indicates RBAC or network issues"
+                      exit 1
+                    fi
 
-          echo "✅ Storage configuration validated successfully"
+                    echo "✅ Storage configuration validated successfully"
 
       - name: Provision azureml online endpoint
         uses: ./.github/actions/execute_shell_code
