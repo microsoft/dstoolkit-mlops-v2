@@ -5,43 +5,12 @@ on:
     inputs:
       exec_environment:
         type: string
-        default: "dev"
-      model_type:
-        type: string
-        default: "london_taxi"
       enable_storage_public_access:
         type: boolean
         default: false
-  workflow_call:
-    inputs:
-      exec_environment:
-        type: string
-        description: "Execution Environment"
-        required: true
-        default: "dev"
       model_type:
         type: string
-        description: "type of model to execute"
         required: true
-      enable_storage_public_access:
-        type: boolean
-        description: "Temporarily enable storage public network access for this run"
-        required: false
-        default: false
-
-permissions:
-  id-token: write
-  contents: read
-
-env:
-  SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
-  RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
-  WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
-  STORAGE_ACCOUNT_NAME: ${{ vars.STORAGE_ACCT_NAME }}
-  ARM_CLIENT_ID: ${{vars.ARM_CLIENT_ID}}
-  ARM_TENANT_ID: ${{vars.ARM_TENANT_ID}}
-  BUILD_BUILDID: ${{ github.run_id }}
-  BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
 
 jobs:
   execute-training-job:
@@ -74,12 +43,6 @@ jobs:
 
           echo "Waiting for storage configuration propagation..."
           sleep 15
-
-      - name: Announce storage public access skipped
-        if: ${{ !inputs.enable_storage_public_access }}
-        run: |
-          echo "Storage public network access was NOT enabled for this run (enable_storage_public_access=false)."
-          echo "If deployments fail, check RBAC and private endpoint configuration for mfstac003 and mfacr001."
 
       - name: Execute MLOps Standard Pipeline
         uses: ./.github/actions/execute_shell_code
@@ -440,7 +403,43 @@ jobs:
           arm_tenant_id: ${{ env.ARM_TENANT_ID }}
           subscription_id: ${{ env.SUBSCRIPTION_ID }}
 
+      - name: Wait for concurrent deployments to finish
+        if: inputs.enable_storage_public_access
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Checking for other in-progress deployments before restoring storage restrictions..."
+          MAX_ITERATIONS=60
+          ITERATION=0
+          CURRENT_RUN=${{ github.run_id }}
+
+          while [ $ITERATION -lt $MAX_ITERATIONS ]; do
+            RUNNING_CD=$(gh run list \
+              --workflow platform_cd_workflow.yml \
+              --status in_progress \
+              --json databaseId \
+              --jq "[.[] | select(.databaseId != $CURRENT_RUN)] | length")
+
+            RUNNING_DEPLOY_ONLY=$(gh run list \
+              --workflow deploy_online_only.yml \
+              --status in_progress \
+              --json databaseId \
+              --jq "length")
+
+            TOTAL_RUNNING=$((RUNNING_CD + RUNNING_DEPLOY_ONLY))
+
+            if [ "$TOTAL_RUNNING" -eq 0 ]; then
+              echo "No concurrent deployments detected. Proceeding with storage restrict."
+              break
+            fi
+
+            ITERATION=$((ITERATION + 1))
+            echo "Iteration $ITERATION/$MAX_ITERATIONS: still waiting ($TOTAL_RUNNING active runs)..."
+            sleep 30
+          done
+
       - name: Restore Storage Network Restrictions
+        if: inputs.enable_storage_public_access
         run: |
           echo "Restoring storage network restrictions after all deployments..."
           az storage account update \
@@ -456,3 +455,8 @@ jobs:
           echo "  - Public network access: Disabled"
           echo "  - Default network action: Deny"
           echo "  - Shared key access: Disabled (policy-enforced)"
+
+      - name: Skip restore (storage not opened by this run)
+        if: ${{ !inputs.enable_storage_public_access }}
+        run: |
+          echo "Storage was not opened by this run; skipping restore."
