@@ -76,10 +76,51 @@ def wait_for_endpoint_ready(ml_client, endpoint_name, max_wait=600):
     raise TimeoutError(f"Endpoint not ready after {max_wait} seconds")
 
 
-def wait_for_deployment_ready(ml_client, endpoint_name, deployment_name, max_wait=900, poll_interval=30):
+def _dump_deployment_diagnostics(ml_client, endpoint_name, deployment_name):
+    """Fetch and print deployment diagnostics for failed/canceled deployments."""
+    try:
+        detailed = ml_client.online_deployments.get(
+            name=deployment_name, endpoint_name=endpoint_name
+        )
+        print("--- Deployment diagnostic dump ---")
+        try:
+            print(detailed)
+        except Exception:
+            print(repr(detailed))
+
+        # Fetch Azure async operation payload for deeper diagnostics
+        _try_fetch_async_operation(detailed)
+    except Exception:
+        print(f"Unable to fetch detailed deployment info for {deployment_name}")
+
+
+def _try_fetch_async_operation(deployment_obj):
+    """Attempt to fetch and save Azure async operation payload."""
+    try:
+        credential = DefaultAzureCredential()
+        async_uri = None
+        props = getattr(deployment_obj, "properties", None)
+        if props:
+            try:
+                async_uri = props.get("AzureAsyncOperationUri")
+            except Exception:
+                async_uri = getattr(props, "AzureAsyncOperationUri", None)
+        if not async_uri:
+            async_uri = getattr(deployment_obj, "AzureAsyncOperationUri", None)
+
+        if async_uri:
+            _fetch_and_save_async_operation(async_uri, credential)
+    except Exception:
+        print("Unable to fetch Azure async operation payload for diagnostics")
+
+
+def wait_for_deployment_ready(
+    ml_client, endpoint_name, deployment_name, max_wait=900, poll_interval=30
+):
     """Ensure the existing deployment finishes any in-flight operation before updating."""
     print(
-        f"Checking if deployment {deployment_name} on endpoint {endpoint_name} is idle before updating..."
+        f"Checking if deployment {deployment_name} on endpoint "
+        f"{endpoint_name} is idle before updating..."
     )
     start_time = time.time()
 
@@ -92,44 +133,15 @@ def wait_for_deployment_ready(ml_client, endpoint_name, deployment_name, max_wai
 
             if not state or state == "Succeeded":
                 print(
-                    f"Deployment {deployment_name} is in '{state or 'Unknown'}' state and ready for updates"
+                    f"Deployment {deployment_name} is in '{state or 'Unknown'}' "
+                    f"state and ready for updates"
                 )
                 return True
             if state in ["Failed", "Canceled"]:
-                # Fetch and print full deployment details to aid debugging
-                try:
-                    detailed = ml_client.online_deployments.get(
-                        name=deployment_name, endpoint_name=endpoint_name
-                    )
-                    print("--- Deployment diagnostic dump ---")
-                    try:
-                        print(detailed)
-                    except Exception:
-                        # Fallback to repr if printing the object fails
-                        print(repr(detailed))
-                    # Attempt to fetch Azure async operation payload for deeper diagnostics
-                    try:
-                        credential = DefaultAzureCredential()
-                        async_uri = None
-                        props = getattr(detailed, "properties", None)
-                        if props:
-                            try:
-                                async_uri = props.get("AzureAsyncOperationUri")
-                            except Exception:
-                                async_uri = getattr(props, "AzureAsyncOperationUri", None)
-                        if not async_uri:
-                            # Try top-level properties fallback
-                            async_uri = getattr(detailed, "AzureAsyncOperationUri", None)
-
-                        if async_uri:
-                            _fetch_and_save_async_operation(async_uri, credential)
-                    except Exception as _:
-                        print("Unable to fetch Azure async operation payload for diagnostics")
-                except Exception as _:
-                    print(f"Unable to fetch detailed deployment info for {deployment_name}")
-
+                _dump_deployment_diagnostics(ml_client, endpoint_name, deployment_name)
                 raise Exception(
-                    f"Deployment {deployment_name} in {state} state - manual intervention required"
+                    f"Deployment {deployment_name} in {state} state - "
+                    f"manual intervention required"
                 )
 
             print(
@@ -141,7 +153,8 @@ def wait_for_deployment_ready(ml_client, endpoint_name, deployment_name, max_wai
             message = str(e)
             if "resourcenotfound" in message.lower() or "not found" in message.lower():
                 print(
-                    f"Deployment {deployment_name} does not exist yet - safe to create a new deployment"
+                    f"Deployment {deployment_name} does not exist yet - "
+                    f"safe to create a new deployment"
                 )
                 return True
             raise
@@ -149,6 +162,37 @@ def wait_for_deployment_ready(ml_client, endpoint_name, deployment_name, max_wai
     raise TimeoutError(
         f"Deployment {deployment_name} still not ready after {max_wait} seconds"
     )
+
+
+def _handle_deployment_conflict(attempt, max_retries, initial_delay, wait_if_conflict):
+    """Handle deployment conflict by waiting or using exponential backoff."""
+    print("Conflict detected: Another operation is in progress.")
+    if wait_if_conflict:
+        print("Waiting for existing deployment operation to finish before retrying...")
+        wait_if_conflict()
+    else:
+        delay = initial_delay * (2 ** attempt)
+        print(f"Waiting {delay} seconds before retry {attempt + 2}/{max_retries}...")
+        time.sleep(delay)
+
+
+def _dump_current_deployment_state(ml_client, deployment):
+    """Try to fetch and print current deployment status for diagnostics."""
+    try:
+        dep_name = getattr(deployment, 'name', None)
+        ep_name = getattr(deployment, 'endpoint_name', None)
+        if dep_name and ep_name:
+            current = ml_client.online_deployments.get(
+                name=dep_name, endpoint_name=ep_name
+            )
+            print("--- Current deployment state dump ---")
+            try:
+                print(current)
+            except Exception:
+                print(repr(current))
+            _try_fetch_async_operation(current)
+    except Exception:
+        print("Could not retrieve live deployment state for diagnostics")
 
 
 def deploy_with_retry(
@@ -169,52 +213,13 @@ def deploy_with_retry(
         except ResourceExistsError as e:
             message = str(e)
             if "Already running method" in message and attempt < max_retries - 1:
-                print("Conflict detected: Another operation is in progress.")
-                if wait_if_conflict:
-                    print(
-                        "Waiting for existing deployment operation to finish before retrying..."
-                    )
-                    wait_if_conflict()
-                else:
-                    delay = initial_delay * (2 ** attempt)  # Exponential backoff
-                    print(
-                        f"Waiting {delay} seconds before retry {attempt + 2}/{max_retries}..."
-                    )
-                    time.sleep(delay)
+                _handle_deployment_conflict(attempt, max_retries, initial_delay, wait_if_conflict)
             else:
                 print(f"Deployment failed after {attempt + 1} attempts")
                 raise
         except Exception as e:
             print(f"Unexpected error during deployment: {str(e)}")
-            # Try to fetch current deployment status for additional context
-            try:
-                dep_name = getattr(deployment, 'name', None)
-                ep_name = getattr(deployment, 'endpoint_name', None)
-                if dep_name and ep_name:
-                    current = ml_client.online_deployments.get(name=dep_name, endpoint_name=ep_name)
-                    print("--- Current deployment state dump ---")
-                    try:
-                        print(current)
-                    except Exception:
-                        print(repr(current))
-                        # Attempt to fetch async op payload if available on the current deployment object
-                        try:
-                            credential = DefaultAzureCredential()
-                            async_uri = None
-                            props = getattr(current, "properties", None)
-                            if props:
-                                try:
-                                    async_uri = props.get("AzureAsyncOperationUri")
-                                except Exception:
-                                    async_uri = getattr(props, "AzureAsyncOperationUri", None)
-                            if not async_uri:
-                                async_uri = getattr(current, "AzureAsyncOperationUri", None)
-                            if async_uri:
-                                _fetch_and_save_async_operation(async_uri, credential)
-                        except Exception:
-                            print("Unable to fetch async op payload for current deployment state")
-            except Exception:
-                print("Could not retrieve live deployment state for diagnostics")
+            _dump_current_deployment_state(ml_client, deployment)
             raise
 
     raise Exception("Deployment failed after all retry attempts")
@@ -309,14 +314,17 @@ def main():
     )
 
     # Deploy with retry logic
-    deploy_with_retry(
-        ml_client,
-        blue_deployment,
-        wait_if_conflict=lambda: wait_for_deployment_ready(
+    def wait_callback():
+        return wait_for_deployment_ready(
             ml_client,
             deployment_config["endpoint_name"],
             deployment_config["deployment_name"],
-        ),
+        )
+
+    deploy_with_retry(
+        ml_client,
+        blue_deployment,
+        wait_if_conflict=wait_callback,
     )
 
 
