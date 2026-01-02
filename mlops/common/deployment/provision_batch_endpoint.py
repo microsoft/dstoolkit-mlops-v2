@@ -94,7 +94,21 @@ def main():
         config.aml_config["workspace_name"],
     )
 
-    deployment_config = config.get_deployment_config(deployment_name=f"{model_type}_batch")
+    deployment_key = f"{model_type}_batch"
+    try:
+        deployment_config = config.get_deployment_config(deployment_name=deployment_key)
+    except KeyError as err:
+        available = ", ".join(sorted(config.deployment_configs.keys()))
+        print(
+            f"Deployment config not found for key '{deployment_key}_{env_type}'. "
+            f"Available deployment_configs keys: {available}"
+        )
+        raise err
+
+    if not deployment_config:
+        raise ValueError(
+            f"Deployment config '{deployment_key}_{env_type}' is empty or null in config.yaml"
+        )
 
     endpoint = BatchEndpoint(
         name=deployment_config["endpoint_name"],
