@@ -7,7 +7,7 @@ on:
         type: string
       enable_storage_public_access:
         type: boolean
-        default: false
+        default: true
       model_type:
         type: string
         required: true
@@ -18,6 +18,9 @@ on:
         description: "Execution Environment"
         required: true
         default: "dev"
+      enable_storage_public_access:
+        type: boolean
+        default: false
       model_type:
         type: string
         description: "type of model to execute"
