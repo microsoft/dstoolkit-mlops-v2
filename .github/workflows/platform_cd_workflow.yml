@@ -175,7 +175,8 @@ jobs:
                       --name "$PUBLISHED_MODEL_NAME" \
                       --workspace-name ${{ env.WORKSPACE_NAME }} \
                       --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-                      --subscription ${{ env.SUBSCRIPTION_ID }} -o json)
+                      --subscription ${{ env.SUBSCRIPTION_ID }} \
+                      --only-show-errors -o json 2>&1 | grep -v '^WARNING' | grep -v '^Class')
 
                     if [ -z "$MODEL_LIST_JSON" ] || [ "$MODEL_LIST_JSON" = "[]" ]; then
                       echo "❌ ERROR: No registered model found named '$PUBLISHED_MODEL_NAME'"
