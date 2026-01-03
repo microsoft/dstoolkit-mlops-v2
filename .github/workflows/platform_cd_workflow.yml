@@ -114,7 +114,7 @@ jobs:
   deploy-online:
     name: Deploy_Online
     runs-on: ubuntu-latest
-    environment: pr
+    environment: ${{ inputs.exec_environment }}
     permissions:
       id-token: write
       contents: read
@@ -316,7 +316,7 @@ jobs:
   deploy-batch:
     name: Deploy_Batch
     runs-on: ubuntu-latest
-    environment: PR
+    environment: ${{ inputs.exec_environment }}
     permissions:
       id-token: write
       contents: read
@@ -395,8 +395,7 @@ jobs:
       id-token: write
       contents: read
     needs: [execute-training-job]
-    environment:
-        name: dev
+    environment: ${{ inputs.exec_environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
