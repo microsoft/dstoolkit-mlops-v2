@@ -8,6 +8,9 @@ on:
       model_type:
         type: string
         default: "london_taxi"
+      enable_storage_public_access:
+        type: boolean
+        default: true  # ← ADD THIS (true to enable by default)
   push:
     branches:
       - main
