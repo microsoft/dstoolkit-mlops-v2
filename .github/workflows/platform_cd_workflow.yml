@@ -82,6 +82,7 @@ jobs:
   deploy-online:
     name: Deploy_Online
     runs-on: ubuntu-latest
+    environment: pr
     permissions:
       id-token: write
       contents: read
@@ -283,6 +284,7 @@ jobs:
   deploy-batch:
     name: Deploy_Batch
     runs-on: ubuntu-latest
+    environment: PR
     permissions:
       id-token: write
       contents: read
