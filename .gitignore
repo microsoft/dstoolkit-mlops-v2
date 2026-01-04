@@ -139,3 +139,4 @@ mlops/*/environment/mamba*
 interrogate_deployment.ps1
 .github/workflows/deploy_online_only.yml
 vars.env
+mlops/common/validate_storage_rbac.py
