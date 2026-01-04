@@ -132,7 +132,8 @@ class MLOpsConfig:
 
         available = ', '.join(sorted(self.pipeline_configs.keys()))
         raise KeyError(
-            f"Pipeline config '{pipelineconfig_name}' not found in {self.config_path}. ``pipeline_configs`` keys: {available}"
+            f"Pipeline config '{pipelineconfig_name}' not found in {self.config_path}. "
+            f"``pipeline_configs`` keys: {available}"
         )
 
     def get_deployment_config(self, deployment_name: str) -> Dict:
@@ -143,7 +144,8 @@ class MLOpsConfig:
 
         available = ', '.join(sorted(self.deployment_configs.keys()))
         raise KeyError(
-            f"Deployment config '{deploymentconfig_name}' not found in {self.config_path}. ``deployment_configs`` keys: {available}"
+            f"Deployment config '{deploymentconfig_name}' not found in {self.config_path}. "
+            f"``deployment_configs`` keys: {available}"
         )
 
 
