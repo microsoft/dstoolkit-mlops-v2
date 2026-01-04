@@ -28,6 +28,11 @@ on:
         description: "Is Docker used for build validation?"
         required: true
         default: true
+      enable_storage_public_access:
+        type: boolean
+        description: "Temporarily enable storage public access for training"
+        required: false
+        default: true
   workflow_call:
     inputs:
       exec_environment:
@@ -45,9 +50,14 @@ on:
         description: "Is Docker used for build validation?"
         required: true
         default: true
+      enable_storage_public_access:
+        type: boolean
+        description: "Temporarily enable storage public access for training"
+        required: false
+        default: true
 permissions:
   id-token: write
-  contents: read    
+  contents: read
 jobs:
   run-ci-workflow:
     uses: ./.github/workflows/platform_ci_workflow.yml
@@ -55,3 +65,5 @@ jobs:
       exec_environment: ${{ inputs.exec_environment || 'pr' }}
       model_type: ${{ inputs.model_type || 'docker_taxi' }}
       is_docker: ${{ github.event_name == 'pull_request' && true || inputs.is_docker }}
+      enable_storage_public_access: ${{ inputs.enable_storage_public_access != false }}
+    secrets: inherit
