@@ -14,7 +14,7 @@ on:
         default: false
       enable_storage_public_access:
         type: boolean
-        default: false
+        default: true
   workflow_call:
     inputs:
       exec_environment:
@@ -35,7 +35,7 @@ on:
         type: boolean
         description: "Temporarily enable storage public network access for this run"
         required: false
-        default: false
+        default: true
       # arm_client_id:
       #   required: true
       #   type: string
