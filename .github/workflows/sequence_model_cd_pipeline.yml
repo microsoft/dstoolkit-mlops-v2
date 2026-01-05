@@ -40,7 +40,7 @@ on:
         default: true
 permissions:
   id-token: write
-  contents: read         
+  contents: read
 jobs:
   run-cd-workflow:
     uses: ./.github/workflows/platform_cd_workflow.yml
