@@ -17,6 +17,7 @@ on:
       - main
       - lorrin/20260103-fix-platform-cd-env
     paths:
+      - .github/workflows/docker_taxi_cd_pipeline.yml
       - mlops/common/**
       - mlops/docker_taxi/**
       - model/docker_taxi/**
