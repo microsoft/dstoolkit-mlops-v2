@@ -15,6 +15,7 @@ on:
   push:
     branches:
       - main
+      - lorrin/20260103-fix-platform-cd-env
     paths:
       - mlops/common/**
       - mlops/docker_taxi/**
