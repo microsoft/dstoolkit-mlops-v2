@@ -65,5 +65,5 @@ jobs:
       exec_environment: ${{ inputs.exec_environment || 'pr' }}
       model_type: ${{ inputs.model_type || 'docker_taxi' }}
       is_docker: ${{ github.event_name == 'pull_request' && true || inputs.is_docker }}
-      enable_storage_public_access: ${{ inputs.enable_storage_public_access != false }}
+      enable_storage_public_access: true
     secrets: inherit
