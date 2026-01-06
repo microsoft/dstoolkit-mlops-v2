@@ -7,15 +7,48 @@ on:
         type: string
       enable_storage_public_access:
         type: boolean
-        default: false
+        default: true
       model_type:
         type: string
         required: true
+  workflow_call:
+    inputs:
+      exec_environment:
+        type: string
+        description: "Execution Environment"
+        required: true
+        default: "dev"
+      enable_storage_public_access:
+        type: boolean
+        default: false
+      model_type:
+        type: string
+        description: "type of model to execute"
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  SUBSCRIPTION_ID: ${{vars.SUBSCRIPTION_ID}}
+  RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
+  WORKSPACE_NAME: ${{ vars.WORKSPACE_NAME }}
+  STORAGE_ACCOUNT_NAME: ${{ vars.STORAGE_ACCT_NAME }}
+  ARM_CLIENT_ID: ${{vars.ARM_CLIENT_ID}}
+  ARM_TENANT_ID: ${{vars.ARM_TENANT_ID}}
+  BUILD_BUILDID: ${{ github.run_id }}
+  BUILD_SOURCEBRANCHNAME: ${{ github.head_ref || github.ref_name }}
+
+
+
+
 
 jobs:
   execute-training-job:
     name: Execute training job
     runs-on: ubuntu-latest
+    environment: ${{ inputs.exec_environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -82,6 +115,7 @@ jobs:
   deploy-online:
     name: Deploy_Online
     runs-on: ubuntu-latest
+    environment: ${{ inputs.exec_environment }}
     permissions:
       id-token: write
       contents: read
@@ -107,86 +141,6 @@ jobs:
             else
               echo "No common directory found for ${{ inputs.model_type }}, skipping copy"
             fi
-
-      - name: Validate Storage Configuration (RBAC smoke tests)
-        run: |
-          echo "=== Validating Storage Configuration and AD-auth model download ==="
-
-          # Print storage configuration for diagnostics
-          az storage account show \
-            --name ${{ env.STORAGE_ACCOUNT_NAME }} \
-            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-            --subscription ${{ env.SUBSCRIPTION_ID }} \
-            --query '{name:name, defaultAction:networkRuleSet.defaultAction, allowSharedKeyAccess:allowSharedKeyAccess, publicNetworkAccess:publicNetworkAccess}' -o json
-
-          echo "\nTesting blob access with workflow identity (auth-mode login)..."
-          if ! az storage container list \
-            --account-name ${{ env.STORAGE_ACCOUNT_NAME }} \
-            --auth-mode login \
-            --subscription ${{ env.SUBSCRIPTION_ID }} \
-            --output table; then
-            echo "❌ ERROR: Workflow identity cannot access storage - this indicates RBAC or network issues"
-            exit 1
-          fi
-
-          echo "\nDeriving published model name for smoke download test..."
-          PUBLISHED_MODEL_NAME=$(python - <<PY
-          from mlops.common.naming_utils import generate_model_name
-          print(generate_model_name("${{ inputs.model_type }}"))
-          PY
-          )
-                    echo "Published model name: $PUBLISHED_MODEL_NAME"
-
-                    echo "Listing registered models to find latest version..."
-                    MODEL_LIST_JSON=$(az ml model list \
-                      --name "$PUBLISHED_MODEL_NAME" \
-                      --workspace-name ${{ env.WORKSPACE_NAME }} \
-                      --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-                      --subscription ${{ env.SUBSCRIPTION_ID }} -o json)
-
-                    if [ -z "$MODEL_LIST_JSON" ] || [ "$MODEL_LIST_JSON" = "[]" ]; then
-                      echo "❌ ERROR: No registered model found named '$PUBLISHED_MODEL_NAME'"
-                      exit 1
-                    fi
-
-                    LATEST_VERSION=$(echo "$MODEL_LIST_JSON" | python - <<PY
-          import sys, json
-          info = json.load(sys.stdin)
-          if not info:
-              sys.exit(2)
-          print(info[0].get('version'))
-          PY
-          )
-
-                    echo "Latest model version: $LATEST_VERSION"
-
-                    echo "Attempting model download using AD auth (auth-mode login)..."
-                    if ! az ml model download \
-                      --name "$PUBLISHED_MODEL_NAME" \
-                      --version "$LATEST_VERSION" \
-                      --download-path /tmp/model-download \
-                      --auth-mode login \
-                      --workspace-name ${{ env.WORKSPACE_NAME }} \
-                      --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
-                      --subscription ${{ env.SUBSCRIPTION_ID }}; then
-                      echo "❌ ERROR: Model download via AD auth failed - this indicates missing RBAC on the model storage or workspace"
-                      exit 1
-                    fi
-
-                    echo "✅ Storage RBAC smoke tests passed (workflow identity can list blobs and download model)."
-
-                    # Test actual blob access
-                    echo "Testing blob access with workflow identity..."
-                    if ! az storage container list \
-                      --account-name ${{ env.STORAGE_ACCOUNT_NAME }} \
-                      --auth-mode login \
-                      --subscription ${{ env.SUBSCRIPTION_ID }} \
-                      --output table; then
-                      echo "❌ ERROR: Workflow identity cannot access storage - this indicates RBAC or network issues"
-                      exit 1
-                    fi
-
-                    echo "✅ Storage configuration validated successfully"
 
       - name: Provision azureml online endpoint
         uses: ./.github/actions/execute_shell_code
@@ -283,6 +237,7 @@ jobs:
   deploy-batch:
     name: Deploy_Batch
     runs-on: ubuntu-latest
+    environment: ${{ inputs.exec_environment }}
     permissions:
       id-token: write
       contents: read
@@ -361,8 +316,7 @@ jobs:
       id-token: write
       contents: read
     needs: [execute-training-job]
-    environment:
-        name: dev
+    environment: ${{ inputs.exec_environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

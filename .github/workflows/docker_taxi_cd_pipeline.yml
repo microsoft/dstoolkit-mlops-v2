@@ -1,6 +1,17 @@
 name: Custom Object Detection CD Workflow
 
 on:
+  workflow_dispatch:
+    inputs:
+      exec_environment:
+        type: string
+        default: "dev"
+      model_type:
+        type: string
+        default: "docker_taxi"
+      enable_storage_public_access:
+        type: boolean
+        default: true
   push:
     branches:
       - main
@@ -22,12 +33,19 @@ on:
         description: "The type of model to run the workflow for"
         required: true
         default: "docker_taxi"
+      enable_storage_public_access:
+        type: boolean
+        description: "Temporarily enable storage public access for training"
+        required: false
+        default: true
 permissions:
   id-token: write
-  contents: read          
+  contents: read
 jobs:
   run-cd-workflow:
     uses: ./.github/workflows/platform_cd_workflow.yml
     with:
       exec_environment: ${{ inputs.exec_environment || 'dev' }}
       model_type: ${{ inputs.model_type || 'docker_taxi' }}
+      enable_storage_public_access: ${{ inputs.enable_storage_public_access != false }}
+    secrets: inherit

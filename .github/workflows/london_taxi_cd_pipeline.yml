@@ -8,6 +8,9 @@ on:
       model_type:
         type: string
         default: "london_taxi"
+      enable_storage_public_access:
+        type: boolean
+        default: true
   push:
     branches:
       - main
@@ -29,6 +32,11 @@ on:
         description: "The type of model to run the workflow for"
         required: true
         default: "london_taxi"
+      enable_storage_public_access:
+        type: boolean
+        description: "Temporarily enable storage public access for training"
+        required: false
+        default: true
 permissions:
   id-token: write
   contents: read
@@ -38,3 +46,8 @@ jobs:
     with:
       exec_environment: ${{ inputs.exec_environment || 'dev' }}
       model_type: ${{ inputs.model_type || 'london_taxi' }}
+      # Converts the input parameter 'enable_storage_public_access' to a boolean value.
+      # If the input is not explicitly set to false, it defaults to true.
+      # This ensures that storage public access is enabled by default unless explicitly disabled.
+      # The double negation (!= false) handles cases where the input might be null, undefined, or any truthy value.
+      enable_storage_public_access: ${{ inputs.enable_storage_public_access != false }}

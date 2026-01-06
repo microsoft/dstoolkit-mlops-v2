@@ -71,3 +71,10 @@ runs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install --upgrade -r .github/requirements/execute_job_requirements.txt
+
+    - name: Pre-install Azure ML CLI Extension
+      shell: bash
+      run: |
+        echo "Pre-installing Azure ML CLI extension to avoid warnings..."
+        az extension add --name ml --yes --only-show-errors 2>/dev/null || true
+        echo "Azure ML CLI extension ready."

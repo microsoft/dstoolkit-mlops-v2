@@ -14,7 +14,7 @@ on:
         default: false
       enable_storage_public_access:
         type: boolean
-        default: false
+        default: true
   workflow_call:
     inputs:
       exec_environment:
@@ -35,16 +35,7 @@ on:
         type: boolean
         description: "Temporarily enable storage public network access for this run"
         required: false
-        default: false
-      # arm_client_id:
-      #   required: true
-      #   type: string
-      # arm_tenant_id:
-      #   required: true
-      #   type: string
-      # subscription_id:
-      #   required: true
-      #   type: string
+        default: true
 
 permissions:
   id-token: write
@@ -65,6 +56,7 @@ jobs:
     name: Enable Storage Public Access
     if: ${{ inputs.enable_storage_public_access }}
     runs-on: ubuntu-latest
+    environment: ${{ inputs.exec_environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -125,6 +117,7 @@ jobs:
   execute-ml-job-pipeline:
     name: Execute ML Job Pipeline
     runs-on: ubuntu-latest
+    environment: ${{ inputs.exec_environment }}
     needs: build-validation
     steps:
       - name: Checkout
@@ -136,10 +129,6 @@ jobs:
           arm_client_id: ${{ env.ARM_CLIENT_ID }}
           arm_tenant_id: ${{ env.ARM_TENANT_ID }}
           subscription_id: ${{ env.SUBSCRIPTION_ID }}
-        # with:
-        #   arm_client_id: ${{ vars.ARM_CLIENT_ID }}
-        #   arm_tenant_id: ${{ vars.ARM_TENANT_ID }}
-        #   subscription_id: ${{ vars.SUBSCRIPTION_ID }}
 
       - name: Execute AzureML Pipeline
         uses: ./.github/actions/execute_shell_code

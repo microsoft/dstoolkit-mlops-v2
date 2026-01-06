@@ -1,14 +1,6 @@
 name: London Taxi CI Workflow
 
 on:
-  workflow_dispatch:
-    inputs:
-      exec_environment:
-        type: string
-        default: "pr"
-      model_type:
-        type: string
-        default: "london_taxi"
   pull_request:
     branches:
       - main
@@ -31,6 +23,11 @@ on:
         description: "The type of model to run the workflow for"
         required: true
         default: "london_taxi"
+      enable_storage_public_access:
+        type: boolean
+        description: "Temporarily enable storage public access for training"
+        required: false
+        default: true
 permissions:
   id-token: write
   contents: read
@@ -41,4 +38,5 @@ jobs:
       exec_environment: ${{ inputs.exec_environment || 'pr' }}
       model_type: ${{ inputs.model_type || 'london_taxi' }}
       is_docker: false
+      enable_storage_public_access: true
     secrets: inherit
