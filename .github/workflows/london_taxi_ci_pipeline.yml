@@ -1,17 +1,6 @@
 name: London Taxi CI Workflow
 
 on:
-  workflow_dispatch:
-    inputs:
-      exec_environment:
-        type: string
-        default: "pr"
-      model_type:
-        type: string
-        default: "london_taxi"
-      enable_storage_public_access:
-        type: boolean
-        default: true
   pull_request:
     branches:
       - main

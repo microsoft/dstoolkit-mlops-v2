@@ -10,13 +10,11 @@ on:
         default: "london_taxi"
       enable_storage_public_access:
         type: boolean
-        default: true  # ← ADD THIS (true to enable by default)
+        default: true
   push:
     branches:
       - main
-      - lorrin/20260103-fix-platform-cd-env
     paths:
-      - .github/workflows/london_taxi_cd_pipeline.yml
       - mlops/common/**
       - mlops/london_taxi/**
       - model/london_taxi/**

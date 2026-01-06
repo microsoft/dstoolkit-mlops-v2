@@ -14,11 +14,8 @@ on:
   push:
     branches:
       - main
-      - lorrin/20260103-fix-platform-cd-env
     paths:
-      - .github/workflows/sequence_model_cd_pipeline.yml
       - mlops/common/**
-      - mlops/**
       - mlops/sequence_model/**
       - model/sequence_model/**
       - src/sequence_model/**
