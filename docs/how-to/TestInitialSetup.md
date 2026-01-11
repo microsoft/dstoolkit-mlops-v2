@@ -1,6 +1,6 @@
 # Testing the initial setup
 
-**Step 1.** In the main branch, supply an explicit value or accept the defaults in the file, config/config.yaml. The pipelines uses multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. london_taxi, docker_taxi, sequence_model). The config.yaml file is split into the following sections, set the values in each section:
+**Step 1.** In the main branch, supply explicit values or accept the defaults in the file config/config.yaml. The workflows use multiple variables and they should be set for both 'pr' and 'dev' plus any additional environments. Also, set the variables for all models (i.e. london_taxi, docker_taxi, sequence_model). The config.yaml file is split into the following sections; set the values in each section:
 
 - aml_config: Stores the configuration of azure resources hosting the Azure Machine Learning workspace.
 - environment_config: Stores the base image and dynamic properties set at runtime.
@@ -43,61 +43,60 @@ Pipelines:
 - .azure-pipelines/london_taxi_cd_pipeline.yml
 - .azure-pipelines/docker_taxi_cd_pipeline.yml
 
-## Github Workflows Steps
+## GitHub Workflows Steps
 
-**Step 1.** *Provision Infrastructure* - Execute the infrastructure provision pipeline
+**Step 1.** *Provision Infrastructure* - Execute the infrastructure provision workflow:
 
-- .github/workflows/ModelFactory-Bicep-Deployment.yml
-- .github/workflows/ModelFactory-Terraform-Deployment.yml
+- .github/workflows/infra_provision_bicep.yml
+- .github/workflows/infra_provision_terraform.yml
 
-**Step 2.** *Register Data Assets* - Execute the register data asset pipeline (register_data_assets.yml).
+**Step 2.** *Register Data Assets* - Execute the register data asset workflow:
 
 - .github/workflows/register_data_assets.yml
 
-**Step 3.** *Run CI pipeline for a model of your choice* - Execute any of the Azure Pipelines created above for build validation
+**Step 3.** *Run CI workflow for a model of your choice* - Execute the GitHub Actions workflows listed below for build validation.
 
-Pipeline Parameters:
+Workflow Parameters:
 
-- exec_environment: The environment to run the workflow in. Set to "ci" by default
-- model_type: The type of model for which to run the CI workflow. Set to {model name} by default
+- exec_environment: The environment to run the workflow in. Set to "pr" by default.
+- model_type: The type of model for which to run the CI workflow. Set to {model name} by default.
 
 Workflows:
 
 - .github/workflows/london_taxi_ci_pipeline.yml
 - .github/workflows/docker_taxi_ci_pipeline.yml
+- .github/workflows/sequence_model_ci_pipeline.yml
 
 **Step 4.** *Run CD workflow for a model of your choice* - Execute the GitHub Actions workflows listed below for deployment validation.
-Pipeline Parameters:
 
-- exec_environment: The environment to run the workflow in. Set to "cd" by default
-- model_type: The type of model for which to run the CI workflow. Set to {model name} by default
+Workflow Parameters:
+
+- exec_environment: The environment to run the workflow in. Set to "dev" by default.
+- model_type: The type of model for which to run the CD workflow. Set to {model name} by default.
 
 Workflows:
 
 - .github/workflows/london_taxi_cd_pipeline.yml
 - .github/workflows/docker_taxi_cd_pipeline.yml
+- .github/workflows/sequence_model_cd_pipeline.yml
 
-Below is the sample job run for the CI Pipeline.
+Below is a sample job run for the CI workflow.
 
 ![sample_ci_job](../media/sample_ci_job.png)
 
-## Preparing to Extend the solution
+## Preparing to Extend the Solution
 
-**Step 1.** Cleanup unneeded directories and files.
+**Step 1.** Clean up unneeded directories and files.
 
-### If you used Azure DevOps and Bicep for the infrastructure provisioning and data registration, delete the following directories/files:
+### If you used GitHub Actions and Bicep for infrastructure provisioning:
 
-- ./github
-- /infra/terraform
-- .azure-pipelines/terraform
+- Delete .azure-pipelines/ (if you don't need it for reference)
+- Delete infra/terraform/
 
-### If you used Azure DevOps and Terraform for the infrastructure provisioning, delete the following directories/files
+### If you used GitHub Actions and Terraform for infrastructure provisioning:
 
-- ./github
-- /infra/bicep
-- .azure-pipelines/bicep
-
-### If you used Github Actions and Bicep for the infrastructure provisioning, delete the following directories/files
+- Delete .azure-pipelines/ (if you don't need it for reference)
+- Delete infra/bicep/
 
 - ./azure-pipelines
 - /infra/terraform

@@ -18,7 +18,7 @@ Follow these steps to onboard a new ML model to your Model Factory:
 
 The /config/config.yaml file contains a node for the following:
 
-**Note: Unless you have modified variable names in either variable groups or github variables, leave all $(variables) unchanged.**
+**Note: GitHub Actions is the active CI/CD system. Azure Pipelines are deprecated. Unless you have modified variable names in GitHub repository variables, leave all $(variables) unchanged.**
 
 - aml_config: Stores the configuration of azure resources hosting the Azure Machine Learning workspace.
 - environment_config: Stores the base image and dynamic properties set at runtime.
@@ -27,7 +27,7 @@ The /config/config.yaml file contains a node for the following:
 
 ### aml_config
 
-Set the properties for this component in Azure Pipelines variable group of your Azure DevOps project or within Variables in your github repository:
+Set the properties for this component within Variables in your GitHub repository (Settings > Secrets and Variables > Variables):
 
 - subscription_id: The subscription id in Azure hosting the Azure Machine Learning workspace.
 - resource_group_name: The name of the resource group hosting the Azure Machine Learning workspace.
